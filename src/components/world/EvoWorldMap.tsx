@@ -12,9 +12,11 @@ import {
   EVO_TOMES_PEDAGOGY,
   EVO_LAB_GUIDES,
   EVO_NEXT_RECOMMENDATIONS,
+  EVO_TOOLS_BY_INTENT,
   EvoSchoolLevel,
   EvoTomePedagogicalProfile,
   EvoLabPedagogicalGuide,
+  EvoToolCardDefinition,
 } from '../../data/evoLearningPaths';
 import { EvoCaseRepository } from '../evoLabCore/services/caseRepository';
 import { EvoWorldCore } from './EvoWorldCore';
@@ -102,6 +104,11 @@ export interface EvoWorldMapProps {
 
 type MainIntention =
   | 'campus'
+  | 'aprender'
+  | 'practicar'
+  | 'analizar'
+  | 'herramientas'
+  | 'mievo'
   | 'escuela'
   | 'biblioteca'
   | 'laboratorios'
@@ -136,6 +143,24 @@ export const EvoWorldMap: React.FC<EvoWorldMapProps> = ({
   const [selectedTomeProfile, setSelectedTomeProfile] = useState<EvoTomePedagogicalProfile | null>(null);
   const [selectedLabGuide, setSelectedLabGuide] = useState<EvoLabPedagogicalGuide | null>(null);
   const [isLevel0IntroOpen, setIsLevel0IntroOpen] = useState<boolean>(false);
+
+  // Tools Search & Category Filter State
+  const [toolSearchQuery, setToolSearchQuery] = useState<string>('');
+  const [activeToolCategory, setActiveToolCategory] = useState<'all' | 'windows' | 'hardware' | 'rendimiento' | 'diagnostico' | 'experimentos'>('all');
+
+  const filteredTools = useMemo(() => {
+    return EVO_TOOLS_BY_INTENT.filter((tool) => {
+      const matchesCategory = activeToolCategory === 'all' || tool.intentCategory === activeToolCategory;
+      const q = toolSearchQuery.toLowerCase().trim();
+      const matchesQuery =
+        !q ||
+        tool.simpleName.toLowerCase().includes(q) ||
+        tool.whatItDoes.toLowerCase().includes(q) ||
+        tool.whenToUse.toLowerCase().includes(q) ||
+        tool.concepts.some((c) => c.toLowerCase().includes(q));
+      return matchesCategory && matchesQuery;
+    });
+  }, [activeToolCategory, toolSearchQuery]);
 
   // Sync initialIntention when changed externally
   useEffect(() => {
@@ -405,10 +430,11 @@ export const EvoWorldMap: React.FC<EvoWorldMapProps> = ({
       <EvoWorldAmbientLayer />
 
       {/* ========================================================================= */}
-      {/* ORIENTACIÓN PERMANENTE (BREADCRUMB UNIVERSAL)                             */}
+      {/* ORIENTACIÓN PERMANENTE Y BARRA DE INTENCIONES (NAVEGACIÓN MAESTRA)        */}
       {/* ========================================================================= */}
       {activeIntention !== 'campus' && (
         <div className="relative z-30 px-4 sm:px-8 py-2.5 border-b border-zinc-900 bg-zinc-950/95 backdrop-blur-md flex flex-wrap items-center justify-between gap-3 font-mono-tech text-xs">
+          {/* Tabs de Intención Principal */}
           <div className="flex items-center gap-1.5 flex-wrap">
             <button
               onClick={() => {
@@ -418,42 +444,98 @@ export const EvoWorldMap: React.FC<EvoWorldMapProps> = ({
               }}
               className="px-2.5 py-1 rounded-lg bg-zinc-900 hover:bg-zinc-800 border border-zinc-700 text-amber-300 font-bold transition-all flex items-center gap-1.5 cursor-pointer shadow-sm"
             >
-              <span>MUNDO EVO</span>
+              <span>CAMPUS</span>
             </button>
 
-            <ChevronRight className="w-3.5 h-3.5 text-zinc-600 shrink-0" />
+            <span className="text-zinc-700">|</span>
 
+            {/* APRENDER */}
             <button
               onClick={() => {
+                setActiveIntention('escuela');
                 setSelectedLevelNumber(null);
                 setSelectedTomeProfile(null);
               }}
-              className={`px-2.5 py-1 rounded-lg transition-all cursor-pointer font-bold ${
-                selectedLevelNumber === null && !selectedTomeProfile
+              className={`px-3 py-1 rounded-lg transition-all cursor-pointer font-bold ${
+                activeIntention === 'escuela' || activeIntention === 'biblioteca' || activeIntention === 'aprender'
                   ? 'bg-amber-400/20 text-amber-300 border border-amber-400/40'
                   : 'bg-zinc-900/60 text-zinc-400 hover:text-white border border-zinc-800'
               }`}
             >
-              {activeIntention === 'escuela' && 'ESCUELA EVO'}
-              {activeIntention === 'biblioteca' && 'TOMOS EVO LABS'}
-              {activeIntention === 'laboratorios' && 'LABORATORIOS'}
-              {activeIntention === 'diagnosticar' && 'TALLER DE CASOS Y EXPEDIENTES'}
-              {activeIntention === 'progreso' && 'MI PROGRESO'}
+              APRENDER
             </button>
 
-            {activeIntention === 'escuela' && selectedLevelNumber !== null && (
+            {/* PRACTICAR */}
+            <button
+              onClick={() => {
+                setActiveIntention('laboratorios');
+                setSelectedLevelNumber(null);
+                setSelectedTomeProfile(null);
+              }}
+              className={`px-3 py-1 rounded-lg transition-all cursor-pointer font-bold ${
+                activeIntention === 'laboratorios' || activeIntention === 'practicar'
+                  ? 'bg-emerald-400/20 text-emerald-300 border border-emerald-400/40'
+                  : 'bg-zinc-900/60 text-zinc-400 hover:text-white border border-zinc-800'
+              }`}
+            >
+              PRACTICAR
+            </button>
+
+            {/* ANALIZAR MI PC */}
+            <button
+              onClick={() => {
+                setActiveIntention('diagnosticar');
+                setSelectedLevelNumber(null);
+                setSelectedTomeProfile(null);
+              }}
+              className={`px-3 py-1 rounded-lg transition-all cursor-pointer font-bold ${
+                activeIntention === 'diagnosticar' || activeIntention === 'analizar'
+                  ? 'bg-purple-400/20 text-purple-300 border border-purple-400/40'
+                  : 'bg-zinc-900/60 text-zinc-400 hover:text-white border border-zinc-800'
+              }`}
+            >
+              ANALIZAR MI PC
+            </button>
+
+            {/* HERRAMIENTAS */}
+            <button
+              onClick={() => {
+                setActiveIntention('herramientas');
+                setSelectedLevelNumber(null);
+                setSelectedTomeProfile(null);
+              }}
+              className={`px-3 py-1 rounded-lg transition-all cursor-pointer font-bold ${
+                activeIntention === 'herramientas'
+                  ? 'bg-cyan-400/20 text-cyan-300 border border-cyan-400/40'
+                  : 'bg-zinc-900/60 text-zinc-400 hover:text-white border border-zinc-800'
+              }`}
+            >
+              HERRAMIENTAS
+            </button>
+
+            {/* MI EVO */}
+            <button
+              onClick={() => {
+                setActiveIntention('progreso');
+                setSelectedLevelNumber(null);
+                setSelectedTomeProfile(null);
+              }}
+              className={`px-3 py-1 rounded-lg transition-all cursor-pointer font-bold ${
+                activeIntention === 'progreso' || activeIntention === 'mievo'
+                  ? 'bg-indigo-400/20 text-indigo-300 border border-indigo-400/40'
+                  : 'bg-zinc-900/60 text-zinc-400 hover:text-white border border-zinc-800'
+              }`}
+            >
+              MI EVO
+            </button>
+
+            {/* Breadcrumb Secundario si aplica */}
+            {selectedLevelNumber !== null && (
               <>
                 <ChevronRight className="w-3.5 h-3.5 text-zinc-600 shrink-0" />
-                <button
-                  onClick={() => setSelectedTomeProfile(null)}
-                  className={`px-2.5 py-1 rounded-lg transition-all cursor-pointer font-bold ${
-                    !selectedTomeProfile
-                      ? 'bg-amber-400/20 text-amber-300 border border-amber-400/40'
-                      : 'bg-zinc-900/60 text-zinc-400 hover:text-white border border-zinc-800'
-                  }`}
-                >
+                <span className="px-2.5 py-1 rounded-lg bg-zinc-900 border border-zinc-800 text-amber-300 font-bold">
                   NIVEL {selectedLevelNumber}
-                </button>
+                </span>
               </>
             )}
 
@@ -1884,6 +1966,131 @@ export const EvoWorldMap: React.FC<EvoWorldMapProps> = ({
                 );
               })}
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* ========================================================================= */}
+      {/* 7. SECCIÓN: CATÁLOGO DE HERRAMIENTAS ORGANIZADAS POR INTENCIÓN            */}
+      {/* ========================================================================= */}
+      {activeIntention === 'herramientas' && (
+        <div className="relative z-10 flex-1 max-w-6xl mx-auto w-full px-4 sm:px-8 py-6 space-y-6">
+          {/* Encabezado y Filtros */}
+          <div className="space-y-4 border-b border-zinc-800 pb-5">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+              <div>
+                <div className="flex items-center gap-2">
+                  <span className="w-2.5 h-2.5 rounded-full bg-cyan-400 animate-pulse" />
+                  <h2 className="text-2xl sm:text-3xl font-black font-display text-white uppercase">
+                    HERRAMIENTAS EVO // CATÁLOGO POR INTENCIÓN
+                  </h2>
+                </div>
+                <p className="text-xs sm:text-sm text-zinc-400 font-sans-editorial mt-1">
+                  Elegí la herramienta según lo que querés resolver. Nombre simple afuera, profundidad técnica adentro.
+                </p>
+              </div>
+
+              {/* Pestañas de categorías */}
+              <div className="flex flex-wrap items-center gap-1.5 p-1 rounded-xl bg-zinc-900 border border-zinc-800 font-mono-tech text-xs">
+                {[
+                  { id: 'all', label: 'TODAS' },
+                  { id: 'windows', label: 'WINDOWS' },
+                  { id: 'hardware', label: 'HARDWARE' },
+                  { id: 'rendimiento', label: 'RENDIMIENTO' },
+                  { id: 'diagnostico', label: 'DIAGNÓSTICO' },
+                  { id: 'experimentos', label: 'EXPERIMENTOS' },
+                ].map((cat) => (
+                  <button
+                    key={cat.id}
+                    type="button"
+                    onClick={() => setActiveToolCategory(cat.id as any)}
+                    className={`px-3 py-1.5 rounded-lg font-bold transition-all cursor-pointer ${
+                      activeToolCategory === cat.id
+                        ? 'bg-amber-400 text-black shadow-md'
+                        : 'text-zinc-400 hover:text-white'
+                    }`}
+                  >
+                    {cat.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Buscador de herramientas ¿QUÉ QUERÉS HACER? */}
+            <div className="relative max-w-2xl">
+              <Search className="w-4 h-4 text-zinc-500 absolute left-3.5 top-1/2 -translate-y-1/2" />
+              <input
+                type="text"
+                value={toolSearchQuery}
+                onChange={(e) => setToolSearchQuery(e.target.value)}
+                placeholder="¿Qué querés hacer? Buscar: PC lenta, FPS bajos, revisar SSD, Windows no inicia..."
+                className="w-full py-2.5 pl-10 pr-4 rounded-xl bg-zinc-950 border border-zinc-800 focus:border-amber-400 text-xs font-mono-tech text-white placeholder-zinc-500 outline-none transition-colors"
+              />
+            </div>
+          </div>
+
+          {/* Grilla de Herramientas (1 tarjeta = 1 unidad visual) */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {filteredTools.map((tool) => (
+              <div
+                key={tool.id}
+                className="p-5 rounded-2xl bg-[#080b12] border border-zinc-800 hover:border-amber-400/50 transition-all flex flex-col justify-between gap-4 group shadow-xl"
+              >
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between">
+                    <span
+                      className="px-2.5 py-0.5 rounded text-[10px] font-mono-tech font-bold uppercase"
+                      style={{
+                        color: tool.accentColor,
+                        backgroundColor: `${tool.accentColor}18`,
+                        border: `1px solid ${tool.accentColor}40`,
+                      }}
+                    >
+                      {tool.intentCategory.toUpperCase()}
+                    </span>
+                    <span className="text-[10px] text-zinc-500 font-mono-tech">
+                      HERRAMIENTA EVO
+                    </span>
+                  </div>
+
+                  <h3 className="font-display font-black text-lg text-white group-hover:text-amber-300 transition-colors uppercase leading-tight">
+                    {tool.simpleName}
+                  </h3>
+
+                  <div className="space-y-2 text-xs text-zinc-300 font-sans-editorial">
+                    <div>
+                      <strong className="text-zinc-400 font-mono-tech text-[10px] uppercase block">Qué hace:</strong>
+                      <span>{tool.whatItDoes}</span>
+                    </div>
+                    <div>
+                      <strong className="text-zinc-400 font-mono-tech text-[10px] uppercase block">Cuándo usarla:</strong>
+                      <span>{tool.whenToUse}</span>
+                    </div>
+                  </div>
+
+                  {/* Conceptos clave (máximo 3) */}
+                  <div className="flex flex-wrap gap-1.5 pt-1">
+                    {tool.concepts.map((concept, idx) => (
+                      <span
+                        key={idx}
+                        className="px-2 py-0.5 rounded bg-zinc-900 border border-zinc-800 text-[10px] font-mono-tech text-zinc-400"
+                      >
+                        {concept}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() => handleExecuteLabAction(tool.actionKey)}
+                  className="w-full py-2.5 px-3 rounded-xl bg-amber-400 hover:bg-amber-300 text-black font-mono-tech font-bold text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-1.5 cursor-pointer shadow-[0_0_15px_rgba(245,158,11,0.2)] mt-auto"
+                >
+                  <span>[ ABRIR HERRAMIENTA ]</span>
+                  <ArrowRight className="w-3.5 h-3.5 text-black" />
+                </button>
+              </div>
+            ))}
           </div>
         </div>
       )}
