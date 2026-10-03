@@ -20,6 +20,9 @@ import {
   Layers,
   Sparkles,
   Info,
+  ChevronDown,
+  ChevronUp,
+  Cpu,
 } from 'lucide-react';
 import {
   FAILURE_SCENARIOS,
@@ -50,7 +53,10 @@ export const WindowsFailureRepairLab: React.FC<WindowsFailureRepairLabProps> = (
   const [hasRunVerification, setHasRunVerification] = useState<boolean>(false);
   const [copiedCommand, setCopiedCommand] = useState<string | null>(null);
   const [savedSuccess, setSavedSuccess] = useState<boolean>(false);
+  
+  // UX Toggles: Easy vs Deep
   const [showTutorHelp, setShowTutorHelp] = useState<boolean>(false);
+  const [deepDetailsOpen, setDeepDetailsOpen] = useState<boolean>(false);
 
   // Active scenario
   const scenario = useMemo(() => {
@@ -77,7 +83,7 @@ export const WindowsFailureRepairLab: React.FC<WindowsFailureRepairLabProps> = (
     'INVESTIGADOR',
   ];
 
-  // Filtered scenarios
+  // Filtered scenarios (Supports filtering by code e.g. ERR-NET-013, keywords, symptoms)
   const filteredScenarios = useMemo(() => {
     return FAILURE_SCENARIOS.filter((s) => {
       const matchCat = selectedCategory === 'TODAS' || s.category === selectedCategory;
@@ -86,7 +92,8 @@ export const WindowsFailureRepairLab: React.FC<WindowsFailureRepairLabProps> = (
         searchQuery === '' ||
         s.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
         s.userSymptom.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        s.badgeCode.toLowerCase().includes(searchQuery.toLowerCase());
+        s.badgeCode.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        s.category.toLowerCase().includes(searchQuery.toLowerCase());
       return matchCat && matchDiff && matchSearch;
     });
   }, [selectedCategory, selectedDifficulty, searchQuery]);
@@ -100,6 +107,7 @@ export const WindowsFailureRepairLab: React.FC<WindowsFailureRepairLabProps> = (
     setHasRunVerification(false);
     setSavedSuccess(false);
     setShowTutorHelp(false);
+    setDeepDetailsOpen(false);
   };
 
   const handleCopy = (text: string) => {
@@ -121,7 +129,7 @@ export const WindowsFailureRepairLab: React.FC<WindowsFailureRepairLabProps> = (
       rootCause: scenario.rootCause,
       status: hasRunVerification ? 'VERIFICADO_RESUELTO' : 'EN_PROCESO',
       risk: scenario.riskLevel,
-      veracity: 'SIMULATED_EVIDENCE',
+      veracity: 'SIMULATED',
     };
 
     try {
@@ -168,7 +176,7 @@ export const WindowsFailureRepairLab: React.FC<WindowsFailureRepairLabProps> = (
         <div className="flex items-center gap-2 shrink-0">
           <span className="px-3 py-1.5 rounded-xl bg-black/80 border border-cyan-950 text-cyan-300 text-xs font-bold flex items-center gap-1.5 shadow-sm">
             <Shield className="w-3.5 h-3.5 text-cyan-400" />
-            SIMULATED EVIDENCE
+            SIMULATED
           </span>
         </div>
       </div>
@@ -180,9 +188,9 @@ export const WindowsFailureRepairLab: React.FC<WindowsFailureRepairLabProps> = (
         {/* ========================================================================= */}
         <div className="lg:col-span-4 space-y-3.5">
           {/* BUSCADOR PRINCIPAL (ACCIÓN PRINCIPAL DE EXPLORACIÓN) */}
-          <div className="p-3.5 rounded-2xl bg-[#0B0F19] border-2 border-cyan-500/50 shadow-xl space-y-3">
-            <label className="text-[10.5px] text-cyan-300 font-bold uppercase tracking-wider block font-mono-tech flex items-center gap-1.5">
-              <Search className="w-3.5 h-3.5 text-cyan-400" />
+          <div className="p-3.5 rounded-2xl bg-[#0B0F19] border-2 border-cyan-500/60 shadow-2xl space-y-3">
+            <label className="text-[11px] text-cyan-300 font-black uppercase tracking-wider block font-mono-tech flex items-center gap-2">
+              <Search className="w-4 h-4 text-cyan-400" />
               BUSCADOR DE SÍNTOMAS & CÓDIGOS DE ERROR:
             </label>
             <div className="relative">
@@ -191,8 +199,8 @@ export const WindowsFailureRepairLab: React.FC<WindowsFailureRepairLabProps> = (
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Buscar síntoma, código (ERR-BOOT-001)..."
-                className="w-full pl-11 pr-4 py-2 rounded-xl bg-black/90 border-2 border-cyan-500/60 text-xs text-white font-sans-editorial placeholder-zinc-400 focus:outline-none focus:border-cyan-400 focus:ring-2 focus:ring-cyan-400/30 transition-all shadow-inner"
+                placeholder="🔍 Buscar síntoma, código (ERR-NET-013), error..."
+                className="w-full pl-11 pr-4 py-2.5 rounded-xl bg-black/90 border-2 border-cyan-500/60 text-xs text-white font-sans-editorial placeholder-zinc-400 focus:outline-none focus:border-cyan-400 focus:ring-2 focus:ring-cyan-400/30 transition-all shadow-inner"
               />
             </div>
 
@@ -243,12 +251,12 @@ export const WindowsFailureRepairLab: React.FC<WindowsFailureRepairLabProps> = (
             </div>
           </div>
 
-          {/* Scenarios List */}
+          {/* Scenarios List (24 Scenarios) */}
           <div className="p-2 rounded-xl bg-[#070A10] border border-cyan-950/80 space-y-1.5 max-h-[580px] overflow-y-auto scrollbar-thin">
             <div className="px-2 py-1 text-[10px] text-cyan-400 font-bold uppercase tracking-wider flex items-center justify-between">
               <span>EXPEDIENTES DISPONIBLES</span>
               <span className="px-2 py-0.5 rounded bg-cyan-950 border border-cyan-800 text-cyan-300 font-mono-tech font-bold text-[9.5px]">
-                {filteredScenarios.length}
+                {filteredScenarios.length} / 24
               </span>
             </div>
 
@@ -261,7 +269,7 @@ export const WindowsFailureRepairLab: React.FC<WindowsFailureRepairLabProps> = (
                   className={`p-3 rounded-xl border transition-all cursor-pointer space-y-1 ${
                     isSelected
                       ? 'bg-cyan-950/70 border-2 border-cyan-400 text-white shadow-[0_0_12px_rgba(0,210,255,0.2)]'
-                      : 'bg-zinc-950/80 border border-zinc-900 text-zinc-300 hover:border-cyan-800/80 hover:bg-zinc-900/50'
+                      : 'bg-zinc-950/80 border border-zinc-900 text-zinc-300 hover:border-cyan-800/80 hover:bg-zinc-900/40'
                   }`}
                 >
                   <div className="flex items-center justify-between gap-1 text-[9.5px]">
@@ -328,14 +336,14 @@ export const WindowsFailureRepairLab: React.FC<WindowsFailureRepairLabProps> = (
                   RIESGO {scenario.riskLevel}
                 </span>
 
-                {/* Terciario: Tutor Help Button */}
+                {/* Terciario: Support / Tutor Button */}
                 <button
                   type="button"
                   onClick={() => setShowTutorHelp(!showTutorHelp)}
                   className="px-2.5 py-1 rounded-lg bg-transparent hover:bg-zinc-900 border border-zinc-800 hover:border-zinc-700 text-zinc-400 hover:text-cyan-300 text-xs font-mono-tech flex items-center gap-1.5 cursor-pointer transition-all"
                 >
                   <HelpCircle className="w-3.5 h-3.5 text-cyan-400" />
-                  <span>¿AYUDA DIAGNÓSTICA?</span>
+                  <span>NO ENTIENDO / AYUDA</span>
                 </button>
               </div>
             </div>
@@ -345,10 +353,10 @@ export const WindowsFailureRepairLab: React.FC<WindowsFailureRepairLabProps> = (
               <div className="p-3.5 rounded-xl bg-cyan-950/30 border border-cyan-800/80 text-xs text-zinc-200 font-sans-editorial leading-relaxed space-y-1.5 animate-fadeIn">
                 <div className="flex items-center gap-2 font-mono-tech font-bold text-cyan-300 text-[11px] uppercase">
                   <Info className="w-4 h-4 text-cyan-400" />
-                  GUÍA PERICIAL DE ATENCIÓN:
+                  GUÍA PERICIAL EVO DE ATENCIÓN:
                 </div>
                 <p>
-                  No busques adivinar la respuesta. Sigue la secuencia: primero ejecuta la prueba forense para levantar evidencia del sistema. Luego, evalúa las hipótesis contrastándolas directamente con los datos obtenidos.
+                  No adivines la solución. Observa el síntoma inicial y ejecuta la prueba forense para obtener evidencia del escenario simulado. Con la evidencia obtenida, evalúa las hipótesis para aislar la causa raíz real.
                 </p>
               </div>
             )}
@@ -359,7 +367,7 @@ export const WindowsFailureRepairLab: React.FC<WindowsFailureRepairLabProps> = (
               </h3>
             </div>
 
-            {/* 1. SÍNTOMA (LO QUE VE EL USUARIO) */}
+            {/* 1. SÍNTOMA (LO QUE VE EL USUARIO) - Clean & Simple */}
             <div className="p-3.5 rounded-xl bg-gradient-to-r from-cyan-950/40 to-black border-l-3 border-cyan-400 border border-cyan-950 space-y-1">
               <span className="text-[10.5px] font-bold text-cyan-400 uppercase tracking-wider flex items-center gap-1.5">
                 <Eye className="w-3.5 h-3.5 text-cyan-400" />
@@ -434,7 +442,7 @@ export const WindowsFailureRepairLab: React.FC<WindowsFailureRepairLabProps> = (
                   <span className="w-5 h-5 rounded-full bg-cyan-950 border border-cyan-400 text-cyan-300 flex items-center justify-center text-[10px] font-bold">
                     1
                   </span>
-                  PRUEBA FORENSE // OBTENCIÓN DE EVIDENCIA EN VIVO
+                  PRUEBA FORENSE // OBTENCIÓN DE EVIDENCIA SIMULADA
                 </strong>
                 <span className="text-[10px] text-zinc-400 font-mono-tech">
                   HERRAMIENTA: {scenario.firstTestTool}
@@ -501,8 +509,8 @@ export const WindowsFailureRepairLab: React.FC<WindowsFailureRepairLabProps> = (
                       <span className="text-[10px] text-zinc-400 uppercase font-bold">
                         SALIDA DEVUELTA POR EL SISTEMA SIMULADO:
                       </span>
-                      <span className="text-[9px] px-1.5 py-0.5 bg-cyan-950 text-cyan-300 rounded font-mono-tech">
-                        SYSTEM_REPORTED
+                      <span className="text-[9px] px-1.5 py-0.5 bg-cyan-950 text-cyan-300 rounded font-mono-tech font-bold">
+                        SIMULATED
                       </span>
                     </div>
                     <pre className="p-3 rounded-xl bg-[#050811] border border-cyan-950 text-[11px] text-emerald-300 font-mono-tech whitespace-pre-wrap leading-relaxed overflow-x-auto">
@@ -537,13 +545,13 @@ export const WindowsFailureRepairLab: React.FC<WindowsFailureRepairLabProps> = (
                     </span>
                     EVALUACIÓN DE HIPÓTESIS // CONFIRMAR, DEBILITAR O DESCARTAR
                   </strong>
-                  <span className="text-[10px] text-zinc-400">CONTRASTACIÓN CON EVIDENCIA</span>
+                  <span className="text-[10px] text-zinc-400 font-mono-tech">CONTRASTACIÓN CON EVIDENCIA</span>
                 </div>
 
                 <div className="space-y-2">
                   {scenario.hypotheses.map((h, hIdx) => {
                     const isSelected = selectedHypothesisId === h.id;
-                    let stateBadge = { label: 'PENDIENTE', color: 'bg-zinc-800 text-zinc-400 border-zinc-700' };
+                    let stateBadge = { label: 'ABIERTA', color: 'bg-zinc-800 text-zinc-400 border-zinc-700' };
 
                     if (selectedHypothesisId) {
                       if (isSelected) {
@@ -659,7 +667,7 @@ export const WindowsFailureRepairLab: React.FC<WindowsFailureRepairLabProps> = (
                           CAUSA RAÍZ REAL / EVIDENCIADA DEL ESCENARIO:
                         </strong>
                         <span className="text-[9px] px-2.5 py-0.5 bg-black/80 text-purple-300 rounded-md border border-purple-700 font-mono-tech font-bold">
-                          SIMULATED CONFIRMED
+                          SIMULATED
                         </span>
                       </div>
 
@@ -727,9 +735,14 @@ export const WindowsFailureRepairLab: React.FC<WindowsFailureRepairLabProps> = (
                   {/* Solution Commands */}
                   {scenario.solutionCommands.length > 0 && (
                     <div className="space-y-2 pt-2 border-t border-zinc-900">
-                      <span className="text-[10px] text-zinc-400 font-mono-tech uppercase font-bold block">
-                        COMANDOS DE REPARACIÓN:
-                      </span>
+                      <div className="flex items-center justify-between">
+                        <span className="text-[10px] text-zinc-400 font-mono-tech uppercase font-bold block">
+                          COMANDOS DE REPARACIÓN:
+                        </span>
+                        <span className="text-[9px] px-1.5 py-0.5 bg-cyan-950 text-cyan-300 rounded font-mono-tech font-bold">
+                          SIMULATED / EDUCATIONAL
+                        </span>
+                      </div>
                       <div className="space-y-1.5">
                         {scenario.solutionCommands.map((cmd, cIdx) => (
                           <div
@@ -751,8 +764,41 @@ export const WindowsFailureRepairLab: React.FC<WindowsFailureRepairLabProps> = (
                     </div>
                   )}
 
+                  {/* Progressive Technical Details Toggle (Principiante vs Técnico) */}
+                  <div className="pt-1 border-t border-zinc-900">
+                    <button
+                      type="button"
+                      onClick={() => setDeepDetailsOpen(!deepDetailsOpen)}
+                      className="w-full py-2 px-3 rounded-xl bg-black/80 hover:bg-zinc-900 border border-zinc-800 hover:border-cyan-800/80 text-zinc-300 hover:text-cyan-300 text-xs font-mono-tech flex items-center justify-between cursor-pointer transition-all"
+                    >
+                      <span className="flex items-center gap-2 font-bold text-[11px] uppercase">
+                        <Cpu className="w-4 h-4 text-cyan-400" />
+                        [ PROFUNDIZAR EN DETALLES TÉCNICOS E INTERNOS DE WINDOWS ]
+                      </span>
+                      {deepDetailsOpen ? (
+                        <ChevronUp className="w-4 h-4 text-cyan-400" />
+                      ) : (
+                        <ChevronDown className="w-4 h-4 text-cyan-400" />
+                      )}
+                    </button>
+
+                    {deepDetailsOpen && (
+                      <div className="p-3.5 mt-2 rounded-xl bg-[#050810] border border-cyan-900/60 text-xs font-mono-tech text-zinc-300 space-y-2 animate-fadeIn">
+                        <div className="text-[10px] text-cyan-400 font-bold uppercase border-b border-zinc-800 pb-1">
+                          ESPECIFICACIÓN TÉCNICA DEL PROCESO // REFERENCIA SIMULADA:
+                        </div>
+                        <ul className="space-y-1 text-[11px] text-zinc-300 font-sans-editorial">
+                          <li>• <strong className="font-mono-tech text-cyan-300">SUBSISTEMA AFECTADO:</strong> {scenario.category}</li>
+                          <li>• <strong className="font-mono-tech text-cyan-300">NIVEL DE PRIVILEGIO:</strong> Ring 0 / Kernel Mode (WinRE/System)</li>
+                          <li>• <strong className="font-mono-tech text-cyan-300">CÓDIGO DE IDENTIFICACIÓN:</strong> {scenario.badgeCode}</li>
+                          <li>• <strong className="font-mono-tech text-cyan-300">REVERSIBILIDAD:</strong> {scenario.rollbackProtocol}</li>
+                        </ul>
+                      </div>
+                    )}
+                  </div>
+
                   {/* Verification Protocol - Required Execution */}
-                  <div className="p-4 rounded-xl bg-emerald-950/30 border border-emerald-500/40 text-emerald-200 space-y-2.5">
+                  <div className="p-4 rounded-xl bg-emerald-950/30 border border-emerald-500/40 text-emerald-200 space-y-3">
                     <div className="flex flex-wrap items-center justify-between gap-2">
                       <strong className="text-emerald-400 font-mono-tech uppercase text-[10.5px] font-bold flex items-center gap-1.5">
                         <FileCheck className="w-4 h-4 text-emerald-400" />
@@ -784,6 +830,30 @@ export const WindowsFailureRepairLab: React.FC<WindowsFailureRepairLabProps> = (
                       <code className="p-2 rounded-lg bg-black/90 text-emerald-300 font-mono-tech text-[11px] block mt-1 overflow-x-auto border border-emerald-900/60">
                         {scenario.verificationCommand}
                       </code>
+                    )}
+
+                    {/* Comparison Card (Before vs After) */}
+                    {hasRunVerification && (
+                      <div className="mt-3 pt-3 border-t border-emerald-800/60 space-y-2 animate-fadeIn">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-[11px] font-sans-editorial">
+                          <div className="p-2.5 rounded-lg bg-rose-950/40 border border-rose-800/60 text-rose-200 space-y-1">
+                            <strong className="font-mono-tech text-[10px] text-rose-400 uppercase block font-bold">
+                              ESTADO ANTES DE LA REPARACIÓN:
+                            </strong>
+                            <p className="text-[10.5px]">SÍNTOMA ACTIVO: {scenario.userSymptom}</p>
+                          </div>
+                          <div className="p-2.5 rounded-lg bg-emerald-950/60 border border-emerald-700/80 text-emerald-100 space-y-1">
+                            <strong className="font-mono-tech text-[10px] text-emerald-300 uppercase block font-bold">
+                              ESTADO DESPUÉS DE LA REPARACIÓN:
+                            </strong>
+                            <p className="text-[10.5px]">0 ERRORES • SISTEMA OPERATIVO Y SERVICIOS ESTABLES</p>
+                          </div>
+                        </div>
+
+                        <div className="p-2.5 rounded-lg bg-emerald-950/80 border border-emerald-500/60 text-center text-xs font-mono-tech font-black text-emerald-300 uppercase tracking-wider shadow-sm">
+                          “FUNCIONALIDAD RESTAURADA EN ESTE ESCENARIO SIMULADO”
+                        </div>
+                      </div>
                     )}
                   </div>
 
