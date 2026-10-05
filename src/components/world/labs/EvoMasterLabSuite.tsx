@@ -65,7 +65,6 @@ export const EvoMasterLabSuite: React.FC<EvoMasterLabSuiteProps> = ({
   initialScenario,
 }) => {
   const { mode, isPericial } = useEvoOperatingMode();
-  const isElite = true;
   const [activePanel, setActivePanel] = useState<'sandbox' | 'hardware' | 'software' | 'telemetry' | 'matrix' | 'all'>(initialPanel);
 
   // Beginner (Principiante / Guiado) vs Technical (Técnico / Sysinternals) View Mode
@@ -491,7 +490,7 @@ ESTADO HASH  : FIRMADO Y VERIFICADO CONTRA FIRMA DE SESIÓN
                 </button>
               </div>
 
-              {/* Detected Machine Badge */}
+              {/* Detected Machine Badge / Honest Simulated State */}
               {liveHardware ? (
                 <div 
                   className="px-3 py-1.5 rounded-xl border border-emerald-500/40 text-[11px] text-emerald-300 flex items-center gap-2"
@@ -501,14 +500,19 @@ ESTADO HASH  : FIRMADO Y VERIFICADO CONTRA FIRMA DE SESIÓN
                   <span className="font-bold text-white max-w-[130px] truncate">{liveHardware.cpuModel}</span>
                 </div>
               ) : (
-                <button
-                  type="button"
-                  onClick={onOpenAutoDetectModal}
-                  className="px-3 py-1.5 rounded-xl bg-amber-500/10 hover:bg-amber-400 text-amber-300 hover:text-black border border-amber-400/50 hover:border-amber-400 text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer shadow-[0_0_12px_rgba(251,191,36,0.2)]"
-                >
-                  <Zap className="w-3.5 h-3.5 text-amber-400" />
-                  <span>⚡ DETECTAR MI PC</span>
-                </button>
+                <div className="flex items-center gap-2 flex-wrap">
+                  <span className="text-[10px] font-mono text-zinc-400 border border-zinc-800 px-2 py-1 rounded-lg bg-zinc-950/80">
+                    CONTEXTO DE USUARIO NO DISPONIBLE // ESCENARIO DE LABORATORIO SIMULADO
+                  </span>
+                  <button
+                    type="button"
+                    onClick={onOpenAutoDetectModal}
+                    className="px-3 py-1.5 rounded-xl bg-amber-500/10 hover:bg-amber-400 text-amber-300 hover:text-black border border-amber-400/50 hover:border-amber-400 text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer shadow-[0_0_12px_rgba(251,191,36,0.2)]"
+                  >
+                    <Zap className="w-3.5 h-3.5 text-amber-400" />
+                    <span>⚡ DETECTAR MI PC</span>
+                  </button>
+                </div>
               )}
 
               {/* PDF Dossier Button */}

@@ -90,6 +90,8 @@ export interface EvoTechnicalIdentityProfile {
   updatedAt: string;
   userBadgeRank: string;
   privacyMode: 'LOCAL_ONLY' | 'EXPLICIT_SHARED';
+  storageClassification: 'LOCAL_USER_CONTROLLED' | 'SERVER_VERIFIED';
+  integrityDisclaimer: string;
   metricsSummary: {
     totalCapabilities: number;
     verifiedCapabilities: number;
@@ -353,6 +355,8 @@ export class EvoTechnicalIdentityEngine {
       updatedAt: nowISO,
       userBadgeRank,
       privacyMode: 'LOCAL_ONLY',
+      storageClassification: 'LOCAL_USER_CONTROLLED',
+      integrityDisclaimer: 'Registro local generado por EVO LABS. Su integridad depende del entorno del usuario.',
       metricsSummary: {
         totalCapabilities: skillGraph.nodes.length,
         verifiedCapabilities: verifiedCaps,

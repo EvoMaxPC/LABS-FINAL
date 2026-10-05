@@ -223,12 +223,16 @@ export const EvoTechnicalDossierModal: React.FC<EvoTechnicalDossierModalProps> =
                   <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                     <div>
                       <div className="text-xs font-mono font-bold text-amber-400 uppercase">
-                        Rango Pericial Acreditado
+                        Rango Pericial Acreditado // Registro Local
                       </div>
                       <h3 className="text-xl font-bold text-white font-mono">{profile.userBadgeRank}</h3>
                       <p className="text-xs text-zinc-400 pt-1">
-                        Identificador Criptográfico Local: <span className="font-mono text-zinc-300">{profile.identityId}</span>
+                        Identificador Técnico Local: <span className="font-mono text-zinc-300">{profile.identityId}</span>
                       </p>
+                      <div className="mt-2 text-[10px] font-mono text-zinc-400 flex items-center gap-1.5">
+                        <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />
+                        <span>Registro local de usuario. Su integridad depende del entorno del navegador.</span>
+                      </div>
                     </div>
 
                     <div className="flex items-center gap-3">

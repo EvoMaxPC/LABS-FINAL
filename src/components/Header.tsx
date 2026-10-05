@@ -114,12 +114,11 @@ export const Header: React.FC<HeaderProps> = ({
       onNavigateTomo03();
     } else if (id === 'tomo-04' && onNavigateTomo04) {
       onNavigateTomo04();
-    } else if (id === 'tomo-05' && onNavigateTomo05) {
-      onNavigateTomo05();
-    } else if (id === 'tomo-06' && onNavigateTomo06) {
-      onNavigateTomo06();
     } else if (id === 'tomo-08' && onNavigateTomo08) {
       onNavigateTomo08();
+    } else {
+      // Tomos 05, 06, 07, 09, 10 in active roadmap: open technical dossier with 0 dead clicks
+      setInternalDossierTomoId(id);
     }
   };
 
@@ -231,7 +230,7 @@ export const Header: React.FC<HeaderProps> = ({
               )}
             </button>
 
-            {/* 2. APRENDER */}
+            {/* 2. TOMOS */}
             <button
               type="button"
               onClick={() => {
@@ -239,7 +238,7 @@ export const Header: React.FC<HeaderProps> = ({
                 if (onNavigateCampusSection) onNavigateCampusSection('escuela');
                 else if (onNavigateHome) onNavigateHome();
               }}
-              title="Aprender // Colección de 10 Tomos, Tutor y Ruta Formativa"
+              title="Tomos // Colección de 10 Tomos Maestros"
               className={`px-3 py-1.5 rounded-xl flex items-center gap-1.5 transition-all duration-200 cursor-pointer select-none group relative ${
                 isEscuelaActive
                   ? 'bg-gradient-to-b from-amber-400/20 via-amber-500/12 to-amber-500/5 text-amber-200 border border-amber-400/40 font-bold shadow-[0_0_16px_rgba(245,158,11,0.2),inset_0_1px_0_rgba(255,255,255,0.18)]'
@@ -247,7 +246,7 @@ export const Header: React.FC<HeaderProps> = ({
               }`}
             >
               <BookOpen className="w-3.5 h-3.5 text-amber-400 group-hover:scale-110 transition-transform duration-200" />
-              <span>APRENDER</span>
+              <span>TOMOS</span>
               {isEscuelaActive && (
                 <span className="w-1.5 h-1.5 rounded-full bg-amber-400 shadow-[0_0_6px_#fbbf24] animate-pulse" />
               )}
@@ -421,8 +420,8 @@ export const Header: React.FC<HeaderProps> = ({
                     : 'hover:bg-white/[0.06] text-zinc-200 border border-transparent'
                 }`}
               >
-                <Compass className="w-4 h-4 text-amber-400 shrink-0" />
-                <span>APRENDER</span>
+                <BookOpen className="w-4 h-4 text-amber-400 shrink-0" />
+                <span>TOMOS</span>
               </button>
 
               {/* 3. PRACTICAR */}

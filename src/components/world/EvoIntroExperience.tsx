@@ -313,6 +313,14 @@ export const EvoIntroExperience: React.FC<EvoIntroExperienceProps> = ({
                   <p className="text-[10px] text-zinc-400 font-sans leading-tight">Evidencia con procedencia comprobada.</p>
                 </div>
               </div>
+
+              {/* Editorial Clarification Note */}
+              <div className="pt-2 text-center">
+                <span className="text-[10px] font-mono-tech text-zinc-400 bg-zinc-900/80 border border-zinc-800 px-3.5 py-1.5 rounded-full inline-flex items-center gap-1.5">
+                  <Sparkles className="w-3 h-3 text-amber-400" />
+                  <span>Estos 5 pilares resumen el EVO METHOD completo de 9 etapas de investigación.</span>
+                </span>
+              </div>
             </motion.div>
           )}
 

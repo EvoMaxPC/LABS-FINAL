@@ -46,7 +46,6 @@ import {
   TutorEvoProvider,
   useTutorEvo,
 } from './components/tutor/TutorEvoContext';
-import { TutorBreadcrumbBar } from './components/tutor/TutorBreadcrumbBar';
 import { TutorEvoFloatingButton } from './components/tutor/TutorEvoFloatingButton';
 import { TutorEvoDrawer } from './components/tutor/TutorEvoDrawer';
 import { TutorOnboardingModal } from './components/tutor/TutorOnboardingModal';
@@ -1155,9 +1154,6 @@ function AppContent() {
         dossierModalTomoId={dossierModalTomoId}
         onCloseDossierModal={() => setDossierModalTomoId(null)}
       />
-
-      {/* Orientación Permanente: Tutor Breadcrumb Bar */}
-      <TutorBreadcrumbBar />
 
       {/* Main Body Container */}
       <div className="flex-1 min-h-screen print:min-h-0 flex flex-col relative print:p-0 print:m-0">

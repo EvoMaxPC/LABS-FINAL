@@ -565,11 +565,11 @@ ${realUserHardware ? `[8] SILICIO DETECTADO EN EL EQUIPO DEL USUARIO
 - RAM Detectada          : ${realUserHardware.ramCapacityGb || realUserHardware.ramSizeGb || 16} GB @ ${realUserHardware.ramSpeedMhz || 3200} MT/s (${realUserHardware.ramType || 'DDR'})
 - Fecha de Captura       : ${realUserHardware.capturedAt || 'N/D'}
 ` : ''}================================================================================
-           SELLO CRIPTOGRÁFICO DE INTEGRIDAD PERICIAL // SHA-256
+           SELLO DE INTEGRIDAD LOCAL // HASH SHA-256
 ================================================================================
-HASH SHA-256 : ${sha256Simulated}
-AUDITORÍA    : FIRMA PERICIAL DIGITAL DE VALIDACIÓN FORENSE EVO LABS
-ESTADO HASH  : FIRMADO Y VERIFICADO CONTRA FIRMA DE SESIÓN
+DIGEST SHA-256 : ${sha256Simulated}
+AUDITORÍA      : REGISTRO LOCAL GENERADO POR EVO LABS
+INTEGRIDAD     : SU VALIDEZ DEPENDE DEL ENTORNO DEL USUARIO
 ================================================================================
 `;
 
@@ -763,7 +763,7 @@ ESTADO HASH  : FIRMADO Y VERIFICADO CONTRA FIRMA DE SESIÓN
           </div>
 
           {/* Master Latency Meter Badge */}
-          <div className="p-4 rounded-xl bg-black/80 border border-zinc-800 text-right shrink-0 min-w-[200px]">
+          <div className="p-4 rounded-xl bg-black/80 border border-zinc-800 text-right shrink-0 w-full lg:w-auto lg:min-w-[200px]">
             <span className="text-[10px] text-zinc-500 uppercase block tracking-wider font-bold">
               LATENCIA REAL ABSOLUTA (ns)
             </span>

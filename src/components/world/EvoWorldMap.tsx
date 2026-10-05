@@ -7,6 +7,9 @@ import {
 import { ForensicBenchTarget } from '../common/EvoTomoDossierModal';
 import { EVO_WORLD_ZONES } from '../../data/evoWorldData';
 import { VOLUMES_COLLECTION } from '../../data/collections';
+import { EVO_TOMES_EXPANDED_DATA } from '../../data/evoTomesExpandedData';
+import { EvoTomeCardExpanded } from './EvoTomeCardExpanded';
+import { EvoHomeExperience } from '../home/EvoHomeExperience';
 import {
   EVO_SCHOOL_LEVELS,
   EVO_TOMES_PEDAGOGY,
@@ -98,6 +101,7 @@ import {
   Boxes,
   Microchip,
   ChevronRight,
+  Clock,
   X,
   Info,
   HelpCircle,
@@ -989,266 +993,23 @@ export const EvoWorldMap: React.FC<EvoWorldMapProps> = ({
       )}
 
       {/* ========================================================================= */}
-      {/* 1. MUNDO EVO = CAMPUS PRINCIPAL (ESTÉTICA SAAS PREMIUM ESCRITORIO)       */}
+      {/* 1. MUNDO EVO = INICIO COMERCIAL (EVO HOME EXPERIENCE)                     */}
       {/* ========================================================================= */}
-      {activeIntention === 'campus' && (() => {
-        // Evaluate actual user state for the home cockpit
-        const hasProgress = realProgress.hasProgress;
-        const isExamPending = realProgress.isC07Done && !realProgress.isExamPassed;
-        const isFullyCompleted = realProgress.isTomo01FullyDone;
-
-        let userStateLabel = 'NUEVO';
-        let userStateSubtitle = 'Tu evolución todavía no comenzó.';
-        let userStateColor = 'text-amber-400 border-amber-400/20 bg-amber-400/5';
-        let ctaLabel = 'COMENZAR MI EVOLUCIÓN →';
-        let ctaAction = () => {
-          setActiveIntention('escuela');
-          setSelectedLevelNumber(null);
-        };
-
-        if (isFullyCompleted) {
-          userStateLabel = 'COMPLETADO';
-          userStateSubtitle = 'Tomo 01 acreditado con honores.';
-          userStateColor = 'text-emerald-400 border-emerald-500/25 bg-emerald-500/5';
-          ctaLabel = 'VER MI EVO / PASAPORTE →';
-          ctaAction = () => {
-            setActiveIntention('progreso');
-          };
-        } else if (isExamPending) {
-          userStateLabel = 'EXAMEN PENDIENTE';
-          userStateSubtitle = 'Contenido completado • Falta acreditar Tomo 01';
-          userStateColor = 'text-purple-400 border-purple-500/25 bg-purple-500/5';
-          ctaLabel = 'RENDIR EXAMEN →';
-          ctaAction = () => {
-            if (onStartFinalExam) onStartFinalExam();
-            else setActiveIntention('escuela');
-          };
-        } else if (hasProgress) {
-          userStateLabel = 'EN CURSO';
-          userStateSubtitle = `${realProgress.lastActivity?.title || 'Tomo 01'} • En progreso`;
-          userStateColor = 'text-cyan-400 border-cyan-500/25 bg-cyan-500/5';
-          ctaLabel = 'CONTINUAR CAPÍTULO →';
-          ctaAction = () => {
-            if (realProgress.lastActivity?.onContinue) {
-              realProgress.lastActivity.onContinue();
-            } else {
-              setActiveIntention('escuela');
-            }
-          };
-        }
-
-        // Nucleus visual reaction classes
-        let nucleusBorder = 'border-zinc-800/80 group-hover:border-amber-400/40';
-        let nucleusPulseDot = 'bg-amber-400';
-        let nucleusPulseBorder = 'border-amber-400/30';
-        let nucleusGlowClass = 'bg-amber-500/[0.015]';
-        let nucleusIconColor = 'text-amber-400/90';
-
-        if (isFullyCompleted) {
-          nucleusBorder = 'border-emerald-500/40 hover:border-emerald-400';
-          nucleusPulseDot = 'bg-emerald-400';
-          nucleusPulseBorder = 'border-emerald-500/40';
-          nucleusGlowClass = 'bg-emerald-500/[0.03]';
-          nucleusIconColor = 'text-emerald-400';
-        } else if (isExamPending) {
-          nucleusBorder = 'border-purple-500/40 hover:border-purple-400';
-          nucleusPulseDot = 'bg-purple-400 animate-pulse';
-          nucleusPulseBorder = 'border-purple-500/40';
-          nucleusGlowClass = 'bg-purple-500/[0.03]';
-          nucleusIconColor = 'text-purple-400';
-        } else if (hasProgress) {
-          nucleusBorder = 'border-cyan-500/40 hover:border-cyan-400';
-          nucleusPulseDot = 'bg-cyan-400';
-          nucleusPulseBorder = 'border-cyan-500/40';
-          nucleusGlowClass = 'bg-cyan-500/[0.03]';
-          nucleusIconColor = 'text-cyan-400';
-        }
-
-        return (
-          <div className="relative z-10 flex-1 max-w-[1720px] w-[90vw] mx-auto px-4 sm:px-8 lg:px-12 py-10 sm:py-16 flex flex-col space-y-24 transition-all duration-500">
-            
-            {/* 1. SIGNATURE ASYMMETRICAL HERO SECTION */}
-            <section className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-center relative min-h-[520px]">
-              {/* Subtle ambient focal glow */}
-              <div className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full blur-[120px] pointer-events-none transition-colors duration-1000 ${nucleusGlowClass}`} />
-              
-              {/* Left: Typographic Monument & System Controls (7 cols) */}
-              <div className="lg:col-span-7 space-y-8 text-left">
-                {/* 1. MUNDO EVO Distinct Brand Wordmark */}
-                <div className="space-y-3">
-                  <div className="flex items-center gap-3">
-                    <span className={`px-2.5 py-0.5 rounded text-[10px] font-mono-tech font-black border transition-all duration-500 ${userStateColor}`}>
-                      ESTADO // {userStateLabel}
-                    </span>
-                    <span className="text-xs font-mono-tech text-zinc-400 font-medium">
-                      {userStateSubtitle}
-                    </span>
-                  </div>
-
-                  <EvoMundoWordmark variant="hero" showUniverseBadge={true} />
-                </div>
-
-                {/* 2. Canonical Manifest: NO LO CREAS. COMPROBALO. */}
-                <div className="border-l-2 border-amber-400 pl-5 py-1.5 space-y-1 bg-gradient-to-r from-amber-400/[0.03] to-transparent">
-                  <span className="text-2xl sm:text-3xl lg:text-4xl font-display font-black text-amber-400 uppercase block tracking-wider leading-none">
-                    NO LO CREAS.
-                  </span>
-                  <span className="text-2xl sm:text-3xl lg:text-4xl font-display font-black text-white uppercase block tracking-wider leading-none">
-                    COMPROBALO.
-                  </span>
-                </div>
-
-                {/* 3. 1 short concise explanation sentence */}
-                <p className="font-sans-editorial text-sm sm:text-base text-zinc-300 leading-relaxed max-w-xl">
-                  Consola central de operaciones técnicas para aprender, diagnosticar y certificar hardware y sistemas operativos con telemetría y evidencia empírica verificable.
-                </p>
-
-                {/* 4. Proprietary EVO System Buttons */}
-                <div className="flex flex-wrap items-center gap-4 pt-2">
-                  <EvoPrimarySystemButton onClick={ctaAction}>
-                    {ctaLabel}
-                  </EvoPrimarySystemButton>
-
-                  <EvoSecondaryInspectButton
-                    onClick={() => {
-                      const el = document.getElementById('seccion-como-funciona');
-                      if (el) el.scrollIntoView({ behavior: 'smooth' });
-                    }}
-                  >
-                    VER CÓMO FUNCIONA
-                  </EvoSecondaryInspectButton>
-                </div>
-              </div>
-
-              {/* Right: 3D Interactive Silicon Knowledge Object (5 cols) */}
-              <div className="lg:col-span-5 flex items-center justify-center relative min-h-[380px] sm:min-h-[460px]">
-                <EvoHeroCore3D
-                  userStateLabel={userStateLabel}
-                  userStateColor={userStateColor}
-                  onCoreClick={() => {
-                    const el = document.getElementById('seccion-como-funciona');
-                    if (el) el.scrollIntoView({ behavior: 'smooth' });
-                  }}
-                />
-              </div>
-            </section>
-
-            {/* ADAPTIVE PATH // SIGUIENTE MEJOR ACCIÓN DESTACADA */}
-            <EvoNextBestActionBanner
-              action={adaptiveAction}
-              onExecuteAction={handleExecuteAdaptiveAction}
-            />
-
-            {/* 2. CÓMO FUNCIONA SECTION */}
-            <section id="seccion-como-funciona" className="space-y-10 pt-10 border-t border-zinc-900/60">
-              <div className="text-center space-y-2">
-                <span className="text-[10px] font-mono tracking-widest text-cyan-400 uppercase font-bold block">
-                  METODOLOGÍA DE ENSEÑANZA
-                </span>
-                <h2 className="font-display font-black text-2xl sm:text-3xl text-white uppercase tracking-tight">
-                  CÓMO FUNCIONA EVO
-                </h2>
-                <p className="text-sm text-zinc-400 font-sans-editorial max-w-md mx-auto">
-                  Un método riguroso diseñado para entender y dominar la tecnología mediante evidencia técnica comprobable.
-                </p>
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                {[
-                  {
-                    step: '01',
-                    label: 'APRENDER',
-                    desc: 'Entendé cómo funciona.',
-                    details: 'Leé el contenido editorial estructurado, analiza esquemas de silicio y asimila conceptos sin mitos ni atajos.',
-                    color: 'text-amber-400'
-                  },
-                  {
-                    step: '02',
-                    label: 'PRACTICAR',
-                    desc: 'Experimentá en un entorno controlado.',
-                    details: 'Ingresá a simuladores, intercambiá hardware, interactúa con el Kernel de Windows y poné a prueba los conceptos aprendidos.',
-                    color: 'text-emerald-400'
-                  },
-                  {
-                    step: '03',
-                    label: 'ANALIZAR',
-                    desc: 'Observá sistemas y datos reales.',
-                    details: 'Audita telemetría de hilos de CPU, latencias DPC reales, diagramas de bus PCB y flujos de datos en tiempo de ejecución.',
-                    color: 'text-purple-400'
-                  },
-                  {
-                    step: '04',
-                    label: 'COMPROBAR',
-                    desc: 'Validá resultados y generá evidencia.',
-                    details: 'Completá expedientes de taller técnico, diagnostica incidentes reales y certificá tus habilidades con método pericial.',
-                    color: 'text-cyan-400'
-                  }
-                ].map((item) => (
-                  <div key={item.step} className="p-5 rounded-2xl bg-zinc-950/30 border border-zinc-900 hover:border-zinc-800 transition-colors flex flex-col justify-between h-56">
-                    <div className="space-y-2">
-                      <span className={`font-mono font-black text-3xl ${item.color} leading-none block`}>
-                        {item.step}
-                      </span>
-                      <h3 className="font-display font-bold text-sm text-zinc-100 uppercase tracking-wider">
-                        {item.label}
-                      </h3>
-                      <p className="text-xs text-zinc-300 font-medium font-sans-editorial">
-                        {item.desc}
-                      </p>
-                      <p className="text-[11px] text-zinc-400 font-sans-editorial leading-normal pt-1.5">
-                        {item.details}
-                      </p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </section>
-
-            {/* 3. MANIFIESTO SECTION */}
-            <section className="py-8 text-center space-y-6 max-w-3xl mx-auto border-t border-zinc-900/60">
-              <span className="text-[10px] font-mono tracking-widest text-amber-400 uppercase font-bold block">
-                EL MANIFIESTO EDITORIAL
-              </span>
-              <blockquote className="font-display font-black text-3xl sm:text-4xl lg:text-5xl text-white uppercase tracking-tight leading-none">
-                NO LO CREAS.<br/>
-                COMPROBALO.
-              </blockquote>
-              <p className="text-zinc-300 text-sm sm:text-base leading-relaxed max-w-xl mx-auto font-sans-editorial">
-                No enseñamos a repetir pasos mecánicamente. Enseñamos a observar, medir, experimentar y demostrar de forma empírica. Cada acción en EVO LABS debe descubrir algo, registrar evidencia objetiva o transformar tu nivel técnico de forma irreversible.
-              </p>
-            </section>
-
-            {/* 4. QUIÉNES SOMOS SECTION */}
-            <section className="p-6 sm:p-8 rounded-2xl bg-zinc-950/40 border border-zinc-900 space-y-3 text-center max-w-xl mx-auto">
-              <h3 className="font-mono text-[10px] text-zinc-500 uppercase tracking-widest font-bold">
-                QUIÉNES SOMOS
-              </h3>
-              <p className="font-sans-editorial text-sm text-zinc-300 leading-relaxed font-normal">
-                <strong className="text-white">EVO LABS</strong> es una plataforma editorial, técnica y educativa para aprender informática a fondo mediante práctica real, diagnóstico pericial y evidencia comprobada. Unimos el rigor técnico de la ingeniería con la pedagogía interactiva más avanzada.
-              </p>
-            </section>
-
-            {/* 5. FOOTER SECTION */}
-            <footer className="pt-10 border-t border-zinc-900 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-mono text-zinc-500">
-              <div className="flex flex-col items-center sm:items-start space-y-1">
-                <span className="font-display font-black text-white tracking-tight">EVO LABS</span>
-                <span className="text-[10px] text-zinc-600 uppercase tracking-widest">
-                  Plataforma editorial y laboratorio tecnológico
-                </span>
-              </div>
-
-              <div className="text-center font-bold text-zinc-400">
-                NO LO CREAS. COMPROBALO.
-              </div>
-
-              <div className="text-center sm:text-right text-[10px]">
-                <p>© 2026 EVO LABS. Todos los derechos reservados.</p>
-              </div>
-            </footer>
-
-          </div>
-        );
-      })()}
+      {activeIntention === 'campus' && (
+        <EvoHomeExperience
+          onNavigateTomos={() => setActiveIntention('biblioteca')}
+          onNavigatePracticar={() => setActiveIntention('laboratorios')}
+          onNavigateAnalizar={() => setActiveIntention('diagnosticar')}
+          onNavigateHerramientas={() => setActiveIntention('herramientas')}
+          onNavigateMiEvo={() => setActiveIntention('progreso')}
+          onNavigateHotSwapLab={onNavigateHotSwapLab}
+          onNavigateWindowsMatrixLab={onNavigateWindowsMatrixLab}
+          onNavigateBootLab={onNavigateBootLab}
+          onOpenTomo={onOpenTomo}
+          userPassport={passport}
+          realProgress={realProgress}
+        />
+      )}
 
       {/* ========================================================================= */}
       {/* 2. SECCIÓN: ESCUELA EVO (RUTA POR NIVELES 0 AL 6)                         */}
@@ -1513,7 +1274,7 @@ export const EvoWorldMap: React.FC<EvoWorldMapProps> = ({
         }
 
         return (
-          <div className="relative z-10 flex-1 max-w-5xl mx-auto w-full px-4 sm:px-6 py-8 space-y-12 transition-all duration-300">
+          <div className="relative z-10 flex-1 max-w-5xl mx-auto w-full px-4 sm:px-6 py-8 space-y-10 transition-all duration-300">
             
             {/* 1. HEADER EDITORIAL */}
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-zinc-900 pb-5">
@@ -1548,94 +1309,84 @@ export const EvoWorldMap: React.FC<EvoWorldMapProps> = ({
               </div>
             </div>
 
-            {/* 2. TOMO ACTIVO (SPOTLIGHT HERO) */}
-            <div className="p-6 sm:p-8 rounded-2xl bg-gradient-to-r from-[#14120a] via-[#090b10] to-[#06080d] border border-amber-400/30 shadow-[0_0_30px_rgba(245,158,11,0.06)] relative overflow-hidden group">
-              <div className="absolute top-0 right-0 w-80 h-80 bg-amber-400/[0.015] rounded-full blur-3xl pointer-events-none" />
-              
-              <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-center relative z-10">
-                
-                {/* Left side cover art */}
-                <div className="md:col-span-4 flex justify-center">
-                  <div className="w-40 h-56 sm:w-44 sm:h-64 rounded-xl bg-zinc-950 border-2 border-amber-400/25 p-3 flex flex-col justify-between shadow-2xl relative transform group-hover:scale-[1.01] transition-transform duration-500">
-                    <div className="absolute top-0 right-0 w-16 h-16 bg-amber-400/[0.02] rounded-full blur-md" />
-                    
-                    <div className="flex justify-between items-start font-mono text-[9px] text-zinc-500">
-                      <span>NIVEL 1</span>
-                      <span className="text-amber-400 font-bold uppercase">{tomo01State}</span>
-                    </div>
-
-                    <div className="space-y-1.5">
-                      <span className="text-[10px] font-mono text-zinc-500 block">TOMO 01</span>
-                      <h4 className="font-display font-black text-base text-white tracking-tight uppercase leading-tight">
-                        CONOCÉ TU PC
-                      </h4>
-                    </div>
-
-                    <div className="pt-2 border-t border-zinc-900 text-[8px] font-mono text-zinc-600 flex justify-between">
-                      <span>EDICIÓN 2026</span>
-                      <span>100% CANÓNICO</span>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Right side content */}
-                <div className="md:col-span-8 space-y-5">
-                  <div className="space-y-2">
-                    <div className="flex items-center gap-2.5 flex-wrap">
-                      <span className="text-[10px] font-mono tracking-widest text-amber-400 font-bold uppercase">
-                        ESTUDIO ACTIVO PRINCIPAL
-                      </span>
-                      <span className={`px-2 py-0.5 rounded text-[8px] font-mono font-black border uppercase tracking-wider ${tomo01StateColor}`}>
-                        {tomo01State}
-                      </span>
-                    </div>
-
-                    <h3 className="font-display font-black text-2xl sm:text-3xl text-white uppercase tracking-tight">
-                      TOMO 01 // CONOCÉ TU PC
-                    </h3>
-                    
-                    <p className="text-sm text-zinc-300 font-sans-editorial leading-relaxed max-w-xl">
-                      Entendé qué máquina tenés frente a vos, cómo dialogan sus componentes de silicio y dónde radican los límites reales del rendimiento de tu hardware sin placebos.
-                    </p>
-                  </div>
-
-                  {/* Progress bar */}
-                  <div className="max-w-md space-y-1.5 font-mono text-[10px] text-zinc-400">
-                    <div className="flex justify-between uppercase">
-                      <span>Avance académico real</span>
-                      <span className="font-bold text-white">{completedChaptersCount} de 7 completados</span>
-                    </div>
-                    <div className="w-full h-1.5 bg-zinc-900 rounded-full overflow-hidden border border-zinc-800/40">
-                      <div 
-                        className="h-full bg-amber-400 transition-all duration-700" 
-                        style={{ width: `${(completedChaptersCount / 7) * 100}%` }}
-                      />
-                    </div>
-                  </div>
-
-                  {/* CTAs */}
-                  <div className="flex flex-wrap items-center gap-3.5 pt-1">
-                    <button
-                      type="button"
-                      onClick={tomo01CTAAction}
-                      className="px-5 py-3 rounded-xl bg-amber-400 hover:bg-amber-300 text-black font-mono font-bold text-xs uppercase tracking-wider transition-all cursor-pointer shadow-[0_0_15px_rgba(245,158,11,0.25)] hover:shadow-[0_0_25px_rgba(245,158,11,0.4)]"
-                    >
-                      {tomo01CTALabel}
-                    </button>
-
-                    <button
-                      type="button"
-                      onClick={() => {
-                        if (onNavigateMagazine) onNavigateMagazine();
-                      }}
-                      className="px-4 py-2.5 rounded-lg bg-zinc-950/60 hover:bg-zinc-900 border border-zinc-800 text-zinc-300 hover:text-white font-mono text-xs uppercase transition-all cursor-pointer"
-                    >
-                      VER PORTADA / COVERS →
-                    </button>
-                  </div>
-                </div>
-
+            {/* Quick Metrics & Philosophy Bar */}
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs font-mono-tech">
+              <div className="p-3 rounded-xl bg-zinc-950 border border-zinc-900 text-center">
+                <span className="text-[9px] text-zinc-500 uppercase block">CATÁLOGO COMPLETO</span>
+                <span className="font-bold text-white">10 TOMOS MAESTROS</span>
               </div>
+              <div className="p-3 rounded-xl bg-zinc-950 border border-zinc-900 text-center">
+                <span className="text-[9px] text-zinc-500 uppercase block">METROLOGÍA</span>
+                <span className="font-bold text-cyan-400">LABS INCLUIDOS</span>
+              </div>
+              <div className="p-3 rounded-xl bg-zinc-950 border border-zinc-900 text-center">
+                <span className="text-[9px] text-zinc-500 uppercase block">RIGOR PERICIAL</span>
+                <span className="font-bold text-amber-400">0 MITOS / 0 PLACEBOS</span>
+              </div>
+              <div className="p-3 rounded-xl bg-zinc-950 border border-zinc-900 text-center">
+                <span className="text-[9px] text-zinc-500 uppercase block">ACREDITACIÓN</span>
+                <span className="font-bold text-emerald-400">EXPEDIENTE LOCAL</span>
+              </div>
+            </div>
+
+            {/* 2. LISTADO COMPLETO DE LOS 10 TOMOS EXPANDIDOS */}
+            <div className="space-y-6">
+              {EVO_TOMES_EXPANDED_DATA.map((tomeItem) => {
+                const isTomo01 = tomeItem.number === '01';
+                const progressPct = isTomo01 ? Math.round((completedChaptersCount / 7) * 100) : 0;
+                const progressTxt = isTomo01 ? `${completedChaptersCount} de 7 capítulos (${tomo01State})` : undefined;
+
+                return (
+                  <EvoTomeCardExpanded
+                    key={tomeItem.id}
+                    tome={tomeItem}
+                    isActiveStudy={isTomo01}
+                    studyProgressPercentage={progressPct}
+                    studyProgressText={progressTxt}
+                    onOpenTomo={(tomoNum) => {
+                      if (tomoNum === '01') {
+                        if (onNavigateTomo01) onNavigateTomo01();
+                        else if (onOpenTomo) onOpenTomo('01');
+                      } else if (tomoNum === '02' || tomoNum === '03' || tomoNum === '04' || tomoNum === '08') {
+                        if (onOpenTomo) onOpenTomo(tomoNum as any);
+                      } else {
+                        if (onOpenDossier) onOpenDossier(tomoNum as any);
+                        else setTomeInDevMessage(`El Tomo ${tomoNum} (${tomeItem.title}) está planificado para el Roadmap 2026 de EVO LABS y estará disponible próximamente.`);
+                      }
+                    }}
+                    onOpenLab={(actionKey, tomoNum) => {
+                      if (actionKey === 'hotswap') {
+                        if (onNavigateHotSwapLab) onNavigateHotSwapLab();
+                        else if (onOpenTomo) onOpenTomo('01');
+                      } else if (actionKey === 'windows-matrix') {
+                        if (onNavigateWindowsMatrixLab) onNavigateWindowsMatrixLab();
+                      } else if (actionKey === 'lab-core') {
+                        if (onNavigateLabCore) onNavigateLabCore();
+                      } else if (actionKey === 'boot-lab') {
+                        if (onNavigateBootLab) onNavigateBootLab();
+                      } else {
+                        if (onOpenDossier) onOpenDossier((tomoNum || '01') as any);
+                        else setTomeInDevMessage(`El laboratorio asociado al Tomo ${tomoNum} está en fase de desarrollo activo.`);
+                      }
+                    }}
+                    onOpenDossier={(tomoNum) => {
+                      if (onOpenDossier) onOpenDossier(tomoNum as any);
+                      else setTomeInDevMessage(`Ficha curricular del Tomo ${tomoNum} disponible en expediente pericial.`);
+                    }}
+                    onOpenMagazine={(tomoNum) => {
+                      if (tomoNum === '01') {
+                        if (onNavigateMagazine) onNavigateMagazine();
+                        else if (onOpenTomo) onOpenTomo('01');
+                      } else if (tomoNum === '02' || tomoNum === '03' || tomoNum === '04' || tomoNum === '08') {
+                        if (onOpenTomo) onOpenTomo(tomoNum as any);
+                      } else {
+                        if (onOpenDossier) onOpenDossier(tomoNum as any);
+                        else setTomeInDevMessage(`La portada y arte editorial del Tomo ${tomoNum} se encuentran en el roadmap.`);
+                      }
+                    }}
+                  />
+                );
+              })}
             </div>
 
             {/* 3. TOMO STATUS POPUP ALERT */}
@@ -1647,141 +1398,12 @@ export const EvoWorldMap: React.FC<EvoWorldMapProps> = ({
                 </div>
                 <button 
                   onClick={() => setTomeInDevMessage(null)}
-                  className="px-2 py-1 rounded bg-purple-900/40 text-purple-200 hover:bg-purple-900/80 font-bold transition-colors"
+                  className="px-2 py-1 rounded bg-purple-900/40 text-purple-200 hover:bg-purple-900/80 font-bold transition-colors cursor-pointer"
                 >
                   ENTENDIDO
                 </button>
               </div>
             )}
-
-            {/* 4. TOMOS DISPONIBLES & ROADMAP SECTIONS */}
-            <div className="space-y-12">
-              
-              {/* TOMOS DISPONIBLES (Peso medio, estética de folleto técnico premium) */}
-              <div className="space-y-6">
-                <span className="text-[10px] font-mono tracking-widest text-cyan-400 uppercase font-bold block border-b border-zinc-900 pb-2">
-                  VOLÚMENES DISPONIBLES // COMPROBABLES
-                </span>
-                
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {VOLUMES_COLLECTION.filter(v => v.number !== '01' && (v.number === '02' || v.number === '03' || v.number === '04' || v.number === '08')).map((v) => {
-                    return (
-                      <div
-                        key={v.id}
-                        className="p-5 sm:p-6 rounded-2xl bg-zinc-950/30 border border-zinc-900 hover:border-zinc-800 transition-colors flex flex-col justify-between gap-5 group"
-                      >
-                        <div className="space-y-3.5">
-                          <div className="flex justify-between items-start font-mono text-[9px]">
-                            <span className="text-zinc-500 font-bold">TOMO {v.number}</span>
-                            <span className="px-2 py-0.5 rounded bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 font-bold">DISPONIBLE</span>
-                          </div>
-
-                          <div className="space-y-1">
-                            <h3 className="font-display font-black text-lg text-white group-hover:text-amber-300 transition-colors uppercase leading-tight">
-                              {v.title}
-                            </h3>
-                            <p className="text-xs text-zinc-400 font-sans-editorial italic leading-relaxed">
-                              “{v.tagline}”
-                            </p>
-                          </div>
-
-                          <p className="text-xs text-zinc-500 font-sans-editorial leading-relaxed line-clamp-2">
-                            {v.description}
-                          </p>
-                        </div>
-
-                        {/* Actions */}
-                        <div className="pt-3 border-t border-zinc-900/60 flex flex-col sm:flex-row gap-2 font-mono text-[11px] font-bold">
-                          <button
-                            type="button"
-                            onClick={() => {
-                              if (onOpenTomo) onOpenTomo(v.number as any);
-                            }}
-                            className="flex-1 py-2 px-3 rounded-lg bg-zinc-900 hover:bg-zinc-800 text-zinc-300 hover:text-white border border-zinc-800 hover:border-zinc-700 transition-colors text-center cursor-pointer"
-                          >
-                            LEER MAGAZINE →
-                          </button>
-
-                          {v.number === '02' && onNavigateWindowsMatrixLab && (
-                            <button
-                              type="button"
-                              onClick={() => onNavigateWindowsMatrixLab()}
-                              className="py-2 px-3 rounded-lg bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-300 border border-cyan-500/20 transition-colors text-center cursor-pointer"
-                            >
-                              ABRIR LAB →
-                            </button>
-                          )}
-
-                          {v.number === '03' && onNavigateLabCore && (
-                            <button
-                              type="button"
-                              onClick={() => onNavigateLabCore()}
-                              className="py-2 px-3 rounded-lg bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-300 border border-emerald-500/20 transition-colors text-center cursor-pointer"
-                            >
-                              ABRIR REPARACIÓN →
-                            </button>
-                          )}
-
-                          {v.number === '08' && onNavigateBootLab && (
-                            <button
-                              type="button"
-                              onClick={() => onNavigateBootLab()}
-                              className="py-2 px-3 rounded-lg bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-300 border border-emerald-500/20 transition-colors text-center cursor-pointer"
-                            >
-                              ABRIR ARRANQUE →
-                            </button>
-                          )}
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-
-              {/* ROADMAP / EN DESARROLLO (Menor contraste, menor peso) */}
-              <div className="space-y-6">
-                <span className="text-[10px] font-mono tracking-widest text-zinc-500 uppercase font-bold block border-b border-zinc-900 pb-2">
-                  PLANIFICADO // ROADMAP 2026 EN DESARROLLO
-                </span>
-                
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-                  {VOLUMES_COLLECTION.filter(v => v.number !== '01' && v.number !== '02' && v.number !== '03' && v.number !== '04' && v.number !== '08').map((v) => {
-                    return (
-                      <div
-                        key={v.id}
-                        onClick={() => setTomeInDevMessage(`El Tomo ${v.number} (${v.title.replace('EVO LABS // ', '')}) está planificado para el Roadmap 2026 de EVO LABS y estará disponible próximamente.`)}
-                        className="p-5 rounded-2xl bg-zinc-950/20 border border-zinc-900/60 opacity-55 scale-[0.98] hover:scale-100 hover:opacity-85 hover:border-zinc-800/80 transition-all duration-300 cursor-pointer flex flex-col justify-between gap-4"
-                      >
-                        <div className="space-y-3">
-                          <div className="flex justify-between items-start font-mono text-[8px] text-zinc-600">
-                            <span>TOMO {v.number}</span>
-                            <span className="px-1.5 py-0.2 rounded bg-zinc-900 text-zinc-500 border border-zinc-800">ROADMAP</span>
-                          </div>
-
-                          <div className="space-y-0.5">
-                            <h4 className="font-display font-bold text-sm text-zinc-400 uppercase leading-snug">
-                              {v.title.replace('EVO LABS // ', '')}
-                            </h4>
-                            <p className="text-[10px] text-zinc-500 font-sans-editorial italic">
-                              “{v.tagline}”
-                            </p>
-                          </div>
-
-                          <p className="text-[11px] text-zinc-600 font-sans-editorial leading-relaxed line-clamp-2">
-                            {v.description}
-                          </p>
-                        </div>
-
-                        <div className="pt-2 border-t border-zinc-900/40 text-[9px] font-mono text-zinc-600 text-center font-bold">
-                          PLANIFICADO 2026 // VER FICHA
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-
-            </div>
 
           </div>
         );

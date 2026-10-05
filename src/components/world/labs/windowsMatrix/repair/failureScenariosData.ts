@@ -1014,10 +1014,12 @@ export const FAILURE_SCENARIOS: FailureScenarioItem[] = [
     ],
     nextTestCommand: 'Stop-Service SysMain',
     nextTestExplanation: 'Detener temporalmente SysMain para evaluar si el uso de disco cae a valores normales.',
-    rootCause: 'Servicio SysMain realizando tareas de precarga intensiva en una unidad con baja tasa de operaciones por segundo.',
+    rootCause: 'Servicio SysMain realizando tareas de precarga intensiva en una unidad mecánica HDD con reducida tasa de IOPS.',
     solutionSteps: [
-      'Si el sistema corre en HDD o unidad con baja IOPS: Configurar SysMain en inicio Manual o Deshabilitado.',
-      'Optimizar el volumen mediante el desfragmentador/TRIM de Windows.',
+      'CUÁNDO APLICA: Exclusivamente en discos rígidos mecánicos HDD (baja tasa de IOPS).',
+      'CUÁNDO NO APLICA: En unidades SSD NVMe o SATA modernas (donde no penaliza I/O y acelera la precarga).',
+      'Si el sistema corre en HDD mecánico: Configurar SysMain en inicio Manual o Deshabilitado.',
+      'Optimizar el volumen mediante el desfragmentador/TRIM de Windows (Optimize-Volume).',
     ],
     solutionCommands: [
       'Stop-Service SysMain',
