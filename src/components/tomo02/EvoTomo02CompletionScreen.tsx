@@ -65,7 +65,7 @@ export const EvoTomo02CompletionScreen: React.FC<EvoTomo02CompletionScreenProps>
             </div>
             <div>
               <span className="font-mono-tech text-[10px] text-cyan-400 uppercase tracking-widest font-bold block">
-                ACADEMIA EVO LABS // CERTIFICADO EVO
+                EVO LABS // CERTIFICADO EVO
               </span>
               <h1 className="font-display font-black text-2xl sm:text-3xl text-white uppercase tracking-tight">
                 TOMO 02 SUPERADO CON ÉXITO

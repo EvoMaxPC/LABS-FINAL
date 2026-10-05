@@ -292,7 +292,7 @@ function AppContent() {
         updateLocation({
           academySection: 'MUNDO EVO',
           tomoNumber: undefined,
-          tomoTitle: 'Academia EVO LABS',
+          tomoTitle: 'EVO LABS',
           chapterTitle: undefined,
           activityTitle: 'Mapa Principal',
           activityType: 'mundo',
@@ -300,7 +300,7 @@ function AppContent() {
           whatFor: 'Permite visualizar todos los 10 Tomos, acceder al recorrido guiado y retomar tu progreso.',
           currentAction: 'Seleccioná un Tomo de la colección o hacé clic en "Continuar mi recorrido".',
           whatToLookFor: 'Observá los 10 tomos organizados correlativamente con sus badges de estado.',
-          whyItMatters: 'Comprender el mapa global de la Academia te ayuda a trazar tu plan de estudio sin perderte.',
+          whyItMatters: 'Comprender el mapa global de EVO LABS te ayuda a trazar tu plan de estudio sin perderte.',
           nextStep: 'Ingresá al Tomo 01 (Conocé tu PC) para aprender la base del silicio y componentes.',
         });
         saveCurrentLocationHistory('world-map', undefined, 'Mundo EVO');
@@ -1246,6 +1246,7 @@ function AppContent() {
               onNavigateMagazine={() => setCurrentView('magazine')}
               onNavigateTomo01={handleNavigateTomo01}
               onOpenCaseHistory={handleOpenCaseHistory}
+              onHardwareDetected={(passport) => setUserPassport(passport)}
             />
           )}
 

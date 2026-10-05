@@ -123,14 +123,6 @@ export const Header: React.FC<HeaderProps> = ({
     }
   };
 
-  const isMundoEvoActive = currentView === 'world-map' && campusSection === 'campus';
-  const isEscuelaActive = currentView === 'world-map' && (campusSection === 'escuela' || campusSection === 'biblioteca');
-  const isPracticarActive = currentView === 'world-map' && campusSection === 'laboratorios';
-  const isAnalizarActive = currentView === 'world-map' && campusSection === 'diagnosticar';
-  const isHerramientasActive = currentView === 'world-map' && campusSection === 'herramientas';
-  const isMiEvoActive = currentView === 'world-map' && campusSection === 'progreso';
-  const isProgresoActive = isMiEvoActive;
-
   const isTomosActive =
     currentView === 'magazine' ||
     currentView === 'cover' ||
@@ -143,6 +135,17 @@ export const Header: React.FC<HeaderProps> = ({
     currentView === 'hotswap-lab' ||
     currentView === 'windows-matrix-lab' ||
     currentView === 'boot-lab';
+
+  const isMundoEvoActive = currentView === 'world-map' && campusSection === 'campus';
+  const isEscuelaActive =
+    (currentView === 'world-map' && (campusSection === 'escuela' || campusSection === 'biblioteca')) || isTomosActive;
+  const isPracticarActive =
+    (currentView === 'world-map' && campusSection === 'laboratorios') || (isLabsActive && currentView !== 'lab-core');
+  const isAnalizarActive =
+    (currentView === 'world-map' && campusSection === 'diagnosticar') || currentView === 'lab-core';
+  const isHerramientasActive = currentView === 'world-map' && campusSection === 'herramientas';
+  const isMiEvoActive = currentView === 'world-map' && campusSection === 'progreso';
+  const isProgresoActive = isMiEvoActive;
 
   return (
     <>
@@ -340,27 +343,23 @@ export const Header: React.FC<HeaderProps> = ({
           </nav>
 
           {/* ========================================================================= */}
-          {/* ZONA DERECHA: [ MI PROGRESO ] [ MODO / PERFIL ] + MENÚ MÓVIL             */}
-          {/* (ESCÁNER EVO RETIRADO DE LA NAVEGACIÓN VISIBLE)                           */}
+          {/* ZONA DERECHA: [ PASAPORTE EVO / STATUS ] + MENÚ MÓVIL                     */}
+          {/* (UNA ACCIÓN DOMINANTE POR PANTALLA; NAVEGACIÓN EN BARRA CENTRAL)          */}
           {/* ========================================================================= */}
           <div className="flex items-center gap-2 sm:gap-3 shrink-0">
-            
-            {/* MI PROGRESO (Acceso directo limpio) */}
+            {/* Indicador de Identidad Técnica / Pasaporte */}
             <button
               type="button"
               onClick={() => {
                 if (onNavigateCampusSection) onNavigateCampusSection('progreso');
                 else if (onNavigateHome) onNavigateHome();
               }}
-              className={`px-3 py-1.5 rounded-xl border flex items-center gap-2 transition-all duration-200 cursor-pointer text-xs font-semibold select-none ${
-                isProgresoActive
-                  ? 'bg-amber-400/20 text-amber-200 border-amber-400/50 shadow-[0_0_14px_rgba(245,158,11,0.25)]'
-                  : 'bg-white/[0.04] text-zinc-300 hover:text-white hover:bg-white/[0.08] border-white/[0.08] hover:border-white/[0.15]'
-              }`}
-              title="Consultar Mi Progreso y Expediente Académico"
+              className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-xl border border-white/[0.08] bg-white/[0.03] hover:bg-white/[0.07] hover:border-amber-400/30 text-zinc-300 hover:text-white transition-all duration-200 cursor-pointer text-xs font-mono-tech select-none"
+              title="Mi Identidad Técnica // Expediente y Progreso"
             >
-              <Trophy className="w-3.5 h-3.5 text-amber-400" />
-              <span className="hidden sm:inline">Mi Progreso</span>
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+              <span className="text-[10px] uppercase font-bold tracking-wider text-zinc-400">PASAPORTE</span>
+              <span className="text-[11px] font-bold text-amber-300">ACTIVO</span>
             </button>
 
             {/* Selector de Modo Operativo (Esencial / Pericial) - Quitado visualmente como se requería */}

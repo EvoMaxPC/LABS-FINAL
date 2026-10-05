@@ -33,15 +33,6 @@ import {
   Wrench,
 } from 'lucide-react';
 import { TomoModuleItem, TOMO_02_FOLDERS } from '../../data/tomo02Data';
-import { EvoCommandLab } from './labs/EvoCommandLab';
-import { EvoRegistrySandbox } from './labs/EvoRegistrySandbox';
-import { EvoServiceLab } from './labs/EvoServiceLab';
-import { EvoStartupDnaLab } from './labs/EvoStartupDnaLab';
-import { EvoFailureInjectionLab } from './labs/EvoFailureInjectionLab';
-import { EvoRecoveryDrillLab } from './labs/EvoRecoveryDrillLab';
-import { EvoMitoLab } from './labs/EvoMitoLab';
-import { EvoFormatDiagnosisLab } from './labs/EvoFormatDiagnosisLab';
-
 
 interface VisualProps {
   module: TomoModuleItem;
@@ -56,103 +47,60 @@ export const Tomo02ModuleVisual: React.FC<VisualProps> = ({ module, richData, co
   // Render the specific visual component based on module ID
   const renderVisualGraphic = () => {
     switch (moduleId) {
+      case 'm00':
+        return <AperturaMethodVisual compact={compact} />;
       case 'm01':
-        return <EvoWindowsAtlas />;
-      case 'm02':
-        return <RingArchitectureVisual compact={compact} />;
-      case 'm03':
-        return <MemoryHierarchyVisual />;
-      case 'm04':
         return <BootPipelineVisual />;
+      case 'm02':
+        return <GenericKernelVisual module={module} richData={richData} />;
+      case 'm03':
+        return <NtfsMftVisual />;
+      case 'm04':
+        return <NvmeStoragePipelineVisual />;
       case 'm05':
-        return <DpcIsrLatencyVisual />;
+        return <GenericKernelVisual module={module} richData={richData} />;
       case 'm06':
-        return (
-          <div className="space-y-4 text-center p-5 rounded-2xl bg-zinc-950 border border-cyan-900/60">
-            <h4 className="text-white font-bold text-sm uppercase">PROCESO, SCHEDULER & PRIORIDADES</h4>
-            <p className="text-xs text-zinc-400 font-sans-editorial leading-relaxed max-w-md mx-auto">
-              Para experimentar la planificación de hilos en tiempo real, prioridades dinámicas, quantum de CPU y conmutaciones de contexto, abrí el laboratorio oficial de despacho:
-            </p>
-            <button
-              type="button"
-              onClick={() => {
-                const event = new CustomEvent('evo_open_matrix_lab', { detail: { scenario: 'scheduler' } });
-                window.dispatchEvent(event);
-              }}
-              className="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-black text-xs font-black uppercase tracking-wider transition-all shadow-[0_0_15px_rgba(0,210,255,0.3)] cursor-pointer"
-            >
-              <Cpu className="w-4 h-4" />
-              <span>ABRIR EN WINDOWS MATRIX LAB →</span>
-            </button>
-          </div>
-        );
+        return <RingArchitectureVisual compact={compact} />;
       case 'm07':
-        return (
-          <div className="space-y-4">
-            <AdaptiveDpcMetrologyVisual />
-            <div className="text-center p-3 rounded-xl bg-zinc-950/60 border border-cyan-950">
-              <p className="text-[11px] text-zinc-400 font-sans-editorial mb-2">
-                ¿Querés inyectar cargas DPC artificiales y cazar interrupciones ISR en tiempo real?
-              </p>
-              <button
-                type="button"
-                onClick={() => {
-                  const event = new CustomEvent('evo_open_matrix_lab', { detail: { scenario: 'dpc_latencies' } });
-                  window.dispatchEvent(event);
-                }}
-                className="inline-flex items-center gap-1 px-4 py-1.5 rounded-lg bg-cyan-950 hover:bg-cyan-900 border border-cyan-500/50 text-cyan-300 text-[11px] font-bold uppercase transition-all cursor-pointer"
-              >
-                <span>Cazar interrupciones en Windows Matrix Lab →</span>
-              </button>
-            </div>
-          </div>
-        );
+        return <MemoryHierarchyVisual />;
       case 'm08':
-        return <TelemetryPipelineVisual />;
+        return <DpcIsrLatencyVisual />;
       case 'm09':
-        return <RegistryHiveVisual />;
+        return <GenericKernelVisual module={module} richData={richData} />;
       case 'm10':
-        return <LowResourceHddIoVisual />;
+        return <NetworkSocketsVisual />;
       case 'm11':
-        return <EvoFormatDiagnosisLab />;
+        return <AutorunsPersistenceVisual />;
       case 'm12':
-        return <EvoFailureInjectionLab />;
+        return <ScmServicesVisual />;
       case 'm13':
-        return <EvoFormatDiagnosisLab />;
+        return <TaskSchedulerVisual />;
       case 'm14':
-        return <EvoCommandLab initialShell="CMD" />;
+        return <EventLogEtwVisual />;
       case 'm15':
-        return <EvoCommandLab initialShell="POWERSHELL" />;
+        return <RegistryHiveVisual />;
       case 'm16':
-        return <EvoRegistrySandbox />;
+        return <TelemetryPipelineVisual />;
       case 'm17':
-        return <EliteToolsMatrixVisual compact={compact} />;
+        return <CbsWinSxSVisual />;
       case 'm18':
-        return <EvoServiceLab />;
+        return <UacSecureDesktopVisual />;
       case 'm19':
         return <WinreBcdPipelineVisual />;
       case 'm20':
-        return <LowResourceHddIoVisual />;
+        return <AdaptiveDpcMetrologyVisual />;
       case 'm21':
-        return <EvoRecoveryDrillLab />;
+        return <LowResourceHddIoVisual />;
       case 'm22':
-        return <CbsWinSxSVisual />;
+        return <EmergencyProtocolsVisual />;
       case 'm23':
-        return <EventLogEtwVisual />;
+        return <ForensicCaseStudiesVisual />;
       case 'm24':
-        return <TelemetryPipelineVisual />;
+        return <EliteToolsMatrixVisual compact={compact} />;
       case 'm25':
-        return <EvoStartupDnaLab />;
-      case 'm26':
-        return <NetworkSocketsVisual />;
-      case 'm27':
         return <GlossaryMatrixVisual compact={compact} />;
-      case 'm28':
-        return <UacSecureDesktopVisual />;
-      case 'm29':
-        return <EvoRecoveryDrillLab />;
-      case 'm30':
-        return <EvoMitoLab />;
+      case 'm26':
+        return <InvestigatorPassportVisual compact={compact} />;
       default:
         return <GenericKernelVisual module={module} richData={richData} />;
     }
@@ -908,22 +856,6 @@ const ProcessTreeVisual: React.FC = () => {
 
       <div className="p-2 rounded bg-zinc-900/60 border border-zinc-800 text-[11px] text-zinc-400 font-sans-editorial">
         <strong className="text-cyan-400 font-mono-tech">REGLA FORENSE EVO:</strong> Si un proceso llamado <code className="text-white">svchost.exe</code> tiene como padre a <code className="text-white">explorer.exe</code> o a una carpeta temporal en lugar de <code className="text-white">services.exe</code>, es malware disfrazado con 100% de certeza.
-      </div>
-    </div>
-  );
-};
-
-/* =========================================================================
-   NEW COMPONENT: EVO WINDOWS ATLAS
-========================================================================= */
-const EvoWindowsAtlas: React.FC = () => {
-  return (
-    <div className="p-4 rounded-xl bg-black border border-cyan-900/80 space-y-3 font-mono-tech text-xs">
-      <div className="text-cyan-400 font-bold mb-2">EVO WINDOWS ATLAS: MAPA VIVO DEL SISTEMA</div>
-      <p className="text-zinc-400 text-xs font-sans-editorial">Selecciona una capa para explorar la arquitectura técnica de Windows.</p>
-      {/* Placeholder for interactive atlas */}
-      <div className="w-full h-48 bg-zinc-900/50 rounded flex items-center justify-center text-zinc-600 border border-zinc-800">
-        ATLAS INTERACTIVO EN CONSTRUCCIÓN
       </div>
     </div>
   );
@@ -2671,7 +2603,7 @@ const InvestigatorPassportVisual: React.FC<{ compact?: boolean }> = ({ compact =
         <div className="flex flex-wrap items-center justify-between gap-4 border-b border-cyan-950 pb-4">
           <div className="space-y-1">
             <span className="text-[10px] text-zinc-500 uppercase tracking-widest font-bold block">
-              ACADEMIA FORENSE EVO LABS // COMPROBACIÓN EVO
+              EVO LABS // COMPROBACIÓN EVO
             </span>
             <h3 className="text-white text-lg sm:text-xl font-bold uppercase tracking-tight">
               PASAPORTE DE INVESTIGADOR DE KERNEL NT
@@ -2962,7 +2894,7 @@ const InvestigatorPassportVisual: React.FC<{ compact?: boolean }> = ({ compact =
           <div className="flex items-center gap-2 text-zinc-400">
             <CheckCircle2 className="w-4 h-4 text-emerald-400" />
             <span className="text-[11px] font-sans-editorial">
-              Certificado EVO emitido por la Academia Forense EVO LABS. Competencias verificadas en laboratorio.
+              Certificado EVO emitido por EVO LABS. Competencias verificadas en laboratorio.
             </span>
           </div>
           <span className="text-cyan-400 font-bold text-[10px] uppercase tracking-wider">
@@ -3059,7 +2991,7 @@ export function getVisualPedagogicalMeta(moduleId: string, module: TomoModuleIte
         badge: 'RECREACIÓN DIDÁCTICA EVO // PROTOCOLO',
         title: 'MÉTODO DE 7 PASOS & SEMÁFORO DE LAS 15 CARPETAS MAESTRAS',
         whatYouAreSeeing:
-          'El flujo metodológico de 7 pasos de la Academia EVO Labs y el mapa de seguridad por colores (Verde, Amarillo, Rojo) de las 15 carpetas críticas del sistema operativo Windows.',
+          'El flujo metodológico de 7 pasos de EVO LABS y el mapa de seguridad por colores (Verde, Amarillo, Rojo) de las 15 carpetas críticas del sistema operativo Windows.',
         focalPoints: [
           {
             label: 'La Cadena de 7 Pasos',

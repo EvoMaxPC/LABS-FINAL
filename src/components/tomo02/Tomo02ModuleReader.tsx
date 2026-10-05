@@ -392,7 +392,7 @@ export const MODULE_QUESTIONS: Record<string, CheckQuestion> = {
       {
         label: 'Exportar la rama o clave modificada a un archivo .reg de respaldo para garantizar rollback inmediato con doble clic.',
         isCorrect: true,
-        explanation: 'Excelente: la reversibilidad documentada es la regla de oro de la Academia EVO.',
+        explanation: 'Excelente: la reversibilidad documentada es la regla de oro de EVO LABS.',
       },
       {
         label: 'Formatear una unidad USB en formato FAT16.',
@@ -552,7 +552,7 @@ export const MODULE_QUESTIONS: Record<string, CheckQuestion> = {
       {
         label: 'Síntoma documentado → Telemetría objetiva → Hipótesis inicial → Prueba aislada → Causa raíz demostrada → Resolución reversible.',
         isCorrect: true,
-        explanation: 'Excelente: este es el estándar metodológico de la Academia EVO LABS.',
+        explanation: 'Excelente: este es el estándar metodológico de EVO LABS.',
       },
       {
         label: 'Reiniciar la máquina y si sigue fallando, decir que no tiene arreglo.',
@@ -612,7 +612,7 @@ export const MODULE_QUESTIONS: Record<string, CheckQuestion> = {
       {
         label: 'El mejor optimizador de Windows es un investigador con criterio que comprende la arquitectura del kernel NT, usa telemetría nativa para medir antes de tocar y evita scripts destructivos a ciegas.',
         isCorrect: true,
-        explanation: '¡Correcto! Has asimilado la metodología técnica de la Academia EVO LABS: evidencia métrica antes que recetas ciegas.',
+        explanation: '¡Correcto! Has asimilado la metodología técnica de EVO LABS: evidencia métrica antes que recetas ciegas.',
       },
       {
         label: 'Descargar paquetes de "debloaters" aleatorios de foros para borrar todos los servicios y dejar la RAM vacía.',
@@ -1800,7 +1800,7 @@ export const CHAPTERS_01_TO_09_DATA: Record<string, ChapterRichContent> = {
         '4. Confirmá la generación del archivo de informe leyendo el contenido: Get-Content "C:\\EVO_LABS\\Auditoria\\Pasaporte_EVO_Host.txt".',
       ],
       interpretation:
-        'Este archivo representa la primera acta de auditoría de tu Archivo EVO personal, verificando que dispones de las herramientas y el criterio técnico para diagnosticar cualquier entorno Windows según el estándar de la Academia EVO Labs.',
+        'Este archivo representa la primera acta de auditoría de tu Archivo EVO personal, verificando que dispones de las herramientas y el criterio técnico para diagnosticar cualquier entorno Windows según el estándar de EVO LABS.',
       howToRollback:
         'El archivo generado es un informe de texto de auditoría. Si deseás eliminarlo, ejecutá: Remove-Item "C:\\EVO_LABS\\Auditoria\\Pasaporte_EVO_Host.txt".',
     },
@@ -2368,7 +2368,7 @@ export const Tomo02ModuleReader: React.FC<Tomo02ModuleReaderProps> = ({
                 </div>
                 <div>
                   <span className="font-mono-tech text-[10px] text-cyan-400 uppercase tracking-widest font-bold block">
-                    ACADEMIA EVO LABS // CIERRE DE TOMO
+                    EVO LABS // CIERRE DE TOMO
                   </span>
                   <h2 className="font-display font-black text-2xl sm:text-3xl text-white uppercase tracking-tight">
                     TOMO 02 FINALIZADO: LA BIBLIA NEGRA DE WINDOWS

@@ -29,6 +29,7 @@ import { EvoTelemetryHUD } from './labs/EvoTelemetryHUD';
 import { EvoLabConsole } from './labs/EvoLabConsole';
 import { EvoOperatingModeSelector } from '../common/EvoOperatingModeSelector';
 import { EvoLearningGuideModal } from '../common/EvoLearningGuideModal';
+import { EvoAutoDetectPcModal } from '../common/EvoAutoDetectPcModal';
 import {
   isChapter01Complete,
   isChapter02Complete,
@@ -101,6 +102,7 @@ export interface EvoWorldMapProps {
   onOpenCaseHistory?: () => void;
   initialIntention?: MainIntention;
   onOpenIntroPresentation?: () => void;
+  onHardwareDetected?: (hardware: UserHardwarePassport) => void;
 }
 
 type MainIntention =
@@ -116,8 +118,8 @@ type MainIntention =
   | 'diagnosticar'
   | 'progreso';
 
-type LabSubTab = 'guiados' | 'tecnicos' | 'operaciones';
-type DiagnoseSubTab = 'expedientes' | 'pcb' | 'sectores' | 'consola' | 'simuladores';
+type LabSubTab = 'todos' | 'guiados' | 'simuladores' | 'experimentos' | 'casos';
+type DiagnoseSubTab = 'expedientes' | 'consola' | 'pcb' | 'sectores';
 
 const ToolMicrovisual: React.FC<{ toolId: string; actionKey: string; simpleName: string; accentColor: string }> = ({
   toolId,
@@ -333,6 +335,7 @@ export const EvoWorldMap: React.FC<EvoWorldMapProps> = ({
   onOpenCaseHistory,
   initialIntention = 'campus',
   onOpenIntroPresentation,
+  onHardwareDetected,
 }) => {
   // Navigation State
   const [activeIntention, setActiveIntention] = useState<MainIntention>(initialIntention);
@@ -340,14 +343,21 @@ export const EvoWorldMap: React.FC<EvoWorldMapProps> = ({
   const [selectedTomeProfile, setSelectedTomeProfile] = useState<EvoTomePedagogicalProfile | null>(null);
   const [selectedLabGuide, setSelectedLabGuide] = useState<EvoLabPedagogicalGuide | null>(null);
   const [isLevel0IntroOpen, setIsLevel0IntroOpen] = useState<boolean>(false);
+  const [isAutoDetectOpen, setIsAutoDetectOpen] = useState<boolean>(false);
 
   // Tools Search & Category Filter State
   const [toolSearchQuery, setToolSearchQuery] = useState<string>('');
-  const [activeToolCategory, setActiveToolCategory] = useState<'all' | 'windows' | 'hardware' | 'rendimiento' | 'diagnostico' | 'experimentos'>('windows');
+  const [activeToolCategory, setActiveToolCategory] = useState<'all' | 'windows' | 'hardware' | 'rendimiento' | 'diagnostico' | 'terminal'>('all');
 
   const filteredTools = useMemo(() => {
     return EVO_TOOLS_BY_INTENT.filter((tool) => {
-      const matchesCategory = activeToolCategory === 'all' || tool.intentCategory === activeToolCategory;
+      let matchesCategory = activeToolCategory === 'all';
+      if (activeToolCategory === 'windows') matchesCategory = tool.intentCategory === 'windows';
+      else if (activeToolCategory === 'hardware') matchesCategory = tool.intentCategory === 'hardware';
+      else if (activeToolCategory === 'rendimiento') matchesCategory = tool.intentCategory === 'rendimiento';
+      else if (activeToolCategory === 'diagnostico') matchesCategory = tool.intentCategory === 'diagnostico';
+      else if (activeToolCategory === 'terminal') matchesCategory = tool.intentCategory === 'experimentos' || tool.actionKey === 'consola';
+
       const q = toolSearchQuery.toLowerCase().trim();
       const matchesQuery =
         !q ||
@@ -369,7 +379,7 @@ export const EvoWorldMap: React.FC<EvoWorldMapProps> = ({
   }, [initialIntention]);
 
   // Sub-navigation tabs
-  const [labSubTab, setLabSubTab] = useState<LabSubTab>('guiados');
+  const [labSubTab, setLabSubTab] = useState<LabSubTab>('todos');
   const [diagnoseTab, setDiagnoseTab] = useState<DiagnoseSubTab>('expedientes');
 
   // Diagnostic area sub-state
@@ -418,15 +428,15 @@ export const EvoWorldMap: React.FC<EvoWorldMapProps> = ({
 
       if (isTomo01FullyDone) {
         lastActivity = {
-          levelNumber: 1,
-          levelTitle: 'NIVEL 1: CONOCER LA PC',
-          tomoNumber: '01',
-          title: 'Tomo 01 // Certificación y Examen Aprobado',
-          detail: 'Certificación empírica de rendimiento y teoría comprobada (≥70%).',
-          tag: 'TOMO 01 FINALIZADO',
+          levelNumber: 2,
+          levelTitle: 'NIVEL 2: WINDOWS Y KERNEL',
+          tomoNumber: '02',
+          title: 'Tomo 02 // La Biblia Negra de Windows',
+          detail: 'Completaste el Tomo 01 con examen aprobado. Tu próximo paso es explorar el kernel NT y arquitectura de Windows.',
+          tag: 'SIGUIENTE PASO RECOMENDADO',
           onContinue: () => {
-            if (onOpenTomo) onOpenTomo('01');
-            else if (onNavigateMagazine) onNavigateMagazine();
+            if (onOpenTomo) onOpenTomo('02');
+            else if (onNavigateTomo01) onNavigateTomo01();
           },
         };
       } else if (isC07Done) {
@@ -434,12 +444,12 @@ export const EvoWorldMap: React.FC<EvoWorldMapProps> = ({
           levelNumber: 1,
           levelTitle: 'NIVEL 1: CONOCER LA PC',
           tomoNumber: '01',
-          title: 'Tomo 01 // Laboratorio Final Completado',
-          detail: 'Capítulos 01–07 completados. Listo para rendir la Prueba Final EVO.',
-          tag: 'EXAMEN DISPONIBLE',
+          title: 'Examen Final // Tomo 01: Conocé tu PC',
+          detail: 'Tenés un examen pendiente. Completaste los 7 capítulos y el laboratorio final.',
+          tag: 'EXAMEN PENDIENTE',
           onContinue: () => {
             if (onOpenTomo) onOpenTomo('01');
-            else if (onNavigateMagazine) onNavigateMagazine();
+            else if (onNavigateTomo01) onNavigateTomo01();
           },
         };
       } else if (isC06Done) {
@@ -447,12 +457,12 @@ export const EvoWorldMap: React.FC<EvoWorldMapProps> = ({
           levelNumber: 1,
           levelTitle: 'NIVEL 1: CONOCER LA PC',
           tomoNumber: '01',
-          title: 'Tomo 01 // Capítulo 07: Laboratorio Final',
-          detail: 'Listo para iniciar el experimento final con método científico.',
-          tag: 'EN CURSO',
+          title: 'Tomo 01 · Capítulo 07: Laboratorio Final',
+          detail: 'Continuá Tomo 01 · Capítulo 07. Medir → cambiar una variable → volver a medir → concluir.',
+          tag: 'CAPÍTULO PENDIENTE',
           onContinue: () => {
             if (onOpenTomo) onOpenTomo('01');
-            else if (onNavigateMagazine) onNavigateMagazine();
+            else if (onNavigateTomo01) onNavigateTomo01();
           },
         };
       } else if (isC05Done) {
@@ -460,12 +470,12 @@ export const EvoWorldMap: React.FC<EvoWorldMapProps> = ({
           levelNumber: 1,
           levelTitle: 'NIVEL 1: CONOCER LA PC',
           tomoNumber: '01',
-          title: 'Tomo 01 // Capítulo 06: Taller de Diagnóstico EVO',
-          detail: 'Hipótesis deductiva y resolución pericial de fallas.',
-          tag: 'EN CURSO',
+          title: 'Tomo 01 · Capítulo 06: Taller de Diagnóstico EVO',
+          detail: 'Continuá Tomo 01 · Capítulo 06. Encontrá la falla con hipótesis deductiva y descarte pericial.',
+          tag: 'CAPÍTULO PENDIENTE',
           onContinue: () => {
             if (onOpenTomo) onOpenTomo('01');
-            else if (onNavigateMagazine) onNavigateMagazine();
+            else if (onNavigateTomo01) onNavigateTomo01();
           },
         };
       } else if (isC04Done) {
@@ -473,12 +483,12 @@ export const EvoWorldMap: React.FC<EvoWorldMapProps> = ({
           levelNumber: 1,
           levelTitle: 'NIVEL 1: CONOCER LA PC',
           tomoNumber: '01',
-          title: 'Tomo 01 // Capítulo 05: Windows y Kernel',
-          detail: 'Auditoría de servicios y subprocesos en segundo plano.',
-          tag: 'EN CURSO',
+          title: 'Tomo 01 · Capítulo 05: Windows y Kernel',
+          detail: 'Continuá Tomo 01 · Capítulo 05. Procesos, servicios, tareas e hilos del sistema en movimiento.',
+          tag: 'CAPÍTULO PENDIENTE',
           onContinue: () => {
             if (onOpenTomo) onOpenTomo('01');
-            else if (onNavigateMagazine) onNavigateMagazine();
+            else if (onNavigateTomo01) onNavigateTomo01();
           },
         };
       } else if (isC03Done) {
@@ -486,12 +496,12 @@ export const EvoWorldMap: React.FC<EvoWorldMapProps> = ({
           levelNumber: 1,
           levelTitle: 'NIVEL 1: CONOCER LA PC',
           tomoNumber: '01',
-          title: 'Tomo 01 // Capítulo 04: Encontrá el Límite',
-          detail: 'Estrés térmico, throttling y consumo de energía en watts.',
-          tag: 'EN CURSO',
+          title: 'Tomo 01 · Capítulo 04: Encontrá el Límite',
+          detail: 'Continuá Tomo 01 · Capítulo 04. Cuello de botella, carga, temperatura y suministro eléctrico.',
+          tag: 'CAPÍTULO PENDIENTE',
           onContinue: () => {
             if (onOpenTomo) onOpenTomo('01');
-            else if (onNavigateMagazine) onNavigateMagazine();
+            else if (onNavigateTomo01) onNavigateTomo01();
           },
         };
       } else if (isC02Done) {
@@ -499,12 +509,12 @@ export const EvoWorldMap: React.FC<EvoWorldMapProps> = ({
           levelNumber: 1,
           levelTitle: 'NIVEL 1: CONOCER LA PC',
           tomoNumber: '01',
-          title: 'Tomo 01 // Capítulo 03: Telemetría & FPS',
-          detail: 'Medición de frametimes y percentiles 1% low en tiempo real.',
-          tag: 'EN CURSO',
+          title: 'Tomo 01 · Capítulo 03: Telemetría & FPS',
+          detail: 'Continuá Tomo 01 · Capítulo 03. Captura de percentiles 1% low y fluidez comprobable.',
+          tag: 'CAPÍTULO PENDIENTE',
           onContinue: () => {
             if (onOpenTomo) onOpenTomo('01');
-            else if (onNavigateMagazine) onNavigateMagazine();
+            else if (onNavigateTomo01) onNavigateTomo01();
           },
         };
       } else if (isC01Done) {
@@ -512,12 +522,12 @@ export const EvoWorldMap: React.FC<EvoWorldMapProps> = ({
           levelNumber: 1,
           levelTitle: 'NIVEL 1: CONOCER LA PC',
           tomoNumber: '01',
-          title: 'Tomo 01 // Capítulo 02: Buses & Silicio',
-          detail: 'Mapeo de transferencias electrónicas y líneas PCIe.',
-          tag: 'EN CURSO',
+          title: 'Tomo 01 · Capítulo 02: El Viaje del Byte',
+          detail: 'Continuá Tomo 01 · Capítulo 02. El diálogo real entre CPU, RAM, GPU y líneas PCIe.',
+          tag: 'CAPÍTULO PENDIENTE',
           onContinue: () => {
             if (onOpenTomo) onOpenTomo('01');
-            else if (onNavigateMagazine) onNavigateMagazine();
+            else if (onNavigateTomo01) onNavigateTomo01();
           },
         };
       } else if (isBootLabDone) {
@@ -958,7 +968,7 @@ export const EvoWorldMap: React.FC<EvoWorldMapProps> = ({
                 <div className="pb-1.5 border-b border-zinc-900 flex items-center justify-between">
                   <span className="text-[10px] font-mono-tech tracking-widest text-zinc-500 font-bold uppercase flex items-center gap-1.5">
                     <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" />
-                    ESTADO DEL SISTEMA EVO
+                    ESTADO ACTUAL // SISTEMA EVO
                   </span>
                   <span className="text-[9px] px-1.5 py-0.5 rounded bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 font-mono-tech font-bold">ONLINE</span>
                 </div>
@@ -1013,72 +1023,71 @@ export const EvoWorldMap: React.FC<EvoWorldMapProps> = ({
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
               
               {/* Cockpit active radar scope visual */}
-              <div className="lg:col-span-2 hidden lg:flex flex-col items-center justify-center border-r border-zinc-900/60 pr-6 shrink-0 h-full">
-                <div className="relative w-20 h-20 rounded-full border border-cyan-500/20 bg-cyan-950/5 flex items-center justify-center overflow-hidden">
-                  {/* Scope lines */}
-                  <div className="absolute inset-0 border-b border-cyan-500/10" />
-                  <div className="absolute inset-0 border-r border-cyan-500/10" />
-                  <div className="w-12 h-12 rounded-full border border-cyan-500/10" />
-                  <div className="w-6 h-6 rounded-full border border-cyan-500/10" />
-                  {/* Blip */}
-                  <div className="absolute top-6 right-6 w-2 h-2 bg-amber-400 rounded-full animate-ping" />
-                  <div className="absolute top-6 right-6 w-2 h-2 bg-amber-400 rounded-full" />
+              <div className="lg:col-span-2 hidden lg:flex flex-col items-center justify-center border-r border-zinc-800/80 pr-6 shrink-0 h-full">
+                <div className="relative w-20 h-20 rounded-full border border-amber-400/30 bg-amber-950/10 flex items-center justify-center overflow-hidden">
+                  <div className="absolute inset-0 border-b border-amber-400/15" />
+                  <div className="absolute inset-0 border-r border-amber-400/15" />
+                  <div className="w-12 h-12 rounded-full border border-amber-400/20" />
+                  <div className="w-6 h-6 rounded-full border border-amber-400/30" />
+                  <div className="absolute top-5 right-5 w-2 h-2 bg-amber-400 rounded-full animate-ping" />
+                  <div className="absolute top-5 right-5 w-2 h-2 bg-amber-400 rounded-full" />
                 </div>
-                <div className="text-[8px] text-zinc-500 font-mono-tech mt-2 text-center uppercase tracking-widest">
-                  SYS_COORDINATES<br/>
-                  [X:47.9 / Y:12.4]
+                <div className="text-[8px] text-amber-400/70 font-mono-tech mt-2 text-center uppercase tracking-widest font-bold">
+                  EVO_TRACK<br/>
+                  [PASO ACTIVO]
                 </div>
               </div>
 
-              {/* Middle Section: Active Mission Info */}
-              <div className="lg:col-span-7 space-y-2.5">
+              {/* Middle Section: Dominant Action Info */}
+              <div className="lg:col-span-7 space-y-3">
                 <div className="flex items-center gap-2 flex-wrap">
-                  <span className="px-2 py-0.5 rounded text-[9px] font-mono-tech uppercase bg-cyan-500/10 text-cyan-300 border border-cyan-500/20 font-black tracking-widest">
-                    MISIÓN EN CURSO
+                  <span className="px-2.5 py-0.5 rounded text-[10px] font-mono-tech uppercase bg-amber-400/15 text-amber-300 border border-amber-400/30 font-black tracking-widest flex items-center gap-1.5">
+                    <Sparkles className="w-3 h-3 text-amber-400 animate-pulse" />
+                    CONTINUAR MI EVOLUCIÓN // SIGUIENTE MEJOR ACCIÓN
                   </span>
                   <span className="text-zinc-600 font-mono-tech text-xs">•</span>
                   <span className="text-[10px] text-zinc-400 font-mono-tech uppercase">
-                    {realProgress.hasProgress && realProgress.lastActivity ? 'ÚLTIMO REGISTRO DE AVANCE' : 'ESTACIÓN DE PARTIDA'}
+                    {realProgress.hasProgress && realProgress.lastActivity ? 'ESTADO REAL GUARDADO' : 'INICIO DE FORMACIÓN'}
                   </span>
                 </div>
 
                 {realProgress.hasProgress && realProgress.lastActivity ? (
-                  <div className="space-y-1">
-                    <span className="text-[10px] font-mono-tech text-amber-400 font-bold uppercase tracking-wider block">
+                  <div className="space-y-1.5">
+                    <span className="text-[11px] font-mono-tech text-amber-400 font-bold uppercase tracking-wider block">
                       {realProgress.lastActivity.levelTitle}
                     </span>
-                    <h3 className="font-display font-bold text-lg text-white">
+                    <h3 className="font-display font-black text-xl sm:text-2xl text-white">
                       {realProgress.lastActivity.title}
                     </h3>
-                    <p className="evo-body-secondary text-xs sm:text-sm">
-                      {realProgress.lastActivity.detail}
+                    <p className="text-sm text-zinc-300 font-sans-editorial leading-relaxed font-medium">
+                      “{realProgress.lastActivity.detail}”
                     </p>
                   </div>
                 ) : (
-                  <div className="space-y-1">
-                    <span className="text-[10px] font-mono-tech text-amber-400 font-bold uppercase tracking-wider block">
+                  <div className="space-y-1.5">
+                    <span className="text-[11px] font-mono-tech text-amber-400 font-bold uppercase tracking-wider block">
                       Nivel 1 // Hardware y Silicio
                     </span>
-                    <h3 className="font-display font-bold text-lg text-white">
+                    <h3 className="font-display font-black text-xl sm:text-2xl text-white">
                       TOMO 01 // CONOCÉ TU PC
                     </h3>
-                    <p className="evo-body-secondary text-xs sm:text-sm">
-                      Iniciá tu viaje técnico. Desde la física de los semiconductores hasta el direccionamiento de memoria, completando desafíos periciales reales.
+                    <p className="text-sm text-zinc-300 font-sans-editorial leading-relaxed font-medium">
+                      “Iniciá tu camino en Tomo 01 · Conocé tu PC. Desde los semiconductores hasta el hardware real.”
                     </p>
                   </div>
                 )}
               </div>
 
-              {/* Far Right: Compact Mission CTA button */}
-              <div className="lg:col-span-3 flex justify-end">
+              {/* Far Right: Dominant CTA */}
+              <div className="lg:col-span-3 flex flex-col gap-2 justify-center">
                 {realProgress.hasProgress && realProgress.lastActivity ? (
                   <button
                     type="button"
                     onClick={realProgress.lastActivity.onContinue}
-                    className="evo-btn-primary w-full lg:w-auto bg-cyan-400 border-cyan-400/30 hover:bg-cyan-300 text-black shadow-[0_0_15px_rgba(34,211,238,0.2)]"
+                    className="w-full py-3.5 px-5 rounded-xl bg-gradient-to-r from-amber-400 via-amber-300 to-amber-400 hover:from-amber-300 hover:to-amber-200 text-black font-mono-tech text-xs font-black uppercase tracking-wider transition-all flex items-center justify-center gap-2 cursor-pointer shadow-[0_0_25px_rgba(245,158,11,0.4)] hover:shadow-[0_0_35px_rgba(245,158,11,0.6)] transform hover:-translate-y-0.5"
                   >
                     <Play className="w-4 h-4 fill-current text-black" />
-                    <span>REANUDAR MISIÓN</span>
+                    <span>CONTINUAR MI EVOLUCIÓN</span>
                   </button>
                 ) : (
                   <button
@@ -1087,12 +1096,23 @@ export const EvoWorldMap: React.FC<EvoWorldMapProps> = ({
                       if (onOpenTomo) onOpenTomo('01');
                       else if (onNavigateTomo01) onNavigateTomo01();
                     }}
-                    className="evo-btn-primary w-full lg:w-auto"
+                    className="w-full py-3.5 px-5 rounded-xl bg-gradient-to-r from-amber-400 via-amber-300 to-amber-400 hover:from-amber-300 hover:to-amber-200 text-black font-mono-tech text-xs font-black uppercase tracking-wider transition-all flex items-center justify-center gap-2 cursor-pointer shadow-[0_0_25px_rgba(245,158,11,0.4)] hover:shadow-[0_0_35px_rgba(245,158,11,0.6)] transform hover:-translate-y-0.5"
                   >
                     <Play className="w-4 h-4 fill-current text-black" />
-                    <span>INICIAR TOMO 01</span>
+                    <span>INICIAR MI EVOLUCIÓN</span>
                   </button>
                 )}
+                <button
+                  type="button"
+                  onClick={() => {
+                    setActiveIntention('biblioteca');
+                    setSelectedLevelNumber(null);
+                  }}
+                  className="w-full py-2 px-3 rounded-lg bg-zinc-900/80 hover:bg-zinc-800 border border-zinc-800 text-zinc-300 hover:text-white font-mono-tech text-[10px] font-bold uppercase transition-all flex items-center justify-center gap-1.5 cursor-pointer"
+                >
+                  <BookOpen className="w-3 h-3 text-amber-400" />
+                  <span>VER COLECCIÓN (10 TOMOS)</span>
+                </button>
               </div>
 
             </div>
@@ -1107,7 +1127,7 @@ export const EvoWorldMap: React.FC<EvoWorldMapProps> = ({
             <div className="flex items-center justify-between pb-2 border-b border-zinc-900">
               <span className="text-[10px] font-mono-tech tracking-widest text-zinc-500 uppercase font-black flex items-center gap-2">
                 <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse" />
-                CANALES DE ACCESO AL CAMPUS // INSTRUMENTAL MODULAR
+                5 ÁREAS PRINCIPALES // UNIVERSO EVO
               </span>
               <span className="text-[10px] text-zinc-600 font-mono-tech">SELECT_OPERATIVE_MODULE</span>
             </div>
@@ -1344,7 +1364,7 @@ export const EvoWorldMap: React.FC<EvoWorldMapProps> = ({
                 type="button"
                 onClick={onOpenIntroPresentation}
                 className="px-4 py-2 rounded-xl bg-zinc-900/40 hover:bg-zinc-800 border border-zinc-900 hover:border-cyan-400/40 text-zinc-400 hover:text-cyan-300 font-mono-tech text-xs font-bold transition-all flex items-center gap-2 cursor-pointer shadow-sm"
-                title="Volver a ver la presentación animada de la Academia EVO Labs"
+                title="Volver a ver la presentación institucional de EVO LABS"
               >
                 <Play className="w-3.5 h-3.5 text-cyan-400" />
                 <span>VER PRESENTACIÓN INSTITUCIONAL</span>
@@ -1832,7 +1852,8 @@ export const EvoWorldMap: React.FC<EvoWorldMapProps> = ({
       )}
 
       {/* ========================================================================= */}
-      {/* 4. SECCIÓN: LABORATORIOS (GUIADOS + TÉCNICOS + OPERACIONES)                */}
+      {/* ========================================================================= */}
+      {/* 4. SECCIÓN: PRACTICAR // ORGANIZACIÓN POR PROPÓSITO                      */}
       {/* ========================================================================= */}
       {activeIntention === 'laboratorios' && (
         <div className="relative z-10 flex-1 max-w-6xl mx-auto w-full px-4 sm:px-8 py-6 space-y-6">
@@ -1841,263 +1862,224 @@ export const EvoWorldMap: React.FC<EvoWorldMapProps> = ({
               <div className="flex items-center gap-2">
                 <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
                 <h2 className="evo-page-title">
-                  SUITE DE LABORATORIOS EVO
+                  PRACTICAR // LABORATORIOS, SIMULADORES Y CASOS
                 </h2>
               </div>
-              <p className="evo-body-secondary">
-                Práctica rigurosa. Cada laboratorio cuenta con una ficha técnica previa que responde qué observar y comprobar.
+              <p className="evo-body-secondary italic">
+                “Experimentá, medí y comprobá.” Práctica rigurosa organizada por propósito, no por componente.
               </p>
             </div>
 
-            <div className="flex flex-wrap items-center gap-2 p-1 rounded-xl bg-zinc-900 border border-zinc-800 font-mono-tech text-xs">
-              <button
-                type="button"
-                onClick={() => setLabSubTab('guiados')}
-                className={`px-3 py-1.5 rounded-lg font-bold transition-all cursor-pointer ${
-                  labSubTab === 'guiados'
-                    ? 'bg-amber-400 text-black shadow-md'
-                    : 'text-zinc-400 hover:text-white'
-                }`}
-              >
-                LABORATORIOS GUIADOS
-              </button>
-              <button
-                type="button"
-                onClick={() => setLabSubTab('tecnicos')}
-                className={`px-3 py-1.5 rounded-lg font-bold transition-all cursor-pointer ${
-                  labSubTab === 'tecnicos'
-                    ? 'bg-amber-400 text-black shadow-md'
-                    : 'text-zinc-400 hover:text-white'
-                }`}
-              >
-                LABORATORIOS TÉCNICOS EVO
-              </button>
-              <button
-                type="button"
-                onClick={() => setLabSubTab('operaciones')}
-                className={`px-3 py-1.5 rounded-lg font-bold transition-all cursor-pointer ${
-                  labSubTab === 'operaciones'
-                    ? 'bg-amber-400 text-black shadow-md'
-                    : 'text-zinc-400 hover:text-white'
-                }`}
-              >
-                LABORATORIO DE OPERACIONES EVO
-              </button>
+            <div className="flex flex-wrap items-center gap-1.5 p-1 rounded-xl bg-zinc-900 border border-zinc-800 font-mono-tech text-xs">
+              {[
+                { id: 'todos', label: 'TODOS' },
+                { id: 'guiados', label: 'LABORATORIOS GUIADOS' },
+                { id: 'simuladores', label: 'SIMULADORES' },
+                { id: 'experimentos', label: 'EXPERIMENTOS' },
+                { id: 'casos', label: 'CASOS EVO' },
+              ].map((tab) => (
+                <button
+                  key={tab.id}
+                  type="button"
+                  onClick={() => setLabSubTab(tab.id as LabSubTab)}
+                  className={`px-3 py-1.5 rounded-lg font-bold transition-all cursor-pointer ${
+                    labSubTab === tab.id
+                      ? 'bg-amber-400 text-black shadow-md'
+                      : 'text-zinc-400 hover:text-white'
+                  }`}
+                >
+                  {tab.label}
+                </button>
+              ))}
             </div>
           </div>
 
-          {/* SUB-TAB 1: LABORATORIOS GUIADOS (ASOCIADOS A TOMOS) */}
-          {labSubTab === 'guiados' && (
-            <div className="space-y-4">
-              <div className="flex items-center justify-between border-b border-zinc-800/80 pb-2">
-                <span className="font-mono-tech text-xs font-bold text-white uppercase flex items-center gap-2">
-                  <BookOpen className="w-3.5 h-3.5 text-purple-400" />
-                  LABORATORIOS GUIADOS ASOCIADOS A LOS 10 TOMOS
-                </span>
-                <span className="text-[10px] text-zinc-500 font-mono-tech">
-                  1 ACTIVO // 9 EN DESARROLLO
-                </span>
-              </div>
+          {/* Grilla de Prácticas Organizada por Propósito */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {[
+              // 1. LABORATORIOS GUIADOS
+              {
+                id: 'lab-boot',
+                family: 'LABORATORIOS GUIADOS',
+                familyKey: 'guiados',
+                title: 'Laboratorio de Arranque y Fallas (Tomo 08)',
+                badge: 'ACTIVO',
+                badgeColor: 'text-emerald-400 bg-emerald-400/10 border-emerald-400/30',
+                whatYouDo: 'Recorrer cronológicamente los 35 estados desde el encendido hasta el escritorio.',
+                whatYouVerify: 'Diagnosticar con multímetro virtual y osciloscopio la etapa exacta donde se detiene el POST.',
+                ctaText: 'INICIAR LABORATORIO BOOT',
+                action: () => {
+                  if (onNavigateBootLab) onNavigateBootLab();
+                  else if (onOpenTomo) onOpenTomo('08');
+                },
+                icon: <Power className="w-5 h-5 text-emerald-400" />,
+              },
+              {
+                id: 'lab-silicon',
+                family: 'LABORATORIOS GUIADOS',
+                familyKey: 'guiados',
+                title: 'Laboratorio de Silicio y Peritaje (Tomo 01)',
+                badge: 'ACTIVO',
+                badgeColor: 'text-amber-400 bg-amber-400/10 border-amber-400/30',
+                whatYouDo: 'Inspeccionar zócalos de microprocesador, pistas PCIe y topología de memoria RAM.',
+                whatYouVerify: 'Comprobar correspondencia eléctrica de pines, pistas de bus y saturación térmica.',
+                ctaText: 'ABRIR BANCO DE SILICIO',
+                action: () => {
+                  if (onNavigateHotSwapLab) onNavigateHotSwapLab('hardware');
+                },
+                icon: <Cpu className="w-5 h-5 text-amber-400" />,
+              },
+              {
+                id: 'lab-windows-nt',
+                family: 'LABORATORIOS GUIADOS',
+                familyKey: 'guiados',
+                title: 'Laboratorio de Windows NT y Kernel (Tomo 02)',
+                badge: 'ACTIVO',
+                badgeColor: 'text-cyan-400 bg-cyan-400/10 border-cyan-400/30',
+                whatYouDo: 'Auditar la barrera de Ring 0 vs Ring 3, servicios en reposo y llamadas al kernel NT.',
+                whatYouVerify: 'Medir latencias DPC reales en controladores y comprobar huella de RAM sin mitos.',
+                ctaText: 'ABRIR LAB WINDOWS',
+                action: () => {
+                  if (onNavigateWindowsMatrixLab) onNavigateWindowsMatrixLab('services');
+                },
+                icon: <Terminal className="w-5 h-5 text-cyan-400" />,
+              },
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                {/* TOMO 08 (ACTIVO) */}
-                <div className="p-4 rounded-xl evo-surface-level2 border border-emerald-500/20 hover:border-emerald-500/50 transition-all flex items-center justify-between gap-4 group">
-                  <div className="flex items-start gap-3 min-w-0">
-                    <div className="w-10 h-10 rounded-xl bg-emerald-500/20 border border-emerald-500/40 text-emerald-400 flex items-center justify-center shrink-0 mt-0.5">
-                      <Power className="w-5 h-5" />
+              // 2. SIMULADORES
+              {
+                id: 'sim-matrix',
+                family: 'SIMULADORES',
+                familyKey: 'simuladores',
+                title: 'Windows Matrix Lab Engine',
+                badge: 'MOTOR ACTIVO',
+                badgeColor: 'text-cyan-400 bg-cyan-400/10 border-cyan-400/30',
+                whatYouDo: 'Simular la secuencia de instalación limpia, telemetría y estructura de arranque de Windows.',
+                whatYouVerify: 'Inyectar escenarios de falla y verificar qué componente o servicio colapsa.',
+                ctaText: 'ABRIR WINDOWS MATRIX',
+                action: () => {
+                  if (onNavigateWindowsMatrixLab) onNavigateWindowsMatrixLab();
+                },
+                icon: <Activity className="w-5 h-5 text-cyan-400" />,
+              },
+              {
+                id: 'sim-hotswap',
+                family: 'SIMULADORES',
+                familyKey: 'simuladores',
+                title: 'Banco de Ensamble y Hot-Swap ATX',
+                badge: 'ACTIVO',
+                badgeColor: 'text-amber-400 bg-amber-400/10 border-amber-400/30',
+                whatYouDo: 'Intercambiar procesadores, placas gráficas y memorias en tiempo real sobre placa virtual.',
+                whatYouVerify: 'Comprobar balance de consumo en watts, compatibilidad de sockets y líneas PCIe.',
+                ctaText: 'ABRIR BANCO HOT-SWAP',
+                action: () => {
+                  if (onNavigateHotSwapLab) onNavigateHotSwapLab('all');
+                },
+                icon: <Boxes className="w-5 h-5 text-amber-400" />,
+              },
+
+              // 3. EXPERIMENTOS
+              {
+                id: 'exp-ab',
+                family: 'EXPERIMENTOS',
+                familyKey: 'experimentos',
+                title: 'Cámara de Ensayo A/B (Frametimes & Rendimiento)',
+                badge: 'METROLOGÍA',
+                badgeColor: 'text-purple-400 bg-purple-400/10 border-purple-400/30',
+                whatYouDo: 'Realizar ensayos contrastados antes y después de aplicar una optimización en Windows o hardware.',
+                whatYouVerify: 'Demostrar empíricamente con percentiles 1% low si la mejora es medible o mero placebo.',
+                ctaText: 'INICIAR PRUEBA A/B',
+                action: () => {
+                  if (onNavigateHotSwapLab) onNavigateHotSwapLab('sandbox');
+                },
+                icon: <Gauge className="w-5 h-5 text-purple-400" />,
+              },
+              {
+                id: 'exp-pcb',
+                family: 'EXPERIMENTOS',
+                familyKey: 'experimentos',
+                title: 'Esquemático Interactivo de Motherboard',
+                badge: 'ESQUEMÁTICO',
+                badgeColor: 'text-purple-400 bg-purple-400/10 border-purple-400/30',
+                whatYouDo: 'Inspeccionar circuitos impresos, pistas de señal, rieles de alimentación y etapas VRM.',
+                whatYouVerify: 'Identificar señales de habilitación (EN), reloj de bus y caídas de tensión por etapa.',
+                ctaText: 'ABRIR ESQUEMÁTICO',
+                action: () => {
+                  setActiveIntention('diagnosticar');
+                  setDiagnoseTab('pcb');
+                },
+                icon: <Layers className="w-5 h-5 text-purple-400" />,
+              },
+
+              // 4. CASOS EVO
+              {
+                id: 'casos-forenses',
+                family: 'CASOS EVO',
+                familyKey: 'casos',
+                title: 'Central de Incidentes y Taller Forense',
+                badge: 'TALLER ACTIVO',
+                badgeColor: 'text-rose-400 bg-rose-400/10 border-rose-400/30',
+                whatYouDo: 'Recibir una computadora con reporte de falla real ingresada por un cliente al taller.',
+                whatYouVerify: 'Aplicar el árbol de descarte, registrar evidencias metrológicas y formular dictamen técnico.',
+                ctaText: 'INGRESAR A CENTRAL DE CASOS',
+                action: () => {
+                  setActiveIntention('diagnosticar');
+                  setDiagnoseTab('expedientes');
+                },
+                icon: <FolderGit2 className="w-5 h-5 text-rose-400" />,
+              },
+            ]
+              .filter((item) => labSubTab === 'todos' || item.familyKey === labSubTab)
+              .map((item) => (
+                <div
+                  key={item.id}
+                  className="p-5 rounded-2xl evo-surface-level2 border border-zinc-900 hover:border-emerald-400/30 transition-all flex flex-col justify-between gap-4 group"
+                >
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between">
+                      <span className="text-[10px] font-mono-tech font-bold uppercase text-zinc-400 tracking-wider">
+                        {item.family}
+                      </span>
+                      <span className={`px-2 py-0.5 rounded text-[9px] font-mono-tech font-bold uppercase border ${item.badgeColor}`}>
+                        {item.badge}
+                      </span>
                     </div>
-                    <div className="space-y-1 min-w-0">
-                      <div className="flex items-center gap-2">
-                        <span className="text-[10px] font-bold font-mono-tech text-emerald-400">TOMO 08</span>
-                        <span className="px-2 py-0.5 rounded text-[9px] font-mono-tech font-bold uppercase bg-emerald-400/20 text-emerald-300 border border-emerald-400/40">
-                          ACTIVO
-                        </span>
+
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-xl bg-zinc-900 border border-zinc-800 flex items-center justify-center shrink-0">
+                        {item.icon}
                       </div>
-                      <h4 className="font-display font-bold text-sm text-white group-hover:text-emerald-300 transition-colors">
-                        LABORATORIO DE ARRANQUE Y FALLAS GUIADO
-                      </h4>
-                      <p className="text-xs text-zinc-300 font-sans-editorial truncate">
-                        Recorrido guiado de 35 estados desde la alimentación de espera hasta el escritorio de Windows.
-                      </p>
+                      <h3 className="font-display font-bold text-base text-white group-hover:text-emerald-300 transition-colors leading-tight">
+                        {item.title}
+                      </h3>
+                    </div>
+
+                    <div className="space-y-2 text-xs font-sans-editorial pt-1 border-t border-zinc-900/80">
+                      <div>
+                        <strong className="text-zinc-400 font-mono-tech text-[10px] uppercase block">
+                          Qué vas a hacer:
+                        </strong>
+                        <span className="text-zinc-300">{item.whatYouDo}</span>
+                      </div>
+                      <div>
+                        <strong className="text-emerald-400 font-mono-tech text-[10px] uppercase block">
+                          Qué vas a comprobar:
+                        </strong>
+                        <span className="text-zinc-200">{item.whatYouVerify}</span>
+                      </div>
                     </div>
                   </div>
 
                   <button
                     type="button"
-                    onClick={() => setSelectedLabGuide(EVO_LAB_GUIDES['tech-boot'])}
-                    className="px-4 py-2 rounded-xl text-xs font-mono-tech font-bold uppercase bg-emerald-400 text-black hover:bg-emerald-300 transition-all shrink-0 cursor-pointer shadow-[0_0_15px_rgba(16,185,129,0.3)] flex items-center gap-1.5"
+                    onClick={item.action}
+                    className="w-full py-2.5 px-4 rounded-xl bg-zinc-900 hover:bg-emerald-400 hover:text-black text-emerald-300 border border-emerald-500/30 hover:border-emerald-400 font-mono-tech text-xs font-bold uppercase tracking-wider transition-all flex items-center justify-center gap-2 cursor-pointer shadow-sm"
                   >
-                    <span>ENTRAR</span>
-                    <ArrowRight className="w-3.5 h-3.5 text-black" />
+                    <span>{item.ctaText}</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
                   </button>
                 </div>
-
-                {/* OTROS TOMOS GUIADOS (EN DESARROLLO) */}
-                {[
-                  { num: '01', title: 'Laboratorio de Silicio y Peritaje', tomo: 'Conocé tu PC' },
-                  { num: '02', title: 'Laboratorio de Windows NT', tomo: 'La Biblia Negra de Windows' },
-                  { num: '03', title: 'Banco de Reparación ATX', tomo: 'Reparación de PC' },
-                  { num: '04', title: 'Banco de Micromecánica Portátil', tomo: 'Reparación de Notebooks' },
-                  { num: '05', title: 'Laboratorio Forense de Redes', tomo: 'Sistema de Redes' },
-                  { num: '06', title: 'Laboratorio de Ciberseguridad', tomo: 'Ciberseguridad' },
-                  { num: '07', title: 'Banco Metrológico de Gaming', tomo: 'Gaming Pro' },
-                  { num: '09', title: 'Laboratorio de Kernel y Sysfs', tomo: 'Sistemas y Kernel' },
-                  { num: '10', title: 'Laboratorio Forense de Memoria', tomo: 'Forense e Ingeniería Inversa' },
-                ].map((item) => (
-                  <div
-                    key={item.num}
-                    className="p-4 rounded-xl evo-surface-level1 border border-zinc-900 flex items-center justify-between gap-4 opacity-75"
-                  >
-                    <div className="space-y-1 min-w-0">
-                      <div className="flex items-center gap-2">
-                        <span className="text-[10px] font-bold font-mono-tech text-zinc-500">TOMO {item.num}</span>
-                        <span className="px-2 py-0.5 rounded text-[9px] font-mono-tech font-bold uppercase bg-zinc-900 text-zinc-500 border border-zinc-800">
-                          EN DESARROLLO
-                        </span>
-                      </div>
-                      <h4 className="font-display font-bold text-sm text-zinc-300 truncate">
-                        {item.title}
-                      </h4>
-                      <p className="text-xs text-zinc-500 font-sans-editorial truncate">
-                        Laboratorio guiado asociado al Tomo {item.num}: {item.tomo}.
-                      </p>
-                    </div>
-
-                    <span className="px-3 py-1.5 rounded-lg text-[10px] font-mono-tech font-bold uppercase text-zinc-600 bg-zinc-950 border border-zinc-800 shrink-0">
-                      EN DESARROLLO
-                    </span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* SUB-TAB 2: LABORATORIOS TÉCNICOS EVO (HERRAMIENTAS TRANSVERSALES) */}
-          {labSubTab === 'tecnicos' && (
-            <div className="space-y-4">
-              <div className="flex items-center justify-between border-b border-zinc-800/80 pb-2">
-                <span className="font-mono-tech text-xs font-bold text-white uppercase flex items-center gap-2">
-                  <Zap className="w-3.5 h-3.5 text-amber-400" />
-                  HERRAMIENTAS TRANSVERSALES DE APRENDIZAJE Y ANÁLISIS
-                </span>
-                <span className="text-[10px] text-zinc-500 font-mono-tech">
-                  6 HERRAMIENTAS
-                </span>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {[
-                  EVO_LAB_GUIDES['tech-hardware'],
-                  EVO_LAB_GUIDES['tech-silicon'],
-                  EVO_LAB_GUIDES['tech-metrology'],
-                  EVO_LAB_GUIDES['tech-software-kernel'],
-                  EVO_LAB_GUIDES['tech-telemetry'],
-                  EVO_LAB_GUIDES['tech-windows-kernel'],
-                ].filter(Boolean).map((guide) => (
-                  <div
-                    key={guide.id}
-                    className="p-5 rounded-xl evo-surface-level2 border border-zinc-900 hover:border-cyan-400/30 transition-all flex flex-col justify-between gap-4 group"
-                  >
-                    <div className="space-y-3">
-                      <div className="flex items-center justify-between">
-                        <span
-                          className="px-2 py-0.5 rounded text-[10px] font-mono-tech font-bold uppercase border"
-                          style={{
-                            color: guide.accentColor,
-                            backgroundColor: `${guide.accentColor}15`,
-                            borderColor: `${guide.accentColor}40`,
-                          }}
-                        >
-                          {guide.status}
-                        </span>
-                        {guide.relatedTomoTitle && (
-                          <span className="text-[10px] text-zinc-500 font-mono-tech truncate max-w-[200px]">
-                            {guide.relatedTomoTitle}
-                          </span>
-                        )}
-                      </div>
-
-                      <h4 className="font-display font-bold text-base text-white group-hover:text-amber-300 transition-colors">
-                        {guide.name}
-                      </h4>
-
-                      <p className="text-xs text-zinc-300 font-sans-editorial leading-relaxed">
-                        {guide.whatIsThisLab}
-                      </p>
-
-                      <div className="space-y-1 pt-2 border-t border-zinc-900 text-xs font-sans-editorial">
-                        <div>
-                          <strong className="text-zinc-400 font-mono-tech text-[11px]">Para qué sirve: </strong>
-                          <span className="text-zinc-300">{guide.whatYouWillPractice}</span>
-                        </div>
-                        <div>
-                          <strong className="text-zinc-400 font-mono-tech text-[11px]">Resultado: </strong>
-                          <span className="text-emerald-400">{guide.whatOutputDelivers}</span>
-                        </div>
-                      </div>
-                    </div>
-
-                    <button
-                      type="button"
-                      onClick={() => setSelectedLabGuide(guide)}
-                      className="w-full py-2.5 px-3 rounded-lg bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-zinc-200 hover:text-white font-mono-tech text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer mt-auto"
-                    >
-                      <Sparkles className="w-3.5 h-3.5 text-amber-400" />
-                      <span>ABRIR GUÍA PEDAGÓGICA Y ENTRAR</span>
-                    </button>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* SUB-TAB 3: LABORATORIO DE OPERACIONES EVO */}
-          {labSubTab === 'operaciones' && (
-            <div className="space-y-4">
-              <div className="p-6 rounded-2xl bg-gradient-to-br from-[#07131e] to-[#080b12] border border-cyan-500/40 hover:border-cyan-400/80 transition-all duration-200 shadow-xl flex flex-col md:flex-row md:items-center justify-between gap-6 group">
-                <div className="flex items-start gap-4">
-                  <div className="w-14 h-14 rounded-2xl bg-cyan-500/15 border border-cyan-500/40 text-cyan-400 flex items-center justify-center shrink-0">
-                    <Boxes className="w-7 h-7" />
-                  </div>
-                  <div className="space-y-2">
-                    <div className="flex items-center gap-2">
-                      <h3 className="font-display font-black text-xl text-white group-hover:text-cyan-300 transition-colors">
-                        LABORATORIO DE OPERACIONES EVO
-                      </h3>
-                      <span className="px-2 py-0.5 rounded text-[10px] font-mono-tech font-bold uppercase text-cyan-400 bg-cyan-500/15 border border-cyan-500/40">
-                        BANCO TRANSVERSAL
-                      </span>
-                    </div>
-
-                    <p className="text-xs sm:text-sm text-zinc-300 font-sans-editorial leading-relaxed max-w-2xl">
-                      “Este espacio permite explorar libremente las herramientas técnicas de EVO LABS fuera de una clase específica.”
-                    </p>
-
-                    <div className="flex flex-wrap gap-2 pt-1 text-[11px] font-mono-tech text-zinc-400">
-                      <span className="px-2 py-0.5 rounded bg-zinc-900 border border-zinc-800">
-                        Esquemático PCB Interactivo
-                      </span>
-                      <span className="px-2 py-0.5 rounded bg-zinc-900 border border-zinc-800">
-                        8 Sectores de Taller
-                      </span>
-                      <span className="px-2 py-0.5 rounded bg-zinc-900 border border-zinc-800">
-                        Workstations & Simuladores
-                      </span>
-                    </div>
-                  </div>
-                </div>
-
-                <button
-                  type="button"
-                  onClick={() => setSelectedLabGuide(EVO_LAB_GUIDES['tech-operaciones'])}
-                  className="px-6 py-3.5 rounded-xl bg-cyan-400 hover:bg-cyan-300 text-black font-mono-tech font-bold text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2 cursor-pointer shadow-[0_0_20px_rgba(6,182,212,0.35)] shrink-0"
-                >
-                  <Play className="w-4 h-4 fill-current" />
-                  <span>ENTRAR A OPERACIONES</span>
-                </button>
-              </div>
-            </div>
-          )}
+              ))}
+          </div>
         </div>
       )}
 
@@ -2176,43 +2158,104 @@ export const EvoWorldMap: React.FC<EvoWorldMapProps> = ({
                 >
                   8 SECTORES LAB
                 </button>
-                <button
-                  type="button"
-                  onClick={() => setDiagnoseTab('simuladores')}
-                  className={`px-3 py-1.5 rounded-lg font-bold transition-all cursor-pointer ${
-                    diagnoseTab === 'simuladores'
-                      ? 'bg-purple-400 text-black shadow-md'
-                      : 'text-zinc-400 hover:text-white'
-                  }`}
-                >
-                  SIMULADORES
-                </button>
               </div>
             </div>
           </div>
 
-          {/* Banner de Diagnóstico Real & Procedencia Epistémica EVO */}
-          <div className="p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-[#170e24] via-[#0e1017] to-[#080a11] border border-purple-500/30 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 font-mono-tech">
-            <div className="space-y-1.5">
+          {/* Banner Conceptual Fuerte: ACÁ NO SIMULAMOS */}
+          <div className="p-5 sm:p-6 rounded-2xl bg-gradient-to-r from-[#170e24] via-[#0e1017] to-[#080a11] border-2 border-purple-500/40 flex flex-col md:flex-row items-start md:items-center justify-between gap-6 shadow-[0_0_30px_rgba(168,85,247,0.15)]">
+            <div className="space-y-2">
               <div className="flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                <span className="text-[11px] text-purple-300 font-bold uppercase tracking-wider">
-                  EVO CORE // MOTOR DE DIAGNÓSTICO Y PERITAJE DE SILICIO
+                <span className="w-2.5 h-2.5 rounded-full bg-purple-400 animate-pulse" />
+                <span className="text-xs font-mono-tech text-purple-300 font-black uppercase tracking-widest">
+                  PRINCIPIO PERICIAL EVO LABS
                 </span>
-                <span className="text-[9px] px-2 py-0.5 rounded bg-zinc-900 border border-zinc-700 text-zinc-300">
-                  PROCEDENCIA: SYSTEM_REPORTED
+                <span className="text-[9px] px-2 py-0.5 rounded bg-purple-950/80 border border-purple-700/60 text-purple-200 font-mono-tech font-bold">
+                  EVIDENCIA REAL
                 </span>
               </div>
-              <p className="text-xs text-zinc-300 max-w-2xl font-sans-editorial">
-                Mediciones obtenidas por CIM/WMI a través del EVO Local Agent en <code className="text-purple-300 font-mono">127.0.0.1:43921</code>. Los campos no verificables se clasifican estrictamente como UNKNOWN.
+              <h3 className="font-display font-black text-xl text-white tracking-wide">
+                ACÁ NO SIMULAMOS. ACÁ ANALIZAMOS TU EQUIPO.
+              </h3>
+              <p className="text-xs text-zinc-300 max-w-2xl font-sans-editorial leading-relaxed">
+                Diagnóstico real con procedencia de datos estricta: todo valor verificado por WMI/CIM o telemetría de hardware se clasifica como <strong className="text-purple-300 font-mono">SYSTEM_REPORTED</strong>. Lo que no puede comprobarse con rigor es categorizado estrictamente como <strong className="text-zinc-400 font-mono">UNKNOWN</strong>.
               </p>
             </div>
-            <div className="flex items-center gap-2 shrink-0">
-              <span className="text-[10px] text-zinc-400 border-l border-zinc-800 pl-3 hidden lg:block">
-                Las simulaciones educativas pertenecen a <strong className="text-emerald-400">PRACTICAR</strong>.
-              </span>
+
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 shrink-0">
+              <button
+                type="button"
+                onClick={() => setIsAutoDetectOpen(true)}
+                className="px-4 py-2.5 rounded-xl bg-purple-500 hover:bg-purple-400 text-black font-mono-tech text-xs font-black uppercase tracking-wider transition-all flex items-center justify-center gap-1.5 cursor-pointer shadow-[0_0_15px_rgba(168,85,247,0.4)]"
+              >
+                <Cpu className="w-4 h-4 text-black" />
+                <span>{passport ? 'ACTUALIZAR DETECCIÓN' : 'DETECTAR MI EQUIPO'}</span>
+              </button>
+              {onNavigateLabCore && (
+                <button
+                  type="button"
+                  onClick={() => onNavigateLabCore()}
+                  className="px-4 py-2.5 rounded-xl bg-zinc-900 hover:bg-zinc-800 border border-purple-500/40 text-purple-200 font-mono-tech text-xs font-bold uppercase tracking-wider transition-all flex items-center justify-center gap-1.5 cursor-pointer"
+                >
+                  <Activity className="w-4 h-4 text-purple-400" />
+                  <span>ABRIR EVO CORE</span>
+                </button>
+              )}
             </div>
           </div>
+
+          {/* Tarjeta de Pasaporte de Hardware Detectado */}
+          {passport ? (
+            <div className="p-5 rounded-2xl bg-zinc-950/70 border border-purple-500/30 font-mono-tech space-y-3">
+              <div className="flex items-center justify-between border-b border-zinc-800 pb-2">
+                <span className="text-xs text-purple-300 font-bold uppercase flex items-center gap-2">
+                  <ShieldCheck className="w-4 h-4 text-emerald-400" />
+                  PASAPORTE TÉCNICO REGISTRADO // PROCEDENCIA: SYSTEM_REPORTED
+                </span>
+                <span className="text-[10px] text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/30 font-bold">
+                  VERIFICADO
+                </span>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 text-xs">
+                <div className="p-3 rounded-xl bg-[#090b11] border border-zinc-900">
+                  <span className="text-zinc-500 text-[10px] uppercase block">PROCESADOR (CPU)</span>
+                  <span className="text-white font-bold block truncate mt-1">{passport.cpuModel || 'Detectado'}</span>
+                  <span className="text-zinc-400 text-[10px]">{passport.cores ? `${passport.cores} núcleos / ${passport.logicalProcessors || passport.cores} hilos` : 'Cores reportados'}</span>
+                </div>
+                <div className="p-3 rounded-xl bg-[#090b11] border border-zinc-900">
+                  <span className="text-zinc-500 text-[10px] uppercase block">MEMORIA RAM</span>
+                  <span className="text-emerald-400 font-bold block mt-1">{passport.ramTotalGB ? `${passport.ramTotalGB} GB` : 'RAM Detectada'}</span>
+                  <span className="text-zinc-400 text-[10px]">{passport.ramConfiguredClockMhz ? `${passport.ramConfiguredClockMhz} MHz` : 'Frecuencia WMI'}</span>
+                </div>
+                <div className="p-3 rounded-xl bg-[#090b11] border border-zinc-900">
+                  <span className="text-zinc-500 text-[10px] uppercase block">GRÁFICOS (GPU)</span>
+                  <span className="text-amber-400 font-bold block truncate mt-1">{passport.gpuModel || 'GPU del sistema'}</span>
+                  <span className="text-zinc-400 text-[10px]">{passport.gpuVramGB ? `${passport.gpuVramGB} GB VRAM` : 'Driver activo'}</span>
+                </div>
+                <div className="p-3 rounded-xl bg-[#090b11] border border-zinc-900">
+                  <span className="text-zinc-500 text-[10px] uppercase block">SISTEMA OPERATIVO</span>
+                  <span className="text-cyan-400 font-bold block truncate mt-1">{passport.osCaption || 'Windows NT'}</span>
+                  <span className="text-zinc-400 text-[10px]">{passport.osBuild ? `Build ${passport.osBuild}` : 'Kernel verificado'}</span>
+                </div>
+              </div>
+            </div>
+          ) : (
+            <div className="p-4 rounded-xl bg-[#090c13] border border-zinc-800 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs font-mono-tech">
+              <div className="flex items-center gap-3">
+                <Info className="w-5 h-5 text-amber-400 shrink-0" />
+                <span className="text-zinc-300">
+                  Aún no registraste el pasaporte técnico de tu PC. Podés capturarlo en 5 segundos con el comando WMI seguro.
+                </span>
+              </div>
+              <button
+                type="button"
+                onClick={() => setIsAutoDetectOpen(true)}
+                className="px-3.5 py-1.5 rounded-lg bg-zinc-900 hover:bg-zinc-800 border border-amber-400/40 text-amber-300 font-bold uppercase transition-all shrink-0 cursor-pointer"
+              >
+                DETECTAR AHORA
+              </button>
+            </div>
+          )}
 
           {/* Sub-herramienta 1: EXPEDIENTES Y CASOS */}
           {diagnoseTab === 'expedientes' && (
@@ -2418,48 +2461,166 @@ export const EvoWorldMap: React.FC<EvoWorldMapProps> = ({
       )}
 
       {/* ========================================================================= */}
-      {/* 6. SECCIÓN: MI PROGRESO (EXPEDIENTE ACADÉMICO EVO)                        */}
+      {/* 6. SECCIÓN: MI EVO // IDENTIDAD TÉCNICA Y EXPEDIENTE PROFESIONAL          */}
       {/* ========================================================================= */}
       {activeIntention === 'progreso' && (
-        <div className="relative z-10 flex-1 max-w-4xl mx-auto w-full px-4 sm:px-8 py-8 space-y-6">
+        <div className="relative z-10 flex-1 max-w-5xl mx-auto w-full px-4 sm:px-8 py-8 space-y-6">
           <div className="space-y-1 border-b border-zinc-800 pb-4">
-            <h2 className="evo-page-title flex items-center gap-2">
+            <div className="flex items-center gap-2">
               <Trophy className="w-6 h-6 text-amber-400" />
-              <span>EXPEDIENTE ACADÉMICO EVO // MI PROGRESO</span>
-            </h2>
-            <p className="evo-body-secondary">
-              Registro pericial de niveles explorados, tomos leídos, laboratorios completados y casos resueltos.
+              <h2 className="evo-page-title">
+                MI EVO // IDENTIDAD TÉCNICA Y EXPEDIENTE PROFESIONAL
+              </h2>
+            </div>
+            <p className="evo-body-secondary italic">
+              “Tu trayectoria pericial demostrada con evidencia empírica.” Habilidades comprobadas, certificaciones y expedientes.
             </p>
           </div>
 
+          {/* Pasaporte & Resumen Global */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             <div className="p-4 rounded-xl bg-[#090c13] border border-zinc-800 space-y-1">
-              <div className="text-[10px] text-zinc-500 font-mono-tech uppercase">Ruta / Nivel Actual</div>
+              <div className="text-[10px] text-zinc-500 font-mono-tech uppercase">Rango Pericial</div>
               <div className="text-sm font-bold text-amber-400 font-mono-tech truncate">
                 {realProgress.hasProgress && realProgress.lastActivity
                   ? realProgress.lastActivity.levelTitle
-                  : 'Nivel 0 (Inicial)'}
+                  : 'Nivel 0 // Inicial'}
               </div>
             </div>
 
             <div className="p-4 rounded-xl bg-[#090c13] border border-zinc-800 space-y-1">
-              <div className="text-[10px] text-zinc-500 font-mono-tech uppercase">Capítulos Tomo 01</div>
+              <div className="text-[10px] text-zinc-500 font-mono-tech uppercase">Tomo 01: Conocé tu PC</div>
               <div className="text-sm font-bold text-white font-mono-tech">
-                {completedChaptersCount} de 7 completados
+                {completedChaptersCount} de 7 capítulos ({Math.round((completedChaptersCount / 7) * 100)}%)
               </div>
             </div>
 
             <div className="p-4 rounded-xl bg-[#090c13] border border-zinc-800 space-y-1">
-              <div className="text-[10px] text-zinc-500 font-mono-tech uppercase">Laboratorios Reales</div>
-              <div className="text-sm font-bold text-white font-mono-tech">
-                {realProgress.isBootLabDone ? 'Tomo 08 (Activo)' : '0 Completados'}
+              <div className="text-[10px] text-zinc-500 font-mono-tech uppercase">Examen & Certificado</div>
+              <div className="text-sm font-bold font-mono-tech">
+                {realProgress.isExamPassed ? (
+                  <span className="text-emerald-400">APROBADO (≥70%)</span>
+                ) : realProgress.isC07Done ? (
+                  <span className="text-amber-400">LISTO PARA RENDIR</span>
+                ) : (
+                  <span className="text-zinc-500">EN FORMACIÓN</span>
+                )}
               </div>
             </div>
 
             <div className="p-4 rounded-xl bg-[#090c13] border border-zinc-800 space-y-1">
-              <div className="text-[10px] text-zinc-500 font-mono-tech uppercase">Casos Forenses</div>
+              <div className="text-[10px] text-zinc-500 font-mono-tech uppercase">Casos Forenses Resueltos</div>
               <div className="text-sm font-bold text-white font-mono-tech">
-                {realProgress.resolvedCasesCount} de {realProgress.totalCasesCount} resueltos
+                {realProgress.resolvedCasesCount} de {realProgress.totalCasesCount} expedientes
+              </div>
+            </div>
+          </div>
+
+          {/* LOS 4 PILARES COGNITIVOS DE IDENTIDAD TÉCNICA */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+            {/* 1. QUÉ APRENDÍ */}
+            <div className="p-5 rounded-2xl bg-zinc-950/70 border border-zinc-800 space-y-3">
+              <div className="flex items-center justify-between border-b border-zinc-800 pb-2">
+                <span className="text-xs font-mono-tech font-bold text-white uppercase flex items-center gap-2">
+                  <BookOpen className="w-4 h-4 text-amber-400" />
+                  1. QUÉ APRENDÍ
+                </span>
+                <span className="text-[10px] text-amber-400 font-mono-tech font-bold">BASE TEÓRICA</span>
+              </div>
+              <ul className="space-y-2 text-xs font-sans-editorial text-zinc-300">
+                <li className="flex items-start gap-2">
+                  <span className="text-amber-400 font-bold">•</span>
+                  <span><strong>Arquitectura de silicio:</strong> Física de semiconductores, zócalos, IMC y topología de memoria RAM.</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-amber-400 font-bold">•</span>
+                  <span><strong>Flujo del dato:</strong> Interconexión CPU, PCIe, GPU, latencias de caché y cuellos de botella reales.</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-amber-400 font-bold">•</span>
+                  <span><strong>Kernel NT:</strong> La frontera entre Ring 0 y Ring 3, procesos, servicios e hilos del sistema operativo.</span>
+                </li>
+              </ul>
+            </div>
+
+            {/* 2. QUÉ DEMOSTRÉ */}
+            <div className="p-5 rounded-2xl bg-zinc-950/70 border border-zinc-800 space-y-3">
+              <div className="flex items-center justify-between border-b border-zinc-800 pb-2">
+                <span className="text-xs font-mono-tech font-bold text-white uppercase flex items-center gap-2">
+                  <Award className="w-4 h-4 text-emerald-400" />
+                  2. QUÉ DEMOSTRÉ
+                </span>
+                <span className="text-[10px] text-emerald-400 font-mono-tech font-bold">EVIDENCIA & EVALUACIÓN</span>
+              </div>
+              <div className="space-y-2.5 text-xs">
+                <div className="p-3 rounded-xl bg-[#090c13] border border-zinc-900 flex items-center justify-between">
+                  <div>
+                    <span className="font-bold text-white block">Evaluación Teórica Tomo 01</span>
+                    <span className="text-[11px] text-zinc-400">15 preguntas ponderadas de arquitectura y descarte</span>
+                  </div>
+                  <span className={`px-2 py-0.5 rounded text-[10px] font-mono-tech font-bold ${realProgress.isExamPassed ? 'bg-emerald-500/15 text-emerald-300 border border-emerald-500/30' : 'bg-zinc-900 text-zinc-500 border border-zinc-800'}`}>
+                    {realProgress.isExamPassed ? 'APROBADO' : 'PENDIENTE'}
+                  </span>
+                </div>
+                <div className="p-3 rounded-xl bg-[#090c13] border border-zinc-900 flex items-center justify-between">
+                  <div>
+                    <span className="font-bold text-white block">Certificación Oficial EVO</span>
+                    <span className="text-[11px] text-zinc-400">Diploma metrológico imprimible y verificable</span>
+                  </div>
+                  <span className={`px-2 py-0.5 rounded text-[10px] font-mono-tech font-bold ${realProgress.isTomo01FullyDone ? 'bg-amber-500/15 text-amber-300 border border-amber-500/30' : 'bg-zinc-900 text-zinc-500 border border-zinc-800'}`}>
+                    {realProgress.isTomo01FullyDone ? 'EMITIDO' : 'BLOQUEADO'}
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            {/* 3. QUÉ PUEDO HACER */}
+            <div className="p-5 rounded-2xl bg-zinc-950/70 border border-zinc-800 space-y-3">
+              <div className="flex items-center justify-between border-b border-zinc-800 pb-2">
+                <span className="text-xs font-mono-tech font-bold text-white uppercase flex items-center gap-2">
+                  <Wrench className="w-4 h-4 text-cyan-400" />
+                  3. QUÉ PUEDO HACER
+                </span>
+                <span className="text-[10px] text-cyan-400 font-mono-tech font-bold">HABILIDADES PRÁCTICAS</span>
+              </div>
+              <ul className="space-y-2 text-xs font-sans-editorial text-zinc-300">
+                <li className="flex items-start gap-2">
+                  <CheckCircle2 className="w-3.5 h-3.5 text-cyan-400 shrink-0 mt-0.5" />
+                  <span>Capturar frametimes y percentiles 1% low para evaluar fluidez real.</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <CheckCircle2 className="w-3.5 h-3.5 text-cyan-400 shrink-0 mt-0.5" />
+                  <span>Auditar servicios en segundo plano y medir latencias DPC en Windows.</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <CheckCircle2 className="w-3.5 h-3.5 text-cyan-400 shrink-0 mt-0.5" />
+                  <span>Diagnosticar fallas de arranque POST paso a paso con multímetro.</span>
+                </li>
+              </ul>
+            </div>
+
+            {/* 4. QUÉ ME FALTA */}
+            <div className="p-5 rounded-2xl bg-zinc-950/70 border border-zinc-800 space-y-3">
+              <div className="flex items-center justify-between border-b border-zinc-800 pb-2">
+                <span className="text-xs font-mono-tech font-bold text-white uppercase flex items-center gap-2">
+                  <Compass className="w-4 h-4 text-purple-400" />
+                  4. QUÉ ME FALTA
+                </span>
+                <span className="text-[10px] text-purple-400 font-mono-tech font-bold">PRÓXIMOS DESAFÍOS</span>
+              </div>
+              <div className="space-y-2 text-xs font-sans-editorial">
+                {!realProgress.isExamPassed ? (
+                  <div className="p-2.5 rounded-lg bg-amber-950/20 border border-amber-500/30 text-amber-200">
+                    <strong>Examen Tomo 01:</strong> Completá los capítulos restantes y rendí la prueba técnica.
+                  </div>
+                ) : (
+                  <div className="p-2.5 rounded-lg bg-emerald-950/20 border border-emerald-500/30 text-emerald-200">
+                    <strong>Tomo 02:</strong> Avanzá a "La Biblia Negra de Windows" para explorar el kernel NT.
+                  </div>
+                )}
+                <div className="p-2.5 rounded-lg bg-zinc-900 border border-zinc-800 text-zinc-400">
+                  <strong>Taller de Casos:</strong> Resolver expedientes periciales complejos en el taller de incidentes.
+                </div>
               </div>
             </div>
           </div>
@@ -2469,7 +2630,7 @@ export const EvoWorldMap: React.FC<EvoWorldMapProps> = ({
             <div className="flex items-center justify-between border-b border-zinc-800/80 pb-2">
               <span className="font-mono-tech font-bold text-white text-xs uppercase flex items-center gap-2">
                 <Compass className="w-4 h-4 text-cyan-400" />
-                ESTADO POR NIVELES (ESCUELA EVO)
+                ESTADO POR NIVELES // RUTA FORMATIVA EVO
               </span>
               <span className="text-[10px] text-zinc-500 font-mono-tech">
                 DATOS REALES GUARDADOS
@@ -2516,7 +2677,7 @@ export const EvoWorldMap: React.FC<EvoWorldMapProps> = ({
       )}
 
       {/* ========================================================================= */}
-      {/* 7. SECCIÓN: CATÁLOGO DE HERRAMIENTAS ORGANIZADAS POR INTENCIÓN            */}
+      {/* 7. SECCIÓN: CATÁLOGO DE HERRAMIENTAS ORGANIZADAS POR FUNCIÓN               */}
       {/* ========================================================================= */}
       {activeIntention === 'herramientas' && (
         <div className="relative z-10 flex-1 max-w-6xl mx-auto w-full px-4 sm:px-8 py-6 space-y-6">
@@ -2531,19 +2692,19 @@ export const EvoWorldMap: React.FC<EvoWorldMapProps> = ({
                   </h2>
                 </div>
                 <p className="evo-body-secondary mt-1">
-                  <span className="evo-label-badge text-cyan-400">CATÁLOGO POR INTENCIÓN</span> — Elegí la herramienta según lo que querés resolver. Nombre simple afuera, profundidad técnica adentro.
+                  <span className="evo-label-badge text-cyan-400">INSTRUMENTOS FUNCIONALES</span> — Categorizados por función técnica real. Usá un instrumento con evidencia objetiva.
                 </p>
               </div>
 
-              {/* Pestañas de categorías */}
+              {/* Pestañas de categorías canónicas */}
               <div className="flex flex-wrap items-center gap-1.5 p-1 rounded-xl bg-zinc-900 border border-zinc-800 font-mono-tech text-xs">
                 {[
                   { id: 'all', label: 'TODAS' },
-                  { id: 'windows', label: 'WINDOWS' },
+                  { id: 'windows', label: 'SISTEMA' },
                   { id: 'hardware', label: 'HARDWARE' },
+                  { id: 'terminal', label: 'RED & TERMINAL' },
                   { id: 'rendimiento', label: 'RENDIMIENTO' },
                   { id: 'diagnostico', label: 'DIAGNÓSTICO' },
-                  { id: 'experimentos', label: 'EXPERIMENTOS' },
                 ].map((cat) => (
                   <button
                     key={cat.id}
