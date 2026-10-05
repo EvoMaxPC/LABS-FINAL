@@ -471,7 +471,7 @@ export const TutorEvoDrawer: React.FC = () => {
           </div>
         )}
 
-        {/* Tab 3: SECTORES DE LA ACADEMIA */}
+        {/* Tab 3: SECTORES DE EVO LABS */}
         {activeTutorTab === 'tour' && (
           <div className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-4">
             <div className="space-y-1">

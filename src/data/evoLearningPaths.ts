@@ -802,6 +802,8 @@ export interface EvoToolCardDefinition {
   tomoId?: '01' | '02' | '03' | '04' | '08';
   subParam?: string;
   accentColor: string;
+  inputReq?: string;
+  outputArtifact?: string;
 }
 
 export const EVO_TOOLS_BY_INTENT: EvoToolCardDefinition[] = [

@@ -501,18 +501,66 @@ export const EditorialIndex: React.FC<EditorialIndexProps> = ({
 
               const isLocked = !isAvailable && !isCompleted;
 
+              if (isLocked) {
+                return (
+                  <article
+                    key={cap.number}
+                    id={`capitulo-${cap.number}`}
+                    onClick={() => {
+                      if (onSelectLockedChapter) {
+                        onSelectLockedChapter(cap);
+                      }
+                    }}
+                    className="rounded-xl border border-zinc-900/60 bg-[#0b0d12]/40 p-4 transition-all duration-300 group relative overflow-hidden cursor-pointer hover:border-zinc-700 hover:bg-[#0e1118]"
+                  >
+                    <div className="flex items-center justify-between gap-3 mb-2.5">
+                      <span className="text-[10px] font-mono-tech uppercase font-bold tracking-widest px-1.5 py-0.5 rounded bg-zinc-950/80 text-zinc-500 border border-zinc-900">
+                        {cap.categoryTag}
+                      </span>
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          onSelectLockedChapter?.(cap);
+                        }}
+                        className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-mono-tech uppercase font-bold tracking-widest bg-zinc-950 border border-zinc-900 text-zinc-500 group-hover:text-yellow-400/80 group-hover:border-yellow-400/40 transition-colors cursor-pointer"
+                        title="Ver requisitos para desbloquear este capítulo"
+                      >
+                        <Lock className="w-2.5 h-2.5 text-zinc-500 group-hover:text-yellow-400/80 transition-colors" />
+                        <span>BLOQUEADO • REQUISITOS</span>
+                      </button>
+                    </div>
+
+                    <div className="flex items-center gap-4">
+                      <span className="font-mono-tech font-black text-2xl text-zinc-600 group-hover:text-zinc-400 shrink-0 w-8 transition-colors">
+                        {cap.number}
+                      </span>
+                      <div className="w-11 h-11 rounded-lg overflow-hidden bg-zinc-950 border border-zinc-900 shrink-0 opacity-40 group-hover:opacity-60 transition-opacity">
+                        <img
+                          src={cap.visualImage}
+                          alt=""
+                          referrerPolicy="no-referrer"
+                          className="w-full h-full object-cover object-center grayscale"
+                        />
+                      </div>
+                      <div className="min-w-0 flex-1">
+                        <h4 className="font-display font-bold text-sm sm:text-base text-zinc-400 group-hover:text-zinc-200 transition-colors uppercase tracking-tight truncate">
+                          {cap.title}
+                        </h4>
+                        <p className="text-zinc-500 text-[11px] truncate">
+                          Requisito: {cap.number === '02' ? 'Completar Cap. 01' : `Completar Cap. 0${parseInt(cap.number) - 1}`}
+                        </p>
+                      </div>
+                    </div>
+                  </article>
+                );
+              }
+
               return (
                 <article
                   key={cap.number}
                   id={`capitulo-${cap.number}`}
-                  onClick={() => {
-                    if (isLocked && onSelectLockedChapter) {
-                      onSelectLockedChapter(cap);
-                    }
-                  }}
                   className={`rounded-2xl border bg-[#121318] p-5 sm:p-6 transition-all duration-300 group relative overflow-hidden ${
-                    isLocked ? 'cursor-pointer hover:border-zinc-600 hover:bg-[#15161d]' : ''
-                  } ${
                     isAvailable
                       ? 'border-yellow-400/70 hover:border-yellow-400 hover:bg-[#161720]'
                       : isCompleted

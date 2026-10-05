@@ -27,6 +27,7 @@ import {
   Gauge,
   X,
 } from 'lucide-react';
+import { EvoMundoWordmark } from '../common/EvoMundoWordmark';
 
 export interface EvoIntroExperienceProps {
   onEnterCampus: () => void;
@@ -51,24 +52,20 @@ export const EvoIntroExperience: React.FC<EvoIntroExperienceProps> = ({
   const sceneDurations = [4000, 4500, 5000, 20000];
 
   const handleEnterCampusAction = useCallback(() => {
-    if (rememberPreference) {
-      try {
-        localStorage.setItem('evo_academia_intro_dismissed', 'true');
-      } catch {}
-    }
+    try {
+      localStorage.setItem('evo_academia_intro_dismissed', 'true');
+    } catch {}
     if (onEnterCampus) onEnterCampus();
     else if (onComplete) onComplete();
-  }, [rememberPreference, onEnterCampus, onComplete]);
+  }, [onEnterCampus, onComplete]);
 
   const handleStartTomo01Action = useCallback(() => {
-    if (rememberPreference) {
-      try {
-        localStorage.setItem('evo_academia_intro_dismissed', 'true');
-      } catch {}
-    }
+    try {
+      localStorage.setItem('evo_academia_intro_dismissed', 'true');
+    } catch {}
     if (onStartTomo01) onStartTomo01();
     else if (onEnterCampus) onEnterCampus();
-  }, [rememberPreference, onStartTomo01, onEnterCampus]);
+  }, [onStartTomo01, onEnterCampus]);
 
   const handleSkipAction = useCallback(() => {
     try {
@@ -415,13 +412,8 @@ export const EvoIntroExperience: React.FC<EvoIntroExperienceProps> = ({
               transition={{ duration: 0.4, ease: 'easeOut' }}
               className="space-y-6 max-w-2xl mx-auto py-4 text-center flex flex-col items-center"
             >
-              <div className="space-y-2">
-                <span className="text-[10px] font-mono-tech font-black text-amber-400 tracking-wider uppercase block">
-                  CENTRO DE OPERACIONES
-                </span>
-                <h2 className="text-3xl sm:text-5xl font-display font-black tracking-tight text-white uppercase">
-                  MUNDO EVO
-                </h2>
+              <div className="space-y-3 flex flex-col items-center">
+                <EvoMundoWordmark variant="hero" showUniverseBadge={true} className="items-center text-center" />
                 <p className="text-xs sm:text-sm text-zinc-300 font-sans-editorial max-w-lg">
                   Tu consola central de operaciones técnicas en EVO LABS está lista. Elegí por dónde comenzar tu evolución.
                 </p>

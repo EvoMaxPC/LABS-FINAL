@@ -127,7 +127,7 @@ export const EvoInstitutionalIntro: React.FC<EvoInstitutionalIntroProps> = ({
       <main className="relative z-10 flex-1 max-w-4xl mx-auto w-full px-4 sm:px-8 py-6 sm:py-10 flex flex-col justify-center items-center">
         
         {/* ========================================================================= */}
-        {/* SCENE 0: BIENVENIDA A LA ACADEMIA                                         */}
+        {/* SCENE 0: BIENVENIDA A EVO LABS                                         */}
         {/* ========================================================================= */}
         {currentStep === 0 && (
           <div className="w-full text-center space-y-6 animate-in fade-in duration-300">

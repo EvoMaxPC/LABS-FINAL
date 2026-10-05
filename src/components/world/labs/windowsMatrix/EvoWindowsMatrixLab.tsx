@@ -210,11 +210,6 @@ export const EvoWindowsMatrixLab: React.FC<EvoWindowsMatrixLabProps> = ({
   // Analysis Trigger
   const [analyzed, setAnalyzed] = useState<boolean>(false);
 
-  // Scheduler Lab State
-  const [schedulerArch, setSchedulerArch] = useState<'hybrid' | 'vcache' | 'monolithic'>('hybrid');
-  const [schedulerWorkload, setSchedulerWorkload] = useState<'foreground' | 'app' | 'background' | 'maintenance'>('foreground');
-  const [showSchedulerDeepDive, setShowSchedulerDeepDive] = useState<boolean>(false);
-
   // Toggle usage chips
   const toggleUsage = (id: string) => {
     setSelectedUsages(prev =>
@@ -222,24 +217,38 @@ export const EvoWindowsMatrixLab: React.FC<EvoWindowsMatrixLabProps> = ({
     );
   };
 
+  // Scheduler Lab State
+  const [schedulerArch, setSchedulerArch] = useState<'hybrid' | 'vcache' | 'monolithic'>('hybrid');
+  const [schedulerWorkload, setSchedulerWorkload] = useState<'foreground' | 'app' | 'background' | 'maintenance'>('foreground');
+  const [showSchedulerDeepDive, setShowSchedulerDeepDive] = useState<boolean>(false);
+
+  // Missing fields helper
+  const missingFields = useMemo(() => {
+    const list: string[] = [];
+    if (!cpuCategory) list.push('Procesador (CPU)');
+    if (!ramAmount) list.push('Memoria RAM');
+    if (!storageType) list.push('Almacenamiento (HDD/SSD)');
+    if (!tpmStatus) list.push('TPM 2.0');
+    if (!secureBoot) list.push('Secure Boot');
+    if (!uefiStatus) list.push('Firmware UEFI / BIOS');
+    return list;
+  }, [cpuCategory, ramAmount, storageType, tpmStatus, secureBoot, uefiStatus]);
+
   // Confidence Level Calculation
   const confidenceLevel = useMemo(() => {
-    let filled = 0;
-    if (cpuCategory) filled++;
-    if (ramAmount) filled++;
-    if (storageType) filled++;
-    if (tpmStatus) filled++;
-    if (secureBoot) filled++;
-
-    if (filled >= 5) return 'DATOS SUFICIENTES';
-    if (filled >= 2) return 'DATOS PARCIALES';
+    if (missingFields.length === 0) return 'DATOS SUFICIENTES';
+    if (missingFields.length <= 3) return 'DATOS PARCIALES';
     return 'DATOS INSUFICIENTES';
-  }, [cpuCategory, ramAmount, storageType, tpmStatus, secureBoot]);
+  }, [missingFields]);
 
   // Windows 11 Specs Compliance Evaluation
   const win11Compatibility = useMemo(() => {
-    if (confidenceLevel === 'DATOS INSUFICIENTES') {
-      return { status: 'NO SABEMOS', text: 'Información insuficiente para evaluar', color: 'text-zinc-400 bg-zinc-800' };
+    if (confidenceLevel !== 'DATOS SUFICIENTES') {
+      return { 
+        status: 'DATOS INSUFICIENTES', 
+        text: `Faltan ingresar datos esenciales: ${missingFields.join(', ')}`, 
+        color: 'text-zinc-400 bg-zinc-800' 
+      };
     }
 
     const cpuOk = cpuCategory === 'intel-hybrid' || cpuCategory === 'amd-modern' || cpuCategory === 'quad-standard';
@@ -257,18 +266,21 @@ export const EvoWindowsMatrixLab: React.FC<EvoWindowsMatrixLabProps> = ({
       return { status: 'NO CUMPLE', text: 'No cumple requisitos nativos de Windows 11 de origen', color: 'text-rose-300 bg-rose-950/80 border-rose-600/50' };
     }
 
-    return { status: 'NO SABEMOS', text: 'Faltan verificar configuraciones en BIOS/Firmware', color: 'text-amber-300 bg-amber-950/80 border-amber-600/50' };
-  }, [confidenceLevel, cpuCategory, ramAmount, storageType, tpmStatus, uefiStatus, secureBoot]);
+    return { status: 'NO CUMPLE', text: 'Faltan verificar configuraciones en BIOS/Firmware', color: 'text-amber-300 bg-amber-950/80 border-amber-600/50' };
+  }, [confidenceLevel, missingFields, cpuCategory, ramAmount, storageType, tpmStatus, uefiStatus, secureBoot]);
 
   // Transparent Recommendation Rules
   const recommendationResult = useMemo(() => {
     if (!analyzed) return null;
 
-    if (confidenceLevel === 'DATOS INSUFICIENTES') {
+    if (confidenceLevel !== 'DATOS SUFICIENTES') {
       return {
         bestFit: 'DATOS INSUFICIENTES',
-        whyFit: ['Completa al menos Procesador, RAM y Almacenamiento para generar una evaluación veraz.'],
-        keepInMind: ['Sin datos de hardware no podemos prejuzgar la compatibilidad.'],
+        whyFit: [
+          `No se puede determinar la compatibilidad debido a que faltan datos esenciales de hardware:`,
+          ...missingFields.map(f => `• Falta ingresar: ${f}`)
+        ],
+        keepInMind: ['Sin datos de hardware completos no podemos prejuzgar la compatibilidad de forma veraz.'],
         checkBefore: ['Usa el botón "[ ¿DÓNDE VEO MI HARDWARE? ]" para conocer los componentes de tu equipo.'],
         alternative: 'N/A',
         legacyAlert: null
@@ -316,7 +328,7 @@ export const EvoWindowsMatrixLab: React.FC<EvoWindowsMatrixLabProps> = ({
       alternative: MICROSOFT_LIFECYCLE_SNAPSHOT['win11-26h2'].name + ' (Si los drivers ya están validados por el fabricante)',
       legacyAlert: null
     };
-  }, [analyzed, confidenceLevel, win11Compatibility]);
+  }, [analyzed, confidenceLevel, missingFields, win11Compatibility]);
 
   return (
     <div className="w-full min-h-screen bg-zinc-950 text-zinc-100 p-4 md:p-6 space-y-6 font-sans">
@@ -349,7 +361,7 @@ export const EvoWindowsMatrixLab: React.FC<EvoWindowsMatrixLabProps> = ({
               className="px-3 py-2 bg-zinc-800 hover:bg-zinc-700 text-zinc-200 border border-zinc-700 rounded-lg text-xs font-mono transition-all flex items-center gap-1.5"
             >
               <HelpCircle className="w-4 h-4 text-cyan-400" />
-              [ NO ENTIENDO ]
+              EXPLICÁMELO SIMPLE
             </button>
           </div>
         </div>
@@ -624,7 +636,7 @@ export const EvoWindowsMatrixLab: React.FC<EvoWindowsMatrixLabProps> = ({
                     onClick={() => setShowGlossaryModal(true)}
                     className="px-3 py-1 bg-zinc-800 hover:bg-zinc-700 text-cyan-400 border border-zinc-700 rounded text-xs font-mono"
                   >
-                    [ NO ENTIENDO ]
+                    EXPLICÁMELO SIMPLE
                   </button>
                 </div>
               </div>
@@ -1159,7 +1171,7 @@ export const EvoWindowsMatrixLab: React.FC<EvoWindowsMatrixLabProps> = ({
         </div>
       )}
 
-      {/* MODAL: NO ENTIENDO ([ NO ENTIENDO ]) */}
+      {/* MODAL: EXPLICÁMELO SIMPLE */}
       {showGlossaryModal && (
         <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
           <div className="bg-zinc-900 border border-cyan-500/40 rounded-xl max-w-xl w-full p-6 space-y-4 shadow-2xl relative">

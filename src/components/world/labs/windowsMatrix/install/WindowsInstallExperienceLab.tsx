@@ -437,10 +437,10 @@ export const WindowsInstallExperienceLab: React.FC = () => {
               <button
                 type="button"
                 onClick={() => setTutorOpen(true)}
-                className="px-2 py-0.5 rounded bg-cyan-950 hover:bg-cyan-900 text-cyan-300 border border-cyan-800 text-[10px] font-bold transition-colors cursor-pointer ml-2 flex items-center gap-1"
+                className="px-2 py-1 rounded bg-cyan-950 hover:bg-cyan-900 text-cyan-300 border border-cyan-800 text-xs font-bold transition-colors cursor-pointer ml-2 flex items-center gap-1"
               >
-                <HelpCircle className="w-3 h-3" />
-                <span>[ NO ENTIENDO ]</span>
+                <HelpCircle className="w-3.5 h-3.5" />
+                <span>EXPLICÁMELO SIMPLE</span>
               </button>
             </div>
           </div>

@@ -343,7 +343,7 @@ export const WindowsFailureRepairLab: React.FC<WindowsFailureRepairLabProps> = (
                   className="px-2.5 py-1 rounded-lg bg-transparent hover:bg-zinc-900 border border-zinc-800 hover:border-zinc-700 text-zinc-400 hover:text-cyan-300 text-xs font-mono-tech flex items-center gap-1.5 cursor-pointer transition-all"
                 >
                   <HelpCircle className="w-3.5 h-3.5 text-cyan-400" />
-                  <span>NO ENTIENDO / AYUDA</span>
+                  <span>EXPLICÁMELO SIMPLE / AYUDA</span>
                 </button>
               </div>
             </div>

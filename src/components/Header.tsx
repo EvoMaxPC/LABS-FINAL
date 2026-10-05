@@ -264,14 +264,14 @@ export const Header: React.FC<HeaderProps> = ({
               title="Practicar // Suite de Laboratorios"
               className={`px-3 py-1.5 rounded-xl flex items-center gap-1.5 transition-all duration-200 cursor-pointer select-none group relative ${
                 isPracticarActive
-                  ? 'bg-gradient-to-b from-emerald-400/20 via-emerald-500/12 to-emerald-500/5 text-emerald-200 border border-emerald-400/40 font-bold shadow-[0_0_16px_rgba(16,185,129,0.2),inset_0_1px_0_rgba(255,255,255,0.18)]'
+                  ? 'bg-gradient-to-b from-amber-400/20 via-amber-500/12 to-amber-500/5 text-amber-200 border border-amber-400/40 font-bold shadow-[0_0_16px_rgba(245,158,11,0.2),inset_0_1px_0_rgba(255,255,255,0.18)]'
                   : 'text-zinc-300 hover:text-white hover:bg-white/[0.06] border border-transparent hover:border-white/[0.08]'
               }`}
             >
-              <Zap className="w-3.5 h-3.5 text-emerald-400 group-hover:scale-110 transition-transform duration-200" />
+              <Zap className="w-3.5 h-3.5 text-amber-400 group-hover:scale-110 transition-transform duration-200" />
               <span>PRACTICAR</span>
               {isPracticarActive && (
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 shadow-[0_0_6px_#34d399] animate-pulse" />
+                <span className="w-1.5 h-1.5 rounded-full bg-amber-400 shadow-[0_0_6px_#fbbf24] animate-pulse" />
               )}
             </button>
 
@@ -286,14 +286,14 @@ export const Header: React.FC<HeaderProps> = ({
               title="Analizar mi PC // Taller de Diagnóstico y Casos"
               className={`px-3 py-1.5 rounded-xl flex items-center gap-1.5 transition-all duration-200 cursor-pointer select-none group relative ${
                 isAnalizarActive
-                  ? 'bg-gradient-to-b from-purple-400/20 via-purple-500/12 to-purple-500/5 text-purple-200 border border-purple-400/40 font-bold shadow-[0_0_16px_rgba(168,85,247,0.2),inset_0_1px_0_rgba(255,255,255,0.18)]'
+                  ? 'bg-gradient-to-b from-amber-400/20 via-amber-500/12 to-amber-500/5 text-amber-200 border border-amber-400/40 font-bold shadow-[0_0_16px_rgba(245,158,11,0.2),inset_0_1px_0_rgba(255,255,255,0.18)]'
                   : 'text-zinc-300 hover:text-white hover:bg-white/[0.06] border border-transparent hover:border-white/[0.08]'
               }`}
             >
-              <Cpu className="w-3.5 h-3.5 text-purple-400 group-hover:scale-110 transition-transform duration-200" />
+              <Cpu className="w-3.5 h-3.5 text-amber-400 group-hover:scale-110 transition-transform duration-200" />
               <span className="whitespace-nowrap">ANALIZAR MI PC</span>
               {isAnalizarActive && (
-                <span className="w-1.5 h-1.5 rounded-full bg-purple-400 shadow-[0_0_6px_#c084fc] animate-pulse" />
+                <span className="w-1.5 h-1.5 rounded-full bg-amber-400 shadow-[0_0_6px_#fbbf24] animate-pulse" />
               )}
             </button>
 
@@ -308,14 +308,14 @@ export const Header: React.FC<HeaderProps> = ({
               title="Herramientas // Catálogo técnico independiente"
               className={`px-3 py-1.5 rounded-xl flex items-center gap-1.5 transition-all duration-200 cursor-pointer select-none group relative ${
                 isHerramientasActive
-                  ? 'bg-gradient-to-b from-cyan-400/20 via-cyan-500/12 to-cyan-500/5 text-cyan-200 border border-cyan-400/40 font-bold shadow-[0_0_16px_rgba(6,182,212,0.2),inset_0_1px_0_rgba(255,255,255,0.18)]'
+                  ? 'bg-gradient-to-b from-amber-400/20 via-amber-500/12 to-amber-500/5 text-amber-200 border border-amber-400/40 font-bold shadow-[0_0_16px_rgba(245,158,11,0.2),inset_0_1px_0_rgba(255,255,255,0.18)]'
                   : 'text-zinc-300 hover:text-white hover:bg-white/[0.06] border border-transparent hover:border-white/[0.08]'
               }`}
             >
-              <Gauge className="w-3.5 h-3.5 text-cyan-400 group-hover:scale-110 transition-transform duration-200" />
+              <Gauge className="w-3.5 h-3.5 text-amber-400 group-hover:scale-110 transition-transform duration-200" />
               <span>HERRAMIENTAS</span>
               {isHerramientasActive && (
-                <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 shadow-[0_0_6px_#22d3ee] animate-pulse" />
+                <span className="w-1.5 h-1.5 rounded-full bg-amber-400 shadow-[0_0_6px_#fbbf24] animate-pulse" />
               )}
             </button>
 
@@ -330,14 +330,14 @@ export const Header: React.FC<HeaderProps> = ({
               title="Mi EVO // Expediente personal y progreso"
               className={`px-3 py-1.5 rounded-xl flex items-center gap-1.5 transition-all duration-200 cursor-pointer select-none group relative ${
                 isMiEvoActive
-                  ? 'bg-gradient-to-b from-indigo-400/20 via-indigo-500/12 to-indigo-500/5 text-indigo-200 border border-indigo-400/40 font-bold shadow-[0_0_16px_rgba(99,102,241,0.2),inset_0_1px_0_rgba(255,255,255,0.18)]'
+                  ? 'bg-gradient-to-b from-amber-400/20 via-amber-500/12 to-amber-500/5 text-amber-200 border border-amber-400/40 font-bold shadow-[0_0_16px_rgba(245,158,11,0.2),inset_0_1px_0_rgba(255,255,255,0.18)]'
                   : 'text-zinc-300 hover:text-white hover:bg-white/[0.06] border border-transparent hover:border-white/[0.08]'
               }`}
             >
-              <Trophy className="w-3.5 h-3.5 text-indigo-400 group-hover:scale-110 transition-transform duration-200" />
+              <Trophy className="w-3.5 h-3.5 text-amber-400 group-hover:scale-110 transition-transform duration-200" />
               <span className="whitespace-nowrap">MI EVO</span>
               {isMiEvoActive && (
-                <span className="w-1.5 h-1.5 rounded-full bg-indigo-400 shadow-[0_0_6px_#818cf8] animate-pulse" />
+                <span className="w-1.5 h-1.5 rounded-full bg-amber-400 shadow-[0_0_6px_#fbbf24] animate-pulse" />
               )}
             </button>
           </nav>
@@ -417,11 +417,11 @@ export const Header: React.FC<HeaderProps> = ({
                 }}
                 className={`flex items-center gap-2.5 px-3 py-2.5 rounded-xl transition-all ${
                   isEscuelaActive
-                    ? 'bg-cyan-400/15 text-cyan-200 border border-cyan-400/40 font-bold'
+                    ? 'bg-amber-400/15 text-amber-200 border border-amber-400/40 font-bold'
                     : 'hover:bg-white/[0.06] text-zinc-200 border border-transparent'
                 }`}
               >
-                <Compass className="w-4 h-4 text-cyan-400 shrink-0" />
+                <Compass className="w-4 h-4 text-amber-400 shrink-0" />
                 <span>APRENDER</span>
               </button>
 
@@ -435,11 +435,11 @@ export const Header: React.FC<HeaderProps> = ({
                 }}
                 className={`flex items-center gap-2.5 px-3 py-2.5 rounded-xl transition-all ${
                   isPracticarActive
-                    ? 'bg-emerald-400/15 text-emerald-200 border border-emerald-400/40 font-bold'
+                    ? 'bg-amber-400/15 text-amber-200 border border-amber-400/40 font-bold'
                     : 'hover:bg-white/[0.06] text-zinc-200 border border-transparent'
                 }`}
               >
-                <Zap className="w-4 h-4 text-emerald-400 shrink-0" />
+                <Zap className="w-4 h-4 text-amber-400 shrink-0" />
                 <span>PRACTICAR</span>
               </button>
 
@@ -453,11 +453,11 @@ export const Header: React.FC<HeaderProps> = ({
                 }}
                 className={`flex items-center gap-2.5 px-3 py-2.5 rounded-xl transition-all ${
                   isAnalizarActive
-                    ? 'bg-rose-400/15 text-rose-200 border border-rose-400/40 font-bold'
+                    ? 'bg-amber-400/15 text-amber-200 border border-amber-400/40 font-bold'
                     : 'hover:bg-white/[0.06] text-zinc-200 border border-transparent'
                 }`}
               >
-                <Activity className="w-4 h-4 text-rose-400 shrink-0" />
+                <Activity className="w-4 h-4 text-amber-400 shrink-0" />
                 <span>ANALIZAR MI PC</span>
               </button>
 
@@ -471,11 +471,11 @@ export const Header: React.FC<HeaderProps> = ({
                 }}
                 className={`flex items-center gap-2.5 px-3 py-2.5 rounded-xl transition-all ${
                   isHerramientasActive
-                    ? 'bg-sky-400/15 text-sky-200 border border-sky-400/40 font-bold'
+                    ? 'bg-amber-400/15 text-amber-200 border border-amber-400/40 font-bold'
                     : 'hover:bg-white/[0.06] text-zinc-200 border border-transparent'
                 }`}
               >
-                <Wrench className="w-4 h-4 text-sky-400 shrink-0" />
+                <Wrench className="w-4 h-4 text-amber-400 shrink-0" />
                 <span>HERRAMIENTAS</span>
               </button>
 
@@ -489,11 +489,11 @@ export const Header: React.FC<HeaderProps> = ({
                 }}
                 className={`flex items-center gap-2.5 px-3 py-2.5 rounded-xl transition-all ${
                   isMiEvoActive
-                    ? 'bg-indigo-400/15 text-indigo-200 border border-indigo-400/40 font-bold'
+                    ? 'bg-amber-400/15 text-amber-200 border border-amber-400/40 font-bold'
                     : 'hover:bg-white/[0.06] text-zinc-200 border border-transparent'
                 }`}
               >
-                <Trophy className="w-4 h-4 text-indigo-400 shrink-0" />
+                <Trophy className="w-4 h-4 text-amber-400 shrink-0" />
                 <span>MI EVO</span>
               </button>
             </div>

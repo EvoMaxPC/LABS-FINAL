@@ -148,7 +148,7 @@ function AppContent() {
     } catch {
       // ignore
     }
-    return 'cover';
+    return 'world-map';
   });
 
   // Sub-panel & Lab states
@@ -203,6 +203,15 @@ function AppContent() {
       if (url.searchParams.get('intro') === 'true') {
         return true;
       }
+      if (
+        url.searchParams.get('volume') ||
+        url.searchParams.get('view') ||
+        url.searchParams.get('mode') ||
+        url.searchParams.get('pdf') ||
+        url.searchParams.get('print') === 'true'
+      ) {
+        return false;
+      }
       const dismissed = localStorage.getItem('evo_academia_intro_dismissed') === 'true';
       return !dismissed;
     } catch {
@@ -226,18 +235,28 @@ function AppContent() {
       const url = new URL(window.location.href);
       const vol = url.searchParams.get('volume');
       const viewParam = url.searchParams.get('view');
-      const dismissed = localStorage.getItem('evo_academia_intro_dismissed') === 'true';
-      const playIntro = url.searchParams.get('intro') === 'true' || !dismissed;
+      const hasDeepLink = Boolean(
+        vol ||
+        viewParam ||
+        url.searchParams.get('print') === 'true' ||
+        url.searchParams.get('mode') === 'magazine' ||
+        url.searchParams.get('pdf') === 'true'
+      );
+      const playIntro = !hasDeepLink && localStorage.getItem('evo_academia_intro_dismissed') !== 'true';
+      const playExplicitIntro = url.searchParams.get('intro') === 'true';
+
+      if (playExplicitIntro) {
+        setIsIntroActive(true);
+      } else if (hasDeepLink) {
+        setIsIntroActive(false);
+      }
 
       if (viewParam === 'hotswap') {
         setCurrentView('hotswap-lab');
-        if (playIntro) setIsIntroActive(true);
       } else if (viewParam === 'matrix') {
         setCurrentView('windows-matrix-lab');
-        if (playIntro) setIsIntroActive(true);
       } else if (viewParam === 'core' || viewParam === 'lab-core') {
         setCurrentView('lab-core');
-        if (playIntro) setIsIntroActive(true);
       } else if (vol === '02') {
         setCurrentView('tomo-02');
         if (playIntro) setIsIntroActive(true);
@@ -720,9 +739,6 @@ function AppContent() {
     setActiveNotice(
       '¡Capítulo 01 completado! Se ha generado tu Pasaporte EVO y desbloqueado el Capítulo 02: CÓMO TRABAJAN JUNTOS.'
     );
-
-    setCurrentView('index');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const handleChapter02Completed = () => {
@@ -861,7 +877,15 @@ function AppContent() {
 
   const handleCompleteExam = (score: number, total: number) => {
     setChaptersList(computeChaptersList());
-    if (score >= 5) {
+    const passed = total > 0 ? score / total >= 0.7 : false;
+    if (passed) {
+      try {
+        localStorage.setItem('evo_tomo01_completed', 'true');
+        localStorage.setItem('evo_labs_tomo_theory_verified_tomo-01', 'true');
+        localStorage.setItem('evo_theory_verified_01', 'true');
+      } catch {
+        // ignore
+      }
       setCelebrationData({
         completedNumber: 'TOMO 01',
         completedTitle: 'CONOCÉ TU PC // CERTIFICACIÓN EVO',
@@ -869,7 +893,7 @@ function AppContent() {
         unlockedTitle: 'BANCO DE SILICIO & TELEMETRÍA (HOT-SWAP LAB)',
       });
       setActiveNotice(
-        `¡Prueba Final superada con ${score}/${total}! Tomo 01 acreditado con éxito. Habilitado el entorno práctico de laboratorio.`
+        `¡Prueba Final superada con ${score}/${total} (${Math.round((score / total) * 100)}%)! Tomo 01 acreditado con éxito. Habilitado el entorno práctico de laboratorio.`
       );
     }
   };
@@ -1019,6 +1043,11 @@ function AppContent() {
   if (isIntroActive) {
     const handleIntroFinish = () => {
       setIsIntroActive(false);
+      try {
+        localStorage.setItem('evo_academia_intro_dismissed', 'true');
+      } catch {
+        // ignore
+      }
       if (deepLinkDest) {
         setCurrentView(deepLinkDest.view);
         setDeepLinkDest(null);
@@ -1033,7 +1062,12 @@ function AppContent() {
         onEnterCampus={handleIntroFinish}
         onStartTomo01={() => {
           setIsIntroActive(false);
-          setCurrentView('magazine');
+          try {
+            localStorage.setItem('evo_academia_intro_dismissed', 'true');
+          } catch {
+            // ignore
+          }
+          handleNavigateTomo01();
         }}
         onSkipAndRemember={() => {
           try {
@@ -1245,6 +1279,18 @@ function AppContent() {
               onOpenDossier={(tomoId) => setDossierModalTomoId(tomoId)}
               onNavigateMagazine={() => setCurrentView('magazine')}
               onNavigateTomo01={handleNavigateTomo01}
+              onGoToChapter={(ch) => {
+                if (ch === '01') handleStartChapter01();
+                else if (ch === '02') handleStartChapter02();
+                else if (ch === '03') handleStartChapter03();
+                else if (ch === '04') handleStartChapter04();
+                else if (ch === '05') handleStartChapter05();
+                else if (ch === '06') handleStartChapter06();
+                else if (ch === '07') handleStartChapter07();
+                else handleStartChapter01();
+              }}
+              onStartFinalExam={handleStartFinalExam}
+              onOpenCompletionScreen={handleOpenCompletionScreen}
               onOpenCaseHistory={handleOpenCaseHistory}
               onHardwareDetected={(passport) => setUserPassport(passport)}
             />

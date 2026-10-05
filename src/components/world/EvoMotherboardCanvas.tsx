@@ -536,7 +536,7 @@ export const EvoMotherboardCanvas: React.FC<EvoMotherboardCanvasProps> = ({
   const currentDossier = MOTHERBOARD_DATA_DICTIONARY[activeComponent] || MOTHERBOARD_DATA_DICTIONARY.cpu;
 
   // Datos reales inyectados desde el hardware passport si existen
-  const cpuDisplayName = passport?.cpuModel || 'Intel Core i3-1220P / AM5 Socket';
+  const cpuDisplayName = passport?.cpuModel || 'Intel Core i3-1220P (FCBGA1744)';
   const ramDisplayName = passport?.ramCapacityGb
     ? `${passport.ramCapacityGb} GB DDR5 @ ${passport.ramSpeedMhz || 5600} MT/s`
     : '16 GB DDR5 5600 MT/s Dual-Channel';
@@ -1381,7 +1381,7 @@ export const EvoMotherboardCanvas: React.FC<EvoMotherboardCanvasProps> = ({
                 <Thermometer className="w-3.5 h-3.5 text-yellow-500" />
                 {currentDossier.metrics.temperature.label}
               </span>
-              <span className="text-[10px] px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 font-bold">
+              <span className="text-[10px] px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 font-bold whitespace-nowrap shrink-0">
                 NOMINAL
               </span>
             </div>
@@ -1405,7 +1405,7 @@ export const EvoMotherboardCanvas: React.FC<EvoMotherboardCanvasProps> = ({
                 <Zap className="w-3.5 h-3.5 text-yellow-500" />
                 {currentDossier.metrics.voltage.label}
               </span>
-              <span className="text-[10px] px-1.5 py-0.5 rounded bg-yellow-500/20 text-yellow-500 border border-yellow-500/40 font-bold">
+              <span className="text-[10px] px-1.5 py-0.5 rounded bg-yellow-500/20 text-yellow-500 border border-yellow-500/40 font-bold whitespace-nowrap shrink-0">
                 ESTABLE
               </span>
             </div>
@@ -1461,7 +1461,7 @@ export const EvoMotherboardCanvas: React.FC<EvoMotherboardCanvasProps> = ({
                 {currentDossier.metrics.latency.label}
               </span>
               <span
-                className={`text-[10px] px-1.5 py-0.5 rounded font-bold border ${
+                className={`text-[10px] px-1.5 py-0.5 rounded font-bold border whitespace-nowrap shrink-0 ${
                   currentDossier.metrics.latency.dpcSpikeRisk === 'optimal'
                     ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40'
                     : 'bg-amber-500/20 text-amber-300 border-amber-500/40'

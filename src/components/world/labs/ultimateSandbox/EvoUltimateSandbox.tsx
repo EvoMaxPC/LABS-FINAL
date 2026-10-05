@@ -2463,7 +2463,7 @@ export const EvoUltimateSandbox: React.FC<EvoUltimateSandboxProps> = ({
                 </div>
                 <div>
                   <div className="text-[11px] font-mono-tech font-bold text-emerald-400 uppercase tracking-wider flex items-center gap-2">
-                    <span>TELEMETRÍA REAL INGERIDA</span>
+                    <span>TELEMETRÍA DETECTADA (SYSTEM_REPORTED)</span>
                     <span className="px-1.5 py-0.2 rounded text-[9px] bg-emerald-400/20 text-emerald-300 border border-emerald-400/30">
                       EN VIVO
                     </span>

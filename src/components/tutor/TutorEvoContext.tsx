@@ -50,6 +50,10 @@ export const TutorEvoProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       ) {
         return false;
       }
+      // Do not compete with primary EvoIntroExperience
+      if (localStorage.getItem('evo_academia_intro_dismissed') !== 'true') {
+        return false;
+      }
       return localStorage.getItem(STORAGE_KEY_ONBOARDING_DISMISSED) !== 'true';
     } catch {
       return false;
