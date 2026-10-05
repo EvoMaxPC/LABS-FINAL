@@ -337,3 +337,427 @@
   }
 }
 
+/* ==========================================================================
+   EVO LABS UNIFIED GLOBAL TYPOGRAPHY SYSTEM (FASE 05)
+   ========================================================================== */
+
+.evo-hero-title {
+  font-family: 'Epilogue', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: clamp(34px, 4.2vw, 56px);
+  font-weight: 900;
+  line-height: 0.98;
+  letter-spacing: -0.025em;
+  text-transform: uppercase;
+  color: #ffffff;
+}
+
+.evo-page-title {
+  font-family: 'Epilogue', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: clamp(22px, 3vw, 32px);
+  font-weight: 900;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  color: #ffffff;
+}
+
+.evo-section-title {
+  font-family: 'Epilogue', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: clamp(18px, 2.2vw, 22px);
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: -0.015em;
+  text-transform: uppercase;
+  color: #ffffff;
+}
+
+.evo-card-title {
+  font-family: 'Epilogue', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: clamp(15px, 1.8vw, 18px);
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+  color: #ffffff;
+}
+
+.evo-body-primary {
+  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: clamp(14px, 1.5vw, 16px);
+  font-weight: 400;
+  line-height: 1.6;
+  color: #d4d4d8; /* zinc-300 */
+}
+
+.evo-body-secondary {
+  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: clamp(13px, 1.3vw, 14px);
+  font-weight: 400;
+  line-height: 1.5;
+  color: #a1a1aa; /* zinc-400 */
+}
+
+.evo-label-badge {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: clamp(10px, 1vw, 11px);
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: #a1a1aa; /* zinc-400 */
+}
+
+.evo-metadata-tech {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: clamp(10px, 1.1vw, 12px);
+  font-weight: 400;
+  line-height: 1.35;
+  color: #71717a; /* zinc-500 */
+}
+
+/* ==========================================================================
+   EVO LABS ART DIRECTION PASS (FASE 06)
+   ========================================================================== */
+
+/* Surfaces Definitions */
+.evo-surface-level0 {
+  background-color: #050608 !important;
+}
+
+.evo-surface-level1 {
+  background-color: #080a0f !important;
+}
+
+.evo-surface-level2 {
+  background-color: #0c0f17 !important;
+  border: 1px solid rgba(113, 113, 122, 0.15) !important; /* ultra fine zinc border */
+}
+
+.evo-surface-level3 {
+  background-color: #121624 !important;
+  border: 1px solid rgba(245, 158, 11, 0.3) !important;
+  box-shadow: 0 0 15px -3px rgba(245, 158, 11, 0.12) !important;
+}
+
+/* EVO TRACE Elements */
+.evo-trace-line {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(245, 158, 11, 0.25) 20%, rgba(245, 158, 11, 0.25) 80%, transparent);
+  position: relative;
+}
+
+.evo-trace-node {
+  width: 5px;
+  height: 5px;
+  background-color: #f59e0b;
+  border-radius: 50%;
+  box-shadow: 0 0 8px #f59e0b;
+  display: inline-block;
+  animation: evo-node-pulse 2s infinite ease-in-out;
+}
+
+@keyframes evo-node-pulse {
+  0%, 100% { transform: scale(1); opacity: 0.8; }
+  50% { transform: scale(1.3); opacity: 1; box-shadow: 0 0 12px #f59e0b; }
+}
+
+.evo-trace-dashed-border {
+  border: 1px dashed rgba(255, 255, 255, 0.12);
+  background-image: linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+  background-size: 100% 4px;
+}
+
+/* EVO LAB FRAME - Technical corner brackets & instrument feel */
+.evo-lab-frame {
+  position: relative;
+  background: #080a0f;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.evo-lab-frame::before {
+  content: '';
+  position: absolute;
+  top: -1px;
+  left: -1px;
+  width: 8px;
+  height: 8px;
+  border-top: 2px solid #f59e0b;
+  border-left: 2px solid #f59e0b;
+  pointer-events: none;
+}
+
+.evo-lab-frame::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  right: -1px;
+  width: 8px;
+  height: 8px;
+  border-bottom: 2px solid #22d3ee;
+  border-right: 2px solid #22d3ee;
+  pointer-events: none;
+}
+
+.evo-lab-frame-accent-emerald::before {
+  border-top-color: #10b981;
+  border-left-color: #10b981;
+}
+
+.evo-lab-frame-accent-purple::before {
+  border-top-color: #a855f7;
+  border-left-color: #a855f7;
+}
+
+.evo-lab-frame-accent-cyan::before {
+  border-top-color: #22d3ee;
+  border-left-color: #22d3ee;
+}
+
+/* EVO PROOF STATE - Custom states with slow microglow respirando & ambient scanlines */
+.evo-proof-observando {
+  position: relative;
+  overflow: hidden;
+  border-left: 2px solid #f59e0b;
+}
+
+.evo-proof-observando::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; height: 100%;
+  background: linear-gradient(180deg, transparent 0%, rgba(245, 158, 11, 0.02) 50%, transparent 100%);
+  animation: evo-scanline 6s infinite linear;
+  pointer-events: none;
+}
+
+.evo-proof-midiendo {
+  position: relative;
+  overflow: hidden;
+  border-left: 2px solid #22d3ee;
+}
+
+.evo-proof-midiendo::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; height: 100%;
+  background: linear-gradient(180deg, transparent 0%, rgba(34, 211, 238, 0.03) 50%, transparent 100%);
+  animation: evo-scanline 4s infinite linear;
+  pointer-events: none;
+}
+
+.evo-proof-simulando {
+  position: relative;
+  border-left: 2px solid #818cf8;
+}
+
+.evo-proof-validado {
+  border-left: 2px solid #10b981;
+  background-color: rgba(16, 185, 129, 0.02);
+}
+
+@keyframes evo-scanline {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(100%); }
+}
+
+/* EVO EVIDENCE RAIL */
+.evo-evidence-rail {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  position: relative;
+}
+
+.evo-evidence-rail-line {
+  flex-grow: 1;
+  height: 2px;
+  background: linear-gradient(90deg, #10b981, #22d3ee, #f59e0b, #a855f7);
+  opacity: 0.75;
+}
+
+/* Fine tech grid background with tenuy radial glow */
+.evo-global-ambient-bg {
+  background-color: #050608;
+  background-image: 
+    radial-gradient(circle at 50% 15%, rgba(245, 158, 11, 0.015) 0%, transparent 50%),
+    radial-gradient(circle at 10% 70%, rgba(34, 211, 238, 0.01) 0%, transparent 40%),
+    linear-gradient(to right, rgba(255, 255, 255, 0.01) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.01) 1px, transparent 1px) !important;
+  background-size: 100% 100%, 100% 100%, 32px 32px, 32px 32px !important;
+  background-size: 100% 100%, 100% 100%, 32px 32px, 32px 32px !important;
+}
+
+/* ==========================================================================
+   EVO LABS PREMIUM BUTTON SYSTEM (BUTTONS REFINEMENT SYSTEM)
+   ========================================================================== */
+
+.evo-btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background-color: #f59e0b; /* Amarillo Ámbar EVO */
+  color: #050608 !important; /* Negro Graphite */
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  height: 44px;
+  padding-left: 20px;
+  padding-right: 20px;
+  border-radius: 8px;
+  border: 1px solid rgba(251, 191, 36, 0.4);
+  transition: all 180ms ease-out;
+  cursor: pointer;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1), 0 0 12px rgba(245, 158, 11, 0.1);
+}
+
+.evo-btn-primary:hover {
+  transform: translateY(-1px);
+  background-color: #fbbf24;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15), 0 0 15px rgba(245, 158, 11, 0.25);
+  border-color: rgba(251, 191, 36, 0.6);
+}
+
+.evo-btn-primary:active {
+  transform: translateY(0);
+  background-color: #d97706;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.evo-btn-primary:focus-visible {
+  outline: none;
+  ring: 2px;
+  ring-color: rgba(251, 191, 36, 0.6);
+  ring-offset: 2px;
+}
+
+.evo-btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background-color: #0c0f17; /* Slate dark graphite */
+  color: #d4d4d8 !important; /* zinc-300 */
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  height: 42px;
+  padding-left: 18px;
+  padding-right: 18px;
+  border-radius: 8px;
+  border: 1px solid rgba(113, 113, 122, 0.2);
+  transition: all 180ms ease-out;
+  cursor: pointer;
+}
+
+.evo-btn-secondary:hover {
+  background-color: #121624;
+  color: #ffffff !important;
+  border-color: rgba(113, 113, 122, 0.5);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+}
+
+.evo-btn-secondary:active {
+  transform: translateY(0);
+  background-color: #090b11;
+  border-color: rgba(113, 113, 122, 0.3);
+}
+
+.evo-btn-tertiary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background: transparent;
+  color: #a1a1aa !important; /* zinc-400 */
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 4px 8px;
+  border-radius: 6px;
+  border: 1px solid transparent;
+  transition: all 180ms ease-out;
+  cursor: pointer;
+}
+
+.evo-btn-tertiary:hover {
+  color: #ffffff !important;
+  background-color: rgba(255, 255, 255, 0.03);
+}
+
+.evo-btn-tertiary:hover svg {
+  transform: translateX(2px);
+}
+
+.evo-btn-tertiary svg {
+  transition: transform 180ms ease-out;
+}
+
+.evo-btn-nav {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  height: 32px;
+  padding-left: 12px;
+  padding-right: 12px;
+  border-radius: 6px;
+  border: 1px solid rgba(113, 113, 122, 0.15);
+  background-color: rgba(9, 11, 17, 0.6);
+  color: #a1a1aa;
+  transition: all 180ms ease-out;
+  cursor: pointer;
+}
+
+.evo-btn-nav:hover {
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.15);
+  background-color: rgba(9, 11, 17, 0.9);
+}
+
+.evo-btn-nav-active {
+  background-color: rgba(245, 158, 11, 0.1) !important;
+  color: #f59e0b !important;
+  border-color: rgba(245, 158, 11, 0.3) !important;
+  box-shadow: 0 0 10px rgba(245, 158, 11, 0.05);
+}
+
+/* Semi-floating elements and utilities */
+.evo-btn-floating {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background-color: #0c0f17;
+  color: #ffffff !important;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  height: 36px;
+  padding-left: 14px;
+  padding-right: 14px;
+  border-radius: 8px;
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25), 0 0 10px rgba(245, 158, 11, 0.08);
+  transition: all 180ms ease-out;
+  cursor: pointer;
+}
+
+.evo-btn-floating:hover {
+  transform: translateY(-1px);
+  background-color: #121624;
+  border-color: rgba(245, 158, 11, 0.5);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.35), 0 0 12px rgba(245, 158, 11, 0.15);
+}
+
+

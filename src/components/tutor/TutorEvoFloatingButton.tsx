@@ -119,17 +119,14 @@ export const TutorEvoFloatingButton: React.FC = () => {
       <button
         type="button"
         onClick={() => setIsFlyoutOpen(!isFlyoutOpen)}
-        className="group px-4 py-3 rounded-full bg-gradient-to-r from-amber-500 to-yellow-500 hover:brightness-110 text-black font-extrabold text-xs font-mono tracking-wider uppercase shadow-2xl flex items-center gap-2 transition-all duration-200 cursor-pointer hover:scale-105 active:scale-95 border border-amber-300"
-        style={{
-          boxShadow: '0 8px 30px rgba(245, 158, 11, 0.45)',
-        }}
+        className="evo-btn-floating h-10 px-3.5 rounded-full border border-amber-400/40 text-white shadow-lg flex items-center gap-2 transition-all duration-200 cursor-pointer"
         title="Abrir Tutor EVO: Ayuda, orientación y glosario"
       >
-        <span className="w-5 h-5 rounded-full bg-black text-amber-400 flex items-center justify-center font-black text-xs">
+        <span className="w-4 h-4 rounded-full bg-amber-400/10 border border-amber-400/30 text-amber-300 flex items-center justify-center font-black text-[10px]">
           ?
         </span>
-        <span className="tracking-wide">TUTOR EVO</span>
-        <Sparkles className="w-3.5 h-3.5 text-black group-hover:rotate-12 transition-transform" />
+        <span className="tracking-wide text-[11px] font-bold">TUTOR EVO</span>
+        <Sparkles className="w-3.5 h-3.5 text-amber-400 group-hover:rotate-12 transition-transform" />
       </button>
     </div>
   );

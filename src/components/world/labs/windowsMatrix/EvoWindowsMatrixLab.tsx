@@ -168,12 +168,29 @@ export const MICROSOFT_LIFECYCLE_SNAPSHOT: Record<string, WindowsVersionLifecycl
   }
 };
 
-export const EvoWindowsMatrixLab: React.FC<EvoWindowsMatrixLabProps> = () => {
+export const EvoWindowsMatrixLab: React.FC<EvoWindowsMatrixLabProps> = ({
+  initialScenario,
+}) => {
   const { mode: evoMode } = useEvoOperatingMode();
 
   // Active View Tab: 'advisor' (Advisor 3 pasos), 'matrix' (Comparar versiones), 'deep' (Profundizar Labs)
-  const [activeTab, setActiveTab] = useState<'advisor' | 'matrix' | 'deep'>('advisor');
-  const [deepLabSubTab, setDeepLabSubTab] = useState<'boot' | 'install' | 'services' | 'repair' | 'scheduler'>('scheduler');
+  const [activeTab, setActiveTab] = useState<'advisor' | 'matrix' | 'deep'>(() => {
+    if (initialScenario === 'matrix') return 'matrix';
+    if (initialScenario === 'advisor') return 'advisor';
+    if (['boot', 'install', 'services', 'repair', 'scheduler', 'scheduler-hybrid'].includes(initialScenario || '')) {
+      return 'deep';
+    }
+    return 'advisor';
+  });
+
+  const [deepLabSubTab, setDeepLabSubTab] = useState<'boot' | 'install' | 'services' | 'repair' | 'scheduler'>(() => {
+    if (initialScenario === 'boot') return 'boot';
+    if (initialScenario === 'install') return 'install';
+    if (initialScenario === 'services') return 'services';
+    if (initialScenario === 'repair') return 'repair';
+    if (initialScenario === 'scheduler' || initialScenario === 'scheduler-hybrid') return 'scheduler';
+    return 'scheduler';
+  });
 
   // Step 1: User Hardware Input
   const [cpuCategory, setCpuCategory] = useState<string>('');

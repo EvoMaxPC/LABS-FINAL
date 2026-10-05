@@ -171,12 +171,42 @@ function AppContent() {
     'campus' | 'escuela' | 'biblioteca' | 'laboratorios' | 'diagnosticar' | 'progreso'
   >('campus');
 
+  const [deepLinkDest, setDeepLinkDest] = useState<{ view: any; volume?: string | null } | null>(() => {
+    try {
+      const url = new URL(window.location.href);
+      const vol = url.searchParams.get('volume');
+      const viewParam = url.searchParams.get('view');
+      if (viewParam || vol) {
+        let viewToSave: any = 'world-map';
+        if (viewParam === 'hotswap') viewToSave = 'hotswap-lab';
+        else if (viewParam === 'matrix') viewToSave = 'windows-matrix-lab';
+        else if (viewParam === 'core' || viewParam === 'lab-core') viewToSave = 'lab-core';
+        else if (viewParam === 'boot' || viewParam === 'boot-lab') viewToSave = 'boot-lab';
+        else if (viewParam === 'index') viewToSave = 'index';
+        else if (viewParam === 'world' || viewParam === 'map') viewToSave = 'world-map';
+        else if (viewParam === 'chapter-01') viewToSave = 'chapter-01';
+        
+        if (vol === '02') viewToSave = 'tomo-02';
+        else if (vol === '03') viewToSave = 'tomo-03';
+        else if (vol === '04') viewToSave = 'tomo-04';
+        else if (vol === '08') viewToSave = 'tomo-08';
+        
+        return { view: viewToSave, volume: vol };
+      }
+    } catch {}
+    return null;
+  });
+
   const [isIntroActive, setIsIntroActive] = useState<boolean>(() => {
     try {
       const url = new URL(window.location.href);
-      return url.searchParams.get('intro') === 'true';
+      if (url.searchParams.get('intro') === 'true') {
+        return true;
+      }
+      const dismissed = localStorage.getItem('evo_academia_intro_dismissed') === 'true';
+      return !dismissed;
     } catch {
-      return false;
+      return true;
     }
   });
   const [activeProfile, setActiveProfile] = useState<EvoNarrativeProfile>('investigador');
@@ -196,29 +226,33 @@ function AppContent() {
       const url = new URL(window.location.href);
       const vol = url.searchParams.get('volume');
       const viewParam = url.searchParams.get('view');
+      const dismissed = localStorage.getItem('evo_academia_intro_dismissed') === 'true';
+      const playIntro = url.searchParams.get('intro') === 'true' || !dismissed;
+
       if (viewParam === 'hotswap') {
         setCurrentView('hotswap-lab');
-        setIsIntroActive(false);
+        if (playIntro) setIsIntroActive(true);
       } else if (viewParam === 'matrix') {
         setCurrentView('windows-matrix-lab');
-        setIsIntroActive(false);
+        if (playIntro) setIsIntroActive(true);
       } else if (viewParam === 'core' || viewParam === 'lab-core') {
         setCurrentView('lab-core');
-        setIsIntroActive(false);
+        if (playIntro) setIsIntroActive(true);
       } else if (vol === '02') {
         setCurrentView('tomo-02');
-        setIsIntroActive(false);
+        if (playIntro) setIsIntroActive(true);
       } else if (vol === '03') {
         setCurrentView('tomo-03');
-        setIsIntroActive(false);
+        if (playIntro) setIsIntroActive(true);
       } else if (vol === '04') {
         setCurrentView('tomo-04');
+        if (playIntro) setIsIntroActive(true);
       } else if (vol === '08') {
         setCurrentView('tomo-08');
-        setIsIntroActive(false);
+        if (playIntro) setIsIntroActive(true);
       } else if (viewParam === 'boot' || viewParam === 'boot-lab') {
         setCurrentView('boot-lab');
-        setIsIntroActive(false);
+        if (playIntro) setIsIntroActive(true);
       } else if (
         url.searchParams.get('print') === 'true' ||
         url.searchParams.get('mode') === 'magazine' ||
@@ -983,13 +1017,20 @@ function AppContent() {
   };
 
   if (isIntroActive) {
+    const handleIntroFinish = () => {
+      setIsIntroActive(false);
+      if (deepLinkDest) {
+        setCurrentView(deepLinkDest.view);
+        setDeepLinkDest(null);
+      } else {
+        setCampusSection('campus');
+        setCurrentView('world-map');
+      }
+    };
+
     return (
       <EvoIntroExperience
-        onEnterCampus={() => {
-          setIsIntroActive(false);
-          setCampusSection('campus');
-          setCurrentView('world-map');
-        }}
+        onEnterCampus={handleIntroFinish}
         onStartTomo01={() => {
           setIsIntroActive(false);
           setCurrentView('magazine');
@@ -1000,20 +1041,10 @@ function AppContent() {
           } catch {
             // ignore
           }
-          setIsIntroActive(false);
-          setCampusSection('campus');
-          setCurrentView('world-map');
+          handleIntroFinish();
         }}
-        onComplete={() => {
-          setIsIntroActive(false);
-          setCampusSection('campus');
-          setCurrentView('world-map');
-        }}
-        onSkip={() => {
-          setIsIntroActive(false);
-          setCampusSection('campus');
-          setCurrentView('world-map');
-        }}
+        onComplete={handleIntroFinish}
+        onSkip={handleIntroFinish}
       />
     );
   }
@@ -1239,10 +1270,6 @@ function AppContent() {
                 onOpenEdition={handleOpenEdition}
                 onOpenA4Magazine={() => setCurrentView('magazine')}
                 onBackToWorldMap={handleNavigateHome}
-              />
-              <HorizontalCollection
-                volumes={VOLUMES_COLLECTION}
-                onOpenVolume={handleOpenVolume}
               />
             </div>
           )}

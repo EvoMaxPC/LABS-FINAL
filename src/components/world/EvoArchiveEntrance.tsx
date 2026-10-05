@@ -77,7 +77,7 @@ export const EvoArchiveEntrance: React.FC<EvoArchiveEntranceProps> = ({
               SECTOR 03 // ARCHIVO TÉCNICO VIVO
             </div>
 
-            <h1 className="text-3xl sm:text-4xl font-display font-black tracking-tight text-white uppercase">
+            <h1 className="evo-page-title text-3xl sm:text-4xl font-black">
               ARCHIVO EVO
             </h1>
 
