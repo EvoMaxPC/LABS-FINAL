@@ -1352,6 +1352,23 @@ export const EvoMotherboardCanvas: React.FC<EvoMotherboardCanvasProps> = ({
           </div>
         </div>
 
+        {/* EXPLICACIÓN SIMPLE PARA PRINCIPIANTES */}
+        <div className="p-4 rounded-xl bg-gradient-to-r from-[#14120a] to-[#0c0d12] border border-amber-400/20 space-y-1">
+          <div className="text-[10px] text-amber-400 font-bold uppercase tracking-wider font-mono-tech flex items-center gap-1.5">
+            <Info className="w-3.5 h-3.5 text-amber-400" />
+            <span>EXPLICACIÓN SIMPLE PARA PRINCIPIANTES: ¿QUÉ SIGNIFICA {activeComponent.toUpperCase()}?</span>
+          </div>
+          <p className="text-xs text-zinc-300 font-sans-editorial leading-relaxed">
+            {activeComponent === 'vrm' && 'Regula y entrega energía estable al procesador para que funcione sin apagarse ni recalentar.'}
+            {activeComponent === 'cpu' && 'El microprocesador central, el cerebro de la PC que procesa toda la lógica e instrucciones.'}
+            {activeComponent === 'ram' && 'Memoria de acceso rápido temporal donde se guardan los datos activos de tus juegos o programas.'}
+            {activeComponent === 'pch' && 'Chipset de la placa madre que intercomunica puertos USB, discos SSD y periféricos con el CPU.'}
+            {activeComponent === 'pcie' && 'Bus de expansión ultra rápido donde se conecta la placa de video para procesar gráficos 3D.'}
+            {activeComponent === 'm2' && 'Zócalo de alta velocidad para discos de almacenamiento sólido SSD NVMe ultrarrápidos.'}
+            {activeComponent === 'io' && 'Panel de entrada/salida trasero donde se conectan pantallas, auriculares y redes externas.'}
+          </p>
+        </div>
+
         {/* ======================================================================= */}
         {/* GRILLA 1: MÉTRICAS DE TELEMETRÍA (PREPARADAS PARA ESTADO EN TIEMPO REAL)*/}
         {/* ======================================================================= */}

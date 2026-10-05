@@ -53,30 +53,30 @@ export const TOMO_07_EXAM_BANK_PLACEHOLDER: ExamBank = {
 export const TOMO_09_EXAM_BANK_PLACEHOLDER: ExamBank = {
   tomoId: 'tomo-09',
   tomoNumber: '09',
-  tomoTitle: 'SISTEMAS Y KERNEL',
-  tomoTagline: 'Entendé qué pasa debajo del sistema operativo.',
-  accentColor: '#38BDF8',
-  secondaryColor: '#0284C7',
+  tomoTitle: 'PROGRAMACIÓN DESDE CERO',
+  tomoTagline: 'Empezá sin saber programar. Creá tus primeras aplicaciones y herramientas.',
+  accentColor: '#22C55E',
+  secondaryColor: '#16A34A',
   passingScorePercent: 70,
   questionsPerAttempt: 15,
   isUnderDevelopment: true,
   developmentNote:
-    'El banco de preguntas avanzadas para el Tomo 09 (Arquitectura de kernels monolíticos vs híbridos, eBPF, cgroups, virtualización y gestión de memoria virtual) se encuentra en desarrollo editorial.',
+    'El banco de preguntas para el Tomo 09 (Lógica algorítmica, variables, estructuras de control, JavaScript/TypeScript, Python, APIs y flujos con Git/GitHub) se encuentra en preparación editorial.',
   questions: [],
 };
 
 export const TOMO_10_EXAM_BANK_PLACEHOLDER: ExamBank = {
   tomoId: 'tomo-10',
   tomoNumber: '10',
-  tomoTitle: 'FORENSE E INGENIERÍA INVERSA',
-  tomoTagline: 'No mires sólo el resultado. Reconstruí lo que pasó.',
-  accentColor: '#A855F7',
+  tomoTitle: 'PROMPT E IA AVANZADA',
+  tomoTagline: 'Aprendé a dirigir la IA con rigor técnico, contexto y metodología.',
+  accentColor: '#8B5CF6',
   secondaryColor: '#7C3AED',
   passingScorePercent: 70,
   questionsPerAttempt: 15,
   isUnderDevelopment: true,
   developmentNote:
-    'El banco de evaluación forense para el Tomo 10 (Desensamblado x86/x64, análisis de binarios PE/ELF, adquisición de memoria volátil y trazabilidad de artefactos) está en preparación pericial.',
+    'El banco de preguntas técnicas para el Tomo 10 (Arquitectura de tokens, prompting estructurado, contexto dinámico, function calling, RAG y agentes autónomos) se encuentra en preparación técnica.',
   questions: [],
 };
 

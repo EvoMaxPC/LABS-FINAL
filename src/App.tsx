@@ -168,7 +168,7 @@ function AppContent() {
   const [dossierModalTomoId, setDossierModalTomoId] = useState<string | null>(null);
 
   const [campusSection, setCampusSection] = useState<
-    'campus' | 'escuela' | 'biblioteca' | 'laboratorios' | 'diagnosticar' | 'progreso'
+    'campus' | 'escuela' | 'biblioteca' | 'laboratorios' | 'diagnosticar' | 'progreso' | 'herramientas'
   >('campus');
 
   const [deepLinkDest, setDeepLinkDest] = useState<{ view: any; volume?: string | null } | null>(() => {
@@ -907,7 +907,7 @@ function AppContent() {
   };
 
   const handleNavigateCampusSection = (
-    section: 'campus' | 'escuela' | 'biblioteca' | 'laboratorios' | 'diagnosticar' | 'progreso'
+    section: 'campus' | 'escuela' | 'biblioteca' | 'laboratorios' | 'diagnosticar' | 'progreso' | 'herramientas'
   ) => {
     setCampusSection(section);
     setCurrentView('world-map');

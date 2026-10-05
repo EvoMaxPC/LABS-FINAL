@@ -595,9 +595,10 @@ export const Tomo02MagazineView: React.FC<Tomo02MagazineViewProps> = ({
             <button
               type="button"
               onClick={onBackToApp}
+              title="Volver a Inicio // Centro de Operaciones Mundo EVO"
               className="px-3 py-1.5 rounded-lg bg-zinc-900 border border-cyan-900/60 hover:border-cyan-400 text-zinc-300 hover:text-white transition-all flex items-center gap-1.5 cursor-pointer hidden lg:inline-flex"
             >
-              <span>CAMPUS EVO</span>
+              <span>INICIO</span>
             </button>
           )}
 

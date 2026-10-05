@@ -184,7 +184,7 @@ export const EvoTomo02CompletionScreen: React.FC<EvoTomo02CompletionScreenProps>
             onClick={onGoToCampusFormation}
             className="p-4 rounded-xl bg-zinc-950 hover:bg-zinc-900 border border-cyan-950 hover:border-cyan-500/60 text-zinc-300 hover:text-white transition-all text-center cursor-pointer"
           >
-            <span className="font-bold block mb-1">ESCUELA EVO // CAMPUS</span>
+            <span className="font-bold block mb-1">APRENDER // FORMACIÓN</span>
             <span className="text-[11px] text-zinc-500">Continuar formación en el mapa</span>
           </button>
         )}

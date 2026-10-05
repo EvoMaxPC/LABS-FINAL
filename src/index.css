@@ -5,6 +5,10 @@
     --font-display: 'Epilogue', sans-serif;
     --font-sans: 'Plus Jakarta Sans', sans-serif;
     --font-mono: 'JetBrains Mono', monospace;
+    --evo-motion-fast: 140ms;
+    --evo-motion-standard: 200ms;
+    --evo-motion-structural: 320ms;
+    --evo-ease: cubic-bezier(0.2, 0.8, 0.2, 1);
   }
 
   body {
@@ -606,7 +610,7 @@
   padding-right: 20px;
   border-radius: 8px;
   border: 1px solid rgba(251, 191, 36, 0.4);
-  transition: all 180ms ease-out;
+  transition: all var(--evo-motion-standard) var(--evo-ease);
   cursor: pointer;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1), 0 0 12px rgba(245, 158, 11, 0.1);
 }
@@ -648,7 +652,7 @@
   padding-right: 18px;
   border-radius: 8px;
   border: 1px solid rgba(113, 113, 122, 0.2);
-  transition: all 180ms ease-out;
+  transition: all var(--evo-motion-standard) var(--evo-ease);
   cursor: pointer;
 }
 
@@ -680,7 +684,7 @@
   padding: 4px 8px;
   border-radius: 6px;
   border: 1px solid transparent;
-  transition: all 180ms ease-out;
+  transition: all var(--evo-motion-standard) var(--evo-ease);
   cursor: pointer;
 }
 
@@ -694,7 +698,7 @@
 }
 
 .evo-btn-tertiary svg {
-  transition: transform 180ms ease-out;
+  transition: transform var(--evo-motion-standard) var(--evo-ease);
 }
 
 .evo-btn-nav {
@@ -713,7 +717,7 @@
   border: 1px solid rgba(113, 113, 122, 0.15);
   background-color: rgba(9, 11, 17, 0.6);
   color: #a1a1aa;
-  transition: all 180ms ease-out;
+  transition: all var(--evo-motion-standard) var(--evo-ease);
   cursor: pointer;
 }
 
@@ -749,7 +753,7 @@
   border-radius: 8px;
   border: 1px solid rgba(245, 158, 11, 0.3);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25), 0 0 10px rgba(245, 158, 11, 0.08);
-  transition: all 180ms ease-out;
+  transition: all var(--evo-motion-standard) var(--evo-ease);
   cursor: pointer;
 }
 
@@ -759,5 +763,50 @@
   border-color: rgba(245, 158, 11, 0.5);
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.35), 0 0 12px rgba(245, 158, 11, 0.15);
 }
+
+/* ==========================================================================
+   EVO MOTION & MICROINTERACTIONS SYSTEM (FASE 08)
+   ========================================================================== */
+
+.evo-section-fade-in {
+  animation: evoFadeInUp var(--evo-motion-structural) var(--evo-ease) forwards;
+}
+
+@keyframes evoFadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Accessible reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .evo-section-fade-in {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+  .evo-btn-primary,
+  .evo-btn-secondary,
+  .evo-btn-tertiary,
+  .evo-btn-floating,
+  .evo-btn-nav,
+  .evo-surface-level2 {
+    transition: none !important;
+    transform: none !important;
+    animation: none !important;
+  }
+  .animate-pulse,
+  .animate-ping,
+  .animate-evo-fan,
+  .animate-evo-fan-slow {
+    animation: none !important;
+  }
+}
+
 
 

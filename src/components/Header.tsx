@@ -29,9 +29,9 @@ export interface HeaderProps {
   currentView?: string;
   activeLabPanel?: string;
   activeLabMission?: string;
-  campusSection?: 'campus' | 'escuela' | 'biblioteca' | 'laboratorios' | 'diagnosticar' | 'progreso';
+  campusSection?: 'campus' | 'escuela' | 'biblioteca' | 'laboratorios' | 'diagnosticar' | 'progreso' | 'herramientas';
   onNavigateHome?: () => void;
-  onNavigateCampusSection?: (section: 'campus' | 'escuela' | 'biblioteca' | 'laboratorios' | 'diagnosticar' | 'progreso') => void;
+  onNavigateCampusSection?: (section: 'campus' | 'escuela' | 'biblioteca' | 'laboratorios' | 'diagnosticar' | 'progreso' | 'herramientas') => void;
   onNavigateArchive?: () => void;
   onNavigateTomo01?: () => void;
   onNavigateTomo02?: () => void;
@@ -190,14 +190,11 @@ export const Header: React.FC<HeaderProps> = ({
                   <span className="font-display font-extrabold text-lg tracking-wider text-white">
                     LABS
                   </span>
-                  <span className="text-[9px] px-1 py-0.5 rounded bg-amber-400/10 border border-amber-400/25 text-amber-300 font-mono-tech font-bold uppercase tracking-wider ml-0.5 hidden sm:inline-block">
-                    ACADEMIA
-                  </span>
                 </div>
                 <div className="flex items-center gap-1.5 mt-0.5">
                   <span className="w-1 h-1 rounded-full bg-amber-400/80 animate-pulse" />
                   <span className="text-[9px] text-zinc-400 font-mono-tech tracking-widest uppercase font-medium">
-                    SISTEMA DE APRENDIZAJE
+                    SISTEMA DE INGENIERÍA Y APRENDIZAJE
                   </span>
                 </div>
               </div>
@@ -389,7 +386,7 @@ export const Header: React.FC<HeaderProps> = ({
         {isMobileMenuOpen && (
           <div className="lg:hidden bg-[#07090e]/98 border-b border-white/10 px-4 py-4 space-y-3 font-mono-tech animate-in slide-in-from-top-2 duration-200 max-h-[85vh] overflow-y-auto">
             <div className="text-[10px] font-bold text-amber-400 uppercase tracking-widest px-2 pb-1 border-b border-white/[0.06] flex items-center justify-between">
-              <span>ACADEMIA EVO LABS // NAVEGACIÓN</span>
+              <span>EVO LABS // NAVEGACIÓN</span>
             </div>
 
             <div className="grid grid-cols-1 gap-1.5 text-xs">

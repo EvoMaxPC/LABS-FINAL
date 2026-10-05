@@ -402,40 +402,40 @@ export const TOMOS_EDITORIAL_COVERS: Record<string, TomoEditorialCoverMeta> = {
     tomoKey: 'tomo-09',
     number: '09',
     volumeLabel: 'TOMO 09',
-    editionLabel: 'EN DESARROLLO // KERNEL & SISTEMAS 2026',
-    primaryColor: '#38bdf8',
-    accentGradient: 'from-sky-500/25 via-blue-600/10 to-transparent',
-    glowShadow: 'rgba(56, 189, 248, 0.28)',
-    tagline: '“Entendé qué pasa debajo del sistema operativo.”',
-    title: 'SISTEMA EVO LABS DE SISTEMAS Y KERNEL',
+    editionLabel: 'EN DESARROLLO // PROGRAMACIÓN 2026',
+    primaryColor: '#22c55e',
+    accentGradient: 'from-emerald-500/25 via-green-600/10 to-transparent',
+    glowShadow: 'rgba(34, 197, 94, 0.28)',
+    tagline: '“Empezá sin saber programar. Creá tus primeras aplicaciones y herramientas.”',
+    title: 'EVO LABS // PROGRAMACIÓN DESDE CERO',
     editorialSubtitle:
-      'Procesos, memoria, virtualización y funcionamiento interno del sistema.',
-    pagesBadge: 'EN DESARROLLO // ARQUITECTURA DE SISTEMAS',
-    systemStandard: 'POSIX / LINUX KERNEL SUBSYSTEM SPEC',
+      'Lógica computacional, JavaScript, TypeScript, Python, APIs y control de versiones con IA como copiloto.',
+    pagesBadge: 'EN DESARROLLO // PROGRAMACIÓN CON IA',
+    systemStandard: 'ECMASCRIPT / PYTHON 3 & GIT SPECIFICATIONS',
     keyTopics: [
       {
         num: '01',
-        title: 'Arquitectura del Kernel Linux & Subsistemas',
-        description: 'Estructura monolithic modular, sysfs, procfs, systemd, llamadas de sistema y control de procesos.',
+        title: 'Fundamentos de Algoritmos & Lógica de Programación',
+        description: 'Variables, estructuras de control, tipos de datos, funciones y resolución metódica de problemas.',
       },
       {
         num: '02',
-        title: 'Gestión de Memoria & Almacenamiento ZFS',
-        description: 'Paginación virtual, TLB, pools RAID-Z, snapshots atómicos y compresión ZSTD.',
+        title: 'JavaScript / TypeScript & Consumo de APIs REST',
+        description: 'Desarrollo web moderno, tipado estático, asincronía (Promises/async-await) e integración de endpoints.',
       },
       {
         num: '03',
-        title: 'Hipervisores KVM & Contenedores OCI',
-        description: 'Virtualización Tipo 1 por hardware, passthrough PCIe con VFIO, cgroups v2 y namespaces aislados.',
+        title: 'Python, Automatización y Git/GitHub',
+        description: 'Scripting de utilidades, gestión de paquetes, flujos de trabajo en ramas y depuración pericial con IA.',
       },
     ],
     heroGraphic: {
-      badge: 'SUBSISTEMAS KERNEL // KVM HYPERVISOR',
-      chipName: 'LINUX KERNEL MONOLITHIC & CGROUPS V2',
-      frequencyOrSpec: 'KVM VFIO Passthrough // ZFS RAID-Z // eBPF',
-      statusLabel: 'FUNCIONAMIENTO INTERNO DEL SISTEMA OPERATIVO',
-      features: ['Sysfs & Procfs Governance', 'KVM / VFIO Hardware Passthrough', 'ZFS Atomic CoW Resiliency'],
-      bgPattern: 'radial-gradient(ellipse at center, rgba(56,189,248,0.18) 0%, rgba(8,10,13,0.95) 75%)',
+      badge: 'PROGRAMACIÓN // COPILOTOS IA',
+      chipName: 'TYPESCRIPT & PYTHON RUNTIME SUITE',
+      frequencyOrSpec: 'TypeScript 5 // Python 3.12 // Git Workflow',
+      statusLabel: 'DESARROLLO DE SOFTWARE & APLICACIONES PRÁCTICAS',
+      features: ['Lógica y Algoritmia Estructurada', 'APIs REST & Asincronía', 'Git / GitHub Versioning'],
+      bgPattern: 'radial-gradient(ellipse at center, rgba(34,197,94,0.18) 0%, rgba(8,10,13,0.95) 75%)',
     },
   },
 
@@ -443,40 +443,40 @@ export const TOMOS_EDITORIAL_COVERS: Record<string, TomoEditorialCoverMeta> = {
     tomoKey: 'tomo-10',
     number: '10',
     volumeLabel: 'TOMO 10',
-    editionLabel: 'EN DESARROLLO // INGENIERÍA INVERSA & FORENSE',
-    primaryColor: '#a855f7',
-    accentGradient: 'from-purple-600/25 via-fuchsia-600/10 to-transparent',
-    glowShadow: 'rgba(168, 85, 247, 0.28)',
-    tagline: '“No mires sólo el resultado. Reconstruí lo que pasó.”',
-    title: 'SISTEMA EVO LABS // FORENSE E INGENIERÍA INVERSA',
+    editionLabel: 'EN DESARROLLO // PROMPT E IA AVANZADA 2026',
+    primaryColor: '#8b5cf6',
+    accentGradient: 'from-violet-600/25 via-purple-600/10 to-transparent',
+    glowShadow: 'rgba(139, 92, 246, 0.28)',
+    tagline: '“Aprendé a dirigir la IA con rigor técnico, contexto y metodología.”',
+    title: 'EVO LABS // PROMPT E IA AVANZADA',
     editorialSubtitle:
-      'Análisis profundo, evidencia, memoria, binarios e investigación técnica.',
-    pagesBadge: 'EN DESARROLLO // PERITAJE TÉCNICO',
-    systemStandard: 'VOLATILITY 3 & DISASSEMBLER SRE STANDARDS',
+      'Fundamentos de LLMs, prompting estructurado, arquitectura de contexto, agentes autónomos y verificación empírica.',
+    pagesBadge: 'EN DESARROLLO // PROMPTING & AGENTES IA',
+    systemStandard: 'OPENAI / ANTHROPIC / GEMINI API SPECS & PROMPT ENGINEERING',
     keyTopics: [
       {
         num: '01',
-        title: 'Análisis Estático de Binarios con Ghidra',
-        description: 'Desensamblado x86/x64, cabeceras PE/ELF, tablas IAT, grafos de flujo de control y firmas YARA.',
+        title: 'Arquitectura de Tokens, Ventana de Contexto y LLMs',
+        description: 'Atención posicional, parámetros de inferencia (temperatura, top_p) y límites físicos de cómputo.',
       },
       {
         num: '02',
-        title: 'Análisis Forense de Memoria Volátil',
-        description: 'Extracción de volcados RAM con Volatility 3, inyección DLL reflectiva y reconstrucción de procesos ocultos.',
+        title: 'Técnicas de Prompting Estructurado (CoT, Few-Shot, ReAct)',
+        description: 'Diseño de roles de sistema, plantillas JSON/XML, razonamiento guiado y reducción de sesgos.',
       },
       {
         num: '03',
-        title: 'Rootkits de Kernel (Ring 0) & EDR Bypass',
-        description: 'DKOM (Direct Kernel Object Manipulation), hook de IRPs, evasión de sandboxes y cadena de custodia pericial.',
+        title: 'Agentes Autónomos, Tool Calling y RAG',
+        description: 'Llamadas a funciones, recuperación con embeddings vectoriales, flujos multiagente y mitigación de alucinaciones.',
       },
     ],
     heroGraphic: {
-      badge: 'INGENIERÍA INVERSA // FORENSE DE MEMORIA',
-      chipName: 'GHIDRA SRE // VOLATILITY 3 SUITE',
-      frequencyOrSpec: 'PE/ELF Disassembly // Ring 0 DKOM // SHA-256 Custodia',
-      statusLabel: 'PERITAJE TÉCNICO & EXTRACCIÓN DE EVIDENCIA',
-      features: ['Desensamblado x86/x64 Ghidra', 'Forense de RAM Volatility 3', 'Auditoría DKOM & Cadena de Custodia'],
-      bgPattern: 'radial-gradient(ellipse at center, rgba(168,85,247,0.18) 0%, rgba(8,10,13,0.95) 75%)',
+      badge: 'PROMPTING AVANZADO // MULTI-AGENTE',
+      chipName: 'GENAI AGENT ENGINE & RAG PIPELINE',
+      frequencyOrSpec: 'Structured Prompts // Tool Calling // Context Window',
+      statusLabel: 'INGENIERÍA DE PROMPTS & AGENTES AUTÓNOMOS',
+      features: ['Prompting Estructurado CoT & ReAct', 'Tool Calling & RAG Vectorial', 'Validación Empírica Anti-Alucinación'],
+      bgPattern: 'radial-gradient(ellipse at center, rgba(139,92,246,0.18) 0%, rgba(8,10,13,0.95) 75%)',
     },
   },
 };
@@ -851,75 +851,75 @@ const TOMO_EXTENDED_DATA: Record<
   },
   'tomo-09': {
     pages: 'En desarrollo',
-    modulesCount: '5 módulos de arquitectura interna y sistemas',
-    targetAudience: 'Administradores de sistemas Linux, desarrolladores de sistemas y entusiastas del kernel',
+    modulesCount: '5 módulos de lógica computacional y desarrollo con IA',
+    targetAudience: 'Estudiantes, técnicos y entusiastas que inician en programación moderna con copilotos',
     modules: [
       {
         number: 'M01',
-        title: 'Arquitectura del Kernel Linux & Subsistemas',
-        desc: 'Estructura monolithic modular, sysfs, procfs, systemd e inicialización de servicios.',
-        benchConfig: { labView: 'windows-matrix', scenario: 'scheduler-hybrid', badgeLabel: 'LINUX KERNEL SYSFS' }
+        title: 'Fundamentos de Algoritmos & Lógica Computacional',
+        desc: 'Variables, condicionales, bucles, estructuras de datos y resolución metódica de problemas.',
+        benchConfig: { labView: 'windows-matrix', scenario: 'scheduler-hybrid', badgeLabel: 'ALGORITMOS & LÓGICA' }
       },
       {
         number: 'M02',
-        title: 'Administración de Almacenamiento ZFS & Btrfs',
-        desc: 'Pools RAID-Z, snapshots atómicos, compresión ZSTD y reparación por paridad.',
-        benchConfig: { labView: 'hotswap-lab', scenario: 'ab-bench', badgeLabel: 'ZFS ATOMIC' }
+        title: 'JavaScript y TypeScript Moderno',
+        desc: 'Tipado estático, asincronía, funciones puras y manipulación de estructuras complejas.',
+        benchConfig: { labView: 'windows-matrix', scenario: 'win10-ltsc', badgeLabel: 'TYPESCRIPT RUNTIME' }
       },
       {
         number: 'M03',
-        title: 'Fundamentos de Hipervisores Tipo 1 vs Tipo 2',
-        desc: 'Virtualización KVM/QEMU por hardware (Intel VT-x / AMD-V) y passthrough de PCI.',
-        benchConfig: { labView: 'windows-matrix', scenario: 'scheduler-hybrid', badgeLabel: 'KVM VFIO PASSTHROUGH' }
+        title: 'Consumo e Integración de APIs REST & JSON',
+        desc: 'Endpoints HTTP, promesas, async/await, manejo pericial de errores y validación de esquemas.',
+        benchConfig: { labView: 'hotswap-lab', scenario: 'ab-bench', badgeLabel: 'REST CLIENT & APIS' }
       },
       {
         number: 'M04',
-        title: 'Despliegue de Clúster Proxmox VE',
-        desc: 'Alta disponibilidad (HA), almacenamiento compartido Ceph y migración en caliente.',
-        benchConfig: { labView: 'windows-matrix', scenario: 'scheduler-hybrid', badgeLabel: 'PROXMOX CLUSTER' }
+        title: 'Control de Versiones Profesional con Git y GitHub',
+        desc: 'Ramas, commits atómicos, pull requests, resolución de conflictos y repositorios remotos.',
+        benchConfig: { labView: 'windows-matrix', scenario: 'boot-sequence', badgeLabel: 'GIT WORKFLOW' }
       },
       {
         number: 'M05',
-        title: 'Contenedores Docker & Arquitectura OCI',
-        desc: 'Cgroups v2, namespaces, procesos y aislamiento de subsistemas.',
-        benchConfig: { labView: 'windows-matrix', scenario: 'win10-ltsc', badgeLabel: 'DOCKER CGROUPS' }
+        title: 'Python Práctico & Scripting de Automatización',
+        desc: 'Automatización de tareas repetitivas de sistema, parsing de archivos y scripting forense.',
+        benchConfig: { labView: 'windows-matrix', scenario: 'timer-resolution', badgeLabel: 'PYTHON SCRIPTING' }
       },
     ],
   },
   'tomo-10': {
     pages: 'En desarrollo',
-    modulesCount: '5 módulos de peritaje e ingeniería inversa',
-    targetAudience: 'Peritos forenses, analistas de binarios, investigadores de malware e ingenieros inversos',
+    modulesCount: '5 módulos de arquitectura de prompts y agentes autónomos',
+    targetAudience: 'Desarrolladores, investigadores y profesionales técnicos que dirigen IA avanzada',
     modules: [
       {
         number: 'M01',
-        title: 'Análisis Estático de Binarios con Ghidra',
-        desc: 'Desensamblado x86/x64, PE headers, tablas de importación (IAT) y firmas YARA.',
-        benchConfig: { labView: 'windows-matrix', scenario: 'boot-sequence', badgeLabel: 'GHIDRA SRE' }
+        title: 'Arquitectura de Tokens, Ventana de Contexto & LLMs',
+        desc: 'Mecanismos de atención, asignación de tokens, parámetros de muestreo y límites físicos.',
+        benchConfig: { labView: 'windows-matrix', scenario: 'scheduler-hybrid', badgeLabel: 'TOKENS & CONTEXT' }
       },
       {
         number: 'M02',
-        title: 'Técnicas de Evasión y Desofuscación',
-        desc: 'Detección de hipervisor/sandbox, timing attacks, packers UPX y strings cifradas con XOR.',
-        benchConfig: { labView: 'windows-matrix', scenario: 'timer-resolution', badgeLabel: 'TIMING ATTACKS' }
+        title: 'Técnicas de Prompting Estructurado (CoT & Few-Shot)',
+        desc: 'Plantillas formales, roles de sistema, delimitadores XML/JSON y razonamiento paso a paso.',
+        benchConfig: { labView: 'windows-matrix', scenario: 'win10-ltsc', badgeLabel: 'STRUCTURED PROMPT' }
       },
       {
         number: 'M03',
-        title: 'Análisis Forense de Memoria con Volatility 3',
-        desc: 'Extracción de volcados RAM, pslist, malfind, inyección DLL y dump de procesos.',
-        benchConfig: { labView: 'windows-matrix', scenario: 'scheduler-hybrid', badgeLabel: 'VOLATILITY 3 DUMP' }
+        title: 'RAG (Retrieval-Augmented Generation) & Embeddings',
+        desc: 'Indexación vectorial, búsqueda semántica y recuperación fundamentada en conocimiento propio.',
+        benchConfig: { labView: 'hotswap-lab', scenario: 'ab-bench', badgeLabel: 'RAG & EMBEDDINGS' }
       },
       {
         number: 'M04',
-        title: 'Rootkits de Kernel (Ring 0) & EDR Bypass',
-        desc: 'DKOM (Direct Kernel Object Manipulation), hook de IRPs y anulación de callbacks.',
-        benchConfig: { labView: 'windows-matrix', scenario: 'dpc-conflict', badgeLabel: 'RING 0 DKOM' }
+        title: 'Function Calling & Herramientas Multimodales',
+        desc: 'Conexión de modelos con APIs reales, ejecución de código y lectura de esquemáticos.',
+        benchConfig: { labView: 'windows-matrix', scenario: 'dpc-conflict', badgeLabel: 'FUNCTION CALLING' }
       },
       {
         number: 'M05',
-        title: 'Respuesta ante Incidentes & Cadena de Custodia',
-        desc: 'Adquisición forense de discos (dd/E01), hashing SHA-256 y reporte pericial judicial.',
-        benchConfig: { labView: 'hotswap-lab', scenario: 'ab-bench', badgeLabel: 'SHA-256 CUSTODIA' }
+        title: 'Agentes Autónomos & Verificación Empírica',
+        desc: 'Bucles ReAct, gobernanza de decisiones, mitigación de alucinaciones y auditoría técnica.',
+        benchConfig: { labView: 'windows-matrix', scenario: 'timer-resolution', badgeLabel: 'AUTONOMOUS AGENTS' }
       },
     ],
   },

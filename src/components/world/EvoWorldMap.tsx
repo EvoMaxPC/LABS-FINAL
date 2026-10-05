@@ -648,9 +648,10 @@ export const EvoWorldMap: React.FC<EvoWorldMapProps> = ({
                 setSelectedLevelNumber(null);
                 setSelectedTomeProfile(null);
               }}
+              title="Volver a Inicio // Centro de Operaciones Mundo EVO"
               className="evo-btn-nav hover:bg-zinc-800 border border-zinc-700 text-amber-300 font-bold"
             >
-              <span>CAMPUS</span>
+              <span>INICIO</span>
             </button>
 
             <span className="text-zinc-700">|</span>
@@ -763,7 +764,7 @@ export const EvoWorldMap: React.FC<EvoWorldMapProps> = ({
             }}
             className="text-[11px] text-zinc-400 hover:text-amber-400 font-bold transition-colors cursor-pointer flex items-center gap-1"
           >
-            <span>← Volver al Campus</span>
+            <span>← Volver a Inicio</span>
           </button>
         </div>
       )}
@@ -934,10 +935,12 @@ export const EvoWorldMap: React.FC<EvoWorldMapProps> = ({
                       setActiveIntention('biblioteca');
                       setSelectedLevelNumber(null);
                     }}
-                    className="evo-btn-secondary"
+                    className="evo-btn-secondary group flex items-center gap-2"
+                    title="Acceder a la colección canónica de 10 Tomos EVO"
                   >
-                    <BookOpen className="w-4 h-4 text-cyan-400" />
-                    <span>EXPLORAR POR MI CUENTA</span>
+                    <BookOpen className="w-4 h-4 text-amber-400 group-hover:scale-110 transition-transform" />
+                    <span>COLECCIÓN EVO · 10 TOMOS</span>
+                    <span className="text-amber-300 font-bold ml-0.5">VER LOS 10 TOMOS →</span>
                   </button>
                 </div>
               </div>
@@ -1363,7 +1366,7 @@ export const EvoWorldMap: React.FC<EvoWorldMapProps> = ({
               <div className="flex items-center gap-2">
                 <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse" />
                 <h2 className="evo-page-title">
-                  ESCUELA EVO // RECORRIDO FORMATIVO GUIADO
+                  APRENDER // RUTA FORMATIVA GUIADA
                 </h2>
               </div>
               <p className="evo-body-secondary">
@@ -1371,14 +1374,33 @@ export const EvoWorldMap: React.FC<EvoWorldMapProps> = ({
               </p>
             </div>
 
-            <div className="flex items-center gap-2">
+            <div className="flex flex-wrap items-center gap-2">
+              <div className="flex items-center gap-1 p-1 rounded-xl bg-zinc-900/90 border border-zinc-800 font-mono-tech text-xs">
+                <button
+                  type="button"
+                  onClick={() => setActiveIntention('biblioteca')}
+                  className="px-3 py-1.5 rounded-lg font-bold transition-all cursor-pointer text-zinc-400 hover:text-white flex items-center gap-1.5"
+                >
+                  <BookOpen className="w-3.5 h-3.5 text-amber-400" />
+                  <span>COLECCIÓN EVO · 10 TOMOS</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setActiveIntention('escuela')}
+                  className="px-3 py-1.5 rounded-lg font-bold transition-all cursor-pointer bg-amber-400 text-black shadow-md flex items-center gap-1.5"
+                >
+                  <Compass className="w-3.5 h-3.5 text-black" />
+                  <span>RUTA POR NIVELES</span>
+                </button>
+              </div>
+
               <button
                 type="button"
                 onClick={() => setIsLevel0IntroOpen(true)}
-                className="px-3.5 py-1.5 rounded-xl bg-amber-400/10 hover:bg-amber-400/20 border border-amber-400/30 text-amber-300 font-mono-tech text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer"
+                className="px-3 py-1.5 rounded-xl bg-amber-400/10 hover:bg-amber-400/20 border border-amber-400/30 text-amber-300 font-mono-tech text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer"
               >
                 <Compass className="w-3.5 h-3.5 text-amber-400" />
-                <span>NIVEL 0: CÓMO USAR EVO LABS</span>
+                <span>NIVEL 0</span>
               </button>
             </div>
           </div>
@@ -1557,18 +1579,39 @@ export const EvoWorldMap: React.FC<EvoWorldMapProps> = ({
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-zinc-800 pb-4">
             <div className="space-y-1">
               <div className="flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" />
+                <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse" />
                 <h2 className="evo-page-title">
-                  TOMOS EVO LABS // COLECCIÓN DE 10 MAGAZINES
+                  APRENDER // COLECCIÓN EVO (10 TOMOS)
                 </h2>
               </div>
               <p className="evo-body-secondary italic">
-                “Explorá los 10 magazines de la colección.” Manuales de silicio, experiencias interactivas y laboratorios asociados.
+                “Explorá los 10 tomos canónicos de la colección.” Manuales de silicio, experiencias interactivas y laboratorios asociados.
               </p>
             </div>
 
-            <div className="text-xs font-mono-tech text-zinc-500">
-              10 VOLÚMENES // FORMATO A4
+            <div className="flex flex-wrap items-center gap-2">
+              <div className="flex items-center gap-1 p-1 rounded-xl bg-zinc-900/90 border border-zinc-800 font-mono-tech text-xs">
+                <button
+                  type="button"
+                  onClick={() => setActiveIntention('biblioteca')}
+                  className="px-3 py-1.5 rounded-lg font-bold transition-all cursor-pointer bg-amber-400 text-black shadow-md flex items-center gap-1.5"
+                >
+                  <BookOpen className="w-3.5 h-3.5 text-black" />
+                  <span>COLECCIÓN EVO · 10 TOMOS</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setActiveIntention('escuela')}
+                  className="px-3 py-1.5 rounded-lg font-bold transition-all cursor-pointer text-zinc-400 hover:text-white flex items-center gap-1.5"
+                >
+                  <Compass className="w-3.5 h-3.5 text-amber-400" />
+                  <span>RUTA POR NIVELES</span>
+                </button>
+              </div>
+
+              <div className="text-xs font-mono-tech text-zinc-500 hidden sm:block">
+                10 VOLÚMENES // CANÓNICOS
+              </div>
             </div>
           </div>
 
@@ -2059,7 +2102,7 @@ export const EvoWorldMap: React.FC<EvoWorldMapProps> = ({
       )}
 
       {/* ========================================================================= */}
-      {/* 5. SECCIÓN: TALLER DE CASOS Y EXPEDIENTES EVO (DIAGNOSTICAR)              */}
+      {/* 5. SECCIÓN: ANALIZAR MI PC // DIAGNÓSTICO REAL & EVO CORE                  */}
       {/* ========================================================================= */}
       {activeIntention === 'diagnosticar' && (
         <div className="relative z-10 flex-1 max-w-7xl mx-auto w-full px-4 sm:px-8 py-6 space-y-6">
@@ -2068,70 +2111,106 @@ export const EvoWorldMap: React.FC<EvoWorldMapProps> = ({
               <div className="flex items-center gap-2">
                 <span className="w-2 h-2 rounded-full bg-purple-400 animate-pulse" />
                 <h2 className="evo-page-title">
-                  TALLER DE CASOS Y EXPEDIENTES EVO
+                  ANALIZAR MI PC // DIAGNÓSTICO REAL & EVO CORE
                 </h2>
               </div>
               <p className="evo-body-secondary italic">
-                “Acá dejás de seguir una clase. Recibís evidencia, formulás hipótesis, realizás pruebas y llegás a una conclusión.”
+                “No se adivina. Se mide. Si no puede comprobarse: UNKNOWN.” Diagnóstico forense de silicio, telemetría y resultados con procedencia.
               </p>
             </div>
 
-            <div className="flex flex-wrap items-center gap-1 p-1 rounded-xl bg-zinc-900 border border-zinc-800 font-mono-tech text-xs">
-              <button
-                type="button"
-                onClick={() => setDiagnoseTab('expedientes')}
-                className={`px-3 py-1.5 rounded-lg font-bold transition-all cursor-pointer ${
-                  diagnoseTab === 'expedientes'
-                    ? 'bg-purple-400 text-black shadow-md'
-                    : 'text-zinc-400 hover:text-white'
-                }`}
-              >
-                CASOS GUARDADOS
-              </button>
-              <button
-                type="button"
-                onClick={() => setDiagnoseTab('pcb')}
-                className={`px-3 py-1.5 rounded-lg font-bold transition-all cursor-pointer ${
-                  diagnoseTab === 'pcb'
-                    ? 'bg-purple-400 text-black shadow-md'
-                    : 'text-zinc-400 hover:text-white'
-                }`}
-              >
-                ESQUEMÁTICO PCB
-              </button>
-              <button
-                type="button"
-                onClick={() => setDiagnoseTab('sectores')}
-                className={`px-3 py-1.5 rounded-lg font-bold transition-all cursor-pointer ${
-                  diagnoseTab === 'sectores'
-                    ? 'bg-purple-400 text-black shadow-md'
-                    : 'text-zinc-400 hover:text-white'
-                }`}
-              >
-                8 SECTORES LAB
-              </button>
-              <button
-                type="button"
-                onClick={() => setDiagnoseTab('consola')}
-                className={`px-3 py-1.5 rounded-lg font-bold transition-all cursor-pointer ${
-                  diagnoseTab === 'consola'
-                    ? 'bg-purple-400 text-black shadow-md'
-                    : 'text-zinc-400 hover:text-white'
-                }`}
-              >
-                CONSOLA INCIDENTES
-              </button>
-              <button
-                type="button"
-                onClick={() => setDiagnoseTab('simuladores')}
-                className={`px-3 py-1.5 rounded-lg font-bold transition-all cursor-pointer ${
-                  diagnoseTab === 'simuladores'
-                    ? 'bg-purple-400 text-black shadow-md'
-                    : 'text-zinc-400 hover:text-white'
-                }`}
-              >
-                SIMULADORES
-              </button>
+            <div className="flex flex-wrap items-center gap-2">
+              {onNavigateLabCore && (
+                <button
+                  type="button"
+                  onClick={() => onNavigateLabCore()}
+                  className="px-4 py-2 rounded-xl bg-purple-500 hover:bg-purple-400 text-black font-mono-tech text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer shadow-[0_0_15px_rgba(168,85,247,0.3)]"
+                >
+                  <Cpu className="w-3.5 h-3.5 text-black" />
+                  <span>ABRIR EVO CORE →</span>
+                </button>
+              )}
+
+              <div className="flex flex-wrap items-center gap-1 p-1 rounded-xl bg-zinc-900 border border-zinc-800 font-mono-tech text-xs">
+                <button
+                  type="button"
+                  onClick={() => setDiagnoseTab('expedientes')}
+                  className={`px-3 py-1.5 rounded-lg font-bold transition-all cursor-pointer ${
+                    diagnoseTab === 'expedientes'
+                      ? 'bg-purple-400 text-black shadow-md'
+                      : 'text-zinc-400 hover:text-white'
+                  }`}
+                >
+                  EXPEDIENTES REALES
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setDiagnoseTab('consola')}
+                  className={`px-3 py-1.5 rounded-lg font-bold transition-all cursor-pointer ${
+                    diagnoseTab === 'consola'
+                      ? 'bg-purple-400 text-black shadow-md'
+                      : 'text-zinc-400 hover:text-white'
+                  }`}
+                >
+                  CONSOLA TÉCNICA
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setDiagnoseTab('pcb')}
+                  className={`px-3 py-1.5 rounded-lg font-bold transition-all cursor-pointer ${
+                    diagnoseTab === 'pcb'
+                      ? 'bg-purple-400 text-black shadow-md'
+                      : 'text-zinc-400 hover:text-white'
+                  }`}
+                >
+                  ESQUEMÁTICO PCB
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setDiagnoseTab('sectores')}
+                  className={`px-3 py-1.5 rounded-lg font-bold transition-all cursor-pointer ${
+                    diagnoseTab === 'sectores'
+                      ? 'bg-purple-400 text-black shadow-md'
+                      : 'text-zinc-400 hover:text-white'
+                  }`}
+                >
+                  8 SECTORES LAB
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setDiagnoseTab('simuladores')}
+                  className={`px-3 py-1.5 rounded-lg font-bold transition-all cursor-pointer ${
+                    diagnoseTab === 'simuladores'
+                      ? 'bg-purple-400 text-black shadow-md'
+                      : 'text-zinc-400 hover:text-white'
+                  }`}
+                >
+                  SIMULADORES
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* Banner de Diagnóstico Real & Procedencia Epistémica EVO */}
+          <div className="p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-[#170e24] via-[#0e1017] to-[#080a11] border border-purple-500/30 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 font-mono-tech">
+            <div className="space-y-1.5">
+              <div className="flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                <span className="text-[11px] text-purple-300 font-bold uppercase tracking-wider">
+                  EVO CORE // MOTOR DE DIAGNÓSTICO Y PERITAJE DE SILICIO
+                </span>
+                <span className="text-[9px] px-2 py-0.5 rounded bg-zinc-900 border border-zinc-700 text-zinc-300">
+                  PROCEDENCIA: SYSTEM_REPORTED
+                </span>
+              </div>
+              <p className="text-xs text-zinc-300 max-w-2xl font-sans-editorial">
+                Mediciones obtenidas por CIM/WMI a través del EVO Local Agent en <code className="text-purple-300 font-mono">127.0.0.1:43921</code>. Los campos no verificables se clasifican estrictamente como UNKNOWN.
+              </p>
+            </div>
+            <div className="flex items-center gap-2 shrink-0">
+              <span className="text-[10px] text-zinc-400 border-l border-zinc-800 pl-3 hidden lg:block">
+                Las simulaciones educativas pertenecen a <strong className="text-emerald-400">PRACTICAR</strong>.
+              </span>
             </div>
           </div>
 
