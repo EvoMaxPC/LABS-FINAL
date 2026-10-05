@@ -756,237 +756,97 @@ export const EvoWorldMap: React.FC<EvoWorldMapProps> = ({
       <EvoWorldAmbientLayer />
 
       {/* ========================================================================= */}
-      {/* ORIENTACIÓN PERMANENTE Y BARRA DE INTENCIONES (NAVEGACIÓN MAESTRA)        */}
+      {/* BREADCRUMB SUB-NIVEL (SÓLO SI HAY UN NIVEL O TOMO INTERNO ABIERTO)        */}
       {/* ========================================================================= */}
-      {activeIntention !== 'campus' && (
-        <div className="relative z-30 px-4 sm:px-8 py-2.5 border-b border-zinc-900 bg-zinc-950/95 backdrop-blur-md flex flex-wrap items-center justify-between gap-3 font-mono-tech text-xs">
-          {/* Tabs de Intención Principal */}
-          <div className="flex items-center gap-1.5 flex-wrap">
+      {activeIntention !== 'campus' && (selectedLevelNumber !== null || selectedTomeProfile !== null) && (
+        <div className="relative z-30 max-w-[1280px] mx-auto w-full px-4 sm:px-6 lg:px-8 pt-3">
+          <div className="px-3.5 py-1.5 rounded-xl border border-zinc-800 bg-zinc-950/90 backdrop-blur-md flex items-center justify-between font-mono-tech text-xs">
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={() => {
+                  setSelectedLevelNumber(null);
+                  setSelectedTomeProfile(null);
+                }}
+                className="text-zinc-400 hover:text-amber-400 font-bold transition-colors cursor-pointer"
+              >
+                ← Volver al mapa principal
+              </button>
+
+              {selectedLevelNumber !== null && (
+                <>
+                  <ChevronRight className="w-3.5 h-3.5 text-zinc-600 shrink-0" />
+                  <span className="px-2 py-0.5 rounded bg-zinc-900 border border-zinc-800 text-amber-300 font-bold text-[11px]">
+                    NIVEL {selectedLevelNumber}
+                  </span>
+                </>
+              )}
+
+              {selectedTomeProfile && (
+                <>
+                  <ChevronRight className="w-3.5 h-3.5 text-zinc-600 shrink-0" />
+                  <span className="px-2 py-0.5 rounded bg-amber-400 text-black font-bold uppercase tracking-wider text-[11px]">
+                    TOMO {selectedTomeProfile.tomoNumber}
+                  </span>
+                </>
+              )}
+            </div>
+
             <button
+              type="button"
               onClick={() => {
                 setActiveIntention('campus');
                 setSelectedLevelNumber(null);
                 setSelectedTomeProfile(null);
               }}
-              title="Volver a Inicio // Centro de Operaciones Mundo EVO"
-              className="evo-btn-nav hover:bg-zinc-800 border border-zinc-700"
+              className="text-[11px] text-zinc-500 hover:text-zinc-300 font-bold transition-colors cursor-pointer"
             >
-              <span>INICIO</span>
+              Cerrar
             </button>
-
-            <span className="text-zinc-700">|</span>
-
-            {/* APRENDER */}
-            <button
-              onClick={() => {
-                setActiveIntention('escuela');
-                setSelectedLevelNumber(null);
-                setSelectedTomeProfile(null);
-              }}
-              className={`evo-btn-nav font-bold ${
-                activeIntention === 'escuela' || activeIntention === 'biblioteca' || activeIntention === 'aprender'
-                  ? 'evo-btn-nav-active'
-                  : ''
-              }`}
-            >
-              APRENDER
-            </button>
-
-            {/* PRACTICAR */}
-            <button
-              onClick={() => {
-                setActiveIntention('laboratorios');
-                setSelectedLevelNumber(null);
-                setSelectedTomeProfile(null);
-              }}
-              className={`evo-btn-nav font-bold ${
-                activeIntention === 'laboratorios' || activeIntention === 'practicar'
-                  ? 'evo-btn-nav-active'
-                  : ''
-              }`}
-            >
-              PRACTICAR
-            </button>
-
-            {/* ANALIZAR MI PC */}
-            <button
-              onClick={() => {
-                setActiveIntention('diagnosticar');
-                setSelectedLevelNumber(null);
-                setSelectedTomeProfile(null);
-              }}
-              className={`evo-btn-nav font-bold ${
-                activeIntention === 'diagnosticar' || activeIntention === 'analizar'
-                  ? 'evo-btn-nav-active'
-                  : ''
-              }`}
-            >
-              ANALIZAR MI PC
-            </button>
-
-            {/* HERRAMIENTAS */}
-            <button
-              onClick={() => {
-                setActiveIntention('herramientas');
-                setSelectedLevelNumber(null);
-                setSelectedTomeProfile(null);
-              }}
-              className={`evo-btn-nav font-bold ${
-                activeIntention === 'herramientas'
-                  ? 'evo-btn-nav-active'
-                  : ''
-              }`}
-            >
-              HERRAMIENTAS
-            </button>
-
-            {/* MI EVO */}
-            <button
-              onClick={() => {
-                setActiveIntention('progreso');
-                setSelectedLevelNumber(null);
-                setSelectedTomeProfile(null);
-              }}
-              className={`evo-btn-nav font-bold ${
-                activeIntention === 'progreso' || activeIntention === 'mievo'
-                  ? 'evo-btn-nav-active'
-                  : ''
-              }`}
-            >
-              MI EVO
-            </button>
-
-            {/* Breadcrumb Secundario si aplica */}
-            {selectedLevelNumber !== null && (
-              <>
-                <ChevronRight className="w-3.5 h-3.5 text-zinc-600 shrink-0" />
-                <span className="px-2.5 py-1 rounded-lg bg-zinc-900 border border-zinc-800 text-amber-300 font-bold">
-                  NIVEL {selectedLevelNumber}
-                </span>
-              </>
-            )}
-
-            {selectedTomeProfile && (
-              <>
-                <ChevronRight className="w-3.5 h-3.5 text-zinc-600 shrink-0" />
-                <span className="px-2.5 py-1 rounded-lg bg-amber-400 text-black font-bold uppercase tracking-wider">
-                  TOMO {selectedTomeProfile.tomoNumber}
-                </span>
-              </>
-            )}
           </div>
-
-          <button
-            onClick={() => {
-              setActiveIntention('campus');
-              setSelectedLevelNumber(null);
-              setSelectedTomeProfile(null);
-            }}
-            className="text-[11px] text-zinc-400 hover:text-amber-400 font-bold transition-colors cursor-pointer flex items-center gap-1"
-          >
-            <span>← Volver a Inicio</span>
-          </button>
         </div>
       )}
 
       {/* ========================================================================= */}
-      {/* CONSOLE_OPERATIVE_HUD // SENSOR DE CONTEXTO                               */}
+      {/* CONSOLE_OPERATIVE_HUD // FRANJA COMPACTA SECUNDARIA (NO DOMINANTE)        */}
       {/* ========================================================================= */}
       {activeIntention !== 'campus' && (
-        <div className="relative z-20 max-w-6xl mx-auto w-full px-4 sm:px-8 pt-6">
-          <div className="rounded-2xl bg-[#090b11]/90 border border-zinc-900/80 p-4 shadow-xl space-y-3.5 relative overflow-hidden">
-            {/* Ambient subtle glow */}
-            <div className="absolute top-0 right-0 w-40 h-40 bg-amber-400/[0.02] rounded-full blur-2xl pointer-events-none" />
-            
-            {/* HUD Header */}
-            <div className="flex items-center justify-between pb-2 border-b border-zinc-900/60 text-[10px] font-mono-tech tracking-widest text-zinc-500">
-              <div className="flex items-center gap-1.5 font-bold uppercase">
+        <div className="relative z-20 max-w-[1280px] mx-auto w-full px-4 sm:px-6 lg:px-8 pt-3 sm:pt-4">
+          <div className="rounded-xl bg-[#090b11]/80 border border-zinc-900/90 px-3.5 py-2.5 shadow-md flex flex-col md:flex-row md:items-center justify-between gap-2.5 font-mono-tech text-xs">
+            {/* Izquierda: Ubicación y Estado */}
+            <div className="flex items-center gap-2.5 sm:gap-3 flex-wrap text-[11px]">
+              <div className="flex items-center gap-1.5 font-bold uppercase text-zinc-400">
                 <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse shrink-0" />
-                <span>SYS_OPERATIVE_HUD // SENSOR DE ENTORNO ACTIVO</span>
+                <span className="text-[10px] text-zinc-500">SYS_HUD</span>
               </div>
-              <div className="flex items-center gap-2">
-                <span>ESTADO: MONITOREANDO</span>
-                <span className="text-zinc-700">|</span>
-                <span>SEC_EVO: FASE_ACTIVA</span>
-              </div>
-            </div>
-
-            {/* Propósito details */}
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4 text-xs font-mono-tech">
-              <div className="space-y-1">
-                <div className="text-[10px] text-zinc-500 uppercase tracking-wider font-bold">📍 UBICACIÓN</div>
-                <div className="text-white font-bold uppercase">
-                  {activeIntention === 'escuela' || activeIntention === 'biblioteca' ? 'APRENDER // RUTA PEDAGÓGICA' :
-                   activeIntention === 'laboratorios' ? 'PRACTICAR // SUITE DE LABS' :
-                   activeIntention === 'diagnosticar' ? 'DIAGNÓSTICO // TALLER DE CASOS' :
+              <span className="text-zinc-700 hidden sm:inline">|</span>
+              <div className="flex items-center gap-1.5">
+                <span className="text-zinc-500 text-[10px] uppercase font-bold">UBICACIÓN:</span>
+                <span className="text-zinc-200 font-bold uppercase">
+                  {activeIntention === 'escuela' || activeIntention === 'biblioteca' ? 'TOMOS // ESCUELA PEDAGÓGICA' :
+                   activeIntention === 'laboratorios' ? 'PRACTICAR // BANCOS INTERACTIVOS' :
+                   activeIntention === 'diagnosticar' ? 'ANALIZAR MI PC // EVO CORE' :
                    activeIntention === 'herramientas' ? 'HERRAMIENTAS // INSTRUMENTAL' :
-                   'EXPEDIENTE // MI PROGRESO'}
-                </div>
+                   'MI EVO // EXPEDIENTE'}
+                </span>
               </div>
-
-              <div className="space-y-1">
-                <div className="text-[10px] text-zinc-500 uppercase tracking-wider font-bold">🧠 ESTOY APRENDIENDO</div>
-                <div className="text-zinc-300">
-                  {activeIntention === 'escuela' || activeIntention === 'biblioteca' ? 'Arquitectura de hardware, peritaje y silicio' :
-                   activeIntention === 'laboratorios' ? 'Comprobación de métricas, secuencia y fallas' :
-                   activeIntention === 'diagnosticar' ? 'Hipótesis real, descarte forense y evidencias' :
-                   activeIntention === 'herramientas' ? 'Ecosistema de diagnóstico e instrumental libre' :
-                   'Mis habilidades periciales y expediente consolidado'}
-                </div>
-              </div>
-
-              <div className="space-y-1">
-                <div className="text-[10px] text-zinc-500 uppercase tracking-wider font-bold">⚡ QUÉ HACER AHORA</div>
-                <div className="text-amber-300 font-bold">
-                  {activeIntention === 'escuela' || activeIntention === 'biblioteca' ? 'Abrir Ficha Pedagógica o iniciar un tomo' :
-                   activeIntention === 'laboratorios' ? 'Entrar a la guía interactiva del Tomo 08' :
-                   activeIntention === 'diagnosticar' ? 'Revisar hipótesis en la consola o ver PCB' :
-                   activeIntention === 'herramientas' ? 'Abrir esquemático o consola de incidentes' :
-                   'Verificar el estado de tus niveles de aprendizaje'}
-                </div>
-              </div>
-
-              <div className="space-y-1">
-                <div className="text-[10px] text-zinc-500 uppercase tracking-wider font-bold">🚀 QUÉ VIENE DESPUÉS</div>
-                <div className="text-zinc-400">
-                  {activeIntention === 'escuela' || activeIntention === 'biblioteca' ? 'Práctica rigurosa en el laboratorio' :
-                   activeIntention === 'laboratorios' ? 'Metodología forense real sobre fallas' :
-                   activeIntention === 'diagnosticar' ? 'Cerrar el expediente y validar habilidades' :
-                   activeIntention === 'herramientas' ? 'Aplicar mediciones sobre casos del Taller' :
-                   'Completar el examen del Tomo 01 y avanzar'}
-                </div>
+              <span className="text-zinc-700 hidden sm:inline">|</span>
+              <div className="flex items-center gap-1.5">
+                <span className="text-zinc-500 text-[10px] uppercase font-bold">ESTADO:</span>
+                <span className="text-emerald-400 font-bold uppercase">ACTIVO</span>
               </div>
             </div>
 
-            {/* Secuencia Experiencial EVO */}
-            <div className="pt-2 border-t border-zinc-900/40 flex flex-wrap items-center justify-between gap-4">
-              <span className="text-[10px] font-mono-tech tracking-widest text-zinc-500 uppercase font-black">
-                FIRMA EXPERIENCIAL EVO // SECUENCIA DE ACCIÓN:
+            {/* Derecha: Siguiente Acción */}
+            <div className="flex items-center gap-2 text-[11px] pt-1.5 md:pt-0 border-t md:border-t-0 border-zinc-900/60">
+              <span className="text-amber-400 font-bold text-[10px] uppercase shrink-0">SIGUIENTE ACCIÓN:</span>
+              <span className="text-zinc-300 truncate max-w-[280px] sm:max-w-xs">
+                {activeIntention === 'escuela' || activeIntention === 'biblioteca' ? 'Abrir Tomo o acceder a Lab' :
+                 activeIntention === 'laboratorios' ? 'Medir variables en simulación' :
+                 activeIntention === 'diagnosticar' ? 'Revisar hipótesis y auditar silicio' :
+                 activeIntention === 'herramientas' ? 'Abrir instrumental técnico' :
+                 'Verificar acreditaciones y pasaporte'}
               </span>
-              
-              <div className="flex flex-wrap items-center gap-1.5 text-[9px] sm:text-[10px] font-mono-tech">
-                {[
-                  { name: 'ENTENDER', active: activeIntention === 'escuela' || activeIntention === 'biblioteca', color: 'bg-amber-400/10 text-amber-300 border-amber-400/40' },
-                  { name: 'OBSERVAR', active: activeIntention === 'escuela' || activeIntention === 'biblioteca', color: 'bg-amber-400/10 text-amber-300 border-amber-400/40' },
-                  { name: 'PRACTICAR', active: activeIntention === 'laboratorios', color: 'bg-emerald-400/10 text-emerald-300 border-emerald-400/40' },
-                  { name: 'MEDIR', active: activeIntention === 'laboratorios' || activeIntention === 'herramientas', color: 'bg-emerald-400/10 text-emerald-300 border-emerald-400/40' },
-                  { name: 'DIAGNOSTICAR', active: activeIntention === 'diagnosticar', color: 'bg-purple-400/10 text-purple-300 border-purple-400/40' },
-                  { name: 'COMPROBAR', active: activeIntention === 'diagnosticar' || activeIntention === 'laboratorios' || activeIntention === 'herramientas', color: 'bg-purple-400/10 text-purple-300 border-purple-400/40' },
-                  { name: 'GUARDAR EVIDENCIA', active: activeIntention === 'diagnosticar' || activeIntention === 'herramientas', color: 'bg-pink-400/10 text-pink-300 border-pink-400/40' },
-                  { name: 'AVANZAR', active: activeIntention === 'progreso', color: 'bg-indigo-400/10 text-indigo-300 border-indigo-400/40' },
-                ].map((act, index) => (
-                  <div key={index} className="flex items-center gap-1.5">
-                    <span className={`px-2 py-0.5 rounded font-bold border transition-all duration-300 ${
-                      act.active 
-                        ? `${act.color} shadow-[0_0_10px_rgba(251,191,36,0.08)]` 
-                        : 'bg-zinc-950/40 text-zinc-600 border-zinc-900'
-                    }`}>
-                      {act.name}
-                    </span>
-                    {index < 7 && <span className="text-zinc-800">→</span>}
-                  </div>
-                ))}
-              </div>
             </div>
           </div>
         </div>
@@ -998,16 +858,22 @@ export const EvoWorldMap: React.FC<EvoWorldMapProps> = ({
       {activeIntention === 'campus' && (
         <EvoHomeExperience
           onNavigateTomos={() => setActiveIntention('biblioteca')}
-          onNavigatePracticar={() => setActiveIntention('laboratorios')}
-          onNavigateAnalizar={() => setActiveIntention('diagnosticar')}
+          onNavigateMagazines={() => {
+            if (onNavigateMagazine) onNavigateMagazine();
+            else setActiveIntention('escuela');
+          }}
+          onNavigateLaboratorios={() => setActiveIntention('laboratorios')}
           onNavigateHerramientas={() => setActiveIntention('herramientas')}
-          onNavigateMiEvo={() => setActiveIntention('progreso')}
-          onNavigateHotSwapLab={onNavigateHotSwapLab}
-          onNavigateWindowsMatrixLab={onNavigateWindowsMatrixLab}
-          onNavigateBootLab={onNavigateBootLab}
-          onOpenTomo={onOpenTomo}
-          userPassport={passport}
-          realProgress={realProgress}
+          onNavigateAnalizar={() => setActiveIntention('diagnosticar')}
+          onNavigateComoUsar={() => {
+            const el = document.getElementById('seccion-manifiesto');
+            if (el) el.scrollIntoView({ behavior: 'smooth' });
+          }}
+          onNavigatePrecios={() => {
+            const el = document.getElementById('seccion-manifiesto');
+            if (el) el.scrollIntoView({ behavior: 'smooth' });
+          }}
+          onNavigateEntrar={() => setActiveIntention('progreso')}
         />
       )}
 
@@ -1798,152 +1664,160 @@ export const EvoWorldMap: React.FC<EvoWorldMapProps> = ({
       {/* 5. SECCIÓN: ANALIZAR MI PC // DIAGNÓSTICO REAL & EVO CORE                  */}
       {/* ========================================================================= */}
       {activeIntention === 'diagnosticar' && (
-        <div className="relative z-10 flex-1 max-w-7xl mx-auto w-full px-4 sm:px-8 py-6 space-y-6">
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-zinc-800 pb-4">
-            <div className="space-y-1">
-              <div className="flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-purple-400 animate-pulse" />
-                <h2 className="evo-page-title">
-                  ANALIZAR MI PC // DIAGNÓSTICO REAL & EVO CORE
-                </h2>
-              </div>
-              <p className="evo-body-secondary italic">
-                “No se adivina. Se mide. Si no puede comprobarse: UNKNOWN.” Diagnóstico forense de silicio, telemetría y resultados con procedencia.
+        <div className="relative z-10 flex-1 max-w-[1280px] mx-auto w-full px-4 sm:px-6 lg:px-8 py-5 sm:py-6 space-y-6">
+          
+          {/* Header Interno Simplificado & Limpio */}
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-zinc-800/80 pb-5">
+            <div className="space-y-1.5">
+              <span className="text-[10px] font-mono-tech tracking-widest text-purple-400 uppercase font-black block">
+                ANALIZAR MI PC // EVO CORE
+              </span>
+              <h1 className="font-display font-black text-2xl sm:text-3xl text-white uppercase tracking-tight">
+                ANALIZAR MI PC
+              </h1>
+              <p className="text-xs sm:text-sm font-mono-tech font-bold text-purple-300 uppercase tracking-wide">
+                DIAGNÓSTICO, EVIDENCIA Y RENDIMIENTO.
+              </p>
+              <p className="text-xs sm:text-sm text-zinc-300 font-sans-editorial max-w-2xl leading-relaxed">
+                Investigá tu equipo, compará resultados y documentá evidencia según la fuente disponible.
               </p>
             </div>
 
-            <div className="flex flex-wrap items-center gap-2">
-              {onNavigateLabCore && (
-                <button
-                  type="button"
-                  onClick={() => onNavigateLabCore()}
-                  className="px-4 py-2 rounded-xl bg-purple-500 hover:bg-purple-400 text-black font-mono-tech text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer shadow-[0_0_15px_rgba(168,85,247,0.3)]"
-                >
-                  <Cpu className="w-3.5 h-3.5 text-black" />
-                  <span>ABRIR EVO CORE →</span>
-                </button>
-              )}
+            {/* Un solo CTA dominante */}
+            {onNavigateLabCore && (
+              <button
+                type="button"
+                onClick={() => onNavigateLabCore()}
+                className="px-5 py-3 rounded-xl bg-purple-500 hover:bg-purple-400 text-black font-mono-tech text-xs font-black uppercase tracking-wider transition-all flex items-center justify-center gap-2 cursor-pointer shadow-[0_0_20px_rgba(168,85,247,0.35)] shrink-0 self-start md:self-auto"
+              >
+                <Cpu className="w-4 h-4 text-black" />
+                <span>ABRIR EVO CORE →</span>
+              </button>
+            )}
+          </div>
 
-              <div className="flex flex-wrap items-center gap-1 p-1 rounded-xl bg-zinc-900 border border-zinc-800 font-mono-tech text-xs">
-                <button
-                  type="button"
-                  onClick={() => setDiagnoseTab('expedientes')}
-                  className={`px-3 py-1.5 rounded-lg font-bold transition-all cursor-pointer ${
-                    diagnoseTab === 'expedientes'
-                      ? 'bg-purple-400 text-black shadow-md'
-                      : 'text-zinc-400 hover:text-white'
-                  }`}
-                >
-                  EXPEDIENTES REALES
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setDiagnoseTab('consola')}
-                  className={`px-3 py-1.5 rounded-lg font-bold transition-all cursor-pointer ${
-                    diagnoseTab === 'consola'
-                      ? 'bg-purple-400 text-black shadow-md'
-                      : 'text-zinc-400 hover:text-white'
-                  }`}
-                >
-                  CONSOLA TÉCNICA
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setDiagnoseTab('pcb')}
-                  className={`px-3 py-1.5 rounded-lg font-bold transition-all cursor-pointer ${
-                    diagnoseTab === 'pcb'
-                      ? 'bg-purple-400 text-black shadow-md'
-                      : 'text-zinc-400 hover:text-white'
-                  }`}
-                >
-                  ESQUEMÁTICO PCB
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setDiagnoseTab('sectores')}
-                  className={`px-3 py-1.5 rounded-lg font-bold transition-all cursor-pointer ${
-                    diagnoseTab === 'sectores'
-                      ? 'bg-purple-400 text-black shadow-md'
-                      : 'text-zinc-400 hover:text-white'
-                  }`}
-                >
-                  8 SECTORES LAB
-                </button>
+          {/* Bloque Principal: ACÁ NO SIMULAMOS. ACÁ ANALIZAMOS TU EQUIPO. */}
+          <div className="p-5 sm:p-6 rounded-2xl bg-gradient-to-r from-[#170e24] via-[#0e1017] to-[#080a11] border border-purple-500/30 shadow-xl">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 lg:gap-8 items-center">
+              {/* Izquierda (lg:col-span-7) */}
+              <div className="lg:col-span-7 space-y-2.5">
+                <div className="flex items-center gap-2 flex-wrap">
+                  <span className="w-2 h-2 rounded-full bg-purple-400 animate-pulse" />
+                  <span className="text-[10px] font-mono-tech text-purple-300 font-black uppercase tracking-widest">
+                    PRINCIPIO PERICIAL EVO LABS
+                  </span>
+                  <span className="text-[9px] px-2 py-0.5 rounded bg-purple-950/80 border border-purple-700/60 text-purple-200 font-mono-tech font-bold">
+                    EVIDENCIA REAL
+                  </span>
+                </div>
+                <h3 className="font-display font-black text-lg sm:text-xl text-white uppercase tracking-tight">
+                  ACÁ NO SIMULAMOS. ACÁ ANALIZAMOS TU EQUIPO.
+                </h3>
+                <p className="text-xs text-zinc-300 font-sans-editorial leading-relaxed max-w-xl">
+                  Diagnóstico real con procedencia de datos estricta: todo valor verificado se clasifica como <strong className="text-purple-300 font-mono">SYSTEM_REPORTED</strong>. Lo que no puede comprobarse se categoriza como <strong className="text-zinc-400 font-mono">UNKNOWN</strong>.
+                </p>
+              </div>
+
+              {/* Derecha: Acciones principales (Max 2) + Herramientas secundarias (lg:col-span-5) */}
+              <div className="lg:col-span-5 flex flex-col gap-2.5">
+                <div className="flex flex-col sm:flex-row items-stretch gap-2.5">
+                  <button
+                    type="button"
+                    onClick={() => setIsAutoDetectOpen(true)}
+                    className="flex-1 px-4 py-2.5 rounded-xl bg-purple-500 hover:bg-purple-400 text-black font-mono-tech text-xs font-black uppercase tracking-wider transition-all flex items-center justify-center gap-1.5 cursor-pointer shadow-[0_0_15px_rgba(168,85,247,0.3)]"
+                  >
+                    <Cpu className="w-4 h-4 text-black" />
+                    <span>{passport ? 'ACTUALIZAR DETECCIÓN' : 'DETECTAR MI EQUIPO'}</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setIsForensicReportOpen(true)}
+                    className="flex-1 px-4 py-2.5 rounded-xl bg-cyan-500/15 hover:bg-cyan-500/25 border border-cyan-500/40 text-cyan-200 font-mono-tech text-xs font-bold uppercase tracking-wider transition-all flex items-center justify-center gap-1.5 cursor-pointer"
+                  >
+                    <FileSearch className="w-4 h-4 text-cyan-400" />
+                    <span>INFORME FORENSE</span>
+                  </button>
+                </div>
+
+                {/* Herramientas secundarias compactas */}
+                <div className="flex items-center gap-1.5 flex-wrap pt-1 font-mono-tech text-[10px]">
+                  <span className="text-zinc-500 font-bold uppercase text-[9px]">MÁS ACCIONES:</span>
+                  <button
+                    type="button"
+                    onClick={() => setIsContentFactoryOpen(true)}
+                    className="px-2.5 py-1 rounded-lg bg-zinc-900/90 hover:bg-zinc-800 text-emerald-300 border border-zinc-800 hover:border-emerald-500/40 transition-all flex items-center gap-1 cursor-pointer"
+                  >
+                    <Boxes className="w-3 h-3 text-emerald-400" />
+                    <span>Fábrica Labs (F07)</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setIsMethodGuideOpen(true)}
+                    className="px-2.5 py-1 rounded-lg bg-zinc-900/90 hover:bg-zinc-800 text-amber-300 border border-zinc-800 hover:border-amber-400/40 transition-all flex items-center gap-1 cursor-pointer"
+                  >
+                    <Compass className="w-3 h-3 text-amber-400" />
+                    <span>Method (F08)</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setIsTransferModalOpen(true)}
+                    className="px-2.5 py-1 rounded-lg bg-zinc-900/90 hover:bg-zinc-800 text-zinc-300 border border-zinc-800 hover:border-zinc-700 transition-all flex items-center gap-1 cursor-pointer"
+                  >
+                    <Zap className="w-3 h-3 text-amber-400" />
+                    <span>Transferencia</span>
+                  </button>
+                </div>
               </div>
             </div>
           </div>
 
-          {/* Banner Conceptual Fuerte: ACÁ NO SIMULAMOS */}
-          <div className="p-5 sm:p-6 rounded-2xl bg-gradient-to-r from-[#170e24] via-[#0e1017] to-[#080a11] border-2 border-purple-500/40 flex flex-col md:flex-row items-start md:items-center justify-between gap-6 shadow-[0_0_30px_rgba(168,85,247,0.15)]">
-            <div className="space-y-2">
-              <div className="flex items-center gap-2">
-                <span className="w-2.5 h-2.5 rounded-full bg-purple-400 animate-pulse" />
-                <span className="text-xs font-mono-tech text-purple-300 font-black uppercase tracking-widest">
-                  PRINCIPIO PERICIAL EVO LABS
-                </span>
-                <span className="text-[9px] px-2 py-0.5 rounded bg-purple-950/80 border border-purple-700/60 text-purple-200 font-mono-tech font-bold">
-                  EVIDENCIA REAL
-                </span>
-              </div>
-              <h3 className="font-display font-black text-xl text-white tracking-wide">
-                ACÁ NO SIMULAMOS. ACÁ ANALIZAMOS TU EQUIPO.
-              </h3>
-              <p className="text-xs text-zinc-300 max-w-2xl font-sans-editorial leading-relaxed">
-                Diagnóstico real con procedencia de datos estricta: todo valor verificado por WMI/CIM o telemetría de hardware se clasifica como <strong className="text-purple-300 font-mono">SYSTEM_REPORTED</strong>. Lo que no puede comprobarse con rigor es categorizado estrictamente como <strong className="text-zinc-400 font-mono">UNKNOWN</strong>.
-              </p>
-            </div>
-
-            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 shrink-0">
+          {/* Tabs Horizontales Claras y Compactas */}
+          <div>
+            <div className="flex items-center gap-1.5 p-1 rounded-xl bg-zinc-950 border border-zinc-800/90 font-mono-tech text-xs overflow-x-auto">
               <button
                 type="button"
-                onClick={() => setIsAutoDetectOpen(true)}
-                className="px-4 py-2.5 rounded-xl bg-purple-500 hover:bg-purple-400 text-black font-mono-tech text-xs font-black uppercase tracking-wider transition-all flex items-center justify-center gap-1.5 cursor-pointer shadow-[0_0_15px_rgba(168,85,247,0.4)]"
+                onClick={() => setDiagnoseTab('expedientes')}
+                className={`px-3.5 py-2 rounded-lg font-bold transition-all cursor-pointer whitespace-nowrap ${
+                  diagnoseTab === 'expedientes'
+                    ? 'bg-purple-500 text-black shadow-md'
+                    : 'text-zinc-400 hover:text-white'
+                }`}
               >
-                <Cpu className="w-4 h-4 text-black" />
-                <span>{passport ? 'ACTUALIZAR DETECCIÓN' : 'DETECTAR MI EQUIPO'}</span>
+                EXPEDIENTES REALES
               </button>
               <button
                 type="button"
-                onClick={() => setIsForensicReportOpen(true)}
-                className="px-4 py-2.5 rounded-xl bg-cyan-500/20 hover:bg-cyan-500/30 border border-cyan-500/40 text-cyan-200 font-mono-tech text-xs font-bold uppercase tracking-wider transition-all flex items-center justify-center gap-1.5 cursor-pointer shadow-[0_0_15px_rgba(6,182,212,0.2)]"
+                onClick={() => setDiagnoseTab('consola')}
+                className={`px-3.5 py-2 rounded-lg font-bold transition-all cursor-pointer whitespace-nowrap ${
+                  diagnoseTab === 'consola'
+                    ? 'bg-purple-500 text-black shadow-md'
+                    : 'text-zinc-400 hover:text-white'
+                }`}
               >
-                <FileSearch className="w-4 h-4 text-cyan-400" />
-                <span>INFORME FORENSE A/B (FASE 05)</span>
+                CONSOLA TÉCNICA
               </button>
               <button
                 type="button"
-                onClick={() => setIsContentFactoryOpen(true)}
-                className="px-4 py-2.5 rounded-xl bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-500/40 text-emerald-200 font-mono-tech text-xs font-bold uppercase tracking-wider transition-all flex items-center justify-center gap-1.5 cursor-pointer shadow-[0_0_15px_rgba(16,185,129,0.2)]"
+                onClick={() => setDiagnoseTab('pcb')}
+                className={`px-3.5 py-2 rounded-lg font-bold transition-all cursor-pointer whitespace-nowrap ${
+                  diagnoseTab === 'pcb'
+                    ? 'bg-purple-500 text-black shadow-md'
+                    : 'text-zinc-400 hover:text-white'
+                }`}
               >
-                <Boxes className="w-4 h-4 text-emerald-400" />
-                <span>FÁBRICA DE CONTENIDOS & LABS (FASE 07)</span>
+                ESQUEMÁTICO PCB
               </button>
               <button
                 type="button"
-                onClick={() => setIsMethodGuideOpen(true)}
-                className="px-4 py-2.5 rounded-xl bg-amber-400/20 hover:bg-amber-400/30 border border-amber-400/40 text-amber-200 font-mono-tech text-xs font-bold uppercase tracking-wider transition-all flex items-center justify-center gap-1.5 cursor-pointer shadow-[0_0_15px_rgba(251,191,36,0.2)]"
+                onClick={() => setDiagnoseTab('sectores')}
+                className={`px-3.5 py-2 rounded-lg font-bold transition-all cursor-pointer whitespace-nowrap ${
+                  diagnoseTab === 'sectores'
+                    ? 'bg-purple-500 text-black shadow-md'
+                    : 'text-zinc-400 hover:text-white'
+                }`}
               >
-                <Compass className="w-4 h-4 text-amber-400" />
-                <span>EVO METHOD (FASE 08)</span>
+                8 SECTORES LAB
               </button>
-              <button
-                type="button"
-                onClick={() => setIsTransferModalOpen(true)}
-                className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-amber-500/20 to-yellow-500/20 hover:from-amber-500/30 hover:to-yellow-500/30 border border-amber-500/40 text-amber-300 font-mono-tech text-xs font-bold uppercase tracking-wider transition-all flex items-center justify-center gap-1.5 cursor-pointer"
-              >
-                <Zap className="w-4 h-4 text-amber-400" />
-                <span>TRANSFERENCIA</span>
-              </button>
-              {onNavigateLabCore && (
-                <button
-                  type="button"
-                  onClick={() => onNavigateLabCore()}
-                  className="px-4 py-2.5 rounded-xl bg-zinc-900 hover:bg-zinc-800 border border-purple-500/40 text-purple-200 font-mono-tech text-xs font-bold uppercase tracking-wider transition-all flex items-center justify-center gap-1.5 cursor-pointer"
-                >
-                  <Activity className="w-4 h-4 text-purple-400" />
-                  <span>ABRIR EVO CORE</span>
-                </button>
-              )}
             </div>
           </div>
 

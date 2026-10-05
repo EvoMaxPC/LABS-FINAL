@@ -18,6 +18,7 @@ export interface EvoTomeExpandedItem {
   title: string;
   subtitle: string;
   tagline: string;
+  valuePhrase: string;
   shortExplanation: string;
   solvesProblem: string;
   whatItIncludes: string[];
@@ -48,6 +49,7 @@ export const EVO_TOMES_EXPANDED_DATA: EvoTomeExpandedItem[] = [
     title: 'CONOCÉ TU PC',
     subtitle: 'Arquitectura de Silicio, Buses y Límites de Hardware',
     tagline: 'Entendé tu máquina desde adentro.',
+    valuePhrase: 'Dejá de ver componentes. Empezá a entender el sistema.',
     shortExplanation: 'Comprendé qué hardware tenés frente a vos, cómo dialogan sus componentes de silicio y dónde radican los límites reales del rendimiento sin mitos ni placebos.',
     solvesProblem: 'Elimina la confusión sobre cuellos de botella, latencias de memoria y especificaciones engañosas de folleto.',
     whatItIncludes: [
@@ -85,6 +87,7 @@ export const EVO_TOMES_EXPANDED_DATA: EvoTomeExpandedItem[] = [
     title: 'LA BIBLIA NEGRA DE WINDOWS',
     subtitle: 'Kernel, Servicios, Telemetría y Diagnóstico Sysinternals',
     tagline: 'El lado oculto de Windows. Descubrilo.',
+    valuePhrase: 'Descubrí qué ocurre detrás de lo que Windows te muestra.',
     shortExplanation: 'Dominá el comportamiento interno del sistema operativo: svchost, interrupciones DPC, paginación, compresión de memoria y aislamiento forense de fallas.',
     solvesProblem: 'Resuelve inestabilidades, ralentizaciones misteriosas y desmitifica los scripts destructivos de optimización.',
     whatItIncludes: [
@@ -122,6 +125,7 @@ export const EVO_TOMES_EXPANDED_DATA: EvoTomeExpandedItem[] = [
     title: 'REPARACIÓN DE PC',
     subtitle: 'Método Deductivo, Descarte de Fallas y Banco de Taller',
     tagline: 'Nunca estuviste mejor guiado.',
+    valuePhrase: 'Dejá de cambiar piezas a ciegas.',
     shortExplanation: 'Aprendé el protocolo sistemático de diagnóstico en banco: medición con multímetro en líneas ATX (+12V, +5V, +3.3V), lectura de buzzer BIOS y bucles de reinicio.',
     solvesProblem: 'Evita el cambio innecesario de componentes caros al aislar la causa raíz con certeza instrumental.',
     whatItIncludes: [
@@ -141,7 +145,7 @@ export const EVO_TOMES_EXPANDED_DATA: EvoTomeExpandedItem[] = [
       componentRef: 'EvoLabCoreRepairView',
     },
     purchaseType: 'COMPRA_PERMANENTE',
-    priceStatus: 'PRÓXIMAMENTE',
+    priceStatus: 'PRECIO A DEFINIR',
     priceARS: null,
     priceUSD: null,
     labIncludedLabel: 'LAB INCLUIDO',
@@ -159,6 +163,7 @@ export const EVO_TOMES_EXPANDED_DATA: EvoTomeExpandedItem[] = [
     title: 'REPARACIÓN DE NOTEBOOKS',
     subtitle: 'Desmontaje Seguro, Power Rails, eDP y Baterías',
     tagline: 'Diagnóstico real, paso a paso.',
+    valuePhrase: 'Encontrá la falla antes de reemplazar la placa.',
     shortExplanation: 'Arquitectura específica de portátiles: líneas de alimentación DC Jack, mosfets de entrada, flex de video eDP, refrigeración en espacios reducidos y celdas de litio.',
     solvesProblem: 'Supera el miedo al desensamble de laptops modernas y fallas de encendido sin imagen.',
     whatItIncludes: [
@@ -177,7 +182,7 @@ export const EVO_TOMES_EXPANDED_DATA: EvoTomeExpandedItem[] = [
       actionKey: 'dossier',
     },
     purchaseType: 'COMPRA_PERMANENTE',
-    priceStatus: 'PRÓXIMAMENTE',
+    priceStatus: 'PRECIO A DEFINIR',
     priceARS: null,
     priceUSD: null,
     labIncludedLabel: 'LAB INCLUIDO',
@@ -195,6 +200,7 @@ export const EVO_TOMES_EXPANDED_DATA: EvoTomeExpandedItem[] = [
     title: 'REDES',
     subtitle: 'Ethernet, Wi-Fi 6/7, Protocolos TCP/UDP y Análisis Wireshark',
     tagline: 'Entendé cómo se comunica tu PC.',
+    valuePhrase: 'Entendé por dónde viajan los datos y dónde se corta la comunicación.',
     shortExplanation: 'Descubrí cómo viajan los paquetes de datos por el mundo: resolución DNS, tablas de enrutamiento, MTU, buffers de router, puertos y captura pericial de tráfico.',
     solvesProblem: 'Soluciona problemas de pérdida de paquetes, microcortes, latencias elevadas y mala configuración de red.',
     whatItIncludes: [
@@ -213,7 +219,7 @@ export const EVO_TOMES_EXPANDED_DATA: EvoTomeExpandedItem[] = [
       actionKey: 'dossier',
     },
     purchaseType: 'COMPRA_PERMANENTE',
-    priceStatus: 'PRÓXIMAMENTE',
+    priceStatus: 'PRECIO A DEFINIR',
     priceARS: null,
     priceUSD: null,
     labIncludedLabel: 'LAB INCLUIDO',
@@ -231,6 +237,7 @@ export const EVO_TOMES_EXPANDED_DATA: EvoTomeExpandedItem[] = [
     title: 'CIBERSEGURIDAD',
     subtitle: 'Ring 0, Kernel, Aislamiento de Procesos y Defensa Activa',
     tagline: 'Desde cero hasta dominar tu seguridad.',
+    valuePhrase: 'Aprendé a pensar en seguridad antes de que exista el problema.',
     shortExplanation: 'Comprendé los vectores de ataque reales: escalada de privilegios, inyección en memoria, exploits de firmware y cómo blindar un entorno de trabajo.',
     solvesProblem: 'Protege infraestructura y equipos personales frente a intrusiones y malware de bajo nivel.',
     whatItIncludes: [
@@ -249,7 +256,7 @@ export const EVO_TOMES_EXPANDED_DATA: EvoTomeExpandedItem[] = [
       actionKey: 'dossier',
     },
     purchaseType: 'COMPRA_PERMANENTE',
-    priceStatus: 'PRÓXIMAMENTE',
+    priceStatus: 'PRECIO A DEFINIR',
     priceARS: null,
     priceUSD: null,
     labIncludedLabel: 'LAB INCLUIDO',
@@ -267,6 +274,7 @@ export const EVO_TOMES_EXPANDED_DATA: EvoTomeExpandedItem[] = [
     title: 'GAMING PRO / RENDIMIENTO',
     subtitle: 'Frametime, Percentiles 1% Low, Input Lag y Estabilidad',
     tagline: 'Optimizamos de verdad. Sin secretos.',
+    valuePhrase: 'Los FPS no cuentan toda la historia.',
     shortExplanation: 'El tratado definitivo sobre fluidez: por qué los promedios de FPS engañan, cómo medir consistencia de cuadros con microsegundos y eliminar el stuttering.',
     solvesProblem: 'Termina con los tirones en juegos competitivos y optimiza el pipeline de renderizado de la GPU.',
     whatItIncludes: [
@@ -285,7 +293,7 @@ export const EVO_TOMES_EXPANDED_DATA: EvoTomeExpandedItem[] = [
       actionKey: 'dossier',
     },
     purchaseType: 'COMPRA_PERMANENTE',
-    priceStatus: 'PRÓXIMAMENTE',
+    priceStatus: 'PRECIO A DEFINIR',
     priceARS: null,
     priceUSD: null,
     labIncludedLabel: 'LAB INCLUIDO',
@@ -303,6 +311,7 @@ export const EVO_TOMES_EXPANDED_DATA: EvoTomeExpandedItem[] = [
     title: 'ARRANQUE Y DIAGNÓSTICO',
     subtitle: 'Del Botón POWER al Kernel: POST, UEFI, Bootmgfw y Drivers',
     tagline: 'Del botón POWER a Windows, paso a paso.',
+    valuePhrase: 'Cuando una PC no arranca, cada señal importa.',
     shortExplanation: 'El viaje completo del hardware: qué hace el chipset al recibir energía, inicialización de memoria, tabla ACPI, NVRAM de UEFI, carga de BCD y transferencia a Winload.',
     solvesProblem: 'Diagnostica y repara pantallas azules de boot (INACCESSIBLE_BOOT_DEVICE, 0xc000000e) y corrupción de arranque.',
     whatItIncludes: [
@@ -322,7 +331,7 @@ export const EVO_TOMES_EXPANDED_DATA: EvoTomeExpandedItem[] = [
       componentRef: 'WindowsBootExperienceLab',
     },
     purchaseType: 'COMPRA_PERMANENTE',
-    priceStatus: 'PRÓXIMAMENTE',
+    priceStatus: 'PRECIO A DEFINIR',
     priceARS: null,
     priceUSD: null,
     labIncludedLabel: 'LAB INCLUIDO',
@@ -340,6 +349,7 @@ export const EVO_TOMES_EXPANDED_DATA: EvoTomeExpandedItem[] = [
     title: 'PROGRAMACIÓN DESDE CERO',
     subtitle: 'Lógica Computacional, TypeScript, Python y Automatización',
     tagline: 'Empezá sin saber programar. Creá herramientas reales.',
+    valuePhrase: 'Dejá de copiar código. Entendé la lógica.',
     shortExplanation: 'Aprendé programación orientada a resolver problemas técnicos: scripts de diagnóstico, automatización de auditorías en el sistema operativo y manipulación de datos.',
     solvesProblem: 'Transforma al técnico en desarrollador de sus propias herramientas de diagnóstico.',
     whatItIncludes: [
@@ -358,7 +368,7 @@ export const EVO_TOMES_EXPANDED_DATA: EvoTomeExpandedItem[] = [
       actionKey: 'dossier',
     },
     purchaseType: 'COMPRA_PERMANENTE',
-    priceStatus: 'PRÓXIMAMENTE',
+    priceStatus: 'PRECIO A DEFINIR',
     priceARS: null,
     priceUSD: null,
     labIncludedLabel: 'LAB INCLUIDO',
@@ -376,6 +386,7 @@ export const EVO_TOMES_EXPANDED_DATA: EvoTomeExpandedItem[] = [
     title: 'PROMPT E IA AVANZADA',
     subtitle: 'Prompting Estructurado, Evaluación Empírica y Agentes',
     tagline: 'Dirigí la IA con rigor técnico y metodología.',
+    valuePhrase: 'No le pidas respuestas a la IA. Aprendé a dirigirla.',
     shortExplanation: 'Dominá el uso avanzado de modelos de inteligencia artificial: cómo estructurar prompts deterministas, crear pipelines de razonamiento pericial y validar outputs sin alucinaciones.',
     solvesProblem: 'Supera el uso superficial de chats para construir copilotos técnicos de alta precisión.',
     whatItIncludes: [
@@ -394,7 +405,7 @@ export const EVO_TOMES_EXPANDED_DATA: EvoTomeExpandedItem[] = [
       actionKey: 'dossier',
     },
     purchaseType: 'COMPRA_PERMANENTE',
-    priceStatus: 'PRÓXIMAMENTE',
+    priceStatus: 'PRECIO A DEFINIR',
     priceARS: null,
     priceUSD: null,
     labIncludedLabel: 'LAB INCLUIDO',
