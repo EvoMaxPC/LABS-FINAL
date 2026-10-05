@@ -1,3 +1,7 @@
+/**
+ * LEGACY / INACTIVO: Modal de perfil narrativo conservado como referencia histórica.
+ * La única intro operativa activa del sistema es EvoIntroExperience.tsx.
+ */
 import React, { useState } from 'react';
 import {
   EVO_IDENTITY,

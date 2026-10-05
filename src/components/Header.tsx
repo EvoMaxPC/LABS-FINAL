@@ -239,7 +239,7 @@ export const Header: React.FC<HeaderProps> = ({
                 if (onNavigateCampusSection) onNavigateCampusSection('escuela');
                 else if (onNavigateHome) onNavigateHome();
               }}
-              title="Aprender // Escuela EVO, Tomos y Tutor"
+              title="Aprender // Colección de 10 Tomos, Tutor y Ruta Formativa"
               className={`px-3 py-1.5 rounded-xl flex items-center gap-1.5 transition-all duration-200 cursor-pointer select-none group relative ${
                 isEscuelaActive
                   ? 'bg-gradient-to-b from-amber-400/20 via-amber-500/12 to-amber-500/5 text-amber-200 border border-amber-400/40 font-bold shadow-[0_0_16px_rgba(245,158,11,0.2),inset_0_1px_0_rgba(255,255,255,0.18)]'

@@ -1,3 +1,7 @@
+/**
+ * LEGACY / INACTIVO: Conservado como referencia histórica.
+ * La única intro operativa activa del sistema es EvoIntroExperience.tsx.
+ */
 import React, { useState, useEffect, useCallback } from 'react';
 import {
   Sparkles,
@@ -96,7 +100,7 @@ export const EvoInstitutionalIntro: React.FC<EvoInstitutionalIntroProps> = ({
           <div>
             <div className="flex items-center gap-1.5">
               <span className="font-display font-black text-sm tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-amber-300 via-amber-400 to-amber-500">
-                ACADEMIA EVO LABS
+                EVO LABS
               </span>
               <span className="text-[9px] px-1 py-0.5 rounded bg-amber-400/10 text-amber-300 border border-amber-400/20 hidden sm:inline-block">
                 OFICIAL
@@ -133,9 +137,9 @@ export const EvoInstitutionalIntro: React.FC<EvoInstitutionalIntroProps> = ({
             </div>
 
             <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black font-display tracking-tight text-white uppercase leading-tight">
-              BIENVENIDO A LA <br className="hidden sm:inline" />
+              BIENVENIDO A <br className="hidden sm:inline" />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-300 via-amber-400 to-amber-500">
-                ACADEMIA EVO LABS
+                EVO LABS
               </span>
             </h1>
 
