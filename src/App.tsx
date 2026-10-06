@@ -1754,14 +1754,17 @@ function AppContent({
 
         {/* Minimal Footer */}
         <footer className="app-global-footer border-t border-zinc-800/60 py-6 bg-[#06070a] text-zinc-500 text-xs font-mono-tech mt-auto print:hidden no-print">
-          <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 flex flex-col sm:flex-row items-center justify-between gap-4">
-            <div className="flex items-center gap-2">
-              <span className="w-2 h-2 bg-yellow-400 inline-block" />
-              <span className="font-display font-bold text-white uppercase tracking-tight">
-                EVO LABS
-              </span>
-              <span className="text-zinc-600">•</span>
-              <span className="text-zinc-400">Plataforma Editorial & Laboratorio de Silicio</span>
+          <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+            <div className="space-y-1 text-left">
+              <p className="text-zinc-300 font-bold">
+                © 2026 EVO LABS — ZUDOKA PROGRAMING SYSTEM CORPORATION
+              </p>
+              <p className="text-zinc-400 text-[11px]">
+                Todos los derechos reservados.
+              </p>
+              <p className="text-[10px] text-zinc-500">
+                Creado y dirigido por ZuKA · Denis Galperin
+              </p>
             </div>
             <div className="text-zinc-500 text-[11px] tracking-wider uppercase">
               METROLOGÍA EMPÍRICA // HARDWARE & KERNEL NT

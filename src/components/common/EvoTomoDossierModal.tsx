@@ -24,6 +24,11 @@ import {
 import { VOLUMES_COLLECTION } from '../../data/collections';
 import { EvoBootLab } from '../tomo08/EvoBootLab';
 import { EvoTomeExamEngine } from '../exam/EvoTomeExamEngine';
+import { EvoNetworkForensicsLab } from '../labs/tomo05/EvoNetworkForensicsLab';
+import { EvoDefensiveSecurityLab } from '../labs/tomo06/EvoDefensiveSecurityLab';
+import { EvoPerformanceMetrologyLab } from '../labs/tomo07/EvoPerformanceMetrologyLab';
+import { EvoCodeEngineeringLab } from '../labs/tomo09/EvoCodeEngineeringLab';
+import { EvoAiSystemsLab } from '../labs/tomo10/EvoAiSystemsLab';
 
 export interface ForensicBenchTarget {
   tomoId: string;
@@ -777,10 +782,47 @@ const TOMO_EXTENDED_DATA: Record<
     ],
   },
   'tomo-07': {
-    pages: 'En desarrollo',
-    modulesCount: 'En fase de investigación técnica',
+    pages: '210 páginas A4',
+    modulesCount: '6 módulos de metrología y estabilidad',
     targetAudience: 'Entusiastas del rendimiento, gamers competitivos e ingenieros de benchmarking',
-    modules: [],
+    modules: [
+      {
+        number: 'M01',
+        title: 'Metrología de Frametimes & Percentiles 1% Low',
+        desc: 'Captura PresentMon, conversión de microsegundos a FPS y descarte de ruido.',
+        benchConfig: { labView: 'windows-matrix', scenario: 'scheduler-hybrid', badgeLabel: 'FRAMETIME LAB' },
+      },
+      {
+        number: 'M02',
+        title: 'Frame Pacing & Detección de Clusters de Stutter',
+        desc: 'Identificación de periodicidad en tirones: interrupciones de fondo vs shaders.',
+        benchConfig: { labView: 'windows-matrix', scenario: 'dpc-conflict', badgeLabel: 'PACING ANALYZER' },
+      },
+      {
+        number: 'M03',
+        title: 'Bottleneck Investigator: Hilo Principal vs GPU',
+        desc: 'Diagnóstico de cuellos de botella monohilo en Core 0 con GPU subutilizada.',
+        benchConfig: { labView: 'windows-matrix', scenario: 'scheduler-hybrid', badgeLabel: 'BOTTLENECK' },
+      },
+      {
+        number: 'M04',
+        title: 'Benchmarking A/B: Resizable BAR & Rendimiento',
+        desc: 'Pruebas controladas de 1 variable con 3 corridas, cálculo de mediana y varianza.',
+        benchConfig: { labView: 'hotswap-lab', scenario: 'ab-bench', badgeLabel: 'A/B BENCH' },
+      },
+      {
+        number: 'M05',
+        title: 'Cap & Refresh: Sincronización 144Hz/240Hz & VRR',
+        desc: 'Ventana de sincronización G-Sync / FreeSync y eliminación de lag de V-Sync.',
+        benchConfig: { labView: 'windows-matrix', scenario: 'timer-resolution', badgeLabel: 'CAP & REFRESH' },
+      },
+      {
+        number: 'M06',
+        title: 'Input Pipeline: Cadena Click-to-Photon & Reflex',
+        desc: 'Desglose etapa por etapa: Polling rate de ratón vs cola de renderizado GPU.',
+        benchConfig: { labView: 'windows-matrix', scenario: 'timer-resolution', badgeLabel: 'INPUT PIPELINE' },
+      },
+    ],
   },
   'tomo-08': {
     pages: '16 páginas A4',
@@ -935,6 +977,7 @@ export const EvoTomoDossierModal: React.FC<EvoTomoDossierModalProps> = ({
   // CRITICAL DIRECTIVE: The modal MUST ALWAYS open in 'portada' (cover) view by default
   const [modalView, setModalView] = useState<'portada' | 'indice'>('portada');
   const [isBootLabOpen, setIsBootLabOpen] = useState<boolean>(false);
+  const [isTomoLabOpen, setIsTomoLabOpen] = useState<boolean>(false);
   const [isExamOpen, setIsExamOpen] = useState<boolean>(false);
 
   // Reset to 'portada' whenever the modal opens or tomoId changes
@@ -942,6 +985,7 @@ export const EvoTomoDossierModal: React.FC<EvoTomoDossierModalProps> = ({
     if (isOpen) {
       setModalView('portada');
       setIsBootLabOpen(false);
+      setIsTomoLabOpen(false);
       setIsExamOpen(false);
     }
   }, [isOpen, tomoId]);
@@ -963,6 +1007,8 @@ export const EvoTomoDossierModal: React.FC<EvoTomoDossierModalProps> = ({
             setIsExamOpen(false);
             if (resolvedTomoId === 'tomo-08') {
               setIsBootLabOpen(true);
+            } else if (['tomo-05', 'tomo-06', 'tomo-07', 'tomo-09', 'tomo-10'].includes(resolvedTomoId)) {
+              setIsTomoLabOpen(true);
             } else if (onOpenTomoView) {
               onOpenTomoView(resolvedTomoId);
             }
@@ -979,6 +1025,45 @@ export const EvoTomoDossierModal: React.FC<EvoTomoDossierModalProps> = ({
       </div>
     );
   }
+
+  if (isTomoLabOpen) {
+    if (resolvedTomoId === 'tomo-05') {
+      return (
+        <div className="fixed inset-0 z-[120] bg-black p-2 sm:p-4 overflow-y-auto animate-in fade-in duration-200">
+          <EvoNetworkForensicsLab onClose={() => setIsTomoLabOpen(false)} />
+        </div>
+      );
+    }
+    if (resolvedTomoId === 'tomo-06') {
+      return (
+        <div className="fixed inset-0 z-[120] bg-black p-2 sm:p-4 overflow-y-auto animate-in fade-in duration-200">
+          <EvoDefensiveSecurityLab onClose={() => setIsTomoLabOpen(false)} />
+        </div>
+      );
+    }
+    if (resolvedTomoId === 'tomo-07') {
+      return (
+        <div className="fixed inset-0 z-[120] bg-black p-2 sm:p-4 overflow-y-auto animate-in fade-in duration-200">
+          <EvoPerformanceMetrologyLab onClose={() => setIsTomoLabOpen(false)} />
+        </div>
+      );
+    }
+    if (resolvedTomoId === 'tomo-09') {
+      return (
+        <div className="fixed inset-0 z-[120] bg-black p-2 sm:p-4 overflow-y-auto animate-in fade-in duration-200">
+          <EvoCodeEngineeringLab onClose={() => setIsTomoLabOpen(false)} />
+        </div>
+      );
+    }
+    if (resolvedTomoId === 'tomo-10') {
+      return (
+        <div className="fixed inset-0 z-[120] bg-black p-2 sm:p-4 overflow-y-auto animate-in fade-in duration-200">
+          <EvoAiSystemsLab onClose={() => setIsTomoLabOpen(false)} />
+        </div>
+      );
+    }
+  }
+
 
   const volume = VOLUMES_COLLECTION.find((v) => v.id === resolvedTomoId || v.id === tomoId);
   const coverMeta = TOMOS_EDITORIAL_COVERS[resolvedTomoId] || TOMOS_EDITORIAL_COVERS[tomoId] || TOMOS_EDITORIAL_COVERS['tomo-01'];
@@ -1019,13 +1104,18 @@ export const EvoTomoDossierModal: React.FC<EvoTomoDossierModalProps> = ({
       target = chapterIdOrTarget;
     }
 
-    if (target.labView === 'boot-lab') {
+    if (target.labView === 'boot-lab' || resolvedTomoId === 'tomo-08') {
       if (onOpenForensicBench) {
         onOpenForensicBench(target);
         onClose();
       } else {
         setIsBootLabOpen(true);
       }
+      return;
+    }
+
+    if (['tomo-05', 'tomo-06', 'tomo-07', 'tomo-09', 'tomo-10'].includes(resolvedTomoId)) {
+      setIsTomoLabOpen(true);
       return;
     }
 
@@ -1220,11 +1310,29 @@ export const EvoTomoDossierModal: React.FC<EvoTomoDossierModalProps> = ({
                         <span>LABORATORIO DE ARRANQUE</span>
                       </button>
                     </>
-                  ) : ['tomo-07', 'tomo-09', 'tomo-10'].includes(resolvedTomoId) ? (
-                    <div className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl font-mono-tech font-bold text-xs tracking-wider uppercase border border-amber-400/40 bg-amber-400/10 text-amber-300 shadow-lg">
-                      <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse" />
-                      <span>EDICIÓN EN DESARROLLO</span>
-                    </div>
+                  ) : ['tomo-05', 'tomo-06', 'tomo-07', 'tomo-09', 'tomo-10'].includes(resolvedTomoId) ? (
+                    <button
+                      type="button"
+                      onClick={() => setIsTomoLabOpen(true)}
+                      className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-mono-tech font-black text-xs tracking-wider uppercase text-black shadow-xl hover:brightness-110 transition-all cursor-pointer hover:scale-[1.02] active:scale-[0.98]"
+                      style={{
+                        background: coverMeta.primaryColor,
+                        boxShadow: `0 8px 24px -6px ${coverMeta.primaryColor}50`,
+                      }}
+                    >
+                      <Zap className="w-4 h-4 text-black" />
+                      <span>
+                        {resolvedTomoId === 'tomo-05'
+                          ? 'INICIAR NETWORK FORENSICS LAB'
+                          : resolvedTomoId === 'tomo-06'
+                          ? 'INICIAR DEFENSIVE SECURITY LAB'
+                          : resolvedTomoId === 'tomo-07'
+                          ? 'INICIAR PERFORMANCE METROLOGY LAB'
+                          : resolvedTomoId === 'tomo-09'
+                          ? 'INICIAR CODE ENGINEERING LAB'
+                          : 'INICIAR AI SYSTEMS LAB'}
+                      </span>
+                    </button>
                   ) : (
                     <button
                       type="button"

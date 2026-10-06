@@ -957,6 +957,14 @@ export const EvoWorldMap: React.FC<EvoWorldMapProps> = ({
           onOpenIntroPresentation={onOpenIntroPresentation}
           onOpenLevel0Intro={() => setIsLevel0IntroOpen(true)}
           onOpenCaseResolver={() => setIsCaseResolverOpen(true)}
+          onOpenTomo={handleOpenTomoDirectly}
+          onNavigateBootLab={onNavigateBootLab}
+          onNavigateWindowsMatrixLab={onNavigateWindowsMatrixLab}
+          onNavigateLabCore={onNavigateLabCore}
+          onNavigateHotSwapLab={onNavigateHotSwapLab}
+          onOpenDigitalTwin={() => setIsDigitalTwinOpen(true)}
+          onExecuteTool={handleExecuteMasterTool}
+          passport={passport}
         />
       )}
 

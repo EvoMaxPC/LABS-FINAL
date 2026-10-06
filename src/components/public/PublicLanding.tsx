@@ -1,626 +1,388 @@
 import React, { useState } from 'react';
 import {
-  Sparkles,
   ArrowRight,
-  CheckCircle2,
-  Cpu,
-  Monitor,
-  Shield,
-  Activity,
-  Layers,
-  Zap,
-  HelpCircle,
-  ChevronDown,
-  Terminal,
-  ExternalLink,
   BookOpen,
-  Search,
+  Zap,
+  CheckCircle2,
+  Activity,
+  ChevronRight,
 } from 'lucide-react';
-import { EvoMundoWordmark } from '../common/EvoMundoWordmark';
-import { EvoPrimarySystemButton, EvoSecondaryInspectButton } from '../common/EvoSystemButtons';
+
+// Visual assets reales del proyecto
+import hardwareSculpture from '../../assets/images/hardware_sculpture_hero_1789530888503.jpg';
 
 interface PublicLandingProps {
   onExploreClick?: () => void;
   onMethodClick?: () => void;
   onOpenAuthPlaceholder?: (mode: 'login' | 'register') => void;
-  onOpenTomo?: (tomeNumber: string) => void;
+  onOpenTomo?: (tomoNumber: string) => void;
 }
 
 export const PublicLanding: React.FC<PublicLandingProps> = ({
   onExploreClick,
-  onMethodClick,
   onOpenAuthPlaceholder,
   onOpenTomo,
 }) => {
-  const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(null);
-
-  const toggleFaq = (index: number) => {
-    setOpenFaqIndex(openFaqIndex === index ? null : index);
-  };
-
-  const handleScrollTo = (elementId: string) => {
-    const el = document.getElementById(elementId);
-    if (el) el.scrollIntoView({ behavior: 'smooth' });
-  };
+  const [hoveredNode, setHoveredNode] = useState<number | null>(null);
 
   return (
-    <div className="w-full text-zinc-100 font-sans-editorial selection:bg-amber-400 selection:text-black">
-      
-      {/* =========================================================================
-          1. HERO PÚBLICO
-         ========================================================================= */}
-      <section id="inicio" className="relative pt-16 pb-20 sm:pt-24 sm:pb-32 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto overflow-hidden">
-        {/* Ambient Top Glow */}
-        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[650px] h-[650px] bg-amber-500/10 rounded-full blur-[140px] pointer-events-none -z-10" />
-
-        <div className="text-center max-w-4xl mx-auto space-y-8">
-          {/* Status Badge */}
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-zinc-900 border border-zinc-800 text-[11px] font-mono-tech text-amber-400 font-bold">
-            <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse" />
-            <span>PLATAFORMA DE METROLOGÍA & ARQUITECTURA DE COMPUTADORAS</span>
-          </div>
-
-          {/* Main Wordmark & Manifest */}
-          <div className="space-y-4">
-            <div className="flex justify-center">
-              <EvoMundoWordmark variant="hero" showUniverseBadge={true} />
+    <div className="w-full bg-[#07080c] text-zinc-100 font-sans-editorial selection:bg-amber-400 selection:text-black overflow-x-hidden">
+      <div className="max-w-[1240px] mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16 space-y-24 sm:space-y-32">
+        
+        {/* =========================================================================
+            01 // HERO PRINCIPAL (EDITORIAL SPLIT // ALINEADO A LA IZQUIERDA)
+           ========================================================================= */}
+        <section id="inicio" className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
+          
+          {/* Columna Izquierda: Información Editorial */}
+          <div className="lg:col-span-7 space-y-6 text-left">
+            
+            {/* Eyebrow sobrio y técnico */}
+            <div className="flex items-center gap-2">
+              <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />
+              <span className="font-mono-tech text-xs tracking-[0.2em] uppercase font-bold text-zinc-400">
+                EVO LABS // SISTEMA DE APRENDIZAJE TÉCNICO
+              </span>
             </div>
 
-            <div className="py-2">
-              <h1 className="text-3xl sm:text-5xl lg:text-6xl font-display font-black tracking-tight text-white uppercase leading-none">
-                NO LO CREAS. <span className="text-amber-400">COMPROBALO.</span>
+            {/* Título Grande y Contundente */}
+            <div className="space-y-1">
+              <h1 className="text-4xl sm:text-6xl lg:text-7xl font-display font-black tracking-tight text-white uppercase leading-[0.95]">
+                NO LO CREAS.
+                <br />
+                <span className="text-amber-400">COMPROBALO.</span>
               </h1>
             </div>
 
-            <p className="text-base sm:text-xl text-zinc-300 max-w-2xl mx-auto leading-relaxed">
-              Aprendé arquitectura de hardware, reparación de PC y optimización profunda de Windows mediante <strong className="text-white">simuladores interactivos</strong> y <strong className="text-amber-400">evidencia pericial verificable</strong>.
+            {/* Bajada Breve Canónica */}
+            <p className="font-sans-editorial text-base sm:text-xl text-zinc-300 max-w-xl leading-relaxed">
+              Aprendé cómo funciona una PC.
+              <br />
+              Experimentá. Medí. Diagnosticá con evidencia.
             </p>
-          </div>
 
-          {/* Action CTAs */}
-          <div className="flex flex-wrap items-center justify-center gap-4 pt-2 font-mono-tech">
-            <EvoPrimarySystemButton onClick={() => onExploreClick?.()}>
-              EXPLORAR CATÁLOGO DE TOMOS →
-            </EvoPrimarySystemButton>
+            {/* Máximo 2 CTAs Limpios */}
+            <div className="flex flex-wrap items-center gap-3 pt-2 font-mono-tech text-xs sm:text-sm">
+              <button
+                type="button"
+                onClick={() => {
+                  if (onOpenAuthPlaceholder) onOpenAuthPlaceholder('register');
+                  else onExploreClick?.();
+                }}
+                className="px-7 py-3.5 rounded-xl bg-amber-400 hover:bg-amber-300 text-black font-black uppercase tracking-wider transition-all cursor-pointer shadow-[0_0_20px_rgba(245,158,11,0.25)] flex items-center gap-2"
+              >
+                <span>EXPLORAR EVO</span>
+                <ArrowRight className="w-4 h-4 text-black" />
+              </button>
 
-            <EvoSecondaryInspectButton onClick={() => handleScrollTo('como-funciona')}>
-              CÓMO FUNCIONA EL MÉTODO
-            </EvoSecondaryInspectButton>
-          </div>
-
-          {/* Value Props Micro-Bar */}
-          <div className="pt-8 grid grid-cols-2 sm:grid-cols-4 gap-3 text-[11px] font-mono-tech text-zinc-400 max-w-3xl mx-auto">
-            <div className="p-2.5 rounded-xl bg-zinc-950/60 border border-zinc-900 flex items-center justify-center gap-1.5">
-              <CheckCircle2 className="w-3.5 h-3.5 text-amber-400" />
-              <span>0 Mitos / 0 Placebos</span>
-            </div>
-            <div className="p-2.5 rounded-xl bg-zinc-950/60 border border-zinc-900 flex items-center justify-center gap-1.5">
-              <CheckCircle2 className="w-3.5 h-3.5 text-cyan-400" />
-              <span>Normas JEDEC / PCIe</span>
-            </div>
-            <div className="p-2.5 rounded-xl bg-zinc-950/60 border border-zinc-900 flex items-center justify-center gap-1.5">
-              <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
-              <span>Bancos de Hot-Swap</span>
-            </div>
-            <div className="p-2.5 rounded-xl bg-zinc-950/60 border border-zinc-900 flex items-center justify-center gap-1.5">
-              <CheckCircle2 className="w-3.5 h-3.5 text-purple-400" />
-              <span>Expediente Técnico</span>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* =========================================================================
-          2. QUÉ ES EVO // 3 PILARES FUNDAMENTALES
-         ========================================================================= */}
-      <section id="que-es-evo" className="py-20 bg-[#06080d] border-y border-zinc-900">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
-          
-          <div className="text-center max-w-3xl mx-auto space-y-3">
-            <span className="text-xs font-mono-tech text-amber-400 uppercase tracking-widest font-bold block">
-              EPISTEMOLOGÍA TÉCNICA
-            </span>
-            <h2 className="text-2xl sm:text-4xl font-display font-black text-white uppercase tracking-tight">
-              Una nueva forma de dominar las computadoras
-            </h2>
-            <p className="text-sm sm:text-base text-zinc-400 font-sans-editorial">
-              Dejá atrás los tutoriales superficiales de internet. En EVO LABS cada afirmación técnica se demuestra con mediciones físicas y esquemáticos de ingeniería.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {/* Pilar 1 */}
-            <div className="p-6 rounded-2xl bg-zinc-950/80 border border-zinc-800/80 space-y-4 hover:border-amber-400/40 transition-colors">
-              <div className="w-10 h-10 rounded-xl bg-amber-400/10 border border-amber-400/40 flex items-center justify-center text-amber-400">
-                <Cpu className="w-5 h-5" />
-              </div>
-              <h3 className="text-lg font-display font-bold text-white uppercase">
-                1. Arquitectura de Silicio
-              </h3>
-              <p className="text-xs text-zinc-400 leading-relaxed">
-                Entendé cómo interactúan realmente los núcleos de CPU, controladores de memoria (IMC), carriles PCIe, búferes L1/L2/L3 y conmutadores VRM bajo cargas extremas.
-              </p>
+              <button
+                type="button"
+                onClick={() => onExploreClick?.()}
+                className="px-6 py-3.5 rounded-xl bg-zinc-900/90 hover:bg-zinc-800 text-zinc-200 hover:text-white border border-zinc-700/80 font-bold uppercase tracking-wider transition-all cursor-pointer flex items-center gap-2"
+              >
+                <span>VER TOMOS</span>
+                <ChevronRight className="w-4 h-4 text-zinc-400" />
+              </button>
             </div>
 
-            {/* Pilar 2 */}
-            <div className="p-6 rounded-2xl bg-zinc-950/80 border border-zinc-800/80 space-y-4 hover:border-cyan-400/40 transition-colors">
-              <div className="w-10 h-10 rounded-xl bg-cyan-400/10 border border-cyan-400/40 flex items-center justify-center text-cyan-400">
-                <Terminal className="w-5 h-5" />
-              </div>
-              <h3 className="text-lg font-display font-bold text-white uppercase">
-                2. Diagnóstico de Windows
-              </h3>
-              <p className="text-xs text-zinc-400 leading-relaxed">
-                Aislá fallas reales en servicios, latencias DPC en Ring 0, compresión de memoria, paginación y cuellos de botella con la suite pericial de Sysinternals.
-              </p>
-            </div>
-
-            {/* Pilar 3 */}
-            <div className="p-6 rounded-2xl bg-zinc-950/80 border border-zinc-800/80 space-y-4 hover:border-emerald-400/40 transition-colors">
-              <div className="w-10 h-10 rounded-xl bg-emerald-400/10 border border-emerald-400/40 flex items-center justify-center text-emerald-400">
-                <Activity className="w-5 h-5" />
-              </div>
-              <h3 className="text-lg font-display font-bold text-white uppercase">
-                3. Metrología Empírica
-              </h3>
-              <p className="text-xs text-zinc-400 leading-relaxed">
-                Calculá latencias reales en nanosegundos (ns), evaluá degradación térmica con límites TjMax y obtené un expediente técnico demostrable de tus capacidades.
-              </p>
-            </div>
-          </div>
-
-        </div>
-      </section>
-
-      {/* =========================================================================
-          3. TOMOS DESTACADOS
-         ========================================================================= */}
-      <section id="tomos" className="py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
-          <div className="space-y-2">
-            <span className="text-xs font-mono-tech text-amber-400 uppercase tracking-widest font-bold block">
-              COLECCIÓN DE TOMOS PERICIALES
-            </span>
-            <h2 className="text-2xl sm:text-4xl font-display font-black text-white uppercase tracking-tight">
-              Tratados técnicos de ingeniería aplicada
-            </h2>
-          </div>
-          <span className="text-xs font-mono-tech text-zinc-500">
-            NIVEL B // METROLOGÍA PERICIAL
-          </span>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          
-          {/* Tomo 01 */}
-          <div
-            onClick={() => onOpenTomo?.('01')}
-            className="p-6 rounded-2xl bg-zinc-950 border border-amber-500/30 hover:border-amber-400 transition-all space-y-4 relative overflow-hidden flex flex-col justify-between cursor-pointer group shadow-lg"
-          >
-            <div className="space-y-3">
-              <div className="flex items-center justify-between text-[10px] font-mono-tech">
-                <span className="px-2 py-0.5 rounded bg-amber-400/20 text-amber-300 font-bold border border-amber-400/40">TOMO 01</span>
-                <span className="text-emerald-400 font-bold">PUBLICADO // LECTOR ACTIVO</span>
-              </div>
-              <h3 className="text-xl font-display font-bold text-white uppercase group-hover:text-amber-300 transition-colors">
-                Conocé tu PC
-              </h3>
-              <p className="text-xs text-zinc-400 leading-relaxed font-sans-editorial">
-                Arquitectura del procesador, microcódigo, límites térmicos TjMax, topología de memoria RAM e interconexión PCIe Gen 4/5.
-              </p>
-            </div>
-            <div className="pt-4 border-t border-zinc-900 flex items-center justify-between text-xs font-mono-tech text-zinc-400">
-              <span>7 Capítulos + Lab Hot-Swap</span>
-              <span className="text-amber-400 font-bold">ENTRAR AL TOMO →</span>
-            </div>
-          </div>
-
-          {/* Tomo 02 */}
-          <div
-            onClick={() => onOpenTomo?.('02')}
-            className="p-6 rounded-2xl bg-zinc-950 border border-cyan-500/30 hover:border-cyan-400 transition-all space-y-4 relative overflow-hidden flex flex-col justify-between cursor-pointer group shadow-lg"
-          >
-            <div className="space-y-3">
-              <div className="flex items-center justify-between text-[10px] font-mono-tech">
-                <span className="px-2 py-0.5 rounded bg-cyan-400/20 text-cyan-300 font-bold border border-cyan-400/40">TOMO 02</span>
-                <span className="text-emerald-400 font-bold">PUBLICADO // LECTOR ACTIVO</span>
-              </div>
-              <h3 className="text-xl font-display font-bold text-white uppercase group-hover:text-cyan-300 transition-colors">
-                La Biblia Negra de Windows
-              </h3>
-              <p className="text-xs text-zinc-400 leading-relaxed font-sans-editorial">
-                Despliegue limpio, arquitectura de servicios svchost, aislamiento de telemetría SysMain, memoria comprimida y Sysinternals.
-              </p>
-            </div>
-            <div className="pt-4 border-t border-zinc-900 flex items-center justify-between text-xs font-mono-tech text-zinc-400">
-              <span>12 Módulos + Lab Servicios</span>
-              <span className="text-cyan-400 font-bold">ENTRAR AL TOMO →</span>
-            </div>
-          </div>
-
-          {/* Tomo 03 */}
-          <div
-            onClick={() => onOpenTomo?.('03')}
-            className="p-6 rounded-2xl bg-zinc-950 border border-emerald-500/30 hover:border-emerald-400 transition-all space-y-4 relative overflow-hidden flex flex-col justify-between cursor-pointer group shadow-lg"
-          >
-            <div className="space-y-3">
-              <div className="flex items-center justify-between text-[10px] font-mono-tech">
-                <span className="px-2 py-0.5 rounded bg-emerald-400/20 text-emerald-300 font-bold border border-emerald-400/40">TOMO 03</span>
-                <span className="text-emerald-400 font-bold">PUBLICADO // LECTOR ACTIVO</span>
-              </div>
-              <h3 className="text-xl font-display font-bold text-white uppercase group-hover:text-emerald-300 transition-colors">
-                Reparación de PC
-              </h3>
-              <p className="text-xs text-zinc-400 leading-relaxed font-sans-editorial">
-                Metodología pericial deductiva, aislamiento de causa raíz y descarte de banco en escritorios.
-              </p>
-            </div>
-            <div className="pt-4 border-t border-zinc-900 flex items-center justify-between text-xs font-mono-tech text-zinc-400">
-              <span>Bancos de Diagnóstico</span>
-              <span className="text-emerald-400 font-bold">ENTRAR AL TOMO →</span>
-            </div>
-          </div>
-
-          {/* Tomo 04 */}
-          <div
-            onClick={() => onOpenTomo?.('04')}
-            className="p-6 rounded-2xl bg-zinc-950 border border-purple-500/30 hover:border-purple-400 transition-all space-y-4 relative overflow-hidden flex flex-col justify-between cursor-pointer group shadow-lg"
-          >
-            <div className="space-y-3">
-              <div className="flex items-center justify-between text-[10px] font-mono-tech">
-                <span className="px-2 py-0.5 rounded bg-purple-400/20 text-purple-300 font-bold border border-purple-400/40">TOMO 04</span>
-                <span className="text-emerald-400 font-bold">PUBLICADO // LECTOR ACTIVO</span>
-              </div>
-              <h3 className="text-xl font-display font-bold text-white uppercase group-hover:text-purple-300 transition-colors">
-                Reparación de Notebooks
-              </h3>
-              <p className="text-xs text-zinc-400 leading-relaxed font-sans-editorial">
-                Microelectrónica, esquemáticos, circuitos de carga y fuentes de alimentación para portátiles.
-              </p>
-            </div>
-            <div className="pt-4 border-t border-zinc-900 flex items-center justify-between text-xs font-mono-tech text-zinc-400">
-              <span>Esquemáticos & DC-DC</span>
-              <span className="text-purple-400 font-bold">ENTRAR AL TOMO →</span>
-            </div>
-          </div>
-
-          {/* Tomo 08 */}
-          <div
-            onClick={() => onOpenTomo?.('08')}
-            className="p-6 rounded-2xl bg-zinc-950 border border-emerald-500/30 hover:border-emerald-400 transition-all space-y-4 relative overflow-hidden flex flex-col justify-between cursor-pointer group shadow-lg"
-          >
-            <div className="space-y-3">
-              <div className="flex items-center justify-between text-[10px] font-mono-tech">
-                <span className="px-2 py-0.5 rounded bg-emerald-400/20 text-emerald-300 font-bold border border-emerald-400/40">TOMO 08</span>
-                <span className="text-emerald-400 font-bold">PUBLICADO // LECTOR ACTIVO</span>
-              </div>
-              <h3 className="text-xl font-display font-bold text-white uppercase group-hover:text-emerald-300 transition-colors">
-                Arranque y Diagnóstico
-              </h3>
-              <p className="text-xs text-zinc-400 leading-relaxed font-sans-editorial">
-                Secuencia POST, UEFI, tablas GPT/MBR y banco de 35 estados de fallo.
-              </p>
-            </div>
-            <div className="pt-4 border-t border-zinc-900 flex items-center justify-between text-xs font-mono-tech text-zinc-400">
-              <span>Banco de 35 Fallos POST</span>
-              <span className="text-emerald-400 font-bold">ENTRAR AL TOMO →</span>
-            </div>
-          </div>
-
-        </div>
-      </section>
-
-      {/* =========================================================================
-          4. LABORATORIOS INTERACTIVOS (DEMOS & SIMULACIÓN)
-         ========================================================================= */}
-      <section id="laboratorios" className="py-20 bg-[#06080d] border-y border-zinc-900">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
-          
-          <div className="text-center max-w-3xl mx-auto space-y-3">
-            <span className="text-xs font-mono-tech text-cyan-400 uppercase tracking-widest font-bold block">
-              BANCOS DE PRUEBA PERICIALES // MODELO CONCEPTUAL
-            </span>
-            <h2 className="text-2xl sm:text-4xl font-display font-black text-white uppercase tracking-tight">
-              Aprender practicando, no memorizando
-            </h2>
-            <p className="text-sm text-zinc-400 font-sans-editorial">
-              Los laboratorios de EVO simulan las leyes físicas y lógicas del hardware para que puedas experimentar sin riesgo de dañar componentes reales.
-            </p>
-            <div className="pt-1">
-              <span className="text-[10px] font-mono-tech text-zinc-400 border border-zinc-800 bg-zinc-950 px-3 py-1 rounded-full inline-block">
-                NOTA: Los esquemáticos y cálculos en esta sección son simulaciones demostrativas con fines pedagógicos.
+            {/* Micro-especificación de rigor */}
+            <div className="pt-2 flex items-center gap-4 text-xs font-mono-tech text-zinc-500">
+              <span className="flex items-center gap-1.5">
+                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+                <span>Normas JEDEC & PCIe</span>
+              </span>
+              <span>·</span>
+              <span className="flex items-center gap-1.5">
+                <CheckCircle2 className="w-3.5 h-3.5 text-cyan-400" />
+                <span>Metrología en nanosegundos</span>
               </span>
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div className="p-6 rounded-2xl bg-zinc-950 border border-zinc-800 space-y-4">
-              <div className="flex items-center justify-between text-xs font-mono-tech">
-                <span className="text-amber-400 font-bold flex items-center gap-2">
-                  <Zap className="w-4 h-4" />
-                  HOT-SWAP DE SILICIO
-                </span>
-                <span className="text-[10px] text-zinc-400 border border-zinc-800 px-2 py-0.5 rounded">SIMULACIÓN DE BANCO</span>
+          {/* Columna Derecha: UNA sola pieza visual fuerte */}
+          <div className="lg:col-span-5 relative">
+            <div className="relative rounded-2xl overflow-hidden border border-zinc-800/90 bg-[#0c0e14] shadow-2xl">
+              <img
+                src={hardwareSculpture}
+                alt="EVO Labs Arquitectura de Computadoras"
+                className="w-full h-80 sm:h-96 lg:h-[420px] object-cover object-center filter saturate-110 contrast-105"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#07080c] via-transparent to-transparent opacity-80" />
+              
+              {/* Micro-badge técnico sobreimpreso */}
+              <div className="absolute bottom-4 left-4 right-4 p-3 rounded-xl bg-black/85 backdrop-blur-md border border-zinc-800/80 flex items-center justify-between font-mono-tech text-xs">
+                <div className="flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" />
+                  <span className="text-zinc-200 font-bold uppercase text-[11px]">MOTOR PERICIAL</span>
+                </div>
+                <span className="text-[10px] text-zinc-400 uppercase">TELEMETRÍA VERIFICADA</span>
               </div>
-              <h3 className="text-xl font-display font-bold text-white uppercase">
-                Cálculo de Latencia Real en Nanosegundos (ns)
-              </h3>
-              <p className="text-xs text-zinc-400 leading-relaxed font-sans-editorial">
-                Modificá frecuencias y latencias CAS (CL) de memoria RAM para visualizar la fórmula exacta de acceso `(CL * 2000) / MT/s`, detectar bifurcaciones de carril PCIe y predecir thermal throttling. Cada Tomo incluye sus laboratorios correspondientes.
-              </p>
-            </div>
-
-            <div className="p-6 rounded-2xl bg-zinc-950 border border-zinc-800 space-y-4">
-              <div className="flex items-center justify-between text-xs font-mono-tech">
-                <span className="text-cyan-400 font-bold flex items-center gap-2">
-                  <Terminal className="w-4 h-4" />
-                  MATRIZ FORENSE DE WINDOWS
-                </span>
-                <span className="text-[10px] text-zinc-400 border border-zinc-800 px-2 py-0.5 rounded">SIMULACIÓN DE BANCO</span>
-              </div>
-              <h3 className="text-xl font-display font-bold text-white uppercase">
-                Telemetría y Diagnóstico de Servicios
-              </h3>
-              <p className="text-xs text-zinc-400 leading-relaxed font-sans-editorial">
-                Inspeccioná procesos en tiempo real, evaluá el impacto de SysMain, descubrí por qué los optimizadores placebo rompen dependencias y aprendé a auditar mediante PowerShell pericial.
-              </p>
             </div>
           </div>
 
-        </div>
-      </section>
+        </section>
 
-      {/* =========================================================================
-          5. CÓMO FUNCIONA // EL MÉTODO PERICIAL
-         ========================================================================= */}
-      <section id="como-funciona" className="py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
-        <div className="text-center max-w-3xl mx-auto space-y-3">
-          <span className="text-xs font-mono-tech text-amber-400 uppercase tracking-widest font-bold block">
-            EVO METHOD
-          </span>
-          <h2 className="text-2xl sm:text-4xl font-display font-black text-white uppercase tracking-tight">
-            El método pericial de 5 pilares
-          </h2>
-          <p className="text-xs font-mono-tech text-zinc-400">
-            Resumen operativo de las 9 etapas oficiales de investigación técnica.
-          </p>
-        </div>
+        {/* =========================================================================
+            02 // QUÉ ES EVO LABS (DOS COLUMNAS LIMPIAS // 3 CONCEPTOS)
+           ========================================================================= */}
+        <section className="border-t border-zinc-800/70 pt-16 sm:pt-20">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-start">
+            
+            {/* Columna Izquierda: Mensaje y Filosofía */}
+            <div className="lg:col-span-5 space-y-4 text-left">
+              <span className="font-mono-tech text-xs tracking-widest uppercase font-bold text-amber-400 block">
+                PROPUESTA TÉCNICA
+              </span>
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-display font-black text-white uppercase tracking-tight leading-tight">
+                EVOLUCIÓN EN SISTEMAS INFORMÁTICOS
+              </h2>
+              <p className="font-sans-editorial text-zinc-300 text-sm sm:text-base leading-relaxed">
+                EVO LABS combina contenido editorial, laboratorios interactivos y herramientas técnicas para aprender comprobando.
+              </p>
+            </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-5 gap-3 text-center font-mono-tech text-xs">
-          <div className="p-4 rounded-xl bg-zinc-950 border border-zinc-800 space-y-2">
-            <div className="font-bold text-amber-400">1. ENTENDER</div>
-            <p className="text-[11px] text-zinc-400 font-sans-editorial">Fundamentos de arquitectura y señales.</p>
-          </div>
-          <div className="p-4 rounded-xl bg-zinc-950 border border-zinc-800 space-y-2">
-            <div className="font-bold text-cyan-400">2. OBSERVAR</div>
-            <p className="text-[11px] text-zinc-400 font-sans-editorial">Esquemáticos de silicio y flujo de buses.</p>
-          </div>
-          <div className="p-4 rounded-xl bg-zinc-950 border border-zinc-800 space-y-2">
-            <div className="font-bold text-emerald-400">3. PRACTICAR</div>
-            <p className="text-[11px] text-zinc-400 font-sans-editorial">Laboratorios guiados sin dañar hardware.</p>
-          </div>
-          <div className="p-4 rounded-xl bg-zinc-950 border border-zinc-800 space-y-2">
-            <div className="font-bold text-purple-400">4. DIAGNOSTICAR</div>
-            <p className="text-[11px] text-zinc-400 font-sans-editorial">Descarte pericial de hipótesis erróneas.</p>
-          </div>
-          <div className="p-4 rounded-xl bg-zinc-950 border border-zinc-800 space-y-2">
-            <div className="font-bold text-teal-400">5. COMPROBAR</div>
-            <p className="text-[11px] text-zinc-400 font-sans-editorial">Evidencia técnica con procedencia real.</p>
-          </div>
-        </div>
+            {/* Columna Derecha: 3 Conceptos Concisos */}
+            <div className="lg:col-span-7 space-y-6 text-left">
+              
+              {/* Concepto 1: APRENDER */}
+              <div className="flex items-start gap-4 p-4 rounded-xl bg-zinc-950/40 border border-zinc-850 hover:border-zinc-700 transition-colors">
+                <div className="w-10 h-10 rounded-lg bg-amber-400/10 border border-amber-400/30 flex items-center justify-center text-amber-400 shrink-0 mt-0.5">
+                  <BookOpen className="w-5 h-5" />
+                </div>
+                <div className="space-y-1">
+                  <h3 className="font-display font-bold text-base text-white uppercase tracking-wider">
+                    APRENDER
+                  </h3>
+                  <p className="text-xs sm:text-sm text-zinc-400 font-sans-editorial leading-relaxed">
+                    Fundamentos de ingeniería sin relleno comercial: arquitectura de silicio, buses PCIe y sistemas operativos desde la física y la lógica de componentes.
+                  </p>
+                </div>
+              </div>
 
-        {/* Trazabilidad de Descargas Concept Box */}
-        <div className="p-5 rounded-2xl bg-zinc-950/60 border border-zinc-800 max-w-3xl mx-auto font-mono-tech text-xs space-y-2">
-          <div className="flex items-center gap-2 text-amber-400 font-bold">
-            <Shield className="w-4 h-4" />
-            <span>TRAZABILIDAD DE LICENCIA & MARCA DE AGUA PERSONALIZADA</span>
-          </div>
-          <p className="text-zinc-400 font-sans-editorial text-xs leading-relaxed">
-            Las futuras descargas técnicas en formato PDF contarán con marca de agua pericial personalizada que incluye identificador de licencia, nombre de usuario y fecha de emisión para uso personal e individual.
-          </p>
-        </div>
-      </section>
+              {/* Concepto 2: PRACTICAR */}
+              <div className="flex items-start gap-4 p-4 rounded-xl bg-zinc-950/40 border border-zinc-850 hover:border-zinc-700 transition-colors">
+                <div className="w-10 h-10 rounded-lg bg-cyan-400/10 border border-cyan-400/30 flex items-center justify-center text-cyan-400 shrink-0 mt-0.5">
+                  <Zap className="w-5 h-5" />
+                </div>
+                <div className="space-y-1">
+                  <h3 className="font-display font-bold text-base text-white uppercase tracking-wider">
+                    PRACTICAR
+                  </h3>
+                  <p className="text-xs sm:text-sm text-zinc-400 font-sans-editorial leading-relaxed">
+                    Bancos interactivos de prueba y simuladores de hardware donde podés aislar fallas de arranque y procesos de kernel sin riesgo de romper equipamiento real.
+                  </p>
+                </div>
+              </div>
 
-      {/* =========================================================================
-          6. MODELO COMERCIAL OFICIAL (COMPRA PERMANENTE + EVO COMPLETE)
-         ========================================================================= */}
-      <section id="planes" className="py-20 bg-[#06080d] border-y border-zinc-900">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+              {/* Concepto 3: COMPROBAR */}
+              <div className="flex items-start gap-4 p-4 rounded-xl bg-zinc-950/40 border border-zinc-850 hover:border-zinc-700 transition-colors">
+                <div className="w-10 h-10 rounded-lg bg-emerald-400/10 border border-emerald-400/30 flex items-center justify-center text-emerald-400 shrink-0 mt-0.5">
+                  <Activity className="w-5 h-5" />
+                </div>
+                <div className="space-y-1">
+                  <h3 className="font-display font-bold text-base text-white uppercase tracking-wider">
+                    COMPROBAR
+                  </h3>
+                  <p className="text-xs sm:text-sm text-zinc-400 font-sans-editorial leading-relaxed">
+                    Medición metrológica en nanosegundos, telemetría determinística y expedientes técnicos auditables para respaldar cada diagnóstico con evidencia real.
+                  </p>
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+        </section>
+
+        {/* =========================================================================
+            03 // TRES FORMAS DE USAR EVO (TRES PUERTAS DE ENTRADA // MÁXIMO 3 CARDS)
+           ========================================================================= */}
+        <section className="space-y-8 text-left">
           
-          <div className="text-center max-w-3xl mx-auto space-y-3">
-            <span className="text-xs font-mono-tech text-amber-400 uppercase tracking-widest font-bold block">
-              MODELOS DE VENTA OFICIALES
+          <div className="space-y-2">
+            <span className="font-mono-tech text-xs tracking-widest uppercase font-bold text-cyan-400 block">
+              TRES PUERTAS DE ENTRADA
             </span>
-            <h2 className="text-2xl sm:text-4xl font-display font-black text-white uppercase tracking-tight">
-              Elegí cómo acceder a EVO LABS
+            <h2 className="text-3xl sm:text-4xl font-display font-black text-white uppercase tracking-tight">
+              TRES FORMAS DE USAR EVO LABS
             </h2>
-            <p className="text-xs font-mono-tech text-zinc-400">
-              COMPRA PERMANENTE POR TOMO/PACKS O ACCESO TEMPORAL COMPLETO
+          </div>
+
+          {/* 3 Nodos compactos técnicos unidos por línea fina */}
+          <div className="relative py-2 sm:py-4">
+            <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-0 relative">
+              
+              {/* Nodo 01: APRENDER */}
+              <div
+                onMouseEnter={() => setHoveredNode(0)}
+                onMouseLeave={() => setHoveredNode(null)}
+                className="flex-1 p-5 sm:p-6 rounded-2xl bg-zinc-950/90 border border-zinc-800/80 transition-all duration-200 ease-out cursor-default select-none text-left hover:border-amber-400/60 hover:bg-zinc-900/90 hover:scale-[1.03] hover:shadow-[0_0_20px_rgba(245,158,11,0.12)] relative z-10"
+              >
+                <div className="flex items-center justify-between gap-3 mb-2">
+                  <span className="font-mono-tech text-[10px] font-bold tracking-widest text-amber-400">
+                    01
+                  </span>
+                  <span className="w-1.5 h-1.5 rounded-full bg-zinc-700/60" />
+                </div>
+                <h3 className="text-base sm:text-lg font-display font-black text-white uppercase tracking-wider">
+                  APRENDER
+                </h3>
+                <p className="font-sans-editorial text-xs text-zinc-400 mt-1 leading-snug">
+                  Tomos y contenido técnico.
+                </p>
+              </div>
+
+              {/* Conector 1: Desktop (Horizontal) */}
+              <div className="hidden md:flex items-center w-8 lg:w-16 shrink-0 px-1">
+                <div
+                  className={`h-[1px] w-full transition-all duration-200 ease-out ${
+                    hoveredNode === 0
+                      ? 'bg-amber-400/70 shadow-[0_0_8px_rgba(245,158,11,0.35)]'
+                      : hoveredNode === 1
+                      ? 'bg-cyan-400/70 shadow-[0_0_8px_rgba(6,182,212,0.35)]'
+                      : 'bg-zinc-800/80'
+                  }`}
+                />
+              </div>
+
+              {/* Conector 1: Mobile (Vertical) */}
+              <div className="md:hidden flex justify-center py-1.5">
+                <div
+                  className={`w-[1px] h-5 transition-all duration-200 ease-out ${
+                    hoveredNode === 0
+                      ? 'bg-amber-400/70 shadow-[0_0_8px_rgba(245,158,11,0.35)]'
+                      : hoveredNode === 1
+                      ? 'bg-cyan-400/70 shadow-[0_0_8px_rgba(6,182,212,0.35)]'
+                      : 'bg-zinc-800/80'
+                  }`}
+                />
+              </div>
+
+              {/* Nodo 02: PRACTICAR */}
+              <div
+                onMouseEnter={() => setHoveredNode(1)}
+                onMouseLeave={() => setHoveredNode(null)}
+                className="flex-1 p-5 sm:p-6 rounded-2xl bg-zinc-950/90 border border-zinc-800/80 transition-all duration-200 ease-out cursor-default select-none text-left hover:border-cyan-400/60 hover:bg-zinc-900/90 hover:scale-[1.03] hover:shadow-[0_0_20px_rgba(6,182,212,0.12)] relative z-10"
+              >
+                <div className="flex items-center justify-between gap-3 mb-2">
+                  <span className="font-mono-tech text-[10px] font-bold tracking-widest text-cyan-400">
+                    02
+                  </span>
+                  <span className="w-1.5 h-1.5 rounded-full bg-zinc-700/60" />
+                </div>
+                <h3 className="text-base sm:text-lg font-display font-black text-white uppercase tracking-wider">
+                  PRACTICAR
+                </h3>
+                <p className="font-sans-editorial text-xs text-zinc-400 mt-1 leading-snug">
+                  Laboratorios y simuladores.
+                </p>
+              </div>
+
+              {/* Conector 2: Desktop (Horizontal) */}
+              <div className="hidden md:flex items-center w-8 lg:w-16 shrink-0 px-1">
+                <div
+                  className={`h-[1px] w-full transition-all duration-200 ease-out ${
+                    hoveredNode === 1
+                      ? 'bg-cyan-400/70 shadow-[0_0_8px_rgba(6,182,212,0.35)]'
+                      : hoveredNode === 2
+                      ? 'bg-purple-400/70 shadow-[0_0_8px_rgba(168,85,247,0.35)]'
+                      : 'bg-zinc-800/80'
+                  }`}
+                />
+              </div>
+
+              {/* Conector 2: Mobile (Vertical) */}
+              <div className="md:hidden flex justify-center py-1.5">
+                <div
+                  className={`w-[1px] h-5 transition-all duration-200 ease-out ${
+                    hoveredNode === 1
+                      ? 'bg-cyan-400/70 shadow-[0_0_8px_rgba(6,182,212,0.35)]'
+                      : hoveredNode === 2
+                      ? 'bg-purple-400/70 shadow-[0_0_8px_rgba(168,85,247,0.35)]'
+                      : 'bg-zinc-800/80'
+                  }`}
+                />
+              </div>
+
+              {/* Nodo 03: ANALIZAR */}
+              <div
+                onMouseEnter={() => setHoveredNode(2)}
+                onMouseLeave={() => setHoveredNode(null)}
+                className="flex-1 p-5 sm:p-6 rounded-2xl bg-zinc-950/90 border border-zinc-800/80 transition-all duration-200 ease-out cursor-default select-none text-left hover:border-purple-400/60 hover:bg-zinc-900/90 hover:scale-[1.03] hover:shadow-[0_0_20px_rgba(168,85,247,0.12)] relative z-10"
+              >
+                <div className="flex items-center justify-between gap-3 mb-2">
+                  <span className="font-mono-tech text-[10px] font-bold tracking-widest text-purple-400">
+                    03
+                  </span>
+                  <span className="w-1.5 h-1.5 rounded-full bg-zinc-700/60" />
+                </div>
+                <h3 className="text-base sm:text-lg font-display font-black text-white uppercase tracking-wider">
+                  ANALIZAR
+                </h3>
+                <p className="font-sans-editorial text-xs text-zinc-400 mt-1 leading-snug">
+                  Herramientas y diagnóstico.
+                </p>
+              </div>
+
+            </div>
+          </div>
+        </section>
+
+        {/* =========================================================================
+            04 // MÉTODO EVO (LÍNEA VISUAL CONCISA // NO SECCIÓN GIGANTE)
+           ========================================================================= */}
+        <section className="space-y-6 text-left border-t border-zinc-800/70 pt-16 sm:pt-20">
+          
+          <div className="space-y-1">
+            <span className="font-mono-tech text-xs tracking-widest uppercase font-bold text-cyan-400 block">
+              MÉTODO CIENTÍFICO APLICADO
+            </span>
+            <h2 className="text-3xl sm:text-4xl font-display font-black text-white uppercase tracking-tight">
+              EL MÉTODO EVO
+            </h2>
+            <p className="text-xs sm:text-sm text-zinc-400 font-sans-editorial max-w-xl">
+              El aprendizaje técnico se consolida cuando cada hipótesis se somete a medición física y comprobación empírica.
             </p>
           </div>
 
-          {/* Grilla de 4 Opciones Comerciales */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {/* Una sola línea visual de pasos conectados */}
+          <div className="grid grid-cols-2 sm:grid-cols-5 gap-3 pt-2 font-mono-tech text-xs">
             
-            {/* 1. TOMO INDIVIDUAL */}
-            <div className="p-6 rounded-2xl bg-zinc-950 border border-zinc-800 space-y-5 flex flex-col justify-between hover:border-zinc-700 transition-colors">
-              <div className="space-y-4">
-                <div className="space-y-1">
-                  <span className="text-[10px] font-mono-tech text-emerald-400 font-bold uppercase tracking-wider block">COMPRA PERMANENTE</span>
-                  <h3 className="text-xl font-display font-bold text-white uppercase">Tomo Individual</h3>
-                </div>
-                <p className="text-xs text-zinc-400 leading-relaxed font-sans-editorial">
-                  Comprá un Tomo específico y queda en tu cuenta para siempre.
-                </p>
-                <ul className="space-y-2 text-xs text-zinc-300 font-mono-tech">
-                  <li className="flex items-center gap-2">✓ 1 Tomo Completo</li>
-                  <li className="flex items-center gap-2">✓ Labs Asociados al Tomo</li>
-                  <li className="flex items-center gap-2">✓ Examen y Certificación</li>
-                  <li className="flex items-center gap-2">✓ Actualizaciones Menores</li>
-                </ul>
-              </div>
-              <div className="pt-4 border-t border-zinc-900">
-                <span className="text-[10px] font-mono-tech text-zinc-400 block text-center font-bold">ACCESO VITALICIO</span>
-              </div>
+            <div className="p-3.5 rounded-xl bg-zinc-950/80 border border-zinc-800 space-y-1">
+              <span className="text-[10px] text-zinc-500 block">01</span>
+              <span className="font-bold text-white block">OBSERVAR</span>
+              <p className="text-[11px] text-zinc-400 font-sans-editorial">Síntoma sin prejuicio.</p>
             </div>
 
-            {/* 2. PACK x3 TOMOS */}
-            <div className="p-6 rounded-2xl bg-zinc-950 border border-zinc-800 space-y-5 flex flex-col justify-between hover:border-amber-400/40 transition-colors">
-              <div className="space-y-4">
-                <div className="space-y-1">
-                  <span className="text-[10px] font-mono-tech text-amber-400 font-bold uppercase tracking-wider block">PACK TEMÁTICO</span>
-                  <h3 className="text-xl font-display font-bold text-white uppercase">Pack x3 Tomos</h3>
-                </div>
-                <p className="text-xs text-zinc-400 leading-relaxed font-sans-editorial">
-                  3 Tomos relacionados temáticamente + todos sus laboratorios incluidos con descuento.
-                </p>
-                <ul className="space-y-2 text-xs text-zinc-300 font-mono-tech">
-                  <li className="flex items-center gap-2">✓ 3 Tomos Seleccionados</li>
-                  <li className="flex items-center gap-2">✓ Todos sus Labs Asociados</li>
-                  <li className="flex items-center gap-2">✓ Exámenes y Acreditación</li>
-                  <li className="flex items-center gap-2">✓ Ahorro por Volumen</li>
-                </ul>
-              </div>
-              <div className="pt-4 border-t border-zinc-900">
-                <span className="text-[10px] font-mono-tech text-amber-400 block text-center font-bold">ACCESO VITALICIO</span>
-              </div>
+            <div className="p-3.5 rounded-xl bg-zinc-950/80 border border-zinc-800 space-y-1">
+              <span className="text-[10px] text-zinc-500 block">02</span>
+              <span className="font-bold text-cyan-400 block">MEDIR</span>
+              <p className="text-[11px] text-zinc-400 font-sans-editorial">Instrumental real.</p>
             </div>
 
-            {/* 3. PACK x5 TOMOS */}
-            <div className="p-6 rounded-2xl bg-zinc-950 border border-zinc-800 space-y-5 flex flex-col justify-between hover:border-purple-400/40 transition-colors">
-              <div className="space-y-4">
-                <div className="space-y-1">
-                  <span className="text-[10px] font-mono-tech text-purple-400 font-bold uppercase tracking-wider block">PACK INTEGRAL</span>
-                  <h3 className="text-xl font-display font-bold text-white uppercase">Pack x5 Tomos</h3>
-                </div>
-                <p className="text-xs text-zinc-400 leading-relaxed font-sans-editorial">
-                  5 Tomos estructurados + todos sus laboratorios periciales permanentes.
-                </p>
-                <ul className="space-y-2 text-xs text-zinc-300 font-mono-tech">
-                  <li className="flex items-center gap-2">✓ 5 Tomos Estructurados</li>
-                  <li className="flex items-center gap-2">✓ Suite de Labs Incluida</li>
-                  <li className="flex items-center gap-2">✓ Casos Forenses Guiados</li>
-                  <li className="flex items-center gap-2">✓ Máximo Ahorro en Pack</li>
-                </ul>
-              </div>
-              <div className="pt-4 border-t border-zinc-900">
-                <span className="text-[10px] font-mono-tech text-purple-400 block text-center font-bold">ACCESO VITALICIO</span>
-              </div>
+            <div className="p-3.5 rounded-xl bg-zinc-950/80 border border-zinc-800 space-y-1">
+              <span className="text-[10px] text-zinc-500 block">03</span>
+              <span className="font-bold text-amber-400 block">EXPERIMENTAR</span>
+              <p className="text-[11px] text-zinc-400 font-sans-editorial">Cambio controlado.</p>
             </div>
 
-            {/* 4. EVO COMPLETE (ACCESO TEMPORAL) */}
-            <div className="p-6 rounded-2xl bg-zinc-950 border border-cyan-500/40 space-y-5 flex flex-col justify-between relative shadow-[0_0_25px_rgba(6,182,212,0.08)]">
-              <div className="space-y-4">
-                <div className="space-y-1">
-                  <div className="flex justify-between items-center">
-                    <span className="text-[10px] font-mono-tech text-cyan-400 font-bold uppercase tracking-wider">ALL ACCESS TEMPORAL</span>
-                    <span className="px-1.5 py-0.2 rounded bg-cyan-400/20 text-cyan-300 text-[8.5px] font-bold border border-cyan-400/40">COMPLETO</span>
-                  </div>
-                  <h3 className="text-xl font-display font-bold text-white uppercase">EVO Complete</h3>
-                </div>
-                <p className="text-xs text-zinc-400 leading-relaxed font-sans-editorial">
-                  Accedé a todo el catálogo publicado por tiempo determinado (1, 3, 6 o 12 meses).
-                </p>
-                <ul className="space-y-2 text-xs text-zinc-300 font-mono-tech">
-                  <li className="flex items-center gap-2">✓ Todos los Tomos Publicados</li>
-                  <li className="flex items-center gap-2">✓ Suite Completa de Labs</li>
-                  <li className="flex items-center gap-2">✓ Duración: 1 / 3 / 6 / 12 Meses</li>
-                  <li className="flex items-center gap-2 text-emerald-400 text-[11px]">✓ Nunca borra tu progreso</li>
-                </ul>
-              </div>
-              <div className="pt-4 border-t border-zinc-900">
-                <span className="text-[10px] font-mono-tech text-cyan-400 block text-center font-bold">1 / 3 / 6 / 12 MESES</span>
-              </div>
+            <div className="p-3.5 rounded-xl bg-zinc-950/80 border border-zinc-800 space-y-1">
+              <span className="text-[10px] text-zinc-500 block">04</span>
+              <span className="font-bold text-purple-400 block">COMPARAR</span>
+              <p className="text-[11px] text-zinc-400 font-sans-editorial">Contra línea de base.</p>
+            </div>
+
+            <div className="p-3.5 rounded-xl bg-zinc-950/80 border border-zinc-800 space-y-1 col-span-2 sm:col-span-1">
+              <span className="text-[10px] text-zinc-500 block">05</span>
+              <span className="font-bold text-emerald-400 block">CONCLUIR</span>
+              <p className="text-[11px] text-zinc-400 font-sans-editorial">Evidencia inmutable.</p>
             </div>
 
           </div>
 
-          {/* Banner de Integridad Educativa */}
-          <div className="p-4 rounded-xl bg-zinc-950/80 border border-zinc-800 text-center font-mono-tech text-xs text-zinc-400 max-w-3xl mx-auto">
-            <span className="text-white font-bold">GARANTÍA DE INTEGRIDAD DE PROGRESO:</span> Al finalizar un período temporal de EVO Complete, tu progreso educativo, evidencias periciales y exámenes superados permanecen intactos, conservando el acceso a cualquier tomo comprado individualmente.
-          </div>
+        </section>
 
-        </div>
-      </section>
-
-      {/* =========================================================================
-          7. FAQ // PREGUNTAS FRECUENTES
-         ========================================================================= */}
-      <section id="faq" className="py-20 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
-        <div className="text-center space-y-3">
-          <span className="text-xs font-mono-tech text-amber-400 uppercase tracking-widest font-bold block">
-            PREGUNTAS FRECUENTES
-          </span>
-          <h2 className="text-2xl sm:text-4xl font-display font-black text-white uppercase tracking-tight">
-            Claridad técnica y comercial
-          </h2>
-        </div>
-
-        <div className="space-y-3 font-sans-editorial">
-          {[
-            {
-              q: '¿Qué diferencia a EVO LABS de cursos tradicionales de reparación o informática?',
-              a: 'EVO LABS no enseña recetas fijas ni "trucos mágicos". Se fundamenta en arquitectura de silicio, estándares JEDEC/PCI-SIG, herramientas de diagnóstico pericial (Sysinternals) y simuladores donde podés medir latencias y fallas en tiempo real.',
-            },
-            {
-              q: '¿Los laboratorios interactivos vienen incluidos al comprar un Tomo?',
-              a: 'Sí. Cada Tomo comprado de forma individual o en Pack incluye automáticamente todos sus laboratorios y simuladores asociados de forma permanente. No hay microcompras separadas por laboratorio.',
-            },
-            {
-              q: '¿Qué ocurre con mi progreso si vence mi acceso temporal de EVO Complete?',
-              a: 'Tu progreso de aprendizaje, capítulos completados, evidencias técnicas y exámenes nunca se borran. Además, conservás el acceso a cualquier Tomo adquirido previamente de forma permanente.',
-            },
-            {
-              q: '¿Los laboratorios interactivos dañan mi computadora?',
-              a: 'No. Los laboratorios operan dentro de modelos de simulación técnica de alta fidelidad que se ejecutan en el entorno seguro de tu navegador web.',
-            },
-            {
-              q: '¿Cómo funciona la acreditación pericial?',
-              a: 'A medida que completás capítulos, superás exámenes prácticos y resolvés casos forenses, el Evidence Engine genera un expediente técnico local con trazabilidad completa de tus competencias demostradas.',
-            },
-          ].map((item, idx) => {
-            const isOpen = openFaqIndex === idx;
-            return (
-              <div key={idx} className="rounded-xl bg-zinc-950 border border-zinc-800/80 overflow-hidden transition-colors">
-                <button
-                  type="button"
-                  onClick={() => toggleFaq(idx)}
-                  className="w-full p-4 sm:p-5 text-left flex items-center justify-between gap-4 cursor-pointer focus:outline-none focus:ring-1 focus:ring-amber-400"
-                  aria-expanded={isOpen}
-                >
-                  <span className="text-sm sm:text-base font-bold text-white">{item.q}</span>
-                  <ChevronDown className={`w-4 h-4 text-zinc-400 shrink-0 transition-transform duration-200 ${isOpen ? 'rotate-180 text-amber-400' : ''}`} />
-                </button>
-                {isOpen && (
-                  <div className="px-4 sm:px-5 pb-5 text-xs sm:text-sm text-zinc-400 leading-relaxed border-t border-zinc-900 pt-3">
-                    {item.a}
-                  </div>
-                )}
-              </div>
-            );
-          })}
-        </div>
-      </section>
-
-      {/* =========================================================================
-          8. CTA FINAL
-         ========================================================================= */}
-      <section className="py-20 bg-gradient-to-b from-zinc-950 to-[#05070a] border-t border-zinc-900 text-center px-4">
-        <div className="max-w-3xl mx-auto space-y-6">
-          <h2 className="text-3xl sm:text-5xl font-display font-black text-white uppercase tracking-tight">
-            Comenzá tu evolución técnica hoy
-          </h2>
-          <p className="text-sm sm:text-base text-zinc-400 font-sans-editorial">
-            Sumate al estándar pericial de EVO LABS. Diagnósticos con evidencia, sin mitos ni placebos.
-          </p>
-          <div className="pt-2 flex justify-center">
-            <EvoPrimarySystemButton onClick={() => onExploreClick?.()}>
-              EXPLORAR EL CATÁLOGO COMPLETO →
-            </EvoPrimarySystemButton>
-          </div>
-        </div>
-      </section>
-
+      </div>
     </div>
   );
 };
