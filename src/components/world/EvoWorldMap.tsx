@@ -4,6 +4,7 @@ import {
   UserHardwarePassport,
   EvoNarrativeProfile,
 } from '../../types';
+import { executeToolById, executeTomoById } from '../../utils/evoToolRouter';
 import { ForensicBenchTarget } from '../common/EvoTomoDossierModal';
 import { EVO_WORLD_ZONES } from '../../data/evoWorldData';
 import { VOLUMES_COLLECTION } from '../../data/collections';
@@ -121,7 +122,7 @@ export interface EvoWorldMapProps {
   onChangeProfile?: (profile: EvoNarrativeProfile) => void;
   onOpenTomo?: (tomoId: '01' | '02' | '03' | '04' | '08') => void;
   onNavigateBootLab?: () => void;
-  onNavigateHotSwapLab?: (panel?: 'sandbox' | 'hardware' | 'software' | 'telemetry' | 'all' | 'memory' | 'storage' | 'expansion' | 'silicon') => void;
+  onNavigateHotSwapLab?: (panel?: 'sandbox' | 'hardware' | 'software' | 'telemetry' | 'matrix' | 'all') => void;
   onNavigateWindowsMatrixLab?: (scenario?: string) => void;
   onNavigateLabCore?: () => void;
   onOpenForensicBench?: (target: ForensicBenchTarget) => void;
@@ -719,12 +720,14 @@ export const EvoWorldMap: React.FC<EvoWorldMapProps> = ({
 
   // Handler universal para abrir un tomo
   const handleOpenTomoDirectly = (tomoNumber: string) => {
-    if (tomoNumber === '01' && onOpenTomo) onOpenTomo('01');
-    else if (tomoNumber === '02' && onOpenTomo) onOpenTomo('02');
-    else if (tomoNumber === '03' && onOpenTomo) onOpenTomo('03');
-    else if (tomoNumber === '04' && onOpenTomo) onOpenTomo('04');
-    else if (tomoNumber === '08' && onOpenTomo) onOpenTomo('08');
-    else if (onOpenDossier) onOpenDossier(`tomo-${tomoNumber}`);
+    executeTomoById(tomoNumber, {
+      setCurrentView: (v) => {
+        if (onOpenTomo) onOpenTomo(tomoNumber as any);
+      },
+      openDossierModal: (tId) => {
+        if (onOpenDossier) onOpenDossier(tId);
+      },
+    });
   };
 
   // Handler para ejecutar el laboratorio desde la ficha o modal
@@ -732,9 +735,9 @@ export const EvoWorldMap: React.FC<EvoWorldMapProps> = ({
     if (actionKey === 'boot-lab' && onNavigateBootLab) {
       onNavigateBootLab();
     } else if (actionKey === 'hardware' && onNavigateHotSwapLab) {
-      onNavigateHotSwapLab((subParam as any) || 'hardware');
+      onNavigateHotSwapLab('hardware');
     } else if (actionKey === 'silicon' && onNavigateHotSwapLab) {
-      onNavigateHotSwapLab('memory');
+      onNavigateHotSwapLab('hardware');
     } else if ((actionKey === 'software-kernel' || actionKey === 'windows-matrix') && onNavigateWindowsMatrixLab) {
       onNavigateWindowsMatrixLab(subParam || 'services');
     } else if (actionKey === 'operaciones') {
@@ -761,66 +764,43 @@ export const EvoWorldMap: React.FC<EvoWorldMapProps> = ({
     }
   };
 
-  // Master Tool execution handler covering all 34 tools without dead clicks
+  // Master Tool execution handler routing all 34 tools BY TOOL.ID using canonical router
   const handleExecuteMasterTool = (tool: EvoToolDefinition) => {
-    if (tool.actionKey === 'boot-lab') {
-      if (onNavigateBootLab) onNavigateBootLab();
-      else handleOpenTomoDirectly('08');
-    } else if (tool.actionKey === 'hardware') {
-      if (onNavigateHotSwapLab) onNavigateHotSwapLab((tool.subParam as any) || 'hardware');
-    } else if (tool.actionKey === 'silicon') {
-      if (onNavigateHotSwapLab) onNavigateHotSwapLab('memory');
-    } else if (tool.actionKey === 'software-kernel' || tool.actionKey === 'windows-matrix') {
-      if (onNavigateWindowsMatrixLab) onNavigateWindowsMatrixLab(tool.subParam || 'services');
-    } else if (tool.actionKey === 'metrology') {
-      if (onNavigateHotSwapLab) onNavigateHotSwapLab('telemetry');
-      else {
-        setActiveIntention('diagnosticar');
-        setDiagnoseTab('simuladores');
-      }
-    } else if (tool.actionKey === 'telemetry') {
-      if (onNavigateHotSwapLab) onNavigateHotSwapLab('telemetry');
-      else {
-        setActiveIntention('diagnosticar');
-        setDiagnoseTab('consola');
-      }
-    } else if (tool.actionKey === 'consola') {
-      setActiveIntention('diagnosticar');
-      setDiagnoseTab('consola');
-    } else if (tool.actionKey === 'operaciones') {
-      if (tool.subParam === 'pcb') {
-        setActiveIntention('diagnosticar');
-        setDiagnoseTab('pcb');
-      } else {
-        setActiveIntention('diagnosticar');
-        setDiagnoseTab('sectores');
-      }
-    } else if (tool.actionKey === 'core') {
-      if (onNavigateLabCore) onNavigateLabCore();
-      else setActiveIntention('diagnosticar');
-    } else if (tool.actionKey === 'autodetect') {
-      setIsAutoDetectOpen(true);
-    } else if (tool.actionKey === 'forensic-report') {
-      setIsForensicReportOpen(true);
-    } else if (tool.actionKey === 'digital-twin') {
-      setIsDigitalTwinOpen(true);
-    } else if (tool.actionKey === 'case-resolver') {
-      setIsCaseResolverOpen(true);
-    } else if (tool.actionKey === 'content-factory') {
-      setIsContentFactoryOpen(true);
-    } else if (tool.actionKey === 'transfer-challenge') {
-      setIsTransferModalOpen(true);
-    } else if (tool.actionKey === 'coverage-matrix') {
-      if (onOpenCoverageDashboard) onOpenCoverageDashboard();
-      else if (onNavigateLabCore) onNavigateLabCore();
-      else setActiveIntention('diagnosticar');
-    } else if (tool.actionKey === 'telemetry-integrity') {
-      if (onOpenLiveScanAudit) onOpenLiveScanAudit();
-      else if (onNavigateLabCore) onNavigateLabCore();
-      else setActiveIntention('diagnosticar');
-    } else {
-      setActiveIntention('diagnosticar');
-    }
+    executeToolById(tool.id, {
+      setCurrentView: (view) => {
+        if (view === 'boot-lab' && onNavigateBootLab) onNavigateBootLab();
+        else if (view === 'hotswap-lab' && onNavigateHotSwapLab) onNavigateHotSwapLab('hardware');
+        else if (view === 'windows-matrix-lab' && onNavigateWindowsMatrixLab) onNavigateWindowsMatrixLab();
+        else if (view === 'lab-core' && onNavigateLabCore) onNavigateLabCore();
+        else setActiveIntention('diagnosticar');
+      },
+      setCampusSection: (sec) => setActiveIntention(sec),
+      setActiveLabPanel: (panel) => {
+        if (onNavigateHotSwapLab) onNavigateHotSwapLab(panel);
+      },
+      setLabCorePhase: (phase) => {
+        if (onNavigateLabCore) onNavigateLabCore(phase as any);
+      },
+      setMatrixInitialScenario: (scenario) => {
+        if (onNavigateWindowsMatrixLab) onNavigateWindowsMatrixLab(scenario);
+      },
+      setShowDiscoveryModal: (_val) => setIsAutoDetectOpen(true),
+      setShowCoverageDashboard: (_val) => {
+        if (onOpenCoverageDashboard) onOpenCoverageDashboard();
+        else if (onNavigateLabCore) onNavigateLabCore();
+      },
+      setShowIntegrityModal: (_val) => {
+        if (onOpenLiveScanAudit) onOpenLiveScanAudit();
+      },
+      openCaseResolver: () => setIsCaseResolverOpen(true),
+      openDigitalTwin: () => setIsDigitalTwinOpen(true),
+      openForensicReport: () => setIsForensicReportOpen(true),
+      openContentFactory: () => setIsContentFactoryOpen(true),
+      openTransferChallenge: () => setIsTransferModalOpen(true),
+      openDossierModal: (tId) => {
+        if (onOpenDossier) onOpenDossier(tId);
+      },
+    });
   };
 
   return (

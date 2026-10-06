@@ -1,15 +1,7 @@
 import React, { useState } from 'react';
 import {
   Zap,
-  Cpu,
-  Monitor,
-  HardDrive,
-  Compass,
-  Boxes,
-  Layers,
-  Activity,
   Search,
-  Filter,
 } from 'lucide-react';
 
 interface EvoPublicLabsCatalogProps {

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { safeStorage } from '../../utils/safeStorage';
 import {
   ChevronLeft,
   ChevronRight,
@@ -158,10 +159,10 @@ export const Tomo02MagazineView: React.FC<Tomo02MagazineViewProps> = ({
 
   const [selectedModuleIndex, setSelectedModuleIndex] = useState<number>(0);
 
-  // Real progress state initialized from localStorage
+  // Real progress state initialized from safeStorage
   const [moduleProgress, setModuleProgress] = useState<ModuleProgressStatus>(() => {
     try {
-      const saved = localStorage.getItem('evo_tomo02_progress');
+      const saved = safeStorage.getItem('evo_tomo02_progress');
       if (saved) return JSON.parse(saved);
     } catch {
       // ignore
@@ -171,7 +172,7 @@ export const Tomo02MagazineView: React.FC<Tomo02MagazineViewProps> = ({
 
   const [hasPassedFinalExam, setHasPassedFinalExam] = useState<boolean>(() => {
     try {
-      return localStorage.getItem('evo_tomo02_completed') === 'true';
+      return safeStorage.getItem('evo_tomo02_completed') === 'true';
     } catch {
       return false;
     }
@@ -179,7 +180,7 @@ export const Tomo02MagazineView: React.FC<Tomo02MagazineViewProps> = ({
 
   const [examScore, setExamScore] = useState<number>(() => {
     try {
-      const saved = localStorage.getItem('evo_tomo02_exam_score');
+      const saved = safeStorage.getItem('evo_tomo02_exam_score');
       return saved ? parseInt(saved, 10) : 10;
     } catch {
       return 10;
@@ -195,7 +196,7 @@ export const Tomo02MagazineView: React.FC<Tomo02MagazineViewProps> = ({
       setModuleProgress((prev) => {
         const updated: ModuleProgressStatus = { ...prev, [modId]: 'in_progress' };
         try {
-          localStorage.setItem('evo_tomo02_progress', JSON.stringify(updated));
+          safeStorage.setItem('evo_tomo02_progress', JSON.stringify(updated));
         } catch {
           // ignore
         }
@@ -203,14 +204,14 @@ export const Tomo02MagazineView: React.FC<Tomo02MagazineViewProps> = ({
       });
     }
     setSubView('reader');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    try { window.scrollTo({ top: 0, behavior: 'smooth' }); } catch {}
   };
 
   const handleMarkCompleted = (moduleId: string) => {
     setModuleProgress((prev) => {
       const updated: ModuleProgressStatus = { ...prev, [moduleId]: 'completed' };
       try {
-        localStorage.setItem('evo_tomo02_progress', JSON.stringify(updated));
+        safeStorage.setItem('evo_tomo02_progress', JSON.stringify(updated));
       } catch {
         // ignore
       }
@@ -222,8 +223,8 @@ export const Tomo02MagazineView: React.FC<Tomo02MagazineViewProps> = ({
     setExamScore(score);
     setHasPassedFinalExam(true);
     try {
-      localStorage.setItem('evo_tomo02_completed', 'true');
-      localStorage.setItem('evo_tomo02_exam_score', String(score));
+      safeStorage.setItem('evo_tomo02_completed', 'true');
+      safeStorage.setItem('evo_tomo02_exam_score', String(score));
     } catch {
       // ignore
     }

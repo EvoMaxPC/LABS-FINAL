@@ -2,16 +2,13 @@ import React, { useState } from 'react';
 import {
   BookOpen,
   ArrowRight,
-  Zap,
   Search,
-  SlidersHorizontal,
   CheckCircle2,
   Lock,
-  Layers,
-  Sparkles,
-  FileSearch,
+  Clock,
 } from 'lucide-react';
 import { EVO_TOMES_EXPANDED_DATA, EvoTomeExpandedItem } from '../../data/evoTomesExpandedData';
+import { CANONICAL_TOMES, getTomeById } from '../../data/evoCatalog';
 
 interface EvoPublicTomosCatalogProps {
   onOpenTomo: (tomoNumber: string) => void;
@@ -67,14 +64,14 @@ export const EvoPublicTomosCatalog: React.FC<EvoPublicTomosCatalogProps> = ({
   });
 
   return (
-    <div className="max-w-[1240px] mx-auto w-full px-4 sm:px-6 lg:px-8 py-8 space-y-10">
+    <div className="max-w-[1240px] mx-auto w-full px-4 sm:px-6 lg:px-8 py-8 space-y-10 font-mono-tech select-none">
       
       {/* HEADER EDITORIAL DEL CATÁLOGO */}
       <div className="space-y-3 text-center sm:text-left border-b border-zinc-800 pb-6">
         <div className="flex items-center justify-center sm:justify-start gap-2">
           <BookOpen className="w-5 h-5 text-amber-400" />
           <span className="text-xs font-mono-tech tracking-widest text-amber-400 uppercase font-black">
-            CATÁLOGO OFICIAL EVO LABS
+            CATÁLOGO OFICIAL EVO LABS (10 TOMOS)
           </span>
         </div>
         <h1 className="text-3xl sm:text-5xl font-display font-black text-white uppercase tracking-tight">
@@ -100,7 +97,7 @@ export const EvoPublicTomosCatalog: React.FC<EvoPublicTomosCatalogProps> = ({
         </div>
 
         {/* Filtros por Categoría */}
-        <div className="flex items-center gap-1.5 overflow-x-auto pb-1 font-mono-tech text-xs">
+        <div className="flex items-center gap-1.5 overflow-x-auto pb-1 font-mono-tech text-xs custom-scrollbar">
           {(['ALL', 'HARDWARE', 'WINDOWS', 'REPARACION', 'REDES', 'SEGURIDAD', 'RENDIMIENTO', 'PROGRAMACION', 'IA'] as const).map((cat) => (
             <button
               key={cat}
@@ -122,14 +119,17 @@ export const EvoPublicTomosCatalog: React.FC<EvoPublicTomosCatalogProps> = ({
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4">
         {filteredTomos.map((tome) => {
           const acc = TOMO_ACCENTS[tome.number] || TOMO_ACCENTS['01'];
-          const hasActiveContent = ['01', '02', '03', '04', '08'].includes(tome.number);
+          const canonical = getTomeById(tome.number);
+          const isFullReader = canonical?.runtimeStatus === 'FULL_READER';
+          const isDossierOnly = canonical?.runtimeStatus === 'DOSSIER_ONLY';
+          const isInDev = canonical?.editorialStatus === 'IN_DEVELOPMENT' || canonical?.runtimeStatus === 'LOCKED';
 
           return (
             <div
               key={tome.id}
               className={`p-4 sm:p-5 rounded-2xl bg-zinc-950 border border-zinc-800/90 ${acc.borderColor} transition-all flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5 shadow-lg group`}
             >
-              {/* Portada Vertical */}
+              {/* Portada Vertical (Ancho 96-112px, Alto 144-160px) */}
               <div
                 onClick={() => setSelectedTomeDetail(tome)}
                 className="w-24 sm:w-28 h-36 sm:h-40 rounded-xl overflow-hidden bg-black border border-zinc-800 shrink-0 relative cursor-pointer shadow-md"
@@ -156,7 +156,7 @@ export const EvoPublicTomosCatalog: React.FC<EvoPublicTomosCatalogProps> = ({
                     TOMO {tome.number}
                   </span>
                   <span className="text-[10px] text-zinc-400 font-mono-tech font-bold uppercase">
-                    {hasActiveContent ? 'DISPONIBLE' : 'EN ROADMAP'}
+                    {isFullReader ? 'DISPONIBLE' : isDossierOnly ? 'NO DISPONIBLE' : 'EN PROCESO'}
                   </span>
                 </div>
 
@@ -174,21 +174,44 @@ export const EvoPublicTomosCatalog: React.FC<EvoPublicTomosCatalogProps> = ({
                   <span className="text-white font-bold">PRECIO A DEFINIR</span>
                 </div>
 
+                {/* CTAs estrictos según canonicalStatus */}
                 <div className="pt-2 flex flex-wrap items-center gap-2">
-                  <button
-                    type="button"
-                    onClick={() => onOpenTomo(tome.number)}
-                    className="px-4 py-2 rounded-xl bg-amber-400 hover:bg-amber-300 text-black font-mono-tech text-xs font-black uppercase tracking-wider transition-all cursor-pointer shadow-[0_0_15px_rgba(245,158,11,0.2)]"
-                  >
-                    ENTRAR AL TOMO →
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setSelectedTomeDetail(tome)}
-                    className="px-3.5 py-2 rounded-xl bg-zinc-900 hover:bg-zinc-800 text-zinc-300 font-mono-tech text-xs font-bold uppercase transition-all cursor-pointer border border-zinc-800"
-                  >
-                    VER DETALLE
-                  </button>
+                  {isFullReader ? (
+                    <button
+                      type="button"
+                      onClick={() => onOpenTomo(tome.number)}
+                      className="px-4 py-2 rounded-xl bg-amber-400 hover:bg-amber-300 text-black font-mono-tech text-xs font-black uppercase tracking-wider transition-all cursor-pointer shadow-[0_0_15px_rgba(245,158,11,0.2)]"
+                    >
+                      ENTRAR AL TOMO →
+                    </button>
+                  ) : isInDev ? (
+                    <button
+                      type="button"
+                      disabled
+                      className="px-4 py-2 rounded-xl bg-zinc-900/80 text-zinc-500 font-mono-tech text-xs font-bold uppercase border border-zinc-800/80 cursor-not-allowed flex items-center gap-1.5"
+                    >
+                      <Clock className="w-3.5 h-3.5" />
+                      <span>EN PROCESO</span>
+                    </button>
+                  ) : (
+                    <button
+                      type="button"
+                      onClick={() => setSelectedTomeDetail(tome)}
+                      className="px-4 py-2 rounded-xl bg-zinc-900 hover:bg-zinc-800 text-zinc-300 font-mono-tech text-xs font-bold uppercase border border-zinc-800 cursor-pointer"
+                    >
+                      VER DETALLE
+                    </button>
+                  )}
+
+                  {isFullReader && (
+                    <button
+                      type="button"
+                      onClick={() => setSelectedTomeDetail(tome)}
+                      className="px-3.5 py-2 rounded-xl bg-zinc-900 hover:bg-zinc-800 text-zinc-300 font-mono-tech text-xs font-bold uppercase transition-all cursor-pointer border border-zinc-800"
+                    >
+                      VER DETALLE
+                    </button>
+                  )}
                 </div>
               </div>
             </div>
@@ -196,63 +219,92 @@ export const EvoPublicTomosCatalog: React.FC<EvoPublicTomosCatalogProps> = ({
         })}
       </div>
 
-      {/* MODAL DETALLE DE TOMO */}
-      {selectedTomeDetail && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md animate-in fade-in duration-200">
-          <div className="max-w-2xl w-full rounded-2xl bg-[#0a0d14] border border-amber-400/40 p-6 shadow-2xl space-y-5 font-mono-tech max-h-[90vh] overflow-y-auto">
-            <div className="flex items-center justify-between border-b border-zinc-800 pb-3">
-              <div className="flex items-center gap-2">
-                <span className="text-xs text-amber-400 font-black">TOMO {selectedTomeDetail.number}</span>
-                <span className="text-zinc-600">/</span>
-                <h3 className="font-display font-black text-lg text-white uppercase">{selectedTomeDetail.title}</h3>
-              </div>
-              <button
-                type="button"
-                onClick={() => setSelectedTomeDetail(null)}
-                className="p-1 rounded-lg bg-zinc-900 text-zinc-400 hover:text-white cursor-pointer"
-              >
-                ✕
-              </button>
-            </div>
+      {/* MODAL DETALLE DE TOMO ESTRICTO */}
+      {selectedTomeDetail && (() => {
+        const canonical = getTomeById(selectedTomeDetail.number);
+        const isFullReader = canonical?.runtimeStatus === 'FULL_READER';
+        const isDossierOnly = canonical?.runtimeStatus === 'DOSSIER_ONLY';
+        const isInDev = canonical?.editorialStatus === 'IN_DEVELOPMENT' || canonical?.runtimeStatus === 'LOCKED';
 
-            <div className="flex flex-col sm:flex-row gap-5 items-start">
-              <div className="w-28 sm:w-32 h-44 rounded-xl overflow-hidden bg-black border border-zinc-800 shrink-0">
-                <img src={selectedTomeDetail.coverImage} alt={selectedTomeDetail.title} className="w-full h-full object-cover object-top" />
+        return (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md animate-in fade-in duration-200">
+            <div className="max-w-2xl w-full rounded-2xl bg-[#0a0d14] border border-amber-400/40 p-6 shadow-2xl space-y-5 font-mono-tech max-h-[90vh] overflow-y-auto">
+              <div className="flex items-center justify-between border-b border-zinc-800 pb-3">
+                <div className="flex items-center gap-2">
+                  <span className="text-xs text-amber-400 font-black">TOMO {selectedTomeDetail.number}</span>
+                  <span className="text-zinc-600">/</span>
+                  <h3 className="font-display font-black text-lg text-white uppercase">{selectedTomeDetail.title}</h3>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setSelectedTomeDetail(null)}
+                  className="p-1 rounded-lg bg-zinc-900 text-zinc-400 hover:text-white cursor-pointer"
+                >
+                  ✕
+                </button>
               </div>
-              <div className="space-y-3 flex-1 text-xs">
-                <div>
-                  <span className="text-[10px] text-zinc-500 uppercase font-bold block">FRASE DE VALOR</span>
-                  <p className="text-amber-300 font-sans-editorial text-sm italic">“{selectedTomeDetail.valuePhrase}”</p>
-                </div>
-                <div>
-                  <span className="text-[10px] text-zinc-500 uppercase font-bold block">TIPO DE ACCESO</span>
-                  <p className="text-zinc-300 font-sans-editorial">Compra Permanente de por vida o incluido en suscripción EVO Complete.</p>
-                </div>
-                <div>
-                  <span className="text-[10px] text-zinc-500 uppercase font-bold block">ESTADO</span>
-                  <p className="text-emerald-400 font-bold uppercase">
-                    {['01', '02', '03', '04', '08'].includes(selectedTomeDetail.number) ? 'EDICIÓN DISPONIBLE COMPLETA' : 'ROADMAP OFICIAL EN DESARROLLO'}
-                  </p>
-                </div>
-              </div>
-            </div>
 
-            <div className="pt-3 border-t border-zinc-900 flex justify-end gap-2">
-              <button
-                type="button"
-                onClick={() => {
-                  const num = selectedTomeDetail.number;
-                  setSelectedTomeDetail(null);
-                  onOpenTomo(num);
-                }}
-                className="px-5 py-2.5 rounded-xl bg-amber-400 hover:bg-amber-300 text-black text-xs font-black uppercase tracking-wider transition-all cursor-pointer"
-              >
-                ENTRAR AL TOMO →
-              </button>
+              <div className="flex flex-col sm:flex-row gap-5 items-start">
+                <div className="w-28 sm:w-32 h-44 rounded-xl overflow-hidden bg-black border border-zinc-800 shrink-0">
+                  <img src={selectedTomeDetail.coverImage} alt={selectedTomeDetail.title} className="w-full h-full object-cover object-top" />
+                </div>
+                <div className="space-y-3 flex-1 text-xs">
+                  <div>
+                    <span className="text-[10px] text-zinc-500 uppercase font-bold block">FRASE DE VALOR</span>
+                    <p className="text-amber-300 font-sans-editorial text-sm italic">“{selectedTomeDetail.valuePhrase}”</p>
+                  </div>
+                  <div>
+                    <span className="text-[10px] text-zinc-500 uppercase font-bold block">TIPO DE ACCESO</span>
+                    <p className="text-zinc-300 font-sans-editorial">Compra Permanente de por vida o incluido en suscripción EVO Complete.</p>
+                  </div>
+                  <div>
+                    <span className="text-[10px] text-zinc-500 uppercase font-bold block">ESTADO CANÓNICO</span>
+                    <p className={`font-bold uppercase ${isFullReader ? 'text-emerald-400' : isInDev ? 'text-amber-400' : 'text-zinc-400'}`}>
+                      {isFullReader ? 'DISPONIBLE // LECTOR COMPLETO' : isInDev ? 'EN PROCESO DE DESARROLLO' : 'NO DISPONIBLE // SÓLO DOSSIER'}
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="pt-3 border-t border-zinc-900 flex justify-end gap-2">
+                {isFullReader ? (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const num = selectedTomeDetail.number;
+                      setSelectedTomeDetail(null);
+                      onOpenTomo(num);
+                    }}
+                    className="px-5 py-2.5 rounded-xl bg-amber-400 hover:bg-amber-300 text-black text-xs font-black uppercase tracking-wider transition-all cursor-pointer"
+                  >
+                    ENTRAR AL TOMO →
+                  </button>
+                ) : isDossierOnly ? (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const num = selectedTomeDetail.number;
+                      setSelectedTomeDetail(null);
+                      onOpenTomo(num);
+                    }}
+                    className="px-5 py-2.5 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-amber-400 text-xs font-black uppercase tracking-wider transition-all cursor-pointer border border-zinc-700"
+                  >
+                    VER DOSSIER CURRICULAR →
+                  </button>
+                ) : isInDev ? (
+                  <span className="px-4 py-2 rounded-xl bg-zinc-900 text-amber-400 text-xs font-bold uppercase border border-amber-500/30">
+                    EN PROCESO DE DESARROLLO
+                  </span>
+                ) : (
+                  <span className="px-4 py-2 rounded-xl bg-zinc-900 text-zinc-400 text-xs font-bold uppercase border border-zinc-800">
+                    NO DISPONIBLE
+                  </span>
+                )}
+              </div>
             </div>
           </div>
-        </div>
-      )}
+        );
+      })()}
 
     </div>
   );

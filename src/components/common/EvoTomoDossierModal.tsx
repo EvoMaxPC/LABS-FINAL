@@ -948,19 +948,23 @@ export const EvoTomoDossierModal: React.FC<EvoTomoDossierModalProps> = ({
 
   if (!isOpen || !tomoId) return null;
 
+  const resolvedTomoId = tomoId.startsWith('tomo-')
+    ? tomoId
+    : `tomo-${tomoId.replace('tomo-', '').padStart(2, '0')}`;
+
   if (isExamOpen) {
     return (
       <div className="fixed inset-0 z-[130] bg-[#07090e] text-zinc-100 overflow-y-auto animate-in fade-in duration-200">
         <EvoTomeExamEngine
-          tomoId={tomoId}
+          tomoId={resolvedTomoId}
           onBackToTomoCover={() => setIsExamOpen(false)}
           onBackToIndex={() => setIsExamOpen(false)}
           onContinueToLab={() => {
             setIsExamOpen(false);
-            if (tomoId === 'tomo-08') {
+            if (resolvedTomoId === 'tomo-08') {
               setIsBootLabOpen(true);
             } else if (onOpenTomoView) {
-              onOpenTomoView(tomoId);
+              onOpenTomoView(resolvedTomoId);
             }
           }}
         />
@@ -968,7 +972,7 @@ export const EvoTomoDossierModal: React.FC<EvoTomoDossierModalProps> = ({
     );
   }
 
-  if (isBootLabOpen && tomoId === 'tomo-08') {
+  if (isBootLabOpen && resolvedTomoId === 'tomo-08') {
     return (
       <div className="fixed inset-0 z-[120] bg-black animate-in fade-in duration-200">
         <EvoBootLab onClose={() => setIsBootLabOpen(false)} />
@@ -976,9 +980,9 @@ export const EvoTomoDossierModal: React.FC<EvoTomoDossierModalProps> = ({
     );
   }
 
-  const volume = VOLUMES_COLLECTION.find((v) => v.id === tomoId);
-  const coverMeta = TOMOS_EDITORIAL_COVERS[tomoId] || TOMOS_EDITORIAL_COVERS['tomo-01'];
-  const extended = TOMO_EXTENDED_DATA[tomoId];
+  const volume = VOLUMES_COLLECTION.find((v) => v.id === resolvedTomoId || v.id === tomoId);
+  const coverMeta = TOMOS_EDITORIAL_COVERS[resolvedTomoId] || TOMOS_EDITORIAL_COVERS[tomoId] || TOMOS_EDITORIAL_COVERS['tomo-01'];
+  const extended = TOMO_EXTENDED_DATA[resolvedTomoId] || TOMO_EXTENDED_DATA[tomoId];
 
   if (!volume) return null;
 
@@ -988,7 +992,7 @@ export const EvoTomoDossierModal: React.FC<EvoTomoDossierModalProps> = ({
 
   const handleOpenInteractive = () => {
     if (onOpenTomoView) {
-      onOpenTomoView(tomoId);
+      onOpenTomoView(resolvedTomoId);
     } else {
       // Fallback: switch to internal syllabus index
       setModalView('indice');
@@ -1196,7 +1200,7 @@ export const EvoTomoDossierModal: React.FC<EvoTomoDossierModalProps> = ({
 
                 {/* Botones de Acción de Portada */}
                 <div className="pt-2 flex flex-wrap items-center gap-3">
-                  {tomoId === 'tomo-08' ? (
+                  {resolvedTomoId === 'tomo-08' ? (
                     <>
                       <button
                         type="button"
@@ -1216,7 +1220,7 @@ export const EvoTomoDossierModal: React.FC<EvoTomoDossierModalProps> = ({
                         <span>LABORATORIO DE ARRANQUE</span>
                       </button>
                     </>
-                  ) : ['tomo-07', 'tomo-09', 'tomo-10'].includes(tomoId) ? (
+                  ) : ['tomo-07', 'tomo-09', 'tomo-10'].includes(resolvedTomoId) ? (
                     <div className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl font-mono-tech font-bold text-xs tracking-wider uppercase border border-amber-400/40 bg-amber-400/10 text-amber-300 shadow-lg">
                       <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse" />
                       <span>EDICIÓN EN DESARROLLO</span>
@@ -1500,7 +1504,7 @@ export const EvoTomoDossierModal: React.FC<EvoTomoDossierModalProps> = ({
                   <span>En fase activa de investigación técnica y preparación de laboratorios</span>
                 </div>
 
-                {tomoId === 'tomo-08' && (
+                {resolvedTomoId === 'tomo-08' && (
                   <button
                     type="button"
                     onClick={() => setIsBootLabOpen(true)}

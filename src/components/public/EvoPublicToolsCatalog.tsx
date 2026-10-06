@@ -1,33 +1,110 @@
 import React, { useState, useMemo } from 'react';
 import {
   Gauge,
-  Activity,
-  Cpu,
-  Monitor,
-  Wrench,
   Search,
-  CheckCircle2,
-  FileSearch,
-  HardDrive,
-  Zap,
   ArrowRight,
-  ShieldCheck,
-  Layers,
-  Terminal,
-  Sparkles,
-  SlidersHorizontal,
-  FileText,
   HelpCircle,
+  Cpu,
+  Terminal,
+  Activity,
+  Zap,
+  HardDrive,
+  Monitor,
+  Shield,
+  Layers,
+  Wrench,
+  FileText,
+  Boxes,
+  Compass,
+  Sliders,
+  CheckCircle2,
 } from 'lucide-react';
 import {
   EVO_MASTER_TOOLS_CATALOG,
   EvoToolDefinition,
   EvoToolCategory,
 } from '../../data/evoToolsData';
+import { EVO_TOOLS_BY_INTENT } from '../../data/evoLearningPaths';
 
 interface EvoPublicToolsCatalogProps {
   onExecuteToolAction: (tool: EvoToolDefinition) => void;
 }
+
+// Map tool IDs to historic clean visible names from EVO_TOOLS_BY_INTENT
+const HISTORIC_TOOL_NAMES: Record<string, string> = {
+  'diag-boot-seq': 'CÓMO ARRANCA UNA PC',
+  'diag-atx-power-bench': 'DIAGNOSTICAR UNA PC QUE NO INICIA',
+  'diag-bsod-decoder': 'ANALIZAR UN PANTALLAZO AZUL',
+  'diag-incident-events': 'ANALIZAR ERRORES',
+  'diag-bottleneck-calc': 'ENCONTRÁ EL CUELLO DE BOTELLA',
+  'diag-autodetect-pc': 'CONOCÉ LOS COMPONENTES DE TU PC',
+  'diag-telemetry-integrity': 'VER QUÉ CONSUME MI PC',
+  'diag-case-resolver': 'RESOLVER CASOS DIFÍCILES',
+  'med-latency-calc': 'REVISÁ TU MEMORIA RAM',
+  'med-frametime-analyzer': 'MEDIR FPS Y TIRONES',
+  'med-sensors-telemetry': 'VER SENSORES EN TIEMPO REAL',
+  'med-dpc-latency': 'ENCONTRAR LATENCIAS DE WINDOWS',
+  'med-stress-stability': 'PROBAR UNA OPTIMIZACIÓN',
+  'med-thermal-history': 'REVISAR TEMPERATURAS',
+  'inv-pcb-schematic': 'EXPLORAR LA MOTHERBOARD',
+  'inv-xray-kernel': 'CÓMO WINDOWS USA LA CPU',
+  'inv-cache-imc-flow': 'CÓMO TRABAJA EL PROCESADOR',
+  'inv-digital-twin': 'DIGITAL TWIN (GEMELO DIGITAL)',
+  'inv-workstations-sectors': 'ELEGIR UN BANCO DE TRABAJO',
+  'inv-coverage-matrix': 'REVISAR HARDWARE A FONDO',
+  'rep-windows-repair': 'REPARAR WINDOWS',
+  'rep-windows-install': 'INSTALAR WINDOWS',
+  'rep-hotswap-bench': 'PROBAR COMPONENTES',
+  'rep-core-repair-view': 'LAB CORE // REPARACIÓN DE BENCH',
+  'opt-nt-services': 'SERVICIOS DE WINDOWS',
+  'opt-core-optimization': 'OPTIMIZACIÓN CORE DE WINDOWS',
+  'opt-ab-comparison': 'COMPARÁ ANTES Y DESPUÉS',
+  'opt-upgrade-simulator': 'SIMULAR OTRO HARDWARE',
+  'opt-build-architect': 'ARQUITECTO DE ARMADO DE PC',
+  'doc-forensic-dossier': 'GENERADOR DE EXPEDIENTE PERICIAL',
+  'doc-evidence-passport': 'PASAPORTE DE EVIDENCIA TÉCNICA',
+  'doc-technical-dossier': 'INFORME TÉCNICO PERICIAL',
+  'doc-content-factory': 'CONTENT FACTORY EDITORIAL',
+  'doc-transfer-challenge': 'EVALUACIÓN DE TRANSFERENCIA',
+};
+
+// Clean Technical SVG Asset Illustrations specific to each tool (w-24 sm:w-28, h-36 sm:h-40)
+const TOOL_VISUAL_MAP: Record<string, { icon: React.ElementType; accent: string; bgGradient: string; label: string }> = {
+  'diag-boot-seq': { icon: Zap, accent: '#10B981', bgGradient: 'from-emerald-950/80 via-zinc-950 to-black', label: '35 POST STATES' },
+  'diag-bsod-decoder': { icon: Terminal, accent: '#38BDF8', bgGradient: 'from-sky-950/80 via-zinc-950 to-black', label: 'BUGCHECK DUMP' },
+  'diag-incident-events': { icon: Activity, accent: '#A855F7', bgGradient: 'from-purple-950/80 via-zinc-950 to-black', label: 'EVENT VIEWER' },
+  'diag-bottleneck-calc': { icon: Cpu, accent: '#F59E0B', bgGradient: 'from-amber-950/80 via-zinc-950 to-black', label: 'CPU / GPU METERS' },
+  'diag-autodetect-pc': { icon: Monitor, accent: '#EAB308', bgGradient: 'from-yellow-950/80 via-zinc-950 to-black', label: 'PASAPORTE HW' },
+  'diag-telemetry-integrity': { icon: Shield, accent: '#06B6D4', bgGradient: 'from-cyan-950/80 via-zinc-950 to-black', label: 'INTEGRIDAD' },
+  'diag-atx-power-bench': { icon: Zap, accent: '#EF4444', bgGradient: 'from-rose-950/80 via-zinc-950 to-black', label: 'RIELES ATX 12V' },
+  'diag-case-resolver': { icon: FileText, accent: '#EC4899', bgGradient: 'from-pink-950/80 via-zinc-950 to-black', label: 'EXPEDIENTES' },
+  'med-latency-calc': { icon: Cpu, accent: '#10B981', bgGradient: 'from-emerald-950/80 via-zinc-950 to-black', label: 'DDR TIMINGS ns' },
+  'med-frametime-analyzer': { icon: Activity, accent: '#EC4899', bgGradient: 'from-pink-950/80 via-zinc-950 to-black', label: '1% LOW FPS' },
+  'med-sensors-telemetry': { icon: Monitor, accent: '#06B6D4', bgGradient: 'from-cyan-950/80 via-zinc-950 to-black', label: 'DIODO °C / V' },
+  'med-dpc-latency': { icon: Terminal, accent: '#38BDF8', bgGradient: 'from-sky-950/80 via-zinc-950 to-black', label: 'DPC / ISR Ring 0' },
+  'med-stress-stability': { icon: Activity, accent: '#F59E0B', bgGradient: 'from-amber-950/80 via-zinc-950 to-black', label: 'STRESS TEST' },
+  'med-thermal-history': { icon: Activity, accent: '#EF4444', bgGradient: 'from-rose-950/80 via-zinc-950 to-black', label: 'THROTTLING °C' },
+  'inv-pcb-schematic': { icon: Layers, accent: '#A855F7', bgGradient: 'from-purple-950/80 via-zinc-950 to-black', label: 'PCB VRM LAYERS' },
+  'inv-xray-kernel': { icon: Terminal, accent: '#00D2FF', bgGradient: 'from-cyan-950/80 via-zinc-950 to-black', label: 'SCHEDULER NT' },
+  'inv-cache-imc-flow': { icon: Cpu, accent: '#EAB308', bgGradient: 'from-yellow-950/80 via-zinc-950 to-black', label: 'CACHÉ L1/L2/L3' },
+  'inv-digital-twin': { icon: Boxes, accent: '#00D2FF', bgGradient: 'from-cyan-950/80 via-zinc-950 to-black', label: 'DIGITAL TWIN' },
+  'inv-workstations-sectors': { icon: Compass, accent: '#A855F7', bgGradient: 'from-purple-950/80 via-zinc-950 to-black', label: '8 SECTORES' },
+  'inv-coverage-matrix': { icon: Layers, accent: '#10B981', bgGradient: 'from-emerald-950/80 via-zinc-950 to-black', label: 'COVERAGE MATRIX' },
+  'rep-windows-repair': { icon: Wrench, accent: '#A855F7', bgGradient: 'from-purple-950/80 via-zinc-950 to-black', label: 'SFC / DISM' },
+  'rep-windows-install': { icon: HardDrive, accent: '#00D2FF', bgGradient: 'from-cyan-950/80 via-zinc-950 to-black', label: 'CLEAN ISO GPT' },
+  'rep-hotswap-bench': { icon: Wrench, accent: '#F59E0B', bgGradient: 'from-amber-950/80 via-zinc-950 to-black', label: 'HOT-SWAP BENCH' },
+  'rep-core-repair-view': { icon: Wrench, accent: '#EF4444', bgGradient: 'from-rose-950/80 via-zinc-950 to-black', label: 'LAB CORE BENCH' },
+  'opt-nt-services': { icon: Sliders, accent: '#38BDF8', bgGradient: 'from-sky-950/80 via-zinc-950 to-black', label: 'SERVICES NT' },
+  'opt-core-optimization': { icon: Sliders, accent: '#10B981', bgGradient: 'from-emerald-950/80 via-zinc-950 to-black', label: 'CORE TWEAKS' },
+  'opt-ab-comparison': { icon: Activity, accent: '#38BDF8', bgGradient: 'from-sky-950/80 via-zinc-950 to-black', label: 'A/B BENCH DELTA' },
+  'opt-upgrade-simulator': { icon: Cpu, accent: '#F59E0B', bgGradient: 'from-amber-950/80 via-zinc-950 to-black', label: 'UPGRADE ROI' },
+  'opt-build-architect': { icon: Boxes, accent: '#10B981', bgGradient: 'from-emerald-950/80 via-zinc-950 to-black', label: 'BUILD ARCHITECT' },
+  'doc-forensic-dossier': { icon: FileText, accent: '#EC4899', bgGradient: 'from-pink-950/80 via-zinc-950 to-black', label: 'INFORME PERICIAL' },
+  'doc-evidence-passport': { icon: Shield, accent: '#EAB308', bgGradient: 'from-yellow-950/80 via-zinc-950 to-black', label: 'EVIDENCE BADGE' },
+  'doc-technical-dossier': { icon: FileText, accent: '#38BDF8', bgGradient: 'from-sky-950/80 via-zinc-950 to-black', label: 'DOSSIER TÉCNICO' },
+  'doc-content-factory': { icon: Layers, accent: '#A855F7', bgGradient: 'from-purple-950/80 via-zinc-950 to-black', label: 'EDITORIAL HUBS' },
+  'doc-transfer-challenge': { icon: CheckCircle2, accent: '#10B981', bgGradient: 'from-emerald-950/80 via-zinc-950 to-black', label: 'EVALUACIÓN' },
+};
 
 export const EvoPublicToolsCatalog: React.FC<EvoPublicToolsCatalogProps> = ({
   onExecuteToolAction,
@@ -50,6 +127,7 @@ export const EvoPublicToolsCatalog: React.FC<EvoPublicToolsCatalogProps> = ({
   const filteredTools = useMemo(() => {
     const q = searchQuery.toLowerCase().trim();
     return EVO_MASTER_TOOLS_CATALOG.filter((t) => {
+      const displayName = HISTORIC_TOOL_NAMES[t.id] || t.name;
       const matchesCategory = activeCategory === 'ALL' || t.category === activeCategory;
       if (!matchesCategory) return false;
 
@@ -57,6 +135,7 @@ export const EvoPublicToolsCatalog: React.FC<EvoPublicToolsCatalogProps> = ({
 
       return (
         t.name.toLowerCase().includes(q) ||
+        displayName.toLowerCase().includes(q) ||
         t.whatItDoes.toLowerCase().includes(q) ||
         t.whenToUse.toLowerCase().includes(q) ||
         t.inputRequired.toLowerCase().includes(q) ||
@@ -69,7 +148,7 @@ export const EvoPublicToolsCatalog: React.FC<EvoPublicToolsCatalogProps> = ({
   }, [activeCategory, searchQuery]);
 
   return (
-    <div className="max-w-[1240px] mx-auto w-full px-4 sm:px-6 lg:px-8 py-8 space-y-10">
+    <div className="max-w-[1240px] mx-auto w-full px-4 sm:px-6 lg:px-8 py-8 space-y-10 font-mono-tech select-none">
       
       {/* HEADER DE HERRAMIENTAS */}
       <div className="space-y-3 text-center sm:text-left border-b border-zinc-800 pb-6">
@@ -104,7 +183,7 @@ export const EvoPublicToolsCatalog: React.FC<EvoPublicToolsCatalogProps> = ({
               <button
                 type="button"
                 onClick={() => setSearchQuery('')}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-zinc-500 hover:text-white font-mono"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-zinc-500 hover:text-white font-mono cursor-pointer"
               >
                 ✕
               </button>
@@ -162,105 +241,158 @@ export const EvoPublicToolsCatalog: React.FC<EvoPublicToolsCatalogProps> = ({
               setSearchQuery('');
               setActiveCategory('ALL');
             }}
-            className="px-4 py-2 rounded-xl bg-zinc-900 text-zinc-300 hover:text-white text-xs font-bold uppercase border border-zinc-800 transition-colors mt-2"
+            className="px-4 py-2 rounded-xl bg-zinc-900 text-zinc-300 hover:text-white text-xs font-bold uppercase border border-zinc-800 transition-colors mt-2 cursor-pointer"
           >
             VER TODAS LAS HERRAMIENTAS
           </button>
         </div>
       )}
 
-      {/* GRID DE HERRAMIENTAS (34 HERRAMIENTAS REALES) */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 font-mono-tech">
-        {filteredTools.map((tool) => (
-          <div
-            key={tool.id}
-            className="p-5 rounded-2xl bg-zinc-950 border border-zinc-800/90 hover:border-emerald-500/40 transition-all flex flex-col justify-between space-y-4 shadow-xl group"
-          >
-            <div className="space-y-3">
-              {/* Header de la tarjeta */}
-              <div className="flex items-center justify-between gap-2 flex-wrap">
-                <span
-                  className="text-[10px] px-2 py-0.5 rounded font-bold uppercase"
-                  style={{
-                    color: tool.accentColor,
-                    backgroundColor: `${tool.accentColor}15`,
-                    border: `1px solid ${tool.accentColor}40`,
-                  }}
-                >
-                  {tool.category} {tool.tomoId ? `// TOMO ${tool.tomoId}` : ''}
-                </span>
+      {/* GRID DE 34 HERRAMIENTAS (2 COLUMNAS EN DESKTOP, MISMO TAMAÑO DE TARJETA QUE TOMOS) */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+        {filteredTools.map((tool) => {
+          const displayName = HISTORIC_TOOL_NAMES[tool.id] || tool.name;
+          const visual = TOOL_VISUAL_MAP[tool.id] || {
+            icon: Gauge,
+            accent: tool.accentColor || '#10B981',
+            bgGradient: 'from-emerald-950/80 via-zinc-950 to-black',
+            label: tool.category,
+          };
+          const IconComp = visual.icon;
 
-                <span className="text-[9px] px-2 py-0.5 rounded bg-zinc-900 text-zinc-300 border border-zinc-800 font-bold truncate max-w-[130px]">
-                  {tool.labAssoc || 'EVO CORE'}
-                </span>
+          return (
+            <div
+              key={tool.id}
+              className="p-4 sm:p-5 rounded-2xl bg-zinc-950 border border-zinc-800/90 hover:border-emerald-500/40 transition-all flex flex-col sm:flex-row items-start sm:items-stretch gap-5 shadow-xl group"
+            >
+              {/* Imagen Técnica Vertical Izquierda (Strict 96x144 / 112x160 px: w-24 sm:w-28, h-36 sm:h-40) */}
+              <div className={`w-24 sm:w-28 h-36 sm:h-40 rounded-xl overflow-hidden bg-gradient-to-b ${visual.bgGradient} border border-zinc-800 shrink-0 relative shadow-md flex flex-col justify-between p-3 self-center sm:self-auto`}>
+                
+                {/* Spine accent strip */}
+                <div
+                  className="absolute top-0 bottom-0 left-0 w-1.5"
+                  style={{ backgroundColor: visual.accent }}
+                />
+
+                {/* Top Badge */}
+                <div className="relative z-10 flex justify-end">
+                  <span className="text-[8px] font-mono-tech font-bold uppercase px-1.5 py-0.5 rounded bg-black/80 text-zinc-300 border border-zinc-800">
+                    {tool.tomoId ? `TOMO ${tool.tomoId}` : 'EVO CORE'}
+                  </span>
+                </div>
+
+                {/* Center SVG Icon Art */}
+                <div className="relative z-10 my-auto flex flex-col items-center justify-center gap-1">
+                  <div
+                    className="p-2.5 rounded-xl border backdrop-blur-md shadow-lg"
+                    style={{
+                      backgroundColor: `${visual.accent}15`,
+                      borderColor: `${visual.accent}40`,
+                      color: visual.accent,
+                    }}
+                  >
+                    <IconComp className="w-6 h-6" />
+                  </div>
+                  <span className="text-[8px] font-mono font-black tracking-wider text-zinc-400 uppercase text-center mt-1">
+                    {visual.label}
+                  </span>
+                </div>
+
+                {/* Bottom Tag */}
+                <div className="relative z-10 text-[8px] font-mono font-bold text-zinc-400 uppercase text-center bg-black/60 px-1 py-0.5 rounded">
+                  {tool.category}
+                </div>
               </div>
 
-              {/* Nombre de la herramienta */}
-              <h3 className="font-display font-black text-base text-white uppercase tracking-tight group-hover:text-emerald-300 transition-colors">
-                {tool.name}
-              </h3>
-
-              {/* Badges de Estado y Procedencia */}
-              <div className="flex items-center gap-1.5 flex-wrap pt-0.5">
-                <span className="text-[9px] px-1.5 py-0.2 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 font-bold">
-                  ● {tool.status}
-                </span>
-                <span className="text-[9px] px-1.5 py-0.2 rounded bg-zinc-900 text-zinc-400 border border-zinc-800 font-mono">
-                  {tool.provenance}
-                </span>
-              </div>
-
-              {/* Ficha descriptiva limpia */}
-              <div className="space-y-2 text-xs text-zinc-300 font-sans-editorial pt-1">
-                <div>
-                  <span className="text-zinc-500 font-mono-tech text-[10px] uppercase font-bold block">
-                    ¿QUÉ HACE?
-                  </span>
-                  <p className="text-zinc-300 leading-relaxed text-[12px]">{tool.whatItDoes}</p>
-                </div>
-
-                <div>
-                  <span className="text-zinc-500 font-mono-tech text-[10px] uppercase font-bold block">
-                    ¿CUÁNDO USARLA?
-                  </span>
-                  <p className="text-zinc-400 leading-relaxed text-[12px]">{tool.whenToUse}</p>
-                </div>
-
-                <div className="grid grid-cols-2 gap-2 pt-1 font-mono-tech text-[10px] text-zinc-400 border-t border-zinc-900">
-                  <div>
-                    <span className="text-zinc-500 block uppercase font-bold text-[9px]">Entrada:</span>
-                    <span className="text-zinc-300 truncate block">{tool.inputRequired}</span>
-                  </div>
-                  <div>
-                    <span className="text-zinc-500 block uppercase font-bold text-[9px]">Salida:</span>
-                    <span className="text-emerald-400 font-bold truncate block">{tool.outputDelivered}</span>
-                  </div>
-                </div>
-
-                {/* Conceptos clave */}
-                <div className="flex items-center gap-1 flex-wrap pt-1 font-mono-tech text-[9px]">
-                  {tool.concepts.map((c, i) => (
-                    <span key={i} className="px-1.5 py-0.5 rounded bg-zinc-900/90 text-zinc-400 border border-zinc-800/80">
-                      {c}
+              {/* Contenido Completo Original Exacto */}
+              <div className="flex-1 min-w-0 flex flex-col justify-between space-y-3">
+                <div className="space-y-2.5">
+                  {/* Header Badges */}
+                  <div className="flex items-center justify-between gap-2 flex-wrap">
+                    <span
+                      className="text-[10px] px-2 py-0.5 rounded font-bold uppercase font-mono-tech"
+                      style={{
+                        color: tool.accentColor || visual.accent,
+                        backgroundColor: `${tool.accentColor || visual.accent}15`,
+                        border: `1px solid ${tool.accentColor || visual.accent}40`,
+                      }}
+                    >
+                      {tool.category} {tool.tomoId ? `// TOMO ${tool.tomoId}` : ''}
                     </span>
-                  ))}
+
+                    <span className="text-[9px] px-2 py-0.5 rounded bg-zinc-900 text-zinc-300 border border-zinc-800 font-bold truncate max-w-[130px]">
+                      {tool.labAssoc || 'EVO CORE'}
+                    </span>
+                  </div>
+
+                  {/* Nombre Visible de la Herramienta (Sustentado en EVO_TOOLS_BY_INTENT) */}
+                  <h3 className="font-display font-black text-base text-white uppercase tracking-tight group-hover:text-emerald-300 transition-colors">
+                    {displayName}
+                  </h3>
+
+                  {/* Badges de Estado y Procedencia */}
+                  <div className="flex items-center gap-1.5 flex-wrap pt-0.5">
+                    <span className="text-[9px] px-1.5 py-0.2 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 font-bold">
+                      ● {tool.status}
+                    </span>
+                    <span className="text-[9px] px-1.5 py-0.2 rounded bg-zinc-900 text-zinc-400 border border-zinc-800 font-mono">
+                      {tool.provenance}
+                    </span>
+                  </div>
+
+                  {/* Ficha descriptiva limpia con todo el contenido original exacto */}
+                  <div className="space-y-2 text-xs text-zinc-300 font-sans-editorial pt-1">
+                    <div>
+                      <span className="text-zinc-500 font-mono-tech text-[10px] uppercase font-bold block">
+                        ¿QUÉ HACE?
+                      </span>
+                      <p className="text-zinc-300 leading-relaxed text-[12px]">{tool.whatItDoes}</p>
+                    </div>
+
+                    <div>
+                      <span className="text-zinc-500 font-mono-tech text-[10px] uppercase font-bold block">
+                        ¿CUÁNDO USARLA?
+                      </span>
+                      <p className="text-zinc-400 leading-relaxed text-[12px]">{tool.whenToUse}</p>
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-2 pt-1 font-mono-tech text-[10px] text-zinc-400 border-t border-zinc-900">
+                      <div>
+                        <span className="text-zinc-500 block uppercase font-bold text-[9px]">Entrada:</span>
+                        <span className="text-zinc-300 truncate block">{tool.inputRequired}</span>
+                      </div>
+                      <div>
+                        <span className="text-zinc-500 block uppercase font-bold text-[9px]">Salida:</span>
+                        <span className="text-emerald-400 font-bold truncate block">{tool.outputDelivered}</span>
+                      </div>
+                    </div>
+
+                    {/* Conceptos clave */}
+                    <div className="flex items-center gap-1 flex-wrap pt-1 font-mono-tech text-[9px]">
+                      {tool.concepts.map((c, i) => (
+                        <span key={i} className="px-1.5 py-0.5 rounded bg-zinc-900/90 text-zinc-400 border border-zinc-800/80">
+                          {c}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+                {/* CTA Directo a la herramienta real */}
+                <div className="pt-2 border-t border-zinc-900">
+                  <button
+                    type="button"
+                    onClick={() => onExecuteToolAction(tool)}
+                    className="w-full py-2.5 px-3 rounded-xl bg-emerald-400 hover:bg-emerald-300 text-black text-xs font-black uppercase tracking-wider transition-all cursor-pointer shadow-[0_0_15px_rgba(52,211,153,0.2)] flex items-center justify-center gap-1.5 group-hover:scale-[1.01]"
+                  >
+                    <span>USAR HERRAMIENTA</span>
+                    <ArrowRight className="w-3.5 h-3.5 text-black group-hover:translate-x-1 transition-transform" />
+                  </button>
                 </div>
               </div>
             </div>
-
-            {/* CTA Directo a la herramienta real */}
-            <div className="pt-2 border-t border-zinc-900">
-              <button
-                type="button"
-                onClick={() => onExecuteToolAction(tool)}
-                className="w-full py-2.5 px-3 rounded-xl bg-emerald-400 hover:bg-emerald-300 text-black text-xs font-black uppercase tracking-wider transition-all cursor-pointer shadow-[0_0_15px_rgba(52,211,153,0.2)] flex items-center justify-center gap-1.5 group-hover:scale-[1.01]"
-              >
-                <span>USAR HERRAMIENTA</span>
-                <ArrowRight className="w-3.5 h-3.5 text-black group-hover:translate-x-1 transition-transform" />
-              </button>
-            </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
 
     </div>

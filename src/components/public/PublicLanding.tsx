@@ -23,12 +23,14 @@ interface PublicLandingProps {
   onExploreClick?: () => void;
   onMethodClick?: () => void;
   onOpenAuthPlaceholder?: (mode: 'login' | 'register') => void;
+  onOpenTomo?: (tomeNumber: string) => void;
 }
 
 export const PublicLanding: React.FC<PublicLandingProps> = ({
   onExploreClick,
   onMethodClick,
   onOpenAuthPlaceholder,
+  onOpenTomo,
 }) => {
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(null);
 
@@ -77,7 +79,7 @@ export const PublicLanding: React.FC<PublicLandingProps> = ({
 
           {/* Action CTAs */}
           <div className="flex flex-wrap items-center justify-center gap-4 pt-2 font-mono-tech">
-            <EvoPrimarySystemButton onClick={() => handleScrollTo('tomos')}>
+            <EvoPrimarySystemButton onClick={() => onExploreClick?.()}>
               EXPLORAR CATÁLOGO DE TOMOS →
             </EvoPrimarySystemButton>
 
@@ -191,13 +193,16 @@ export const PublicLanding: React.FC<PublicLandingProps> = ({
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           
           {/* Tomo 01 */}
-          <div className="p-6 rounded-2xl bg-zinc-950 border border-amber-500/30 space-y-4 relative overflow-hidden flex flex-col justify-between">
+          <div
+            onClick={() => onOpenTomo?.('01')}
+            className="p-6 rounded-2xl bg-zinc-950 border border-amber-500/30 hover:border-amber-400 transition-all space-y-4 relative overflow-hidden flex flex-col justify-between cursor-pointer group shadow-lg"
+          >
             <div className="space-y-3">
               <div className="flex items-center justify-between text-[10px] font-mono-tech">
                 <span className="px-2 py-0.5 rounded bg-amber-400/20 text-amber-300 font-bold border border-amber-400/40">TOMO 01</span>
-                <span className="text-emerald-400 font-bold">PUBLICADO // ACCESO INMEDIATO</span>
+                <span className="text-emerald-400 font-bold">PUBLICADO // LECTOR ACTIVO</span>
               </div>
-              <h3 className="text-xl font-display font-bold text-white uppercase">
+              <h3 className="text-xl font-display font-bold text-white uppercase group-hover:text-amber-300 transition-colors">
                 Conocé tu PC
               </h3>
               <p className="text-xs text-zinc-400 leading-relaxed font-sans-editorial">
@@ -206,18 +211,21 @@ export const PublicLanding: React.FC<PublicLandingProps> = ({
             </div>
             <div className="pt-4 border-t border-zinc-900 flex items-center justify-between text-xs font-mono-tech text-zinc-400">
               <span>7 Capítulos + Lab Hot-Swap</span>
-              <span className="text-amber-400 font-bold">INCLUIDO →</span>
+              <span className="text-amber-400 font-bold">ENTRAR AL TOMO →</span>
             </div>
           </div>
 
           {/* Tomo 02 */}
-          <div className="p-6 rounded-2xl bg-zinc-950 border border-zinc-800 space-y-4 flex flex-col justify-between">
+          <div
+            onClick={() => onOpenTomo?.('02')}
+            className="p-6 rounded-2xl bg-zinc-950 border border-cyan-500/30 hover:border-cyan-400 transition-all space-y-4 relative overflow-hidden flex flex-col justify-between cursor-pointer group shadow-lg"
+          >
             <div className="space-y-3">
               <div className="flex items-center justify-between text-[10px] font-mono-tech">
                 <span className="px-2 py-0.5 rounded bg-cyan-400/20 text-cyan-300 font-bold border border-cyan-400/40">TOMO 02</span>
-                <span className="text-emerald-400 font-bold">PUBLICADO // ACCESO INMEDIATO</span>
+                <span className="text-emerald-400 font-bold">PUBLICADO // LECTOR ACTIVO</span>
               </div>
-              <h3 className="text-xl font-display font-bold text-white uppercase">
+              <h3 className="text-xl font-display font-bold text-white uppercase group-hover:text-cyan-300 transition-colors">
                 La Biblia Negra de Windows
               </h3>
               <p className="text-xs text-zinc-400 leading-relaxed font-sans-editorial">
@@ -226,27 +234,76 @@ export const PublicLanding: React.FC<PublicLandingProps> = ({
             </div>
             <div className="pt-4 border-t border-zinc-900 flex items-center justify-between text-xs font-mono-tech text-zinc-400">
               <span>12 Módulos + Lab Servicios</span>
-              <span className="text-cyan-400 font-bold">DISPONIBLE →</span>
+              <span className="text-cyan-400 font-bold">ENTRAR AL TOMO →</span>
             </div>
           </div>
 
           {/* Tomo 03 */}
-          <div className="p-6 rounded-2xl bg-zinc-950 border border-zinc-800 space-y-4 flex flex-col justify-between">
+          <div
+            onClick={() => onOpenTomo?.('03')}
+            className="p-6 rounded-2xl bg-zinc-950 border border-emerald-500/30 hover:border-emerald-400 transition-all space-y-4 relative overflow-hidden flex flex-col justify-between cursor-pointer group shadow-lg"
+          >
             <div className="space-y-3">
               <div className="flex items-center justify-between text-[10px] font-mono-tech">
-                <span className="px-2 py-0.5 rounded bg-purple-400/20 text-purple-300 font-bold border border-purple-400/40">TOMO 03</span>
-                <span className="text-zinc-500 font-bold">ROADMAP // PLANIFICADO</span>
+                <span className="px-2 py-0.5 rounded bg-emerald-400/20 text-emerald-300 font-bold border border-emerald-400/40">TOMO 03</span>
+                <span className="text-emerald-400 font-bold">PUBLICADO // LECTOR ACTIVO</span>
               </div>
-              <h3 className="text-xl font-display font-bold text-zinc-300 uppercase">
-                Reparación & Descarte
+              <h3 className="text-xl font-display font-bold text-white uppercase group-hover:text-emerald-300 transition-colors">
+                Reparación de PC
               </h3>
-              <p className="text-xs text-zinc-500 leading-relaxed font-sans-editorial">
-                Matrices de diagnóstico diferencial, aislamiento de causa raíz, descarte de hardware fallido y validación por reemplazo seguro.
+              <p className="text-xs text-zinc-400 leading-relaxed font-sans-editorial">
+                Metodología pericial deductiva, aislamiento de causa raíz y descarte de banco en escritorios.
               </p>
             </div>
-            <div className="pt-4 border-t border-zinc-900 flex items-center justify-between text-xs font-mono-tech text-zinc-500">
-              <span>Fase Curricular 2026</span>
-              <span>VER FICHA →</span>
+            <div className="pt-4 border-t border-zinc-900 flex items-center justify-between text-xs font-mono-tech text-zinc-400">
+              <span>Bancos de Diagnóstico</span>
+              <span className="text-emerald-400 font-bold">ENTRAR AL TOMO →</span>
+            </div>
+          </div>
+
+          {/* Tomo 04 */}
+          <div
+            onClick={() => onOpenTomo?.('04')}
+            className="p-6 rounded-2xl bg-zinc-950 border border-purple-500/30 hover:border-purple-400 transition-all space-y-4 relative overflow-hidden flex flex-col justify-between cursor-pointer group shadow-lg"
+          >
+            <div className="space-y-3">
+              <div className="flex items-center justify-between text-[10px] font-mono-tech">
+                <span className="px-2 py-0.5 rounded bg-purple-400/20 text-purple-300 font-bold border border-purple-400/40">TOMO 04</span>
+                <span className="text-emerald-400 font-bold">PUBLICADO // LECTOR ACTIVO</span>
+              </div>
+              <h3 className="text-xl font-display font-bold text-white uppercase group-hover:text-purple-300 transition-colors">
+                Reparación de Notebooks
+              </h3>
+              <p className="text-xs text-zinc-400 leading-relaxed font-sans-editorial">
+                Microelectrónica, esquemáticos, circuitos de carga y fuentes de alimentación para portátiles.
+              </p>
+            </div>
+            <div className="pt-4 border-t border-zinc-900 flex items-center justify-between text-xs font-mono-tech text-zinc-400">
+              <span>Esquemáticos & DC-DC</span>
+              <span className="text-purple-400 font-bold">ENTRAR AL TOMO →</span>
+            </div>
+          </div>
+
+          {/* Tomo 08 */}
+          <div
+            onClick={() => onOpenTomo?.('08')}
+            className="p-6 rounded-2xl bg-zinc-950 border border-emerald-500/30 hover:border-emerald-400 transition-all space-y-4 relative overflow-hidden flex flex-col justify-between cursor-pointer group shadow-lg"
+          >
+            <div className="space-y-3">
+              <div className="flex items-center justify-between text-[10px] font-mono-tech">
+                <span className="px-2 py-0.5 rounded bg-emerald-400/20 text-emerald-300 font-bold border border-emerald-400/40">TOMO 08</span>
+                <span className="text-emerald-400 font-bold">PUBLICADO // LECTOR ACTIVO</span>
+              </div>
+              <h3 className="text-xl font-display font-bold text-white uppercase group-hover:text-emerald-300 transition-colors">
+                Arranque y Diagnóstico
+              </h3>
+              <p className="text-xs text-zinc-400 leading-relaxed font-sans-editorial">
+                Secuencia POST, UEFI, tablas GPT/MBR y banco de 35 estados de fallo.
+              </p>
+            </div>
+            <div className="pt-4 border-t border-zinc-900 flex items-center justify-between text-xs font-mono-tech text-zinc-400">
+              <span>Banco de 35 Fallos POST</span>
+              <span className="text-emerald-400 font-bold">ENTRAR AL TOMO →</span>
             </div>
           </div>
 
@@ -557,7 +614,7 @@ export const PublicLanding: React.FC<PublicLandingProps> = ({
             Sumate al estándar pericial de EVO LABS. Diagnósticos con evidencia, sin mitos ni placebos.
           </p>
           <div className="pt-2 flex justify-center">
-            <EvoPrimarySystemButton onClick={() => handleScrollTo('tomos')}>
+            <EvoPrimarySystemButton onClick={() => onExploreClick?.()}>
               EXPLORAR EL CATÁLOGO COMPLETO →
             </EvoPrimarySystemButton>
           </div>

@@ -21,7 +21,9 @@ import { ChapterUnlockedCelebrationModal } from './components/ChapterUnlockedCel
 import { getChapterRequirements, ChapterRequirementInfo } from './utils/chapterPrerequisites';
 import { ChapterItem, EvoNarrativeProfile, EvoLabZone, UserHardwarePassport, Tome01DossierSummary } from './types';
 import { EvoWorldMap } from './components/world/EvoWorldMap';
-import { PublicShell } from './components/public/PublicShell';
+import { PublicShell, PublicNavigationTarget } from './components/public/PublicShell';
+import { executeToolById, executeTomoById } from './utils/evoToolRouter';
+import { EVO_MASTER_TOOLS_CATALOG } from './data/evoToolsData';
 import { EvoIntroExperience } from './components/world/EvoIntroExperience';
 import { EvoArchiveEntrance } from './components/world/EvoArchiveEntrance';
 import { EvoMagazineView } from './components/magazine/EvoMagazineView';
@@ -93,8 +95,259 @@ const safeStorage = {
   },
 };
 
-function AppContent({ onReturnToPublic }: { onReturnToPublic?: () => void }) {
+// Explicit Tool Target Map mapping all 34 tools to exact app state destinations
+const TOOL_TARGET_MAP: Record<string, (actions: {
+  setCurrentView: (view: any) => void;
+  setCampusSection: (sec: any) => void;
+  setActiveLabPanel: (panel: any) => void;
+  setActiveLabMission: (mission: any) => void;
+  setLabCorePhase: (phase: any) => void;
+  setMatrixInitialScenario: (scenario: any) => void;
+  setShowDiscoveryModal: (val: boolean) => void;
+  setShowCoverageDashboard: (val: boolean) => void;
+  setShowIntegrityModal: (val: boolean) => void;
+}) => void> = {
+  'diag-boot-seq': ({ setCurrentView }) => {
+    setCurrentView('boot-lab');
+  },
+  'diag-bsod-decoder': ({ setCurrentView, setMatrixInitialScenario }) => {
+    setMatrixInitialScenario('crash-repair');
+    setCurrentView('windows-matrix-lab');
+  },
+  'diag-incident-events': ({ setCurrentView, setMatrixInitialScenario }) => {
+    setMatrixInitialScenario('services');
+    setCurrentView('windows-matrix-lab');
+  },
+  'diag-bottleneck-calc': ({ setCurrentView, setLabCorePhase, setActiveLabMission }) => {
+    setLabCorePhase('SELECT_PC');
+    setActiveLabMission('BOTTLENECK');
+    setCurrentView('lab-core');
+  },
+  'diag-autodetect-pc': ({ setCurrentView, setCampusSection }) => {
+    setCurrentView('world-map');
+    setCampusSection('diagnosticar');
+    setTimeout(() => {
+      window.dispatchEvent(new CustomEvent('evo_open_autodetect'));
+    }, 150);
+  },
+  'diag-telemetry-integrity': ({ setShowIntegrityModal }) => {
+    setShowIntegrityModal(true);
+  },
+  'diag-atx-power-bench': ({ setCurrentView, setLabCorePhase, setActiveLabMission }) => {
+    setLabCorePhase('SELECT_PC');
+    setActiveLabMission('REPAIR');
+    setCurrentView('lab-core');
+  },
+  'diag-case-resolver': ({ setCurrentView, setCampusSection }) => {
+    setCurrentView('world-map');
+    setCampusSection('diagnosticar');
+    setTimeout(() => {
+      window.dispatchEvent(new CustomEvent('evo_open_case_resolver'));
+    }, 150);
+  },
+  'med-latency-calc': ({ setCurrentView, setActiveLabPanel }) => {
+    setActiveLabPanel('hardware');
+    setCurrentView('hotswap-lab');
+  },
+  'med-frametime-analyzer': ({ setCurrentView, setActiveLabPanel }) => {
+    setActiveLabPanel('telemetry');
+    setCurrentView('hotswap-lab');
+  },
+  'med-sensors-telemetry': ({ setCurrentView, setActiveLabPanel }) => {
+    setActiveLabPanel('telemetry');
+    setCurrentView('hotswap-lab');
+  },
+  'med-dpc-latency': ({ setCurrentView, setMatrixInitialScenario }) => {
+    setMatrixInitialScenario('services');
+    setCurrentView('windows-matrix-lab');
+  },
+  'med-stress-stability': ({ setCurrentView, setLabCorePhase, setActiveLabMission }) => {
+    setLabCorePhase('SELECT_PC');
+    setActiveLabMission('TEST');
+    setCurrentView('lab-core');
+  },
+  'med-thermal-history': ({ setCurrentView, setActiveLabPanel }) => {
+    setActiveLabPanel('telemetry');
+    setCurrentView('hotswap-lab');
+  },
+  'inv-pcb-schematic': ({ setCurrentView, setActiveLabPanel }) => {
+    setActiveLabPanel('hardware');
+    setCurrentView('hotswap-lab');
+  },
+  'inv-xray-kernel': ({ setCurrentView, setMatrixInitialScenario }) => {
+    setMatrixInitialScenario('scheduler');
+    setCurrentView('windows-matrix-lab');
+  },
+  'inv-cache-imc-flow': ({ setCurrentView, setActiveLabPanel }) => {
+    setActiveLabPanel('hardware');
+    setCurrentView('hotswap-lab');
+  },
+  'inv-digital-twin': ({ setCurrentView, setCampusSection }) => {
+    setCurrentView('world-map');
+    setCampusSection('diagnosticar');
+    setTimeout(() => {
+      window.dispatchEvent(new CustomEvent('evo_open_digital_twin'));
+    }, 150);
+  },
+  'inv-workstations-sectors': ({ setCurrentView, setActiveLabPanel }) => {
+    setActiveLabPanel('all');
+    setCurrentView('hotswap-lab');
+  },
+  'inv-coverage-matrix': ({ setShowCoverageDashboard }) => {
+    setShowCoverageDashboard(true);
+  },
+  'rep-windows-repair': ({ setCurrentView, setMatrixInitialScenario }) => {
+    setMatrixInitialScenario('repair');
+    setCurrentView('windows-matrix-lab');
+  },
+  'rep-windows-install': ({ setCurrentView, setMatrixInitialScenario }) => {
+    setMatrixInitialScenario('install');
+    setCurrentView('windows-matrix-lab');
+  },
+  'rep-hotswap-bench': ({ setCurrentView, setActiveLabPanel }) => {
+    setActiveLabPanel('sandbox');
+    setCurrentView('hotswap-lab');
+  },
+  'rep-core-repair-view': ({ setCurrentView, setLabCorePhase, setActiveLabMission }) => {
+    setLabCorePhase('SELECT_PC');
+    setActiveLabMission('REPAIR');
+    setCurrentView('lab-core');
+  },
+  'opt-nt-services': ({ setCurrentView, setMatrixInitialScenario }) => {
+    setMatrixInitialScenario('services');
+    setCurrentView('windows-matrix-lab');
+  },
+  'opt-core-optimization': ({ setCurrentView, setLabCorePhase, setActiveLabMission }) => {
+    setLabCorePhase('SELECT_PC');
+    setActiveLabMission('OPTIMIZE');
+    setCurrentView('lab-core');
+  },
+  'opt-ab-comparison': ({ setCurrentView, setActiveLabPanel }) => {
+    setActiveLabPanel('sandbox');
+    setCurrentView('hotswap-lab');
+  },
+  'opt-upgrade-simulator': ({ setCurrentView, setLabCorePhase, setActiveLabMission }) => {
+    setLabCorePhase('SELECT_PC');
+    setActiveLabMission('UPGRADE');
+    setCurrentView('lab-core');
+  },
+  'opt-build-architect': ({ setCurrentView, setLabCorePhase }) => {
+    setLabCorePhase('BUILD_PC');
+    setCurrentView('lab-core');
+  },
+  'doc-forensic-dossier': ({ setCurrentView, setCampusSection }) => {
+    setCurrentView('world-map');
+    setCampusSection('diagnosticar');
+    setTimeout(() => {
+      window.dispatchEvent(new CustomEvent('evo_open_forensic_report'));
+    }, 150);
+  },
+  'doc-evidence-passport': ({ setShowDiscoveryModal }) => {
+    setShowDiscoveryModal(true);
+  },
+  'doc-technical-dossier': ({ setCurrentView, setCampusSection }) => {
+    setCurrentView('world-map');
+    setCampusSection('diagnosticar');
+    setTimeout(() => {
+      window.dispatchEvent(new CustomEvent('evo_open_forensic_report'));
+    }, 150);
+  },
+  'doc-content-factory': ({ setCurrentView, setCampusSection }) => {
+    setCurrentView('world-map');
+    setCampusSection('diagnosticar');
+    setTimeout(() => {
+      window.dispatchEvent(new CustomEvent('evo_open_content_factory'));
+    }, 150);
+  },
+  'doc-transfer-challenge': ({ setCurrentView, setCampusSection }) => {
+    setCurrentView('world-map');
+    setCampusSection('diagnosticar');
+    setTimeout(() => {
+      window.dispatchEvent(new CustomEvent('evo_open_transfer_challenge'));
+    }, 150);
+  },
+};
+
+import {
+  getTomeNumberFromTarget,
+  resolveTomeViewOrDossier,
+  ResolvedTomeTarget,
+} from './utils/evoTomeTargetRouter';
+
+export { getTomeNumberFromTarget, resolveTomeViewOrDossier };
+export type { ResolvedTomeTarget };
+
+function AppContent({
+  initialPendingTarget,
+  onClearPendingTarget,
+  onReturnToPublic,
+}: {
+  initialPendingTarget?: PublicNavigationTarget | null;
+  onClearPendingTarget?: () => void;
+  onReturnToPublic?: () => void;
+}) {
   const { updateLocation, saveCurrentLocationHistory } = useTutorEvo();
+
+  useEffect(() => {
+    if (initialPendingTarget) {
+      setIsIntroActive(false);
+      try {
+        localStorage.setItem('evo_academia_intro_dismissed', 'true');
+      } catch {}
+      if (initialPendingTarget.type === 'TOME') {
+        const tomoNum = getTomeNumberFromTarget(initialPendingTarget);
+        if (tomoNum) {
+          handleNavigateTomo(tomoNum);
+        } else {
+          const rawDisplay =
+            'tomeNumber' in initialPendingTarget
+              ? String(initialPendingTarget.tomeNumber)
+              : 'desconocido';
+          setActiveNotice(`Error: El Tomo solicitado "${rawDisplay}" no es válido.`);
+        }
+      } else if (initialPendingTarget.type === 'BOOT_LAB') {
+        handleNavigateBootLab();
+      } else if (initialPendingTarget.type === 'HOTSWAP') {
+        setCurrentView('hotswap-lab');
+        const sp = (initialPendingTarget as any).subPanel;
+        if (sp && ['sandbox', 'hardware', 'software', 'telemetry', 'matrix', 'all'].includes(sp)) {
+          setActiveLabPanel(sp);
+        } else {
+          setActiveLabPanel('hardware');
+        }
+      } else if (initialPendingTarget.type === 'WINDOWS_MATRIX') {
+        setMatrixInitialScenario((initialPendingTarget as any).scenario);
+        setCurrentView('windows-matrix-lab');
+      } else if (initialPendingTarget.type === 'LAB_CORE') {
+        setCurrentView('lab-core');
+        const ph = (initialPendingTarget as any).phase;
+        if (ph) setLabCorePhase(ph);
+        const ms = (initialPendingTarget as any).mission;
+        if (ms) setActiveLabMission(ms);
+      } else if (initialPendingTarget.type === 'TOOL') {
+        const toolId = (initialPendingTarget as any).toolId;
+        executeToolById(toolId, {
+          setCurrentView,
+          setCampusSection,
+          setActiveLabPanel,
+          setActiveLabMission,
+          setLabCorePhase,
+          setMatrixInitialScenario,
+          setShowDiscoveryModal,
+          setShowCoverageDashboard,
+          setShowIntegrityModal,
+          openDossierModal: (tId) => setDossierModalTomoId(tId),
+        });
+      } else if (initialPendingTarget.type === 'APP_SECTION') {
+        setCurrentView('world-map');
+        setCampusSection((initialPendingTarget as any).section);
+      } else if (initialPendingTarget.type === 'APP_HOME') {
+        setCurrentView('world-map');
+        setCampusSection('campus');
+      }
+      onClearPendingTarget?.();
+    }
+  }, [initialPendingTarget]);
   const [currentView, setCurrentView] = useState<
     | 'magazine'
     | 'tomo-02'
@@ -119,6 +372,22 @@ function AppContent({ onReturnToPublic }: { onReturnToPublic?: () => void }) {
     | 'tomo01-quiz'
     | 'tomo01-completion'
   >(() => {
+    if (initialPendingTarget) {
+      if (initialPendingTarget.type === 'TOME') {
+        const tomoNum = getTomeNumberFromTarget(initialPendingTarget);
+        if (tomoNum) {
+          const resolved = resolveTomeViewOrDossier(tomoNum);
+          if (resolved && resolved.kind === 'reader') {
+            return resolved.view;
+          }
+        }
+        return 'world-map';
+      }
+      if (initialPendingTarget.type === 'BOOT_LAB') return 'boot-lab';
+      if (initialPendingTarget.type === 'HOTSWAP') return 'hotswap-lab';
+      if (initialPendingTarget.type === 'WINDOWS_MATRIX') return 'windows-matrix-lab';
+      if (initialPendingTarget.type === 'LAB_CORE') return 'lab-core';
+    }
     try {
       const url = new URL(window.location.href);
       const vol = url.searchParams.get('volume');
@@ -126,10 +395,10 @@ function AppContent({ onReturnToPublic }: { onReturnToPublic?: () => void }) {
       if (viewParam === 'hotswap') return 'hotswap-lab';
       if (viewParam === 'matrix') return 'windows-matrix-lab';
       if (viewParam === 'core' || viewParam === 'lab-core') return 'lab-core';
-      if (vol === '02') return 'tomo-02';
-      if (vol === '03') return 'tomo-03';
-      if (vol === '04') return 'tomo-04';
-      if (vol === '08') return 'tomo-08';
+      if (vol === '02' || vol === '2') return 'tomo-02';
+      if (vol === '03' || vol === '3') return 'tomo-03';
+      if (vol === '04' || vol === '4') return 'tomo-04';
+      if (vol === '08' || vol === '8') return 'tomo-08';
       if (viewParam === 'boot' || viewParam === 'boot-lab') return 'boot-lab';
       if (viewParam === 'index') return 'index';
       if (viewParam === 'world' || viewParam === 'map') return 'world-map';
@@ -139,10 +408,10 @@ function AppContent({ onReturnToPublic }: { onReturnToPublic?: () => void }) {
         url.searchParams.get('mode') === 'magazine' ||
         url.searchParams.get('pdf') === 'true'
       ) {
-        if (vol === '02') return 'tomo-02';
-        if (vol === '03') return 'tomo-03';
-        if (vol === '04') return 'tomo-04';
-        if (vol === '08') return 'tomo-08';
+        if (vol === '02' || vol === '2') return 'tomo-02';
+        if (vol === '03' || vol === '3') return 'tomo-03';
+        if (vol === '04' || vol === '4') return 'tomo-04';
+        if (vol === '08' || vol === '8') return 'tomo-08';
         return 'magazine';
       }
     } catch {
@@ -165,7 +434,18 @@ function AppContent({ onReturnToPublic }: { onReturnToPublic?: () => void }) {
   const [liveScanResult, setLiveScanResult] = useState<LiveScanIntegrityResult | null>(null);
   const [showCaseHistoryModal, setShowCaseHistoryModal] = useState<boolean>(false);
   const [caseHistoryList, setCaseHistoryList] = useState<EvoCase[]>([]);
-  const [dossierModalTomoId, setDossierModalTomoId] = useState<string | null>(null);
+  const [dossierModalTomoId, setDossierModalTomoId] = useState<string | null>(() => {
+    if (initialPendingTarget && initialPendingTarget.type === 'TOME') {
+      const tomoNum = getTomeNumberFromTarget(initialPendingTarget);
+      if (tomoNum) {
+        const resolved = resolveTomeViewOrDossier(tomoNum);
+        if (resolved && resolved.kind === 'dossier') {
+          return resolved.dossierId;
+        }
+      }
+    }
+    return null;
+  });
 
   const [campusSection, setCampusSection] = useState<
     'campus' | 'escuela' | 'biblioteca' | 'laboratorios' | 'diagnosticar' | 'progreso' | 'herramientas' | 'como-usar' | 'planes'
@@ -213,6 +493,12 @@ function AppContent({ onReturnToPublic }: { onReturnToPublic?: () => void }) {
   });
 
   const [isIntroActive, setIsIntroActive] = useState<boolean>(() => {
+    if (initialPendingTarget) {
+      try {
+        localStorage.setItem('evo_academia_intro_dismissed', 'true');
+      } catch {}
+      return false;
+    }
     try {
       const url = new URL(window.location.href);
       if (url.searchParams.get('intro') === 'true') {
@@ -234,7 +520,19 @@ function AppContent({ onReturnToPublic }: { onReturnToPublic?: () => void }) {
     }
   });
   const [activeProfile, setActiveProfile] = useState<EvoNarrativeProfile>('investigador');
-  const [activeNotice, setActiveNotice] = useState<string | null>(null);
+  const [activeNotice, setActiveNotice] = useState<string | null>(() => {
+    if (initialPendingTarget && initialPendingTarget.type === 'TOME') {
+      const tomoNum = getTomeNumberFromTarget(initialPendingTarget);
+      if (!tomoNum) {
+        const rawDisplay =
+          'tomeNumber' in initialPendingTarget
+            ? String(initialPendingTarget.tomeNumber)
+            : 'desconocido';
+        return `Error: El Tomo solicitado "${rawDisplay}" no es válido.`;
+      }
+    }
+    return null;
+  });
   const [userPassport, setUserPassport] = useState<UserHardwarePassport | null>(() => {
     try {
       const raw = localStorage.getItem('evo_c01_specs');
@@ -1098,23 +1396,22 @@ function AppContent({ onReturnToPublic }: { onReturnToPublic?: () => void }) {
     );
   }
 
-  const handleNavigateTomo = (tomo: string) => {
-    if (tomo === '01' || tomo === 'tomo-01') setCurrentView('cover');
-    else if (tomo === '02' || tomo === 'tomo-02') setCurrentView('tomo-02');
-    else if (tomo === '03' || tomo === 'tomo-03') setCurrentView('tomo-03');
-    else if (tomo === '04' || tomo === 'tomo-04') setCurrentView('tomo-04');
-    else if (tomo === '08' || tomo === 'tomo-08') setCurrentView('tomo-08');
-    window.scrollTo({ top: 0, behavior: 'instant' });
+  const handleNavigateTomo = (tomo: string | any) => {
+    const tId = typeof tomo === 'string' ? tomo : (tomo?.tomoNumber || tomo?.id || (typeof tomo === 'object' ? '' : String(tomo || '')));
+    executeTomoById(tId, {
+      setCurrentView,
+      openDossierModal: (tId) => setDossierModalTomoId(tId),
+    });
   };
 
   const handleNavigateTomo08 = () => {
     setCurrentView('tomo-08');
-    window.scrollTo({ top: 0, behavior: 'instant' });
+    try { window.scrollTo(0, 0); } catch {}
   };
 
   const handleNavigateBootLab = () => {
     setCurrentView('boot-lab');
-    window.scrollTo({ top: 0, behavior: 'instant' });
+    try { window.scrollTo(0, 0); } catch {}
   };
 
   const handleOpenForensicBench = (target: ForensicBenchTarget) => {
@@ -1624,13 +1921,27 @@ export default function App() {
     return false;
   });
 
+  const [pendingPublicTarget, setPendingPublicTarget] = useState<PublicNavigationTarget | null>(null);
+
   if (!isAppMode) {
-    return <PublicShell onEnterPrivateApp={() => setIsAppMode(true)} />;
+    return (
+      <PublicShell
+        onEnterPrivateApp={() => setIsAppMode(true)}
+        onNavigateTarget={(target) => {
+          setPendingPublicTarget(target);
+          setIsAppMode(true);
+        }}
+      />
+    );
   }
 
   return (
     <TutorEvoProvider>
-      <AppContent onReturnToPublic={() => setIsAppMode(false)} />
+      <AppContent
+        initialPendingTarget={pendingPublicTarget}
+        onClearPendingTarget={() => setPendingPublicTarget(null)}
+        onReturnToPublic={() => setIsAppMode(false)}
+      />
     </TutorEvoProvider>
   );
 }
