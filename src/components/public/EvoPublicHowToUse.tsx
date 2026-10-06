@@ -8,10 +8,14 @@ import {
   Monitor,
   Bot,
   Trophy,
-  FileCheck,
+  FileCheck2,
   Activity,
   Layers,
   Cpu,
+  ArrowRight,
+  ShieldCheck,
+  Search,
+  Sparkles,
 } from 'lucide-react';
 
 interface EvoPublicHowToUseProps {
@@ -30,15 +34,72 @@ export const EvoPublicHowToUse: React.FC<EvoPublicHowToUseProps> = ({
   onNavigateMiEvo,
 }) => {
   const methodSteps = [
-    { step: '01', verb: 'OBSERVAR', desc: 'Identificá el síntoma en el sistema o hardware sin prejuicios ni suposiciones.' },
-    { step: '02', verb: 'ENTENDER', desc: 'Comprendé los buses, dependencias y protocolos que interactúan en la falla.' },
-    { step: '03', verb: 'HIPOTETIZAR', desc: 'Formulá una causa probable basada en la física del silicio y el Kernel NT.' },
-    { step: '04', verb: 'INTERVENIR', desc: 'Realizá una sola modificación controlada en el banco o software.' },
+    { step: '01', verb: 'OBSERVAR', desc: 'Identificá el síntoma en el sistema o hardware sin prejuicios ni suposiciones previas.' },
+    { step: '02', verb: 'ENTENDER', desc: 'Comprendé los buses, dependencias y protocolos de silicio que interactúan en la falla.' },
+    { step: '03', verb: 'HIPOTETIZAR', desc: 'Formulá una causa probable basada en la física de los componentes y el Kernel NT.' },
+    { step: '04', verb: 'INTERVENIR', desc: 'Realizá una sola modificación controlada en el banco de pruebas o configuración.' },
     { step: '05', verb: 'MEDIR', desc: 'Registrá la variable con instrumental metrológico real en tiempo exacto.' },
-    { step: '06', verb: 'COMPARAR', desc: 'Contrastá la medición contra la línea de base original o valores estándar.' },
-    { step: '07', verb: 'COMPROBAR', desc: 'Validá si la hipótesis se demostró con rigor o fue totalmente refutada.' },
-    { step: '08', verb: 'DOCUMENTAR', desc: 'Registrá el hallazgo en el expediente pericial con procedencia de datos.' },
-    { step: '09', verb: 'TRANSFERIR', desc: 'Aplicá el principio a nuevos escenarios, arquitecturas y diagnósticos reales.' },
+    { step: '06', verb: 'COMPARAR', desc: 'Contrastá la medición contra la línea de base original o valores de referencia nominales.' },
+    { step: '07', verb: 'COMPROBAR', desc: 'Validá si la hipótesis se demostró con rigor empírico o fue refutada.' },
+    { step: '08', verb: 'DOCUMENTAR', desc: 'Registrá el hallazgo en el expediente pericial con procedencia de datos garantizada.' },
+    { step: '09', verb: 'TRANSFERIR', desc: 'Aplicá el principio a nuevos escenarios, arquitecturas y diagnósticos del mundo real.' },
+  ];
+
+  const operationalPillars = [
+    {
+      step: '1',
+      title: 'CÓMO APRENDER // TOMOS & MAGAZINES',
+      color: 'text-amber-400',
+      badge: 'APRENDER',
+      desc: 'Accedé a los 10 tomos canónicos y publicaciones técnicas. Cada tomo desglosa arquitectura de silicio, kernel, subsistemas y fallas reales.',
+      actionLabel: 'IR A APRENDER →',
+      onAction: onNavigateTomos,
+    },
+    {
+      step: '2',
+      title: 'CÓMO PRACTICAR // LABS & SIMULADORES',
+      color: 'text-cyan-400',
+      badge: 'PRACTICAR',
+      desc: 'Experimentá en bancos de trabajo reales como Hot-Swap Lab, Windows Matrix Lab y Boot Lab para validar hipótesis de hardware.',
+      actionLabel: 'IR A PRACTICAR →',
+      onAction: onNavigateLabs,
+    },
+    {
+      step: '3',
+      title: 'CÓMO USAR // HERRAMIENTAS TÉCNICAS',
+      color: 'text-emerald-400',
+      badge: 'HERRAMIENTAS',
+      desc: 'Utilizá el instrumental metrológico independiente: calculador de latencias en nanosegundos, auditor de servicios NT y telemetría.',
+      actionLabel: 'VER HERRAMIENTAS →',
+      onAction: onNavigateTools,
+    },
+    {
+      step: '4',
+      title: 'CÓMO ANALIZAR // TU PROPIA PC',
+      color: 'text-purple-400',
+      badge: 'ANALIZAR',
+      desc: 'Ejecutá el motor pericial de diagnóstico seguro para auditar tu procesador, memorias, almacenamiento y coherencia térmica.',
+      actionLabel: 'ANALIZAR MI PC →',
+      onAction: onNavigateAnalyze,
+    },
+    {
+      step: '5',
+      title: 'CÓMO CONSULTAR // TUTOR EVO',
+      color: 'text-pink-400',
+      badge: 'TUTOR CONTEXTUAL',
+      desc: 'El Tutor EVO te acompaña en cada tomo, laboratorio y diagnóstico, guiándote en la formulación de hipótesis sin dar respuestas servidas.',
+      actionLabel: 'CONSULTAR EN APP',
+      onAction: onNavigateTomos,
+    },
+    {
+      step: '6',
+      title: 'EVIDENCIA & PROGRESO // MI EVO',
+      color: 'text-blue-400',
+      badge: 'EXPEDIENTE TÉCNICO',
+      desc: 'Tus exámenes finales aprobados, diagnósticos validados y horas de laboratorio quedan acreditados en tu pasaporte pericial único.',
+      actionLabel: 'VER MI EVO →',
+      onAction: onNavigateMiEvo,
+    },
   ];
 
   const ecosystemEngines = [
@@ -53,7 +114,7 @@ export const EvoPublicHowToUse: React.FC<EvoPublicHowToUseProps> = ({
   return (
     <div className="max-w-[1240px] mx-auto w-full px-4 sm:px-6 lg:px-8 py-8 space-y-12">
       
-      {/* HEADER */}
+      {/* HEADER PRINCIPAL */}
       <div className="space-y-3 text-center sm:text-left border-b border-zinc-800 pb-6">
         <div className="flex items-center justify-center sm:justify-start gap-2">
           <Compass className="w-5 h-5 text-amber-400" />
@@ -65,63 +126,50 @@ export const EvoPublicHowToUse: React.FC<EvoPublicHowToUseProps> = ({
           CÓMO FUNCIONA EVO LABS
         </h1>
         <p className="text-sm sm:text-base text-zinc-300 font-sans-editorial max-w-2xl">
-          Conocé el método pericial de 9 pasos, la cadena pedagógica del Sistema EVO y la arquitectura del ecosistema técnico.
+          Conocé el método pericial de 9 pasos, los 6 pilares de uso operativo y la arquitectura completa del ecosistema técnico.
         </p>
       </div>
 
-      {/* GUÍA RÁPIDA DE USO: 6 PILARES OPERATIVOS */}
+      {/* GUÍA OPERATIVA: 6 PILARES CON ACCESO DIRECTO */}
       <div className="space-y-4">
-        <h2 className="text-xl font-display font-black text-white uppercase tracking-tight">
-          GUÍA OPERATIVA // PASO A PASO
-        </h2>
+        <div className="flex items-center justify-between">
+          <h2 className="text-xl font-display font-black text-white uppercase tracking-tight">
+            GUÍA OPERATIVA // PASO A PASO
+          </h2>
+          <span className="text-[10px] font-mono-tech text-zinc-500 uppercase">6 PUERTAS DE ACCESO</span>
+        </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 font-mono-tech text-xs">
-          <div className="p-5 rounded-2xl bg-zinc-950 border border-zinc-800 space-y-2">
-            <span className="text-amber-400 font-black text-sm block">1. ELEGIR UN TOMO</span>
-            <p className="text-zinc-300 font-sans-editorial leading-relaxed">
-              Ingresá a la sección Tomos, seleccioná el área tecnológica de tu interés (Hardware, Kernel, Redes, etc.) y recorré sus módulos editoriales.
-            </p>
-          </div>
+          {operationalPillars.map((p, idx) => (
+            <div
+              key={idx}
+              className="p-5 rounded-2xl bg-zinc-950 border border-zinc-800 flex flex-col justify-between space-y-3 hover:border-zinc-700 transition-colors shadow-lg"
+            >
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className={`text-xs font-black ${p.color}`}>{p.badge}</span>
+                  <span className="text-[10px] text-zinc-600 font-mono">0{p.step}</span>
+                </div>
+                <h3 className="font-display font-bold text-sm text-white uppercase">{p.title}</h3>
+                <p className="text-zinc-300 font-sans-editorial leading-relaxed text-xs">
+                  {p.desc}
+                </p>
+              </div>
 
-          <div className="p-5 rounded-2xl bg-zinc-950 border border-zinc-800 space-y-2">
-            <span className="text-cyan-400 font-black text-sm block">2. EXPERIMENTAR EN LABS</span>
-            <p className="text-zinc-300 font-sans-editorial leading-relaxed">
-              Cada tomo cuenta con bancos interactivos de pruebas donde podés variar parámetros y verificar mediciones en tiempo real.
-            </p>
-          </div>
-
-          <div className="p-5 rounded-2xl bg-zinc-950 border border-zinc-800 space-y-2">
-            <span className="text-emerald-400 font-black text-sm block">3. USAR HERRAMIENTAS</span>
-            <p className="text-zinc-300 font-sans-editorial leading-relaxed">
-              Utilizá el instrumental especializado para medir latencias, analizar servicios de Windows o aislar fallas en rieles de poder ATX.
-            </p>
-          </div>
-
-          <div className="p-5 rounded-2xl bg-zinc-950 border border-zinc-800 space-y-2">
-            <span className="text-purple-400 font-black text-sm block">4. ANALIZAR TU PROPIA PC</span>
-            <p className="text-zinc-300 font-sans-editorial leading-relaxed">
-              Ejecutá el diagnóstico local seguro para categorizar tu hardware real con procedencia metrológica estricta.
-            </p>
-          </div>
-
-          <div className="p-5 rounded-2xl bg-zinc-950 border border-zinc-800 space-y-2">
-            <span className="text-pink-400 font-black text-sm block">5. CONSULTAR AL TUTOR EVO</span>
-            <p className="text-zinc-300 font-sans-editorial leading-relaxed">
-              El Tutor EVO analiza tu contexto de lectura o simulación y responde dudas de esquemáticos o procedimientos periciales.
-            </p>
-          </div>
-
-          <div className="p-5 rounded-2xl bg-zinc-950 border border-zinc-800 space-y-2">
-            <span className="text-blue-400 font-black text-sm block">6. GUARDAR EVIDENCIA EN MI EVO</span>
-            <p className="text-zinc-300 font-sans-editorial leading-relaxed">
-              Cada examen aprobado y reporte forense se asocia a tu pasaporte técnico personal para acreditar tu dominio.
-            </p>
-          </div>
+              <button
+                type="button"
+                onClick={p.onAction}
+                className="w-full py-2.5 rounded-xl bg-zinc-900 hover:bg-zinc-800 text-zinc-200 hover:text-white border border-zinc-700/60 font-bold uppercase transition-all cursor-pointer flex items-center justify-center gap-1.5 mt-2"
+              >
+                <span>{p.actionLabel}</span>
+              </button>
+            </div>
+          ))}
         </div>
       </div>
 
       {/* EL MÉTODO EVO: 9 PASOS CIENTÍFICOS */}
-      <div className="space-y-4">
+      <div className="space-y-4 pt-2">
         <div className="flex items-center gap-2">
           <span className="text-xs font-mono-tech text-amber-400 font-black uppercase tracking-widest">
             METODOLOGÍA DE INGENIERÍA
@@ -130,8 +178,11 @@ export const EvoPublicHowToUse: React.FC<EvoPublicHowToUseProps> = ({
         <h2 className="text-2xl font-display font-black text-white uppercase tracking-tight">
           EL MÉTODO EVO // 9 PASOS PERICIALES
         </h2>
+        <p className="text-xs sm:text-sm text-zinc-400 font-sans-editorial max-w-2xl">
+          El proceso riguroso aplicado en cada laboratorio para aislar síntomas, medir magnitudes físicas y comprobar hipótesis.
+        </p>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5 font-mono-tech text-xs">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5 font-mono-tech text-xs pt-2">
           {methodSteps.map((m, idx) => (
             <div key={idx} className="p-4 rounded-xl bg-zinc-950 border border-zinc-800/90 space-y-1.5 shadow-md">
               <span className="text-[10px] text-zinc-500 font-mono block font-black">FASE {m.step}</span>

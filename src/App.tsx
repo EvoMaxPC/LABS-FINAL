@@ -21,6 +21,7 @@ import { ChapterUnlockedCelebrationModal } from './components/ChapterUnlockedCel
 import { getChapterRequirements, ChapterRequirementInfo } from './utils/chapterPrerequisites';
 import { ChapterItem, EvoNarrativeProfile, EvoLabZone, UserHardwarePassport, Tome01DossierSummary } from './types';
 import { EvoWorldMap } from './components/world/EvoWorldMap';
+import { PublicShell } from './components/public/PublicShell';
 import { EvoIntroExperience } from './components/world/EvoIntroExperience';
 import { EvoArchiveEntrance } from './components/world/EvoArchiveEntrance';
 import { EvoMagazineView } from './components/magazine/EvoMagazineView';
@@ -92,7 +93,7 @@ const safeStorage = {
   },
 };
 
-function AppContent() {
+function AppContent({ onReturnToPublic }: { onReturnToPublic?: () => void }) {
   const { updateLocation, saveCurrentLocationHistory } = useTutorEvo();
   const [currentView, setCurrentView] = useState<
     | 'magazine'
@@ -167,8 +168,23 @@ function AppContent() {
   const [dossierModalTomoId, setDossierModalTomoId] = useState<string | null>(null);
 
   const [campusSection, setCampusSection] = useState<
-    'campus' | 'escuela' | 'biblioteca' | 'laboratorios' | 'diagnosticar' | 'progreso' | 'herramientas'
-  >('campus');
+    'campus' | 'escuela' | 'biblioteca' | 'laboratorios' | 'diagnosticar' | 'progreso' | 'herramientas' | 'como-usar' | 'planes'
+  >(() => {
+    try {
+      const url = new URL(window.location.href);
+      const viewParam = url.searchParams.get('view');
+      if (viewParam === 'planes' || viewParam === 'pricing' || viewParam === 'precios') return 'planes';
+      if (viewParam === 'como-usar' || viewParam === 'como-funciona' || viewParam === 'how-to-use') return 'como-usar';
+      if (viewParam === 'escuela' || viewParam === 'aprender') return 'escuela';
+      if (viewParam === 'laboratorios' || viewParam === 'practicar') return 'laboratorios';
+      if (viewParam === 'diagnosticar' || viewParam === 'analizar') return 'diagnosticar';
+      if (viewParam === 'herramientas' || viewParam === 'tools') return 'herramientas';
+      if (viewParam === 'progreso' || viewParam === 'mievo') return 'progreso';
+    } catch {
+      // ignore
+    }
+    return 'campus';
+  });
 
   const [deepLinkDest, setDeepLinkDest] = useState<{ view: any; volume?: string | null } | null>(() => {
     try {
@@ -930,7 +946,7 @@ function AppContent() {
   };
 
   const handleNavigateCampusSection = (
-    section: 'campus' | 'escuela' | 'biblioteca' | 'laboratorios' | 'diagnosticar' | 'progreso' | 'herramientas'
+    section: 'campus' | 'escuela' | 'biblioteca' | 'laboratorios' | 'diagnosticar' | 'progreso' | 'herramientas' | 'como-usar' | 'planes'
   ) => {
     setCampusSection(section);
     setCurrentView('world-map');
@@ -1153,6 +1169,7 @@ function AppContent() {
         onHardwareDetected={(passport) => setUserPassport(passport)}
         dossierModalTomoId={dossierModalTomoId}
         onCloseDossierModal={() => setDossierModalTomoId(null)}
+        onReturnToPublic={onReturnToPublic}
       />
 
       {/* Main Body Container */}
@@ -1596,9 +1613,24 @@ function AppContent() {
 }
 
 export default function App() {
+  const [isAppMode, setIsAppMode] = useState<boolean>(() => {
+    try {
+      const url = new URL(window.location.href);
+      const vol = url.searchParams.get('volume');
+      const viewParam = url.searchParams.get('view');
+      const modeParam = url.searchParams.get('mode');
+      if (vol || viewParam || modeParam) return true;
+    } catch {}
+    return false;
+  });
+
+  if (!isAppMode) {
+    return <PublicShell onEnterPrivateApp={() => setIsAppMode(true)} />;
+  }
+
   return (
     <TutorEvoProvider>
-      <AppContent />
+      <AppContent onReturnToPublic={() => setIsAppMode(false)} />
     </TutorEvoProvider>
   );
 }

@@ -30,9 +30,9 @@ export interface HeaderProps {
   currentView?: string;
   activeLabPanel?: string;
   activeLabMission?: string;
-  campusSection?: 'campus' | 'escuela' | 'biblioteca' | 'laboratorios' | 'diagnosticar' | 'progreso' | 'herramientas';
+  campusSection?: 'campus' | 'escuela' | 'biblioteca' | 'laboratorios' | 'diagnosticar' | 'progreso' | 'herramientas' | 'como-usar' | 'planes';
   onNavigateHome?: () => void;
-  onNavigateCampusSection?: (section: 'campus' | 'escuela' | 'biblioteca' | 'laboratorios' | 'diagnosticar' | 'progreso' | 'herramientas') => void;
+  onNavigateCampusSection?: (section: 'campus' | 'escuela' | 'biblioteca' | 'laboratorios' | 'diagnosticar' | 'progreso' | 'herramientas' | 'como-usar' | 'planes') => void;
   onNavigateArchive?: () => void;
   onNavigateTomo01?: () => void;
   onNavigateTomo02?: () => void;
@@ -56,6 +56,7 @@ export interface HeaderProps {
   onHardwareDetected?: (hardware: UserHardwarePassport) => void;
   dossierModalTomoId?: string | null;
   onCloseDossierModal?: () => void;
+  onReturnToPublic?: () => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -79,6 +80,7 @@ export const Header: React.FC<HeaderProps> = ({
   onHardwareDetected,
   dossierModalTomoId = null,
   onCloseDossierModal,
+  onReturnToPublic,
 }) => {
   const [isAutoDetectOpen, setIsAutoDetectOpen] = useState(false);
   const [internalDossierTomoId, setInternalDossierTomoId] = useState<string | null>(null);
@@ -144,6 +146,8 @@ export const Header: React.FC<HeaderProps> = ({
   const isAnalizarActive =
     (currentView === 'world-map' && campusSection === 'diagnosticar') || currentView === 'lab-core';
   const isHerramientasActive = currentView === 'world-map' && campusSection === 'herramientas';
+  const isComoUsarActive = currentView === 'world-map' && campusSection === 'como-usar';
+  const isPlanesActive = currentView === 'world-map' && campusSection === 'planes';
   const isMiEvoActive = currentView === 'world-map' && campusSection === 'progreso';
   const isProgresoActive = isMiEvoActive;
 
@@ -206,9 +210,9 @@ export const Header: React.FC<HeaderProps> = ({
 
           {/* ========================================================================= */}
           {/* ZONA CENTRAL: NAVEGACIÓN SUPERIOR PRINCIPAL (DESKTOP)                      */}
-          {/* REGLA: [ INICIO ] [ TOMOS ] [ MAGAZINES ] [ LABORATORIOS ] [ HERRAMIENTAS ] [ ANALIZAR MI PC ] [ CÓMO USAR EVO ] [ PRECIOS ] */}
+          {/* REGLA: [ INICIO ] [ APRENDER ] [ PRACTICAR ] [ ANALIZAR MI PC ] [ HERRAMIENTAS ] [ CÓMO USAR EVO ] [ PLANES ] */}
           {/* ========================================================================= */}
-          <nav ref={navRef} className="hidden xl:flex items-center gap-1 p-1 rounded-2xl bg-[#0b0e17]/85 border border-white/[0.08] backdrop-blur-xl shadow-[inset_0_1px_1px_rgba(255,255,255,0.06),0_4px_16px_rgba(0,0,0,0.4)] font-mono-tech text-[11px] uppercase tracking-wider font-bold">
+          <nav ref={navRef} className="hidden lg:flex items-center gap-1 p-1 rounded-2xl bg-[#0b0e17]/85 border border-white/[0.08] backdrop-blur-xl shadow-[inset_0_1px_1px_rgba(255,255,255,0.06),0_4px_16px_rgba(0,0,0,0.4)] font-mono-tech text-[11px] uppercase tracking-wider font-bold">
             {/* 1. INICIO */}
             <button
               type="button"
@@ -218,7 +222,7 @@ export const Header: React.FC<HeaderProps> = ({
                 else if (onNavigateHome) onNavigateHome();
               }}
               title="Campus Principal EVO LABS"
-              className={`px-2.5 py-1.5 rounded-xl flex items-center gap-1 transition-all duration-200 cursor-pointer select-none group relative ${
+              className={`px-3 py-1.5 rounded-xl flex items-center gap-1.5 transition-all duration-200 cursor-pointer select-none group relative ${
                 isMundoEvoActive
                   ? 'bg-gradient-to-b from-amber-400/20 via-amber-500/12 to-amber-500/5 text-amber-200 border border-amber-400/40 font-bold shadow-[0_0_16px_rgba(245,158,11,0.2),inset_0_1px_0_rgba(255,255,255,0.18)]'
                   : 'text-zinc-300 hover:text-white hover:bg-white/[0.06] border border-transparent hover:border-white/[0.08]'
@@ -227,7 +231,7 @@ export const Header: React.FC<HeaderProps> = ({
               <span>INICIO</span>
             </button>
 
-            {/* 2. TOMOS */}
+            {/* 2. APRENDER */}
             <button
               type="button"
               onClick={() => {
@@ -235,35 +239,17 @@ export const Header: React.FC<HeaderProps> = ({
                 if (onNavigateCampusSection) onNavigateCampusSection('escuela');
                 else if (onNavigateHome) onNavigateHome();
               }}
-              title="Tomos // Colección de 10 Tomos Maestros"
-              className={`px-2.5 py-1.5 rounded-xl flex items-center gap-1 transition-all duration-200 cursor-pointer select-none group relative ${
+              title="Aprender // 10 Tomos Maestros y Magazines"
+              className={`px-3 py-1.5 rounded-xl flex items-center gap-1.5 transition-all duration-200 cursor-pointer select-none group relative ${
                 isEscuelaActive
                   ? 'bg-gradient-to-b from-amber-400/20 via-amber-500/12 to-amber-500/5 text-amber-200 border border-amber-400/40 font-bold shadow-[0_0_16px_rgba(245,158,11,0.2),inset_0_1px_0_rgba(255,255,255,0.18)]'
                   : 'text-zinc-300 hover:text-white hover:bg-white/[0.06] border border-transparent hover:border-white/[0.08]'
               }`}
             >
-              <span>TOMOS</span>
+              <span>APRENDER</span>
             </button>
 
-            {/* 3. MAGAZINES */}
-            <button
-              type="button"
-              onClick={() => {
-                setOpenDropdown(null);
-                if (onNavigateMagazine) onNavigateMagazine();
-                else if (onNavigateCampusSection) onNavigateCampusSection('escuela');
-              }}
-              title="Magazines // Ediciones técnicas y dossiers"
-              className={`px-2.5 py-1.5 rounded-xl flex items-center gap-1 transition-all duration-200 cursor-pointer select-none group relative ${
-                currentView === 'magazine'
-                  ? 'bg-gradient-to-b from-cyan-400/20 via-cyan-500/12 to-cyan-500/5 text-cyan-200 border border-cyan-400/40 font-bold shadow-[0_0_16px_rgba(6,182,212,0.2),inset_0_1px_0_rgba(255,255,255,0.18)]'
-                  : 'text-zinc-300 hover:text-white hover:bg-white/[0.06] border border-transparent hover:border-white/[0.08]'
-              }`}
-            >
-              <span>MAGAZINES</span>
-            </button>
-
-            {/* 4. LABORATORIOS */}
+            {/* 3. PRACTICAR */}
             <button
               type="button"
               onClick={() => {
@@ -271,14 +257,32 @@ export const Header: React.FC<HeaderProps> = ({
                 if (onNavigateCampusSection) onNavigateCampusSection('laboratorios');
                 else if (onNavigateHome) onNavigateHome();
               }}
-              title="Laboratorios // Suite de Laboratorios e Instrumental"
-              className={`px-2.5 py-1.5 rounded-xl flex items-center gap-1 transition-all duration-200 cursor-pointer select-none group relative ${
+              title="Practicar // Suite de Laboratorios e Instrumental"
+              className={`px-3 py-1.5 rounded-xl flex items-center gap-1.5 transition-all duration-200 cursor-pointer select-none group relative ${
                 isPracticarActive
                   ? 'bg-gradient-to-b from-amber-400/20 via-amber-500/12 to-amber-500/5 text-amber-200 border border-amber-400/40 font-bold shadow-[0_0_16px_rgba(245,158,11,0.2),inset_0_1px_0_rgba(255,255,255,0.18)]'
                   : 'text-zinc-300 hover:text-white hover:bg-white/[0.06] border border-transparent hover:border-white/[0.08]'
               }`}
             >
-              <span>LABORATORIOS</span>
+              <span>PRACTICAR</span>
+            </button>
+
+            {/* 4. ANALIZAR MI PC */}
+            <button
+              type="button"
+              onClick={() => {
+                setOpenDropdown(null);
+                if (onNavigateCampusSection) onNavigateCampusSection('diagnosticar');
+                else if (onNavigateHome) onNavigateHome();
+              }}
+              title="Analizar mi PC // Taller de Diagnóstico y Casos"
+              className={`px-3 py-1.5 rounded-xl flex items-center gap-1.5 transition-all duration-200 cursor-pointer select-none group relative ${
+                isAnalizarActive
+                  ? 'bg-gradient-to-b from-purple-500/20 via-purple-500/12 to-purple-500/5 text-purple-200 border border-purple-400/40 font-bold shadow-[0_0_16px_rgba(168,85,247,0.2)]'
+                  : 'text-zinc-300 hover:text-white hover:bg-white/[0.06] border border-transparent hover:border-white/[0.08]'
+              }`}
+            >
+              <span>ANALIZAR MI PC</span>
             </button>
 
             {/* 5. HERRAMIENTAS */}
@@ -290,7 +294,7 @@ export const Header: React.FC<HeaderProps> = ({
                 else if (onNavigateHome) onNavigateHome();
               }}
               title="Herramientas // Catálogo técnico independiente"
-              className={`px-2.5 py-1.5 rounded-xl flex items-center gap-1 transition-all duration-200 cursor-pointer select-none group relative ${
+              className={`px-3 py-1.5 rounded-xl flex items-center gap-1.5 transition-all duration-200 cursor-pointer select-none group relative ${
                 isHerramientasActive
                   ? 'bg-gradient-to-b from-amber-400/20 via-amber-500/12 to-amber-500/5 text-amber-200 border border-amber-400/40 font-bold shadow-[0_0_16px_rgba(245,158,11,0.2),inset_0_1px_0_rgba(255,255,255,0.18)]'
                   : 'text-zinc-300 hover:text-white hover:bg-white/[0.06] border border-transparent hover:border-white/[0.08]'
@@ -299,63 +303,40 @@ export const Header: React.FC<HeaderProps> = ({
               <span>HERRAMIENTAS</span>
             </button>
 
-            {/* 6. ANALIZAR MI PC */}
+            {/* 6. CÓMO USAR EVO */}
             <button
               type="button"
               onClick={() => {
                 setOpenDropdown(null);
-                if (onNavigateCampusSection) onNavigateCampusSection('diagnosticar');
+                if (onNavigateCampusSection) onNavigateCampusSection('como-usar');
                 else if (onNavigateHome) onNavigateHome();
-              }}
-              title="Analizar mi PC // Taller de Diagnóstico y Casos"
-              className={`px-2.5 py-1.5 rounded-xl flex items-center gap-1 transition-all duration-200 cursor-pointer select-none group relative ${
-                isAnalizarActive
-                  ? 'bg-gradient-to-b from-purple-500/20 via-purple-500/12 to-purple-500/5 text-purple-200 border border-purple-400/40 font-bold shadow-[0_0_16px_rgba(168,85,247,0.2)]'
-                  : 'text-zinc-300 hover:text-white hover:bg-white/[0.06] border border-transparent hover:border-white/[0.08]'
-              }`}
-            >
-              <span>ANALIZAR MI PC</span>
-            </button>
-
-            {/* 7. CÓMO USAR EVO */}
-            <button
-              type="button"
-              onClick={() => {
-                setOpenDropdown(null);
-                if (onNavigateCampusSection) onNavigateCampusSection('campus');
-                else if (onNavigateHome) onNavigateHome();
-                setTimeout(() => {
-                  const el = document.getElementById('seccion-manifiesto');
-                  if (el) el.scrollIntoView({ behavior: 'smooth' });
-                }, 100);
               }}
               title="Cómo Usar EVO // Metodología y Ecosistema"
-              className="px-2.5 py-1.5 rounded-xl flex items-center gap-1 transition-all duration-200 cursor-pointer select-none group relative text-zinc-300 hover:text-white hover:bg-white/[0.06] border border-transparent hover:border-white/[0.08]"
+              className={`px-3 py-1.5 rounded-xl flex items-center gap-1.5 transition-all duration-200 cursor-pointer select-none group relative ${
+                isComoUsarActive
+                  ? 'bg-gradient-to-b from-amber-400/20 via-amber-500/12 to-amber-500/5 text-amber-200 border border-amber-400/40 font-bold shadow-[0_0_16px_rgba(245,158,11,0.2),inset_0_1px_0_rgba(255,255,255,0.18)]'
+                  : 'text-zinc-300 hover:text-white hover:bg-white/[0.06] border border-transparent hover:border-white/[0.08]'
+              }`}
             >
               <span>CÓMO USAR EVO</span>
             </button>
 
-            {/* 8. PRECIOS */}
+            {/* 7. PLANES */}
             <button
               type="button"
               onClick={() => {
                 setOpenDropdown(null);
-                if (isMundoEvoActive) {
-                  const el = document.getElementById('planes-evo');
-                  if (el) el.scrollIntoView({ behavior: 'smooth' });
-                } else {
-                  if (onNavigateCampusSection) onNavigateCampusSection('campus');
-                  else if (onNavigateHome) onNavigateHome();
-                  setTimeout(() => {
-                    const el = document.getElementById('planes-evo');
-                    if (el) el.scrollIntoView({ behavior: 'smooth' });
-                  }, 150);
-                }
+                if (onNavigateCampusSection) onNavigateCampusSection('planes');
+                else if (onNavigateHome) onNavigateHome();
               }}
-              title="Precios y Planes de Acceso"
-              className="px-2.5 py-1.5 rounded-xl flex items-center gap-1 transition-all duration-200 cursor-pointer select-none group relative text-zinc-300 hover:text-white hover:bg-white/[0.06] border border-transparent hover:border-white/[0.08]"
+              title="Planes de Acceso y Precios"
+              className={`px-3 py-1.5 rounded-xl flex items-center gap-1.5 transition-all duration-200 cursor-pointer select-none group relative ${
+                isPlanesActive
+                  ? 'bg-gradient-to-b from-amber-400/20 via-amber-500/12 to-amber-500/5 text-amber-200 border border-amber-400/40 font-bold shadow-[0_0_16px_rgba(245,158,11,0.2),inset_0_1px_0_rgba(255,255,255,0.18)]'
+                  : 'text-zinc-300 hover:text-white hover:bg-white/[0.06] border border-transparent hover:border-white/[0.08]'
+              }`}
             >
-              <span>PRECIOS</span>
+              <span>PLANES</span>
             </button>
           </nav>
 
@@ -377,6 +358,18 @@ export const Header: React.FC<HeaderProps> = ({
               <span className="text-[10px] uppercase font-bold tracking-wider text-zinc-400">PASAPORTE</span>
               <span className="text-[11px] font-bold text-amber-300">ACTIVO</span>
             </button>
+
+            {/* Botón de retorno al sitio público EVO LABS */}
+            {onReturnToPublic && (
+              <button
+                type="button"
+                onClick={onReturnToPublic}
+                className="px-3 py-1.5 rounded-xl border border-zinc-800 bg-zinc-900/90 hover:bg-zinc-800 text-zinc-300 hover:text-white transition-all text-xs font-mono-tech cursor-pointer"
+                title="Volver al Sitio Público EVO LABS"
+              >
+                VOLVER A EVO LABS
+              </button>
+            )}
 
             {/* CTA Dominante Directo: ENTRAR A EVO */}
             <button
@@ -435,7 +428,7 @@ export const Header: React.FC<HeaderProps> = ({
                 <span>INICIO</span>
               </button>
 
-              {/* 2. TOMOS */}
+              {/* 2. APRENDER */}
               <button
                 type="button"
                 onClick={() => {
@@ -450,28 +443,10 @@ export const Header: React.FC<HeaderProps> = ({
                 }`}
               >
                 <BookOpen className="w-4 h-4 text-amber-400 shrink-0" />
-                <span>TOMOS</span>
+                <span>APRENDER</span>
               </button>
 
-              {/* 3. MAGAZINE */}
-              <button
-                type="button"
-                onClick={() => {
-                  setIsMobileMenuOpen(false);
-                  if (onNavigateMagazine) onNavigateMagazine();
-                  else if (onNavigateCampusSection) onNavigateCampusSection('escuela');
-                }}
-                className={`flex items-center gap-2.5 px-3 py-2.5 rounded-xl transition-all ${
-                  currentView === 'magazine'
-                    ? 'bg-cyan-400/15 text-cyan-200 border border-cyan-400/40 font-bold'
-                    : 'hover:bg-white/[0.06] text-zinc-200 border border-transparent'
-                }`}
-              >
-                <FileSearch className="w-4 h-4 text-cyan-400 shrink-0" />
-                <span>MAGAZINE</span>
-              </button>
-
-              {/* 4. LABORATORIOS */}
+              {/* 3. PRACTICAR */}
               <button
                 type="button"
                 onClick={() => {
@@ -486,7 +461,25 @@ export const Header: React.FC<HeaderProps> = ({
                 }`}
               >
                 <Zap className="w-4 h-4 text-amber-400 shrink-0" />
-                <span>LABORATORIOS</span>
+                <span>PRACTICAR</span>
+              </button>
+
+              {/* 4. ANALIZAR MI PC */}
+              <button
+                type="button"
+                onClick={() => {
+                  setIsMobileMenuOpen(false);
+                  if (onNavigateCampusSection) onNavigateCampusSection('diagnosticar');
+                  else if (onNavigateHome) onNavigateHome();
+                }}
+                className={`flex items-center gap-2.5 px-3 py-2.5 rounded-xl transition-all ${
+                  isAnalizarActive
+                    ? 'bg-purple-500/15 text-purple-200 border border-purple-400/40 font-bold'
+                    : 'hover:bg-white/[0.06] text-zinc-200 border border-transparent'
+                }`}
+              >
+                <Activity className="w-4 h-4 text-purple-400 shrink-0" />
+                <span>ANALIZAR MI PC</span>
               </button>
 
               {/* 5. HERRAMIENTAS */}
@@ -507,30 +500,43 @@ export const Header: React.FC<HeaderProps> = ({
                 <span>HERRAMIENTAS</span>
               </button>
 
-              {/* 6. PRECIOS */}
+              {/* 6. CÓMO USAR EVO */}
               <button
                 type="button"
                 onClick={() => {
                   setIsMobileMenuOpen(false);
-                  if (isMundoEvoActive) {
-                    const el = document.getElementById('planes-evo');
-                    if (el) el.scrollIntoView({ behavior: 'smooth' });
-                  } else {
-                    if (onNavigateCampusSection) onNavigateCampusSection('campus');
-                    else if (onNavigateHome) onNavigateHome();
-                    setTimeout(() => {
-                      const el = document.getElementById('planes-evo');
-                      if (el) el.scrollIntoView({ behavior: 'smooth' });
-                    }, 150);
-                  }
+                  if (onNavigateCampusSection) onNavigateCampusSection('como-usar');
+                  else if (onNavigateHome) onNavigateHome();
                 }}
-                className="flex items-center gap-2.5 px-3 py-2.5 rounded-xl hover:bg-white/[0.06] text-zinc-200 border border-transparent transition-all"
+                className={`flex items-center gap-2.5 px-3 py-2.5 rounded-xl transition-all ${
+                  isComoUsarActive
+                    ? 'bg-amber-400/15 text-amber-200 border border-amber-400/40 font-bold'
+                    : 'hover:bg-white/[0.06] text-zinc-200 border border-transparent'
+                }`}
               >
-                <CreditCard className="w-4 h-4 text-amber-400 shrink-0" />
-                <span>PRECIOS</span>
+                <Compass className="w-4 h-4 text-amber-400 shrink-0" />
+                <span>CÓMO USAR EVO</span>
               </button>
 
-              {/* 7. MI EVO */}
+              {/* 7. PLANES */}
+              <button
+                type="button"
+                onClick={() => {
+                  setIsMobileMenuOpen(false);
+                  if (onNavigateCampusSection) onNavigateCampusSection('planes');
+                  else if (onNavigateHome) onNavigateHome();
+                }}
+                className={`flex items-center gap-2.5 px-3 py-2.5 rounded-xl transition-all ${
+                  isPlanesActive
+                    ? 'bg-amber-400/15 text-amber-200 border border-amber-400/40 font-bold'
+                    : 'hover:bg-white/[0.06] text-zinc-200 border border-transparent'
+                }`}
+              >
+                <CreditCard className="w-4 h-4 text-amber-400 shrink-0" />
+                <span>PLANES</span>
+              </button>
+
+              {/* 8. MI EVO */}
               <button
                 type="button"
                 onClick={() => {

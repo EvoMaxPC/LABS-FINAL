@@ -10,6 +10,7 @@ import { VOLUMES_COLLECTION } from '../../data/collections';
 import { EVO_TOMES_EXPANDED_DATA } from '../../data/evoTomesExpandedData';
 import { EvoTomeCardExpanded } from './EvoTomeCardExpanded';
 import { EvoHomeExperience } from '../home/EvoHomeExperience';
+import { EvoQuickSearchBar } from './EvoQuickSearchBar';
 import {
   EVO_SCHOOL_LEVELS,
   EVO_TOMES_PEDAGOGY,
@@ -63,6 +64,10 @@ import { EvoTechnicalIdentityEngine, VerifiedClaim } from '../../services/evoTec
 import { EvoEvolutionTrace } from '../common/EvoEvolutionTrace';
 import { EvoMundoWordmark } from '../common/EvoMundoWordmark';
 import { EvoHeroCore3D } from './EvoHeroCore3D';
+import { EvoPublicHowToUse } from '../public/EvoPublicHowToUse';
+import { EvoPublicPricing } from '../public/EvoPublicPricing';
+import { EvoPublicToolsCatalog } from '../public/EvoPublicToolsCatalog';
+import { EvoToolDefinition } from '../../data/evoToolsData';
 import { EvoPrimarySystemButton, EvoSecondaryInspectButton } from '../common/EvoSystemButtons';
 import {
   Power,
@@ -130,6 +135,8 @@ export interface EvoWorldMapProps {
   onGoToChapter?: (chapterNumber: string) => void;
   onStartFinalExam?: () => void;
   onOpenCompletionScreen?: () => void;
+  onOpenCoverageDashboard?: () => void;
+  onOpenLiveScanAudit?: () => void;
 }
 
 type MainIntention =
@@ -143,7 +150,9 @@ type MainIntention =
   | 'biblioteca'
   | 'laboratorios'
   | 'diagnosticar'
-  | 'progreso';
+  | 'progreso'
+  | 'como-usar'
+  | 'planes';
 
 type LabSubTab = 'todos' | 'guiados' | 'simuladores' | 'experimentos' | 'casos';
 type DiagnoseSubTab = 'expedientes' | 'consola' | 'pcb' | 'sectores';
@@ -366,6 +375,8 @@ export const EvoWorldMap: React.FC<EvoWorldMapProps> = ({
   onGoToChapter,
   onStartFinalExam,
   onOpenCompletionScreen,
+  onOpenCoverageDashboard,
+  onOpenLiveScanAudit,
 }) => {
   // Navigation State
   const [activeIntention, setActiveIntention] = useState<MainIntention>(initialIntention);
@@ -750,6 +761,68 @@ export const EvoWorldMap: React.FC<EvoWorldMapProps> = ({
     }
   };
 
+  // Master Tool execution handler covering all 34 tools without dead clicks
+  const handleExecuteMasterTool = (tool: EvoToolDefinition) => {
+    if (tool.actionKey === 'boot-lab') {
+      if (onNavigateBootLab) onNavigateBootLab();
+      else handleOpenTomoDirectly('08');
+    } else if (tool.actionKey === 'hardware') {
+      if (onNavigateHotSwapLab) onNavigateHotSwapLab((tool.subParam as any) || 'hardware');
+    } else if (tool.actionKey === 'silicon') {
+      if (onNavigateHotSwapLab) onNavigateHotSwapLab('memory');
+    } else if (tool.actionKey === 'software-kernel' || tool.actionKey === 'windows-matrix') {
+      if (onNavigateWindowsMatrixLab) onNavigateWindowsMatrixLab(tool.subParam || 'services');
+    } else if (tool.actionKey === 'metrology') {
+      if (onNavigateHotSwapLab) onNavigateHotSwapLab('telemetry');
+      else {
+        setActiveIntention('diagnosticar');
+        setDiagnoseTab('simuladores');
+      }
+    } else if (tool.actionKey === 'telemetry') {
+      if (onNavigateHotSwapLab) onNavigateHotSwapLab('telemetry');
+      else {
+        setActiveIntention('diagnosticar');
+        setDiagnoseTab('consola');
+      }
+    } else if (tool.actionKey === 'consola') {
+      setActiveIntention('diagnosticar');
+      setDiagnoseTab('consola');
+    } else if (tool.actionKey === 'operaciones') {
+      if (tool.subParam === 'pcb') {
+        setActiveIntention('diagnosticar');
+        setDiagnoseTab('pcb');
+      } else {
+        setActiveIntention('diagnosticar');
+        setDiagnoseTab('sectores');
+      }
+    } else if (tool.actionKey === 'core') {
+      if (onNavigateLabCore) onNavigateLabCore();
+      else setActiveIntention('diagnosticar');
+    } else if (tool.actionKey === 'autodetect') {
+      setIsAutoDetectOpen(true);
+    } else if (tool.actionKey === 'forensic-report') {
+      setIsForensicReportOpen(true);
+    } else if (tool.actionKey === 'digital-twin') {
+      setIsDigitalTwinOpen(true);
+    } else if (tool.actionKey === 'case-resolver') {
+      setIsCaseResolverOpen(true);
+    } else if (tool.actionKey === 'content-factory') {
+      setIsContentFactoryOpen(true);
+    } else if (tool.actionKey === 'transfer-challenge') {
+      setIsTransferModalOpen(true);
+    } else if (tool.actionKey === 'coverage-matrix') {
+      if (onOpenCoverageDashboard) onOpenCoverageDashboard();
+      else if (onNavigateLabCore) onNavigateLabCore();
+      else setActiveIntention('diagnosticar');
+    } else if (tool.actionKey === 'telemetry-integrity') {
+      if (onOpenLiveScanAudit) onOpenLiveScanAudit();
+      else if (onNavigateLabCore) onNavigateLabCore();
+      else setActiveIntention('diagnosticar');
+    } else {
+      setActiveIntention('diagnosticar');
+    }
+  };
+
   return (
     <div className="relative w-full min-h-[calc(100vh-65px)] evo-global-ambient-bg text-[#f4f4f5] overflow-x-hidden font-sans-editorial flex flex-col justify-between select-none">
       {/* Dynamic Background Ambient Layer */}
@@ -808,6 +881,18 @@ export const EvoWorldMap: React.FC<EvoWorldMapProps> = ({
       )}
 
       {/* ========================================================================= */}
+      {/* FRANJA DE BÚSQUEDA RÁPIDA GLOBAL (TOMOS, LABS, EXPEDIENTES, HERRAMIENTAS)  */}
+      {/* ========================================================================= */}
+      <div className="relative z-30 max-w-[1280px] mx-auto w-full px-4 sm:px-6 lg:px-8 pt-3 sm:pt-4">
+        <EvoQuickSearchBar
+          onOpenTomo={(tomoNum) => handleOpenTomoDirectly(tomoNum)}
+          onOpenLab={(actionKey, subParam) => handleExecuteLabAction(actionKey, subParam)}
+          onOpenCase={(_caseId) => setIsCaseResolverOpen(true)}
+          onOpenTool={(tool) => handleExecuteMasterTool(tool)}
+        />
+      </div>
+
+      {/* ========================================================================= */}
       {/* CONSOLE_OPERATIVE_HUD // FRANJA COMPACTA SECUNDARIA (NO DOMINANTE)        */}
       {/* ========================================================================= */}
       {activeIntention !== 'campus' && (
@@ -823,10 +908,12 @@ export const EvoWorldMap: React.FC<EvoWorldMapProps> = ({
               <div className="flex items-center gap-1.5">
                 <span className="text-zinc-500 text-[10px] uppercase font-bold">UBICACIÓN:</span>
                 <span className="text-zinc-200 font-bold uppercase">
-                  {activeIntention === 'escuela' || activeIntention === 'biblioteca' ? 'TOMOS // ESCUELA PEDAGÓGICA' :
+                  {activeIntention === 'escuela' || activeIntention === 'biblioteca' ? 'APRENDER // TOMOS Y PUBLICACIONES' :
                    activeIntention === 'laboratorios' ? 'PRACTICAR // BANCOS INTERACTIVOS' :
                    activeIntention === 'diagnosticar' ? 'ANALIZAR MI PC // EVO CORE' :
                    activeIntention === 'herramientas' ? 'HERRAMIENTAS // INSTRUMENTAL' :
+                   activeIntention === 'como-usar' ? 'CÓMO USAR EVO // METODOLOGÍA & GUÍA' :
+                   activeIntention === 'planes' ? 'PLANES // ACCESO Y PRECIOS' :
                    'MI EVO // EXPEDIENTE'}
                 </span>
               </div>
@@ -845,6 +932,8 @@ export const EvoWorldMap: React.FC<EvoWorldMapProps> = ({
                  activeIntention === 'laboratorios' ? 'Medir variables en simulación' :
                  activeIntention === 'diagnosticar' ? 'Revisar hipótesis y auditar silicio' :
                  activeIntention === 'herramientas' ? 'Abrir instrumental técnico' :
+                 activeIntention === 'como-usar' ? 'Explorar el método y la guía paso a paso' :
+                 activeIntention === 'planes' ? 'Elegir plan o compra de tomos' :
                  'Verificar acreditaciones y pasaporte'}
               </span>
             </div>
@@ -857,23 +946,37 @@ export const EvoWorldMap: React.FC<EvoWorldMapProps> = ({
       {/* ========================================================================= */}
       {activeIntention === 'campus' && (
         <EvoHomeExperience
-          onNavigateTomos={() => setActiveIntention('biblioteca')}
-          onNavigateMagazines={() => {
-            if (onNavigateMagazine) onNavigateMagazine();
-            else setActiveIntention('escuela');
+          onNavigateAprender={() => {
+            setActiveIntention('escuela');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
           }}
-          onNavigateLaboratorios={() => setActiveIntention('laboratorios')}
-          onNavigateHerramientas={() => setActiveIntention('herramientas')}
-          onNavigateAnalizar={() => setActiveIntention('diagnosticar')}
+          onNavigatePracticar={() => {
+            setActiveIntention('laboratorios');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          }}
+          onNavigateAnalizar={() => {
+            setActiveIntention('diagnosticar');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          }}
+          onNavigateHerramientas={() => {
+            setActiveIntention('herramientas');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          }}
           onNavigateComoUsar={() => {
-            const el = document.getElementById('seccion-manifiesto');
-            if (el) el.scrollIntoView({ behavior: 'smooth' });
+            setActiveIntention('como-usar');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
           }}
-          onNavigatePrecios={() => {
-            const el = document.getElementById('seccion-manifiesto');
-            if (el) el.scrollIntoView({ behavior: 'smooth' });
+          onNavigatePlanes={() => {
+            setActiveIntention('planes');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
           }}
-          onNavigateEntrar={() => setActiveIntention('progreso')}
+          onNavigateEntrar={() => {
+            setActiveIntention('progreso');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          }}
+          onOpenIntroPresentation={onOpenIntroPresentation}
+          onOpenLevel0Intro={() => setIsLevel0IntroOpen(true)}
+          onOpenCaseResolver={() => setIsCaseResolverOpen(true)}
         />
       )}
 
@@ -2586,132 +2689,58 @@ export const EvoWorldMap: React.FC<EvoWorldMapProps> = ({
       {/* 7. SECCIÓN: CATÁLOGO DE HERRAMIENTAS ORGANIZADAS POR FUNCIÓN               */}
       {/* ========================================================================= */}
       {activeIntention === 'herramientas' && (
-        <div className="relative z-10 flex-1 max-w-6xl mx-auto w-full px-4 sm:px-8 py-6 space-y-6">
-          {/* Encabezado y Filtros */}
-          <div className="space-y-4 border-b border-zinc-800 pb-5">
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-              <div>
-                <div className="flex items-center gap-2">
-                  <span className="w-2.5 h-2.5 rounded-full bg-cyan-400 animate-pulse" />
-                  <h2 className="evo-page-title">
-                    HERRAMIENTAS EVO
-                  </h2>
-                </div>
-                <p className="evo-body-secondary mt-1">
-                  <span className="evo-label-badge text-cyan-400">INSTRUMENTOS FUNCIONALES</span> — Categorizados por función técnica real. Usá un instrumento con evidencia objetiva.
-                </p>
-              </div>
+        <div className="relative z-10 flex-1 max-w-7xl mx-auto w-full px-4 sm:px-8 py-6 space-y-6">
+          <EvoPublicToolsCatalog
+            onExecuteToolAction={handleExecuteMasterTool}
+          />
+        </div>
+      )}
 
-              {/* Pestañas de categorías canónicas */}
-              <div className="flex flex-wrap items-center gap-1.5 p-1 rounded-xl bg-zinc-900 border border-zinc-800 font-mono-tech text-xs">
-                {[
-                  { id: 'all', label: 'TODAS' },
-                  { id: 'windows', label: 'SISTEMA' },
-                  { id: 'hardware', label: 'HARDWARE' },
-                  { id: 'terminal', label: 'RED & TERMINAL' },
-                  { id: 'rendimiento', label: 'RENDIMIENTO' },
-                  { id: 'diagnostico', label: 'DIAGNÓSTICO' },
-                ].map((cat) => (
-                  <button
-                    key={cat.id}
-                    type="button"
-                    onClick={() => setActiveToolCategory(cat.id as any)}
-                    className={`px-3 py-1.5 rounded-lg font-bold transition-all cursor-pointer ${
-                      activeToolCategory === cat.id
-                        ? 'bg-amber-400 text-black shadow-md'
-                        : 'text-zinc-400 hover:text-white'
-                    }`}
-                  >
-                    {cat.label}
-                  </button>
-                ))}
-              </div>
-            </div>
+      {/* ========================================================================= */}
+      {/* 8. SECCIÓN: CÓMO USAR EVO (HUB DE METODOLOGÍA & GUÍA OPERATIVA)           */}
+      {/* ========================================================================= */}
+      {activeIntention === 'como-usar' && (
+        <div className="relative z-10 flex-1 max-w-7xl mx-auto w-full px-4 sm:px-8 py-6 space-y-6">
+          <EvoPublicHowToUse
+            onNavigateTomos={() => {
+              setActiveIntention('escuela');
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }}
+            onNavigateLabs={() => {
+              setActiveIntention('laboratorios');
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }}
+            onNavigateTools={() => {
+              setActiveIntention('herramientas');
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }}
+            onNavigateAnalyze={() => {
+              setActiveIntention('diagnosticar');
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }}
+            onNavigateMiEvo={() => {
+              setActiveIntention('progreso');
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }}
+          />
+        </div>
+      )}
 
-            {/* Buscador de herramientas ¿QUÉ QUERÉS HACER? */}
-            <div className="relative max-w-2xl">
-              <Search className="w-4 h-4 text-zinc-500 absolute left-3.5 top-1/2 -translate-y-1/2" />
-              <input
-                type="text"
-                value={toolSearchQuery}
-                onChange={(e) => setToolSearchQuery(e.target.value)}
-                placeholder="¿Qué querés hacer? Buscar: PC lenta, FPS bajos, revisar SSD, Windows no inicia..."
-                className="w-full py-2.5 pl-10 pr-4 rounded-xl bg-zinc-950 border border-zinc-800 focus:border-amber-400 text-xs font-mono-tech text-white placeholder-zinc-500 outline-none transition-colors"
-              />
-            </div>
-          </div>
-
-          {/* Grilla de Herramientas (1 tarjeta = 1 unidad visual limpia) */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {filteredTools.map((tool) => (
-              <div
-                key={tool.id}
-                className="p-5 rounded-xl evo-surface-level2 border border-zinc-900 hover:border-cyan-400/30 transition-all flex flex-col justify-between gap-4 group"
-              >
-                <div className="space-y-3">
-                  <div className="flex items-center justify-between">
-                    <span
-                      className="px-2.5 py-0.5 rounded text-[10px] font-mono-tech font-bold uppercase"
-                      style={{
-                        color: tool.accentColor,
-                        backgroundColor: `${tool.accentColor}18`,
-                        border: `1px solid ${tool.accentColor}40`,
-                      }}
-                    >
-                      {tool.intentCategory.toUpperCase()}
-                    </span>
-                    <span className="text-[10px] text-zinc-500 font-mono-tech">
-                      HERRAMIENTA INDEPENDIENTE
-                    </span>
-                  </div>
-
-                  <h3 className="font-display font-black text-lg text-white group-hover:text-amber-300 transition-colors uppercase leading-tight">
-                    {tool.simpleName}
-                  </h3>
-
-                  <div className="space-y-2 text-xs text-zinc-300 font-sans-editorial">
-                    <div>
-                      <strong className="text-zinc-400 font-mono-tech text-[10px] uppercase block">Qué hace:</strong>
-                      <span>{tool.whatItDoes}</span>
-                    </div>
-                    <div>
-                      <strong className="text-zinc-400 font-mono-tech text-[10px] uppercase block">Cuándo usarla:</strong>
-                      <span>{tool.whenToUse}</span>
-                    </div>
-                    <div className="grid grid-cols-2 gap-2 pt-1 font-mono-tech text-[10px] text-zinc-400 border-t border-zinc-900/80">
-                      <div>
-                        <span className="text-zinc-500 block uppercase font-bold text-[9px]">Entrada:</span>
-                        <span className="text-zinc-300">{tool.inputReq || 'Estado del sistema / Síntoma'}</span>
-                      </div>
-                      <div>
-                        <span className="text-zinc-500 block uppercase font-bold text-[9px]">Salida:</span>
-                        <span className="text-amber-400 font-bold">{tool.outputArtifact || 'Reporte de Evidencia'}</span>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Microvisual con indicador SIMULADO */}
-                  <div className="pt-1">
-                    <ToolMicrovisual
-                      toolId={tool.id}
-                      actionKey={tool.actionKey}
-                      simpleName={tool.simpleName}
-                      accentColor={tool.accentColor}
-                    />
-                  </div>
-                </div>
-
-                <button
-                  type="button"
-                  onClick={() => handleExecuteLabAction(tool.actionKey)}
-                  className="w-full py-2.5 px-3 rounded-xl bg-amber-400 hover:bg-amber-300 text-black font-mono-tech font-bold text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-1.5 cursor-pointer shadow-[0_0_15px_rgba(245,158,11,0.2)] mt-auto group-hover:scale-[1.01]"
-                >
-                  <span>USAR HERRAMIENTA</span>
-                  <ArrowRight className="w-3.5 h-3.5 text-black group-hover:translate-x-1 transition-transform" />
-                </button>
-              </div>
-            ))}
-          </div>
+      {/* ========================================================================= */}
+      {/* 9. SECCIÓN: PLANES Y PRECIOS                                              */}
+      {/* ========================================================================= */}
+      {activeIntention === 'planes' && (
+        <div className="relative z-10 flex-1 max-w-7xl mx-auto w-full px-4 sm:px-8 py-6 space-y-6">
+          <EvoPublicPricing
+            onSelectPlan={(_planId) => {
+              setActiveIntention('progreso');
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }}
+            onSelectTomoOption={() => {
+              setActiveIntention('escuela');
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }}
+          />
         </div>
       )}
 
@@ -3108,7 +3137,7 @@ export const EvoWorldMap: React.FC<EvoWorldMapProps> = ({
                 }}
                 className="w-full sm:w-auto px-6 py-2.5 rounded-xl bg-amber-400 hover:bg-amber-300 text-black font-bold text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2 cursor-pointer shadow-[0_0_20px_rgba(245,158,11,0.35)]"
               >
-                <span>ENTRAR A MUNDO EVO // ESCUELA</span>
+                <span>ENTRAR A MUNDO EVO // APRENDER</span>
                 <ArrowRight className="w-4 h-4 text-black" />
               </button>
             </div>
@@ -3241,7 +3270,7 @@ export const EvoWorldMap: React.FC<EvoWorldMapProps> = ({
           EVO LABS // <span className="text-zinc-300">"Hacemos milagros, pero los medimos."</span>
         </div>
         <div className="hidden sm:block text-zinc-600">
-          CAMPUS CENTRAL MUNDO EVO // ESCUELA PEDAGÓGICA V3.5
+          EVO LABS // MUNDO EVO V3.5
         </div>
       </footer>
     </div>

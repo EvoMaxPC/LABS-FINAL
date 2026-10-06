@@ -32,7 +32,7 @@ export const EvoHeroCore3D: React.FC<EvoHeroCore3DProps> = ({
     }
   }, []);
 
-  // Handle smooth 3D tilt tracking
+  // Handle smooth 3D subtle tilt tracking (Solid, elegant presence: max rotateX ±2deg, rotateY ±3deg, translate ±4px)
   const handleMouseMove = useCallback(
     (e: React.MouseEvent<HTMLDivElement>) => {
       if (prefersReducedMotion || !containerRef.current) return;
@@ -42,9 +42,9 @@ export const EvoHeroCore3D: React.FC<EvoHeroCore3DProps> = ({
       const centerX = rect.width / 2;
       const centerY = rect.height / 2;
 
-      // Max tilt of ±18 degrees
-      const tiltY = ((x - centerX) / centerX) * 16;
-      const tiltX = -((y - centerY) / centerY) * 16;
+      // Subtle tilt: rotateX ±2deg, rotateY ±3deg
+      const tiltY = ((x - centerX) / centerX) * 3;
+      const tiltX = -((y - centerY) / centerY) * 2;
 
       setTilt({ x: tiltX, y: tiltY });
     },

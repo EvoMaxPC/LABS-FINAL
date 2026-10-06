@@ -1,3 +1,6 @@
+/**
+ * @deprecated use EVO_CATALOG in src/data/evoCatalog.ts
+ */
 export type TechnicalContentStatus = 'COMPLETE' | 'PARTIAL_COMPLETE' | 'IN_DEVELOPMENT' | 'ROADMAP';
 export type CommercialProductStatus = 'AVAILABLE' | 'COMING_SOON' | 'IN_DEVELOPMENT' | 'NOT_FOR_SALE';
 export type LabRealStatus = 'REAL_FUNCTIONAL' | 'IN_DEVELOPMENT' | 'PLANNED';

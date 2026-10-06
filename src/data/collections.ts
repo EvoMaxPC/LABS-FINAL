@@ -1,3 +1,6 @@
+/**
+ * @deprecated use EVO_CATALOG in src/data/evoCatalog.ts
+ */
 import { VolumeItem, EditorialHeadline, ChapterItem } from '../types';
 
 export const TOMO_01_HEADLINES: EditorialHeadline[] = [
