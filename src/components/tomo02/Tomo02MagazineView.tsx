@@ -54,6 +54,8 @@ import { Tomo02ComoUsarElTomo } from './Tomo02ComoUsarElTomo';
 import { EvoTomo02FinalExam } from './EvoTomo02FinalExam';
 import { EvoTomo02CompletionScreen } from './EvoTomo02CompletionScreen';
 import { Tomo02OfficialPdfMagazine } from './Tomo02OfficialPdfMagazine';
+import { Tomo02Sector00View } from './sector00/Tomo02Sector00View';
+import { Tomo02Sector01View } from './sector01/Tomo02Sector01View';
 
 export type Tomo02SubView =
   | 'cover'
@@ -62,7 +64,9 @@ export type Tomo02SubView =
   | 'reader'
   | 'exam'
   | 'completion'
-  | 'a4_magazine';
+  | 'a4_magazine'
+  | 'sector_00'
+  | 'sector_01';
 
 interface Tomo02MagazineViewProps {
   onBackToApp?: () => void;
@@ -170,13 +174,9 @@ export const Tomo02MagazineView: React.FC<Tomo02MagazineViewProps> = ({
     return {};
   });
 
-  const [hasPassedFinalExam, setHasPassedFinalExam] = useState<boolean>(() => {
-    try {
-      return safeStorage.getItem('evo_tomo02_completed') === 'true';
-    } catch {
-      return false;
-    }
-  });
+  // Tomo 02 completion is strictly FALSE until all 40 sectors (Sector 00 to 39),
+  // master lab and final exam are completed.
+  const [hasPassedFinalExam, setHasPassedFinalExam] = useState<boolean>(false);
 
   const [examScore, setExamScore] = useState<number>(() => {
     try {
@@ -400,12 +400,46 @@ export const Tomo02MagazineView: React.FC<Tomo02MagazineViewProps> = ({
     URL.revokeObjectURL(url);
   };
 
-  // If subView is 'cover', 'pdf_magazine', 'index', 'reader', 'exam', or 'completion', render their respective view
+  // If subView is 'cover', 'pdf_magazine', 'index', 'reader', 'exam', 'completion', 'sector_00', or 'sector_01', render their respective view
+  if (subView === 'sector_00') {
+    return (
+      <Tomo02Sector00View
+        onBackToMagazine={() => {
+          setSubView('index');
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }}
+      />
+    );
+  }
+
+  if (subView === 'sector_01') {
+    return (
+      <Tomo02Sector01View
+        onBackToMagazine={() => {
+          setSubView('index');
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }}
+        onOpenSector00={() => {
+          setSubView('sector_00');
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }}
+      />
+    );
+  }
+
   if (subView === 'cover') {
     return (
       <div className="min-h-screen bg-[#07090e] text-zinc-100 flex flex-col font-sans-editorial">
         <div className="max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <Tomo02Cover
+            onOpenSector00={() => {
+              setSubView('sector_00');
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }}
+            onOpenSector01={() => {
+              setSubView('sector_01');
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }}
             onOpenMagazine={() => {
               setSubView('a4_magazine');
               window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -463,6 +497,14 @@ export const Tomo02MagazineView: React.FC<Tomo02MagazineViewProps> = ({
               window.scrollTo({ top: 0, behavior: 'smooth' });
             }}
             onBackToApp={onBackToApp}
+            onOpenSector00={() => {
+              setSubView('sector_00');
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }}
+            onOpenSector01={() => {
+              setSubView('sector_01');
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }}
             onOpenA4Magazine={() => {
               setSubView('a4_magazine');
               window.scrollTo({ top: 0, behavior: 'smooth' });

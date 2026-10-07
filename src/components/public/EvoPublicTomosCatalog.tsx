@@ -30,24 +30,28 @@ const TOMO_ACCENTS: Record<
   '08': { borderColor: 'hover:border-emerald-400/60', spineColor: '#10B981', textColor: 'text-emerald-400', badgeColor: 'bg-emerald-400/10 text-emerald-300 border-emerald-400/30' },
   '09': { borderColor: 'hover:border-green-400/60', spineColor: '#22C55E', textColor: 'text-green-400', badgeColor: 'bg-green-400/10 text-green-300 border-green-400/30' },
   '10': { borderColor: 'hover:border-violet-400/60', spineColor: '#8B5CF6', textColor: 'text-violet-400', badgeColor: 'bg-violet-400/10 text-violet-300 border-violet-400/30' },
+  '11': { borderColor: 'hover:border-amber-400/60', spineColor: '#EAB308', textColor: 'text-amber-400', badgeColor: 'bg-amber-400/10 text-amber-300 border-amber-400/30' },
+  '12': { borderColor: 'hover:border-pink-400/60', spineColor: '#EC4899', textColor: 'text-pink-400', badgeColor: 'bg-pink-400/10 text-pink-300 border-pink-400/30' },
 };
 
 export const EvoPublicTomosCatalog: React.FC<EvoPublicTomosCatalogProps> = ({
   onOpenTomo,
 }) => {
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedFilter, setSelectedFilter] = useState<'ALL' | 'HARDWARE' | 'WINDOWS' | 'REPARACION' | 'REDES' | 'SEGURIDAD' | 'RENDIMIENTO' | 'PROGRAMACION' | 'IA'>('ALL');
+  const [selectedFilter, setSelectedFilter] = useState<'ALL' | 'HARDWARE' | 'WINDOWS' | 'REPARACION' | 'REDES' | 'SEGURIDAD' | 'RENDIMIENTO' | 'PROGRAMACION' | 'IA' | 'ELECTRONICA' | 'GAMEDEV'>('ALL');
   const [selectedTomeDetail, setSelectedTomeDetail] = useState<EvoTomeExpandedItem | null>(null);
 
   const filterCategoryMap: Record<string, string[]> = {
-    HARDWARE: ['01', '03', '04'],
+    HARDWARE: ['01', '03', '04', '11'],
     WINDOWS: ['02', '08'],
-    REPARACION: ['03', '04', '08'],
+    REPARACION: ['03', '04', '08', '11'],
     REDES: ['05'],
     SEGURIDAD: ['06'],
     RENDIMIENTO: ['07'],
-    PROGRAMACION: ['09'],
+    PROGRAMACION: ['09', '12'],
     IA: ['10'],
+    ELECTRONICA: ['11'],
+    GAMEDEV: ['12'],
   };
 
   const filteredTomos = EVO_TOMES_EXPANDED_DATA.filter((tome) => {

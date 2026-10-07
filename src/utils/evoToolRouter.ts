@@ -322,20 +322,45 @@ export function executeTomoById(
       try { window.scrollTo(0, 0); } catch {}
       return true;
 
+    case '05':
+      ctx.setCurrentView('tomo-05');
+      try { window.scrollTo(0, 0); } catch {}
+      return true;
+
+    case '06':
+      ctx.setCurrentView('tomo-06');
+      try { window.scrollTo(0, 0); } catch {}
+      return true;
+
+    case '07':
+      ctx.setCurrentView('tomo-07');
+      try { window.scrollTo(0, 0); } catch {}
+      return true;
+
     case '08':
       ctx.setCurrentView('tomo-08');
       try { window.scrollTo(0, 0); } catch {}
       return true;
 
-    case '05':
-    case '06':
-    case '07':
     case '09':
+      ctx.setCurrentView('tomo-09');
+      try { window.scrollTo(0, 0); } catch {}
+      return true;
+
     case '10':
-      if (ctx.openDossierModal) {
-        ctx.openDossierModal(`tomo-${cleanId}`);
-      }
-      return false;
+      ctx.setCurrentView('tomo-10');
+      try { window.scrollTo(0, 0); } catch {}
+      return true;
+
+    case '11':
+      ctx.setCurrentView('tomo-11');
+      try { window.scrollTo(0, 0); } catch {}
+      return true;
+
+    case '12':
+      ctx.setCurrentView('tomo-12');
+      try { window.scrollTo(0, 0); } catch {}
+      return true;
 
     default:
       // ZERO FALLBACK TO TOMO 01! Do NOT navigate to cover or 01.

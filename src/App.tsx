@@ -30,7 +30,14 @@ import { EvoMagazineView } from './components/magazine/EvoMagazineView';
 import { Tomo02MagazineView } from './components/tomo02/Tomo02MagazineView';
 import { Tomo03MagazineView } from './components/tomo03/Tomo03MagazineView';
 import { Tomo04MagazineView } from './components/tomo04/Tomo04MagazineView';
+import { Tomo05MagazineView } from './components/tomo05/Tomo05MagazineView';
+import { Tomo06MagazineView } from './components/tomo06/Tomo06MagazineView';
+import { Tomo07MagazineView } from './components/tomo07/Tomo07MagazineView';
 import { Tomo08MagazineView } from './components/tomo08/Tomo08MagazineView';
+import { Tomo09MagazineView } from './components/tomo09/Tomo09MagazineView';
+import { Tomo10MagazineView } from './components/tomo10/Tomo10MagazineView';
+import { Tomo11MagazineView } from './components/tomo11/Tomo11MagazineView';
+import { Tomo12MagazineView } from './components/tomo12/Tomo12MagazineView';
 import { EvoBootLab } from './components/tomo08/EvoBootLab';
 import { EvoMasterLabSuite } from './components/world/labs/EvoMasterLabSuite';
 import { EvoWindowsMatrixLab } from './components/world/labs/windowsMatrix/EvoWindowsMatrixLab';
@@ -353,7 +360,14 @@ function AppContent({
     | 'tomo-02'
     | 'tomo-03'
     | 'tomo-04'
+    | 'tomo-05'
+    | 'tomo-06'
+    | 'tomo-07'
     | 'tomo-08'
+    | 'tomo-09'
+    | 'tomo-10'
+    | 'tomo-11'
+    | 'tomo-12'
     | 'boot-lab'
     | 'world-map'
     | 'archivo'
@@ -398,7 +412,14 @@ function AppContent({
       if (vol === '02' || vol === '2') return 'tomo-02';
       if (vol === '03' || vol === '3') return 'tomo-03';
       if (vol === '04' || vol === '4') return 'tomo-04';
+      if (vol === '05' || vol === '5') return 'tomo-05';
+      if (vol === '06' || vol === '6') return 'tomo-06';
+      if (vol === '07' || vol === '7') return 'tomo-07';
       if (vol === '08' || vol === '8') return 'tomo-08';
+      if (vol === '09' || vol === '9') return 'tomo-09';
+      if (vol === '10') return 'tomo-10';
+      if (vol === '11') return 'tomo-11';
+      if (vol === '12') return 'tomo-12';
       if (viewParam === 'boot' || viewParam === 'boot-lab') return 'boot-lab';
       if (viewParam === 'index') return 'index';
       if (viewParam === 'world' || viewParam === 'map') return 'world-map';
@@ -411,7 +432,14 @@ function AppContent({
         if (vol === '02' || vol === '2') return 'tomo-02';
         if (vol === '03' || vol === '3') return 'tomo-03';
         if (vol === '04' || vol === '4') return 'tomo-04';
+        if (vol === '05' || vol === '5') return 'tomo-05';
+        if (vol === '06' || vol === '6') return 'tomo-06';
+        if (vol === '07' || vol === '7') return 'tomo-07';
         if (vol === '08' || vol === '8') return 'tomo-08';
+        if (vol === '09' || vol === '9') return 'tomo-09';
+        if (vol === '10') return 'tomo-10';
+        if (vol === '11') return 'tomo-11';
+        if (vol === '12') return 'tomo-12';
         return 'magazine';
       }
     } catch {
@@ -1516,11 +1544,53 @@ function AppContent({
             />
           )}
 
+          {currentView === 'tomo-05' && (
+            <Tomo05MagazineView
+              onBack={handleNavigateHome}
+            />
+          )}
+
+          {currentView === 'tomo-06' && (
+            <Tomo06MagazineView
+              onBack={handleNavigateHome}
+            />
+          )}
+
+          {currentView === 'tomo-07' && (
+            <Tomo07MagazineView
+              onBack={handleNavigateHome}
+            />
+          )}
+
           {currentView === 'tomo-08' && (
             <Tomo08MagazineView
               onBackToApp={handleNavigateHome}
               onNavigateTomo={handleNavigateTomo}
               onOpenLab={handleNavigateBootLab}
+            />
+          )}
+
+          {currentView === 'tomo-09' && (
+            <Tomo09MagazineView
+              onBack={handleNavigateHome}
+            />
+          )}
+
+          {currentView === 'tomo-10' && (
+            <Tomo10MagazineView
+              onBack={handleNavigateHome}
+            />
+          )}
+
+          {currentView === 'tomo-11' && (
+            <Tomo11MagazineView
+              onBack={handleNavigateHome}
+            />
+          )}
+
+          {currentView === 'tomo-12' && (
+            <Tomo12MagazineView
+              onBack={handleNavigateHome}
             />
           )}
 
