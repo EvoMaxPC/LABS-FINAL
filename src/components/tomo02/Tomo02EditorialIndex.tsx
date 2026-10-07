@@ -40,6 +40,14 @@ interface Tomo02EditorialIndexProps {
   onOpenA4Magazine?: () => void;
   onOpenSector00?: () => void;
   onOpenSector01?: () => void;
+  onOpenSector02?: () => void;
+  onOpenSector03?: () => void;
+  onOpenSector05?: () => void;
+  onOpenSector06?: () => void;
+  onOpenSector07?: () => void;
+  onOpenSector08?: () => void;
+  onOpenSector09?: () => void;
+  onOpenSector10?: () => void;
   onSelectModule?: (moduleIndex: number) => void;
   onStartFinalExam?: () => void;
   onOpenCompletionScreen?: () => void;
@@ -107,6 +115,14 @@ export const Tomo02EditorialIndex: React.FC<Tomo02EditorialIndexProps> = ({
   onBackToApp,
   onOpenSector00,
   onOpenSector01,
+  onOpenSector02,
+  onOpenSector03,
+  onOpenSector05,
+  onOpenSector06,
+  onOpenSector07,
+  onOpenSector08,
+  onOpenSector09,
+  onOpenSector10,
 }) => {
   const [selectedGroup, setSelectedGroup] = useState<string>('all');
   const [searchFilter, setSearchFilter] = useState('');
@@ -384,6 +400,14 @@ export const Tomo02EditorialIndex: React.FC<Tomo02EditorialIndexProps> = ({
             {filteredSectors.map((sector) => {
               const isSector00 = sector.sectorId === 'sector-00';
               const isSector01 = sector.sectorId === 'sector-01';
+              const isSector02 = sector.sectorId === 'sector-02';
+              const isSector03 = sector.sectorId === 'sector-03';
+              const isSector05 = sector.sectorId === 'sector-05';
+              const isSector06 = sector.sectorId === 'sector-06';
+              const isSector07 = sector.sectorId === 'sector-07';
+              const isSector08 = sector.sectorId === 'sector-08';
+              const isSector09 = sector.sectorId === 'sector-09';
+              const isSector10 = sector.sectorId === 'sector-10';
               const isSector37 = sector.sectorId === 'sector-37';
               const isSector39 = sector.sectorId === 'sector-39';
               const isExpanded = expandedSectorId === sector.sectorId || (Boolean(searchFilter.trim()) && filteredSectors.length <= 4);
@@ -543,7 +567,629 @@ export const Tomo02EditorialIndex: React.FC<Tomo02EditorialIndexProps> = ({
                 );
               }
 
-              // SECTORS 02 TO 39 (LOCKED WITH FULL CANONICAL TEMARIO)
+              // SECTOR 02 (ACTIVE)
+              if (isSector02) {
+                return (
+                  <div
+                    key={sector.sectorId}
+                    className="rounded-2xl bg-gradient-to-r from-[#0078D4]/20 via-[#080B10] to-[#080B10] border-2 border-[#00A4EF] hover:border-[#60CDFF] transition-all shadow-[0_0_30px_rgba(0,164,239,0.22)] group"
+                  >
+                    <div className="p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                      <div className="space-y-1 min-w-0 flex-1">
+                        <div className="flex flex-wrap items-center gap-2 font-mono text-xs">
+                          <span className="w-2.5 h-2.5 rounded-full bg-[#00A4EF] animate-pulse" />
+                          <span className="font-bold text-[#60CDFF]">[SECTOR 02]</span>
+                          <span className="px-2 py-0.5 rounded bg-[#0078D4]/25 text-[#60CDFF] border border-[#00A4EF]/60 font-bold text-[10px]">
+                            GOLD MASTER · ACTIVO
+                          </span>
+                          <span className="text-zinc-600 text-[10px]">•</span>
+                          <span className="text-zinc-300 text-[10px]">30 INVESTIGACIONES</span>
+                          {sector.artefactOrLab && (
+                            <>
+                              <span className="text-zinc-600 text-[10px]">•</span>
+                              <span className="text-[#60CDFF]/90 text-[10px] font-bold">
+                                {sector.artefactOrLab}
+                              </span>
+                            </>
+                          )}
+                        </div>
+
+                        <h3 className="text-base sm:text-lg font-bold text-white uppercase tracking-tight">
+                          {sector.title}
+                        </h3>
+
+                        <p className="text-xs text-zinc-300 line-clamp-1">{sector.subtitle}</p>
+                      </div>
+
+                      <div className="flex items-center gap-2 shrink-0">
+                        <button
+                          type="button"
+                          onClick={() => toggleSectorDetails(sector.sectorId)}
+                          className="px-2.5 py-1.5 rounded-lg bg-[#11161D] hover:bg-[#151B23] border border-sky-500/20 text-zinc-400 hover:text-[#60CDFF] text-xs font-mono flex items-center gap-1 cursor-pointer transition-colors"
+                        >
+                          <span>{isExpanded ? 'Ocultar Temario' : 'Ver Temario'}</span>
+                          {isExpanded ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />}
+                        </button>
+                        <button
+                          type="button"
+                          onClick={onOpenSector02}
+                          className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-[#0078D4] to-[#00A4EF] hover:from-[#0067C0] hover:to-[#60CDFF] text-white font-mono font-bold text-xs uppercase tracking-wider transition-all cursor-pointer shadow-[0_0_24px_rgba(0,164,239,0.30)] flex items-center gap-1.5"
+                        >
+                          <span>INGRESAR</span>
+                          <ArrowRight className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
+                    </div>
+
+                    {isExpanded && sector.investigationsList && (
+                      <div className="px-5 pb-5 pt-2 border-t border-sky-500/15 bg-[#05070A]/90 space-y-2 animate-fadeIn rounded-b-2xl">
+                        <div className="text-[10px] font-mono text-[#60CDFF] font-bold uppercase tracking-wider flex items-center gap-1.5">
+                          <FileText className="w-3 h-3 text-[#00A4EF]" />
+                          <span>TEMARIO CANÓNICO // 30 INVESTIGACIONES PERICIALES</span>
+                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-1.5 pt-1">
+                          {sector.investigationsList.map((item) => (
+                            <div
+                              key={item.id}
+                              className="p-2 rounded bg-[#11161D]/70 border border-sky-500/10 text-xs font-mono text-zinc-300 flex items-start gap-2"
+                            >
+                              <span className="text-[#60CDFF] font-bold shrink-0">{item.id}</span>
+                              <span className="text-zinc-300 line-clamp-1">{item.title}</span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                );
+              }
+
+              // SECTOR 03 (ACTIVE)
+              if (isSector03) {
+                return (
+                  <div
+                    key={sector.sectorId}
+                    className="rounded-2xl bg-gradient-to-r from-[#0078D4]/20 via-[#080B10] to-[#080B10] border-2 border-[#00A4EF] hover:border-[#60CDFF] transition-all shadow-[0_0_30px_rgba(0,164,239,0.22)] group"
+                  >
+                    <div className="p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                      <div className="space-y-1 min-w-0 flex-1">
+                        <div className="flex flex-wrap items-center gap-2 font-mono text-xs">
+                          <span className="w-2.5 h-2.5 rounded-full bg-[#00A4EF] animate-pulse" />
+                          <span className="font-bold text-[#60CDFF]">[SECTOR 03]</span>
+                          <span className="px-2 py-0.5 rounded bg-[#0078D4]/25 text-[#60CDFF] border border-[#00A4EF]/60 font-bold text-[10px]">
+                            GOLD MASTER · ACTIVO
+                          </span>
+                          <span className="text-zinc-600 text-[10px]">•</span>
+                          <span className="text-zinc-300 text-[10px]">21 INVESTIGACIONES</span>
+                          {sector.artefactOrLab && (
+                            <>
+                              <span className="text-zinc-600 text-[10px]">•</span>
+                              <span className="text-[#60CDFF]/90 text-[10px] font-bold">
+                                {sector.artefactOrLab}
+                              </span>
+                            </>
+                          )}
+                        </div>
+
+                        <h3 className="text-base sm:text-lg font-bold text-white uppercase tracking-tight">
+                          {sector.title}
+                        </h3>
+
+                        <p className="text-xs text-zinc-300 line-clamp-1">{sector.subtitle}</p>
+                      </div>
+
+                      <div className="flex items-center gap-2 shrink-0">
+                        <button
+                          type="button"
+                          onClick={() => toggleSectorDetails(sector.sectorId)}
+                          className="px-2.5 py-1.5 rounded-lg bg-[#11161D] hover:bg-[#151B23] border border-sky-500/20 text-zinc-400 hover:text-[#60CDFF] text-xs font-mono flex items-center gap-1 cursor-pointer transition-colors"
+                        >
+                          <span>{isExpanded ? 'Ocultar Temario' : 'Ver Temario'}</span>
+                          {isExpanded ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />}
+                        </button>
+                        <button
+                          type="button"
+                          onClick={onOpenSector03}
+                          className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-[#0078D4] to-[#00A4EF] hover:from-[#0067C0] hover:to-[#60CDFF] text-white font-mono font-bold text-xs uppercase tracking-wider transition-all cursor-pointer shadow-[0_0_24px_rgba(0,164,239,0.30)] flex items-center gap-1.5"
+                        >
+                          <span>INGRESAR</span>
+                          <ArrowRight className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
+                    </div>
+
+                    {isExpanded && sector.investigationsList && (
+                      <div className="px-5 pb-5 pt-2 border-t border-sky-500/15 bg-[#05070A]/90 space-y-2 animate-fadeIn rounded-b-2xl">
+                        <div className="text-[10px] font-mono text-[#60CDFF] font-bold uppercase tracking-wider flex items-center gap-1.5">
+                          <FileText className="w-3 h-3 text-[#00A4EF]" />
+                          <span>TEMARIO CANÓNICO // 21 INVESTIGACIONES PERICIALES</span>
+                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-1.5 pt-1">
+                          {sector.investigationsList.map((item) => (
+                            <div
+                              key={item.id}
+                              className="p-2 rounded bg-[#11161D]/70 border border-sky-500/10 text-xs font-mono text-zinc-300 flex items-start gap-2"
+                            >
+                              <span className="text-[#60CDFF] font-bold shrink-0">{item.id}</span>
+                              <span className="text-zinc-300 line-clamp-1">{item.title}</span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                );
+              }
+
+              // SECTOR 05 (ACTIVE)
+              if (isSector05) {
+                return (
+                  <div
+                    key={sector.sectorId}
+                    className="rounded-2xl bg-gradient-to-r from-[#0078D4]/20 via-[#080B10] to-[#080B10] border-2 border-[#00A4EF] hover:border-[#60CDFF] transition-all shadow-[0_0_30px_rgba(0,164,239,0.22)] group"
+                  >
+                    <div className="p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                      <div className="space-y-1 min-w-0 flex-1">
+                        <div className="flex flex-wrap items-center gap-2 font-mono text-xs">
+                          <span className="w-2.5 h-2.5 rounded-full bg-[#00A4EF] animate-pulse" />
+                          <span className="font-bold text-[#60CDFF]">[SECTOR 05]</span>
+                          <span className="px-2 py-0.5 rounded bg-[#0078D4]/25 text-[#60CDFF] border border-[#00A4EF]/60 font-bold text-[10px]">
+                            GOLD MASTER · ACTIVO
+                          </span>
+                          <span className="text-zinc-600 text-[10px]">•</span>
+                          <span className="text-zinc-300 text-[10px]">21 INVESTIGACIONES</span>
+                          {sector.artefactOrLab && (
+                            <>
+                              <span className="text-zinc-600 text-[10px]">•</span>
+                              <span className="text-[#60CDFF]/90 text-[10px] font-bold">
+                                {sector.artefactOrLab}
+                              </span>
+                            </>
+                          )}
+                        </div>
+
+                        <h3 className="text-base sm:text-lg font-bold text-white uppercase tracking-tight">
+                          {sector.title}
+                        </h3>
+
+                        <p className="text-xs text-zinc-300 line-clamp-1">{sector.subtitle}</p>
+                      </div>
+
+                      <div className="flex items-center gap-2 shrink-0">
+                        <button
+                          type="button"
+                          onClick={() => toggleSectorDetails(sector.sectorId)}
+                          className="px-2.5 py-1.5 rounded-lg bg-[#11161D] hover:bg-[#151B23] border border-sky-500/20 text-zinc-400 hover:text-[#60CDFF] text-xs font-mono flex items-center gap-1 cursor-pointer transition-colors"
+                        >
+                          <span>{isExpanded ? 'Ocultar Temario' : 'Ver Temario'}</span>
+                          {isExpanded ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />}
+                        </button>
+                        <button
+                          type="button"
+                          onClick={onOpenSector05}
+                          className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-[#0078D4] to-[#00A4EF] hover:from-[#0067C0] hover:to-[#60CDFF] text-white font-mono font-bold text-xs uppercase tracking-wider transition-all cursor-pointer shadow-[0_0_24px_rgba(0,164,239,0.30)] flex items-center gap-1.5"
+                        >
+                          <span>INGRESAR</span>
+                          <ArrowRight className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
+                    </div>
+
+                    {isExpanded && sector.investigationsList && (
+                      <div className="px-5 pb-5 pt-2 border-t border-sky-500/15 bg-[#05070A]/90 space-y-2 animate-fadeIn rounded-b-2xl">
+                        <div className="text-[10px] font-mono text-[#60CDFF] font-bold uppercase tracking-wider flex items-center gap-1.5">
+                          <FileText className="w-3 h-3 text-[#00A4EF]" />
+                          <span>TEMARIO CANÓNICO // 21 INVESTIGACIONES PERICIALES</span>
+                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-1.5 pt-1">
+                          {sector.investigationsList.map((item) => (
+                            <div
+                              key={item.id}
+                              className="p-2 rounded bg-[#11161D]/70 border border-sky-500/10 text-xs font-mono text-zinc-300 flex items-start gap-2"
+                            >
+                              <span className="text-[#60CDFF] font-bold shrink-0">{item.id}</span>
+                              <span className="text-zinc-300 line-clamp-1">{item.title}</span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                );
+              }
+
+              // SECTOR 06 (ACTIVE)
+              if (isSector06) {
+                return (
+                  <div
+                    key={sector.sectorId}
+                    className="rounded-2xl bg-gradient-to-r from-[#0078D4]/20 via-[#080B10] to-[#080B10] border-2 border-[#00A4EF] hover:border-[#60CDFF] transition-all shadow-[0_0_30px_rgba(0,164,239,0.22)] group"
+                  >
+                    <div className="p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                      <div className="space-y-1 min-w-0 flex-1">
+                        <div className="flex flex-wrap items-center gap-2 font-mono text-xs">
+                          <span className="w-2.5 h-2.5 rounded-full bg-[#00A4EF] animate-pulse" />
+                          <span className="font-bold text-[#60CDFF]">[SECTOR 06]</span>
+                          <span className="px-2 py-0.5 rounded bg-[#0078D4]/25 text-[#60CDFF] border border-[#00A4EF]/60 font-bold text-[10px]">
+                            GOLD MASTER · ACTIVO
+                          </span>
+                          <span className="text-zinc-600 text-[10px]">•</span>
+                          <span className="text-zinc-300 text-[10px]">32 INVESTIGACIONES</span>
+                          {sector.artefactOrLab && (
+                            <>
+                              <span className="text-zinc-600 text-[10px]">•</span>
+                              <span className="text-[#60CDFF]/90 text-[10px] font-bold">
+                                {sector.artefactOrLab}
+                              </span>
+                            </>
+                          )}
+                        </div>
+
+                        <h3 className="text-base sm:text-lg font-bold text-white uppercase tracking-tight">
+                          {sector.title}
+                        </h3>
+
+                        <p className="text-xs text-zinc-300 line-clamp-1">{sector.subtitle}</p>
+                      </div>
+
+                      <div className="flex items-center gap-2 shrink-0">
+                        <button
+                          type="button"
+                          onClick={() => toggleSectorDetails(sector.sectorId)}
+                          className="px-2.5 py-1.5 rounded-lg bg-[#11161D] hover:bg-[#151B23] border border-sky-500/20 text-zinc-400 hover:text-[#60CDFF] text-xs font-mono flex items-center gap-1 cursor-pointer transition-colors"
+                        >
+                          <span>{isExpanded ? 'Ocultar Temario' : 'Ver Temario'}</span>
+                          {isExpanded ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />}
+                        </button>
+                        <button
+                          type="button"
+                          onClick={onOpenSector06}
+                          className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-[#0078D4] to-[#00A4EF] hover:from-[#0067C0] hover:to-[#60CDFF] text-white font-mono font-bold text-xs uppercase tracking-wider transition-all cursor-pointer shadow-[0_0_24px_rgba(0,164,239,0.30)] flex items-center gap-1.5"
+                        >
+                          <span>INGRESAR</span>
+                          <ArrowRight className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
+                    </div>
+
+                    {isExpanded && sector.investigationsList && (
+                      <div className="px-5 pb-5 pt-2 border-t border-sky-500/15 bg-[#05070A]/90 space-y-2 animate-fadeIn rounded-b-2xl">
+                        <div className="text-[10px] font-mono text-[#60CDFF] font-bold uppercase tracking-wider flex items-center gap-1.5">
+                          <FileText className="w-3 h-3 text-[#00A4EF]" />
+                          <span>TEMARIO CANÓNICO // 32 INVESTIGACIONES PERICIALES</span>
+                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-1.5 pt-1">
+                          {sector.investigationsList.map((item) => (
+                            <div
+                              key={item.id}
+                              className="p-2 rounded bg-[#11161D]/70 border border-sky-500/10 text-xs font-mono text-zinc-300 flex items-start gap-2"
+                            >
+                              <span className="text-[#60CDFF] font-bold shrink-0">{item.id}</span>
+                              <span className="text-zinc-300 line-clamp-1">{item.title}</span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                );
+              }
+
+              // SECTOR 07 (ACTIVE)
+              if (isSector07) {
+                return (
+                  <div
+                    key={sector.sectorId}
+                    className="rounded-2xl bg-gradient-to-r from-[#0078D4]/20 via-[#080B10] to-[#080B10] border-2 border-[#00A4EF] hover:border-[#60CDFF] transition-all shadow-[0_0_30px_rgba(0,164,239,0.22)] group"
+                  >
+                    <div className="p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                      <div className="space-y-1 min-w-0 flex-1">
+                        <div className="flex flex-wrap items-center gap-2 font-mono text-xs">
+                          <span className="w-2.5 h-2.5 rounded-full bg-[#00A4EF] animate-pulse" />
+                          <span className="font-bold text-[#60CDFF]">[SECTOR 07]</span>
+                          <span className="px-2 py-0.5 rounded bg-[#0078D4]/25 text-[#60CDFF] border border-[#00A4EF]/60 font-bold text-[10px]">
+                            GOLD MASTER · ACTIVO
+                          </span>
+                          <span className="text-zinc-600 text-[10px]">•</span>
+                          <span className="text-zinc-300 text-[10px]">11 INVESTIGACIONES</span>
+                          {sector.artefactOrLab && (
+                            <>
+                              <span className="text-zinc-600 text-[10px]">•</span>
+                              <span className="text-[#60CDFF]/90 text-[10px] font-bold">
+                                {sector.artefactOrLab}
+                              </span>
+                            </>
+                          )}
+                        </div>
+
+                        <h3 className="text-base sm:text-lg font-bold text-white uppercase tracking-tight">
+                          {sector.title}
+                        </h3>
+
+                        <p className="text-xs text-zinc-300 line-clamp-1">{sector.subtitle}</p>
+                      </div>
+
+                      <div className="flex items-center gap-2 shrink-0">
+                        <button
+                          type="button"
+                          onClick={() => toggleSectorDetails(sector.sectorId)}
+                          className="px-2.5 py-1.5 rounded-lg bg-[#11161D] hover:bg-[#151B23] border border-sky-500/20 text-zinc-400 hover:text-[#60CDFF] text-xs font-mono flex items-center gap-1 cursor-pointer transition-colors"
+                        >
+                          <span>{isExpanded ? 'Ocultar Temario' : 'Ver Temario'}</span>
+                          {isExpanded ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />}
+                        </button>
+                        <button
+                          type="button"
+                          onClick={onOpenSector07}
+                          className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-[#0078D4] to-[#00A4EF] hover:from-[#0067C0] hover:to-[#60CDFF] text-white font-mono font-bold text-xs uppercase tracking-wider transition-all cursor-pointer shadow-[0_0_24px_rgba(0,164,239,0.30)] flex items-center gap-1.5"
+                        >
+                          <span>INGRESAR</span>
+                          <ArrowRight className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
+                    </div>
+
+                    {isExpanded && sector.investigationsList && (
+                      <div className="px-5 pb-5 pt-2 border-t border-sky-500/15 bg-[#05070A]/90 space-y-2 animate-fadeIn rounded-b-2xl">
+                        <div className="text-[10px] font-mono text-[#60CDFF] font-bold uppercase tracking-wider flex items-center gap-1.5">
+                          <FileText className="w-3 h-3 text-[#00A4EF]" />
+                          <span>TEMARIO CANÓNICO // 11 INVESTIGACIONES PERICIALES</span>
+                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-1.5 pt-1">
+                          {sector.investigationsList.map((item) => (
+                            <div
+                              key={item.id}
+                              className="p-2 rounded bg-[#11161D]/70 border border-sky-500/10 text-xs font-mono text-zinc-300 flex items-start gap-2"
+                            >
+                              <span className="text-[#60CDFF] font-bold shrink-0">{item.id}</span>
+                              <span className="text-zinc-300 line-clamp-1">{item.title}</span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                );
+              }
+
+              // SECTOR 08 (ACTIVE)
+              if (isSector08) {
+                return (
+                  <div
+                    key={sector.sectorId}
+                    className="rounded-2xl bg-gradient-to-r from-[#0078D4]/20 via-[#080B10] to-[#080B10] border-2 border-[#00A4EF] hover:border-[#60CDFF] transition-all shadow-[0_0_30px_rgba(0,164,239,0.22)] group"
+                  >
+                    <div className="p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                      <div className="space-y-1 min-w-0 flex-1">
+                        <div className="flex flex-wrap items-center gap-2 font-mono text-xs">
+                          <span className="w-2.5 h-2.5 rounded-full bg-[#00A4EF] animate-pulse" />
+                          <span className="font-bold text-[#60CDFF]">[SECTOR 08]</span>
+                          <span className="px-2 py-0.5 rounded bg-[#0078D4]/25 text-[#60CDFF] border border-[#00A4EF]/60 font-bold text-[10px]">
+                            GOLD MASTER · ACTIVO
+                          </span>
+                          <span className="text-zinc-600 text-[10px]">•</span>
+                          <span className="text-zinc-300 text-[10px]">25 INVESTIGACIONES</span>
+                          {sector.artefactOrLab && (
+                            <>
+                              <span className="text-zinc-600 text-[10px]">•</span>
+                              <span className="text-[#60CDFF]/90 text-[10px] font-bold">
+                                {sector.artefactOrLab}
+                              </span>
+                            </>
+                          )}
+                        </div>
+
+                        <h3 className="text-base sm:text-lg font-bold text-white uppercase tracking-tight">
+                          {sector.title}
+                        </h3>
+
+                        <p className="text-xs text-zinc-300 line-clamp-1">{sector.subtitle}</p>
+                      </div>
+
+                      <div className="flex items-center gap-2 shrink-0">
+                        <button
+                          type="button"
+                          onClick={() => toggleSectorDetails(sector.sectorId)}
+                          className="px-2.5 py-1.5 rounded-lg bg-[#11161D] hover:bg-[#151B23] border border-sky-500/20 text-zinc-400 hover:text-[#60CDFF] text-xs font-mono flex items-center gap-1 cursor-pointer transition-colors"
+                        >
+                          <span>{isExpanded ? 'Ocultar Temario' : 'Ver Temario'}</span>
+                          {isExpanded ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />}
+                        </button>
+                        <button
+                          type="button"
+                          onClick={onOpenSector08}
+                          className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-[#0078D4] to-[#00A4EF] hover:from-[#0067C0] hover:to-[#60CDFF] text-white font-mono font-bold text-xs uppercase tracking-wider transition-all cursor-pointer shadow-[0_0_24px_rgba(0,164,239,0.30)] flex items-center gap-1.5"
+                        >
+                          <span>INGRESAR</span>
+                          <ArrowRight className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
+                    </div>
+
+                    {isExpanded && sector.investigationsList && (
+                      <div className="px-5 pb-5 pt-2 border-t border-sky-500/15 bg-[#05070A]/90 space-y-2 animate-fadeIn rounded-b-2xl">
+                        <div className="text-[10px] font-mono text-[#60CDFF] font-bold uppercase tracking-wider flex items-center gap-1.5">
+                          <Terminal className="w-3 h-3" />
+                          <span>TEMARIO OFICIAL {sector.investigationsCount} INVESTIGACIONES</span>
+                        </div>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5 pt-1">
+                          {sector.investigationsList.map((item) => (
+                            <div
+                              key={item.id}
+                              className="p-2 rounded bg-[#0A0E17] border border-sky-500/10 flex items-center gap-2 text-xs"
+                            >
+                              <span className="font-mono text-[#60CDFF] text-[11px] font-bold shrink-0">
+                                {item.id}
+                              </span>
+                              <span className="text-zinc-300 font-medium truncate">{item.title}</span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                );
+              }
+
+              // SECTOR 09 (ACTIVE)
+              if (isSector09) {
+                return (
+                  <div
+                    key={sector.sectorId}
+                    className="rounded-2xl bg-gradient-to-r from-amber-500/20 via-[#080B10] to-[#080B10] border-2 border-amber-500 hover:border-amber-400 transition-all shadow-[0_0_30px_rgba(245,158,11,0.22)] group"
+                  >
+                    <div className="p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                      <div className="space-y-1 min-w-0 flex-1">
+                        <div className="flex flex-wrap items-center gap-2 font-mono text-xs">
+                          <span className="w-2.5 h-2.5 rounded-full bg-amber-400 animate-pulse" />
+                          <span className="font-bold text-amber-400">[SECTOR 09]</span>
+                          <span className="px-2 py-0.5 rounded bg-amber-500/25 text-amber-300 border border-amber-500/60 font-bold text-[10px]">
+                            GOLD MASTER · ACTIVO
+                          </span>
+                          <span className="text-zinc-600 text-[10px]">•</span>
+                          <span className="text-zinc-300 text-[10px]">30 INVESTIGACIONES</span>
+                          {sector.artefactOrLab && (
+                            <>
+                              <span className="text-zinc-600 text-[10px]">•</span>
+                              <span className="text-amber-400/90 text-[10px] font-bold">
+                                {sector.artefactOrLab}
+                              </span>
+                            </>
+                          )}
+                        </div>
+
+                        <h3 className="text-base sm:text-lg font-bold text-white uppercase tracking-tight">
+                          {sector.title}
+                        </h3>
+
+                        <p className="text-xs text-zinc-300 line-clamp-1">{sector.subtitle}</p>
+                      </div>
+
+                      <div className="flex items-center gap-2 shrink-0">
+                        <button
+                          type="button"
+                          onClick={() => toggleSectorDetails(sector.sectorId)}
+                          className="px-2.5 py-1.5 rounded-lg bg-[#11161D] hover:bg-[#151B23] border border-amber-500/20 text-zinc-400 hover:text-amber-300 text-xs font-mono flex items-center gap-1 cursor-pointer transition-colors"
+                        >
+                          <span>{isExpanded ? 'Ocultar Temario' : 'Ver Temario'}</span>
+                          {isExpanded ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />}
+                        </button>
+                        <button
+                          type="button"
+                          onClick={onOpenSector09}
+                          className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-amber-600 to-amber-500 hover:from-amber-500 hover:to-amber-400 text-slate-950 font-mono font-bold text-xs uppercase tracking-wider transition-all cursor-pointer shadow-[0_0_24px_rgba(245,158,11,0.30)] flex items-center gap-1.5"
+                        >
+                          <span>INGRESAR</span>
+                          <ArrowRight className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
+                    </div>
+
+                    {isExpanded && sector.investigationsList && (
+                      <div className="px-5 pb-5 pt-2 border-t border-amber-500/15 bg-[#05070A]/90 space-y-2 animate-fadeIn rounded-b-2xl">
+                        <div className="text-[10px] font-mono text-amber-400 font-bold uppercase tracking-wider flex items-center gap-1.5">
+                          <Terminal className="w-3 h-3" />
+                          <span>TEMARIO OFICIAL {sector.investigationsCount} INVESTIGACIONES</span>
+                        </div>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5 pt-1">
+                          {sector.investigationsList.map((item) => (
+                            <div
+                              key={item.id}
+                              className="p-2 rounded bg-[#0A0E17] border border-amber-500/10 flex items-center gap-2 text-xs"
+                            >
+                              <span className="font-mono text-amber-400 text-[11px] font-bold shrink-0">
+                                {item.id}
+                              </span>
+                              <span className="text-zinc-300 font-medium truncate">{item.title}</span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                );
+              }
+
+              // SECTOR 10 (ACTIVE)
+              if (isSector10) {
+                return (
+                  <div
+                    key={sector.sectorId}
+                    className="rounded-2xl bg-gradient-to-r from-[#0078D4]/20 via-[#080B10] to-[#080B10] border-2 border-[#00A4EF] hover:border-[#60CDFF] transition-all shadow-[0_0_30px_rgba(0,164,239,0.22)] group"
+                  >
+                    <div className="p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                      <div className="space-y-1 min-w-0 flex-1">
+                        <div className="flex flex-wrap items-center gap-2 font-mono text-xs">
+                          <span className="w-2.5 h-2.5 rounded-full bg-[#00A4EF] animate-pulse" />
+                          <span className="font-bold text-[#60CDFF]">[SECTOR 10]</span>
+                          <span className="px-2 py-0.5 rounded bg-[#0078D4]/25 text-[#60CDFF] border border-[#00A4EF]/60 font-bold text-[10px]">
+                            GOLD MASTER · ACTIVO
+                          </span>
+                          <span className="text-zinc-600 text-[10px]">•</span>
+                          <span className="text-zinc-300 text-[10px]">30 INVESTIGACIONES</span>
+                          {sector.artefactOrLab && (
+                            <>
+                              <span className="text-zinc-600 text-[10px]">•</span>
+                              <span className="text-[#60CDFF]/90 text-[10px] font-bold">
+                                {sector.artefactOrLab}
+                              </span>
+                            </>
+                          )}
+                        </div>
+
+                        <h3 className="text-base sm:text-lg font-bold text-white uppercase tracking-tight">
+                          {sector.title}
+                        </h3>
+
+                        <p className="text-xs text-zinc-300 line-clamp-1">{sector.subtitle}</p>
+                      </div>
+
+                      <div className="flex items-center gap-2 shrink-0">
+                        <button
+                          type="button"
+                          onClick={() => toggleSectorDetails(sector.sectorId)}
+                          className="px-2.5 py-1.5 rounded-lg bg-[#11161D] hover:bg-[#151B23] border border-sky-500/20 text-zinc-400 hover:text-[#60CDFF] text-xs font-mono flex items-center gap-1 cursor-pointer transition-colors"
+                        >
+                          <span>{isExpanded ? 'Ocultar Temario' : 'Ver Temario'}</span>
+                          {isExpanded ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />}
+                        </button>
+                        <button
+                          type="button"
+                          onClick={onOpenSector10}
+                          className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-[#0078D4] to-[#00A4EF] hover:from-[#0067C0] hover:to-[#60CDFF] text-white font-mono font-bold text-xs uppercase tracking-wider transition-all cursor-pointer shadow-[0_0_24px_rgba(0,164,239,0.30)] flex items-center gap-1.5"
+                        >
+                          <span>INGRESAR</span>
+                          <ArrowRight className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
+                    </div>
+
+                    {isExpanded && sector.investigationsList && (
+                      <div className="px-5 pb-5 pt-2 border-t border-sky-500/15 bg-[#05070A]/90 space-y-2 animate-fadeIn rounded-b-2xl">
+                        <div className="text-[10px] font-mono text-[#60CDFF] font-bold uppercase tracking-wider flex items-center gap-1.5">
+                          <Terminal className="w-3 h-3" />
+                          <span>TEMARIO OFICIAL {sector.investigationsCount} INVESTIGACIONES</span>
+                        </div>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5 pt-1">
+                          {sector.investigationsList.map((item) => (
+                            <div
+                              key={item.id}
+                              className="p-2 rounded bg-[#0A0E17] border border-sky-500/10 flex items-center gap-2 text-xs"
+                            >
+                              <span className="font-mono text-[#60CDFF] text-[11px] font-bold shrink-0">
+                                {item.id}
+                              </span>
+                              <span className="text-zinc-300 font-medium truncate">{item.title}</span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                );
+              }
+
+              // SECTORS 04 TO 39 (LOCKED WITH FULL CANONICAL TEMARIO)
               return (
                 <div
                   key={sector.sectorId}

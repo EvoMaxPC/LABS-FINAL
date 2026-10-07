@@ -298,7 +298,22 @@ export const EvoHomeExperience: React.FC<EvoHomeExperienceProps> = ({
   ];
 
   return (
-    <div className="relative z-10 flex-1 max-w-[1360px] w-full mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-8 flex flex-col space-y-12 sm:space-y-16 transition-all duration-300">
+    <div className="relative w-full min-h-full">
+      {/* Background Technical Grid for EVO LABS Home */}
+      <div 
+        className="absolute inset-0 pointer-events-none z-0"
+        style={{
+          backgroundImage: `
+            linear-gradient(to right, rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+            linear-gradient(to bottom, rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+            linear-gradient(to right, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+            linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 1px, transparent 1px)
+          `,
+          backgroundSize: '32px 32px, 32px 32px, 160px 160px, 160px 160px',
+        }}
+      />
+
+      <div className="relative z-10 flex-1 max-w-[1360px] w-full mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-8 flex flex-col space-y-12 sm:space-y-16 transition-all duration-300">
       
       {/* ========================================================================= */}
       {/* 2 // HERO PRINCIPAL: CENTRO DE OPERACIONES EVO LABS                      */}
@@ -1207,6 +1222,7 @@ export const EvoHomeExperience: React.FC<EvoHomeExperienceProps> = ({
         </div>
       )}
 
+      </div>
     </div>
   );
 };

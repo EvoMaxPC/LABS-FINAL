@@ -127,6 +127,12 @@ export interface Sector00Passport {
   windowsPath: PassportFieldData;
   userProfile: PassportFieldData;
   systemDrive: PassportFieldData;
+  computerName?: PassportFieldData;
+  systemManufacturer?: PassportFieldData;
+  systemModel?: PassportFieldData;
+  bootMode?: PassportFieldData;
+  secureBoot?: PassportFieldData;
+  statusTag?: 'DATO REAL' | 'EJEMPLO' | 'NO DISPONIBLE' | 'DESCONOCIDO';
   baseline: {
     captured: boolean;
     timestamp: string;
@@ -143,8 +149,8 @@ export const SECTOR_00_INVESTIGATIONS: Sector00Investigation[] = [
   {
     id: 'inv-00-01',
     code: '00.01',
-    title: 'WINDOWS NO ES EL ESCRITORIO',
-    subtitle: 'Lo que ves es apenas la superficie',
+    title: 'Qué es realmente un sistema operativo',
+    subtitle: 'La capa invisible entre el silicio y tus programas',
     descubri: {
       hook: 'Hacés doble clic en un icono y pensás que “Windows abrió el programa”. En realidad, el escritorio es sólo un proceso visual ordinario ejecutándose sobre capas silenciosas de drivers, servicios y un kernel implacable.',
       mythVsTruth: {
@@ -217,8 +223,8 @@ export const SECTOR_00_INVESTIGATIONS: Sector00Investigation[] = [
   {
     id: 'inv-00-02',
     code: '00.02',
-    title: 'LA MÁQUINA DETRÁS DE LAS VENTANAS',
-    subtitle: 'Qué es Windows y qué NO es Windows',
+    title: 'Qué es Windows y qué NO es Windows',
+    subtitle: 'La separación estricta entre SO, shell y aplicaciones',
     descubri: {
       hook: '¿Decís “Windows se me trabó” cuando un archivo de Excel no abre, o “Windows me borró un archivo” cuando OneDrive sincronizó mal? Aprender a separar el sistema operativo de los programas agregados es el primer paso de un técnico.',
       mythVsTruth: {
@@ -278,7 +284,7 @@ export const SECTOR_00_INVESTIGATIONS: Sector00Investigation[] = [
   {
     id: 'inv-00-03',
     code: '00.03',
-    title: 'HOME, PRO, ENTERPRISE... ¿QUÉ CAMBIA DE VERDAD?',
+    title: 'Ediciones: Home, Pro, Enterprise, Education',
     subtitle: 'Las diferencias reales sin marketing comercial',
     descubri: {
       hook: 'Mucha gente cree que Windows Pro hace que los juegos tengan más FPS o que la PC sea más rápida. La realidad es que el motor de renderizado y el kernel son idénticos; lo que cambia son las herramientas de gestión y seguridad empresarial.',
@@ -340,7 +346,7 @@ export const SECTOR_00_INVESTIGATIONS: Sector00Investigation[] = [
   {
     id: 'inv-00-04',
     code: '00.04',
-    title: 'x64 vs ARM64: DOS MUNDOS BAJO EL MISMO LOGO',
+    title: 'Arquitectura x64 y ARM64',
     subtitle: 'La arquitectura del procesador define la compatibilidad de tus programas',
     descubri: {
       hook: 'Podés tener dos laptops que visualmente dicen “Windows 11”, pero una tiene un procesador Intel/AMD (x64) y la otra un Qualcomm Snapdragon (ARM64). Intentar instalar un driver x64 en una máquina ARM64 resultará en un fallo rotundo.',
@@ -400,7 +406,7 @@ export const SECTOR_00_INVESTIGATIONS: Sector00Investigation[] = [
   {
     id: 'inv-00-05',
     code: '00.05',
-    title: 'IDENTIFICÁ TU WINDOWS SIN CONFIAR EN LA CAJA',
+    title: 'Cómo saber qué Windows tenés',
     subtitle: 'Múltiples fuentes de verdad y comprobación cruzada',
     descubri: {
       hook: 'La etiqueta pegada en el gabinete o la factura de compra pueden decir cualquier cosa. Un técnico jamás confía en la caja: consulta las fuentes de datos vivas del sistema operativo.',
@@ -460,7 +466,7 @@ export const SECTOR_00_INVESTIGATIONS: Sector00Investigation[] = [
   {
     id: 'inv-00-06',
     code: '00.06',
-    title: 'TRUCO OCULTO: WINVER + MSINFO32',
+    title: 'winver, msinfo32, Información del sistema',
     subtitle: 'El dúo indispensable de diagnóstico rápido',
     descubri: {
       hook: 'Dos atajos de teclado te dan el 90% de la identidad técnica de cualquier equipo en menos de 5 segundos: Win+R `winver` para el resumen editorial y Win+R `msinfo32` para la radiografía completa.',
@@ -521,7 +527,7 @@ export const SECTOR_00_INVESTIGATIONS: Sector00Investigation[] = [
   {
     id: 'inv-00-07',
     code: '00.07',
-    title: 'BUILD, VERSIÓN, REVISIÓN Y CANAL',
+    title: 'Build, versión, revisión, canal de actualización',
     subtitle: 'El DNI real de tu sistema operativo',
     descubri: {
       hook: 'Decir “tengo Windows 11” es como decir “tengo un auto rojo”: no dice el año, el motor ni las piezas instaladas. El identificador técnico real es el número de compilación (OS Build) con su número de revisión menor (UBR).',
@@ -582,7 +588,7 @@ export const SECTOR_00_INVESTIGATIONS: Sector00Investigation[] = [
   {
     id: 'inv-00-08',
     code: '00.08',
-    title: 'CUENTA LOCAL vs CUENTA MICROSOFT',
+    title: 'Usuario local vs cuenta Microsoft',
     subtitle: '¿Quién controla la sesión de tu equipo?',
     descubri: {
       hook: 'Al encender tu PC, ¿iniciás sesión con un usuario almacenado en el disco de tu propia máquina o autenticás contra los servidores en la nube de Microsoft? Esta distinción define tu privacidad, la recuperación de claves y qué ocurre si te quedás sin internet.',
@@ -642,7 +648,7 @@ export const SECTOR_00_INVESTIGATIONS: Sector00Investigation[] = [
   {
     id: 'inv-00-09',
     code: '00.09',
-    title: 'ADMINISTRADOR vs USUARIO ESTÁNDAR',
+    title: 'Administrador vs usuario estándar',
     subtitle: '“Tengo Admin” no significa tener poder absoluto',
     descubri: {
       hook: 'Sos el dueño de la PC, tu usuario dice “Administrador”, pero cuando querés borrar un archivo del sistema, Windows te dice: “Necesita permisos de TrustedInstaller”. ¿Por qué tu propio Windows te desconoce?',
@@ -703,7 +709,7 @@ export const SECTOR_00_INVESTIGATIONS: Sector00Investigation[] = [
   {
     id: 'inv-00-10',
     code: '00.10',
-    title: 'ESCRITORIO, EXPLORER, CONFIGURACIÓN Y PANEL DE CONTROL',
+    title: 'Escritorio, barra, Explorer, Configuración y Panel de control',
     subtitle: 'El mapa de interfaces: pasado y presente conviviendo',
     descubri: {
       hook: '¿Por qué para cambiar la resolución vas a la app moderna de Configuración, pero para ajustar propiedades avanzadas de sonido o adaptadores de red terminás en las ventanas del viejo Panel de Control de Windows 95/7?',
@@ -763,7 +769,7 @@ export const SECTOR_00_INVESTIGATIONS: Sector00Investigation[] = [
   {
     id: 'inv-00-11',
     code: '00.11',
-    title: 'EL MAPA DE RUTAS QUE TODO TÉCNICO DEBE CONOCER',
+    title: 'Rutas importantes de Windows',
     subtitle: 'La anatomía de las 5 carpetas sagradas de tu disco C:',
     descubri: {
       hook: 'Si entrás al disco C:, ves carpetas con nombres parecidos: `Archivos de programa`, `Archivos de programa (x86)`, `ProgramData` y `Windows`. Cada una tiene reglas estrictas de permisos, arquitectura y propósito.',
@@ -824,7 +830,7 @@ export const SECTOR_00_INVESTIGATIONS: Sector00Investigation[] = [
   {
     id: 'inv-00-12',
     code: '00.12',
-    title: 'WINDOWS HABLA EN VARIABLES',
+    title: 'Variables %USERPROFILE%, %APPDATA%, %TEMP%, etc.',
     subtitle: 'Por qué los técnicos nunca escriben rutas fijas en sus scripts',
     descubri: {
       hook: 'Si creás un script que copia un archivo a `C:\\Users\\Juan\\AppData`, funcionará en tu PC pero fallará estrepitosamente en la de María o en cualquier máquina con Windows en otro disco. Los profesionales usan variables de entorno.',
@@ -887,7 +893,7 @@ export const SECTOR_00_INVESTIGATIONS: Sector00Investigation[] = [
   {
     id: 'inv-00-13',
     code: '00.13',
-    title: 'CREÁ TU EXPEDIENTE WINDOWS EVO 001',
+    title: 'Crear el Expediente Windows EVO 001',
     subtitle: 'El registro técnico acumulativo y el motor de procedencia',
     descubri: {
       hook: 'En un peritaje judicial o diagnóstico corporativo, un dato sin origen declarado no tiene validez. En EVO Labs todo dato debe llevar su sello de procedencia: ¿lo dijo el usuario, lo midió una herramienta o lo reportó el kernel?',
@@ -948,7 +954,7 @@ export const SECTOR_00_INVESTIGATIONS: Sector00Investigation[] = [
   {
     id: 'inv-00-14',
     code: '00.14',
-    title: 'CONGELÁ TU PC EN EL TIEMPO: BASELINE',
+    title: 'Baseline inicial antes de tocar nada',
     subtitle: '“Si no sabés cómo estaba antes, jamás podrás demostrar que mejoró”',
     descubri: {
       hook: 'Alguien aplica un script de optimización de internet y dice: “Siento que la PC vuela”. Eso es placebo psicológico. La ingeniería exige medir antes de tocar para poder comparar después con rigor científico.',
@@ -1007,7 +1013,7 @@ export const SECTOR_00_INVESTIGATIONS: Sector00Investigation[] = [
   {
     id: 'inv-00-15',
     code: '00.15',
-    title: 'BOTÓN DE PÁNICO: CÓMO VOLVER ATRÁS',
+    title: 'Cómo volver atrás si algo sale mal',
     subtitle: 'La regla de oro de la reversibilidad técnica',
     descubri: {
       hook: 'El mejor técnico no es el que nunca comete un error, sino el que SIEMPRE tiene un camino seguro para volver exactamente al estado original en menos de 5 minutos.',

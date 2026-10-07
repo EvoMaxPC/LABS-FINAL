@@ -37,6 +37,7 @@ import { Tomo02Sector00PassportModal } from './Tomo02Sector00PassportModal';
 import { Tomo02Sector00MiniCasesModal } from './Tomo02Sector00MiniCasesModal';
 import { Tomo02Sector00TestView } from './Tomo02Sector00TestView';
 import { Tomo02Sector00MissionView } from './Tomo02Sector00MissionView';
+import { Sector00VisualDiagram } from './Sector00VisualDiagrams';
 
 interface Tomo02Sector00ViewProps {
   onBackToMagazine?: () => void;
@@ -297,12 +298,12 @@ export const Tomo02Sector00View: React.FC<Tomo02Sector00ViewProps> = ({
           <aside className="lg:col-span-4 space-y-4">
             
             {/* Sector Hero Card */}
-            <div className="p-5 rounded-2xl bg-[#090c12] border border-cyan-500/30 space-y-3 shadow-lg">
-              <div className="flex items-center justify-between text-xs font-mono-tech">
-                <span className="text-yellow-400 font-bold uppercase tracking-widest">
+            <div className="p-5 rounded-2xl bg-[#080B10] border border-white/10 space-y-3 shadow-lg">
+              <div className="flex items-center justify-between text-xs font-mono">
+                <span className="text-[#FFC700] font-bold uppercase tracking-widest">
                   FASE 01 // SECTOR 00
                 </span>
-                <span className="text-cyan-400 font-bold">
+                <span className="text-[#00A4EF] font-bold">
                   {totalCompletedInvs}/15 INVESTIGACIONES
                 </span>
               </div>
@@ -311,14 +312,14 @@ export const Tomo02Sector00View: React.FC<Tomo02Sector00ViewProps> = ({
                 ¿QUÉ WINDOWS TENÉS REALMENTE?
               </h2>
 
-              <p className="text-xs text-zinc-300 font-sans-editorial leading-relaxed">
+              <p className="text-xs text-zinc-300 font-sans leading-relaxed">
                 “Pensás que tenés Windows 11. Eso no alcanza. Antes de modificar nada, identificá exactamente qué sistema tenés delante.”
               </p>
 
-              <div className="pt-2 border-t border-zinc-800 flex items-center justify-between">
+              <div className="pt-2 border-t border-white/5 flex items-center justify-between">
                 <button
                   onClick={() => setActiveTab('mission')}
-                  className="w-full py-2 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-black font-mono-tech font-black text-xs uppercase tracking-wider transition-colors shadow-md flex items-center justify-center gap-1.5"
+                  className="w-full py-2.5 rounded-xl bg-gradient-to-r from-[#0078D4] to-[#00A4EF] hover:from-[#0067C0] hover:to-[#60CDFF] text-white font-mono font-bold text-xs uppercase tracking-wider transition-all cursor-pointer shadow-md flex items-center justify-center gap-1.5"
                 >
                   <Sparkles className="w-3.5 h-3.5" />
                   <span>{isMissionPassed ? 'MISIÓN COMPLETADA ✓' : 'INICIAR MISIÓN DE IDENTIDAD'}</span>
@@ -336,33 +337,33 @@ export const Tomo02Sector00View: React.FC<Tomo02Sector00ViewProps> = ({
                   <button
                     key={inv.id}
                     onClick={() => setSelectedInvIndex(idx)}
-                    className={`w-full text-left p-3 rounded-xl border transition-all flex items-center justify-between gap-3 ${
+                    className={`w-full text-left p-3 rounded-xl border transition-all flex items-center justify-between gap-3 cursor-pointer ${
                       isSelected
-                        ? 'bg-cyan-950/60 border-cyan-400 shadow-md text-white'
+                        ? 'bg-[#111622] border-[#00A4EF] shadow-md text-white'
                         : isDone
-                        ? 'bg-[#0a1017] border-emerald-500/30 text-zinc-300 hover:border-emerald-500/60'
-                        : 'bg-[#090c12] border-zinc-800/80 text-zinc-400 hover:border-zinc-700 hover:text-zinc-200'
+                        ? 'bg-[#0A0D15] border-emerald-500/20 text-zinc-300 hover:border-emerald-500/50'
+                        : 'bg-[#080B10] border-white/5 text-zinc-400 hover:border-white/20 hover:text-zinc-200'
                     }`}
                   >
                     <div className="flex items-center gap-2.5 min-w-0">
                       <span
-                        className={`text-xs font-mono-tech font-black px-1.5 py-0.5 rounded ${
+                        className={`text-xs font-mono font-bold px-1.5 py-0.5 rounded ${
                           isSelected
-                            ? 'bg-cyan-400 text-black'
+                            ? 'bg-[#0078D4] text-white'
                             : isDone
-                            ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/40'
-                            : 'bg-zinc-900 text-zinc-400'
+                            ? 'bg-emerald-500/20 text-[#16C784] border border-emerald-500/30'
+                            : 'bg-zinc-900 text-zinc-500'
                         }`}
                       >
                         {inv.code}
                       </span>
-                      <span className="text-xs font-display font-bold truncate">
+                      <span className="text-xs font-sans font-bold truncate">
                         {inv.title}
                       </span>
                     </div>
 
                     {isDone ? (
-                      <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+                      <CheckCircle2 className="w-4 h-4 text-[#16C784] shrink-0" />
                     ) : (
                       <ChevronRight className="w-3.5 h-3.5 text-zinc-600 shrink-0" />
                     )}
@@ -371,13 +372,13 @@ export const Tomo02Sector00View: React.FC<Tomo02Sector00ViewProps> = ({
               })}
             </div>
 
-            {/* Tutor EVO Floating Advice Drawer */}
-            <div className="p-4 rounded-xl bg-[#09111c] border border-cyan-500/20 space-y-2">
-              <div className="flex items-center gap-2 text-xs font-mono-tech text-cyan-400 font-bold uppercase">
-                <Lightbulb className="w-4 h-4 text-yellow-400 animate-pulse" />
-                <span>TUTOR EVO // CONSEJO EN VIVO</span>
+            {/* Tutor EVO Advice Drawer */}
+            <div className="p-4 rounded-xl bg-[#080B10] border border-white/10 space-y-2">
+              <div className="flex items-center gap-2 text-xs font-mono text-[#00A4EF] font-bold uppercase">
+                <Lightbulb className="w-4 h-4 text-[#FFC700]" />
+                <span>TUTOR EVO // CONSEJO DE TALLER</span>
               </div>
-              <p className="text-xs text-zinc-300 font-sans-editorial italic leading-relaxed">
+              <p className="text-xs text-zinc-300 font-sans italic leading-relaxed">
                 {selectedInvIndex === 0
                   ? SECTOR_00_TUTOR_ADVICE[0].tip
                   : selectedInvIndex === 6
@@ -395,83 +396,87 @@ export const Tomo02Sector00View: React.FC<Tomo02Sector00ViewProps> = ({
           {/* Right Column: Active Investigation Reader & Cycle */}
           <main className="lg:col-span-8 space-y-6">
             
-            {/* Header of the Investigation */}
-            <div className="p-6 rounded-2xl bg-[#090c12] border border-cyan-500/30 shadow-xl space-y-4">
+            {/* Header / Hero of the Investigation */}
+            <div className="p-6 sm:p-8 rounded-2xl bg-[#080B10] border border-white/10 shadow-xl space-y-6">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <span className="px-2.5 py-1 rounded bg-cyan-950 border border-cyan-500/40 text-xs font-mono-tech font-black text-cyan-300">
+                  <span className="px-2.5 py-1 rounded bg-[#0078D4]/20 border border-[#00A4EF]/40 text-xs font-mono font-bold text-[#60CDFF]">
                     INVESTIGACIÓN {currentInv.code}
                   </span>
-                  <span className="text-xs font-mono-tech text-zinc-400">
-                    EVO PEDAGOGICAL CYCLE
+                  <span className="text-xs font-mono text-zinc-500">
+                    SISTEMA PERICIAL EVO
                   </span>
                 </div>
 
                 {isCurrentCompleted && (
-                  <span className="px-2.5 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/30 text-xs font-mono-tech font-bold text-emerald-400 flex items-center gap-1.5">
+                  <span className="px-2.5 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/30 text-xs font-mono font-bold text-[#16C784] flex items-center gap-1.5">
                     <CheckCircle2 className="w-3.5 h-3.5" /> COMPROBADO
                   </span>
                 )}
               </div>
 
               <div>
-                <h2 className="text-2xl sm:text-3xl font-display font-black text-white uppercase tracking-tight">
+                <h2 className="text-2xl sm:text-3xl font-display font-black text-white uppercase tracking-tight leading-tight">
                   {currentInv.title}
                 </h2>
-                <p className="text-sm font-mono-tech text-cyan-400 font-bold mt-1">
+                <p className="text-sm font-sans text-[#60CDFF] font-medium mt-1.5">
                   “{currentInv.subtitle}”
                 </p>
               </div>
 
+              {/* 0. EDUCATIONAL VISUAL DIAGRAM HERO */}
+              <Sector00VisualDiagram code={currentInv.code} />
+
               {/* 1. DESCUBRÍ (Gancho & Mentira vs Verdad) */}
-              <div className="p-4 rounded-xl bg-[#0c121d] border border-cyan-500/20 space-y-3">
-                <div className="text-xs font-mono-tech text-yellow-400 font-black uppercase tracking-wider flex items-center gap-2">
-                  <Sparkles className="w-4 h-4" />
-                  1. DESCUBRÍ // GANCHO INICIAL
+              <div className="p-5 rounded-xl bg-[#0C1017] border border-white/5 space-y-4">
+                <div className="text-xs font-mono text-[#FFC700] font-bold uppercase tracking-wider flex items-center gap-2">
+                  <Sparkles className="w-4 h-4 text-[#FFC700]" />
+                  <span>1. DESCUBRÍ // GANCHO INICIAL</span>
                 </div>
-                <p className="text-sm text-zinc-200 font-sans-editorial leading-relaxed">
+                <p className="text-sm text-zinc-200 font-sans leading-relaxed">
                   {currentInv.descubri.hook}
                 </p>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-3 pt-2">
-                  <div className="p-3 rounded-lg bg-red-950/20 border border-red-500/30 text-xs font-sans-editorial space-y-1">
-                    <div className="font-mono-tech font-bold text-red-400 uppercase">MENTIRA COMÚN</div>
-                    <div className="text-zinc-300">{currentInv.descubri.mythVsTruth.mentira}</div>
+                {/* Myth vs Truth */}
+                <div className="pt-2 border-t border-white/5 space-y-2">
+                  <div className="text-xs font-sans text-zinc-300">
+                    <strong className="text-red-400 font-mono uppercase mr-2">[MITO]:</strong>
+                    <span>{currentInv.descubri.mythVsTruth.mentira}</span>
                   </div>
 
-                  <div className="p-3 rounded-lg bg-emerald-950/20 border border-emerald-500/30 text-xs font-sans-editorial space-y-1">
-                    <div className="font-mono-tech font-bold text-emerald-400 uppercase">VERDAD TÉCNICA</div>
-                    <div className="text-zinc-200">{currentInv.descubri.mythVsTruth.verdad}</div>
+                  <div className="text-xs font-sans text-zinc-200">
+                    <strong className="text-[#16C784] font-mono uppercase mr-2">[REALIDAD TÉCNICA]:</strong>
+                    <span>{currentInv.descubri.mythVsTruth.verdad}</span>
                   </div>
                 </div>
               </div>
 
-              {/* 2. ENTENDÉ (Explicación desde cero) */}
+              {/* 2. ENTENDÉ (Explicación conceptual sin jerga) */}
               <div className="space-y-3 pt-2">
-                <div className="text-xs font-mono-tech text-cyan-400 font-black uppercase tracking-wider flex items-center gap-2">
-                  <Layers className="w-4 h-4" />
-                  2. ENTENDÉ // {currentInv.entende.title}
+                <div className="text-xs font-mono text-[#00A4EF] font-bold uppercase tracking-wider flex items-center gap-2">
+                  <Layers className="w-4 h-4 text-[#00A4EF]" />
+                  <span>2. ENTENDÉ // {currentInv.entende.title}</span>
                 </div>
 
-                <div className="space-y-2 text-sm text-zinc-300 font-sans-editorial leading-relaxed">
+                <div className="space-y-2.5 text-sm text-zinc-300 font-sans leading-relaxed">
                   {currentInv.entende.explanation.map((para, i) => (
                     <p key={i}>{para}</p>
                   ))}
                 </div>
 
                 {currentInv.entende.diagramItems && (
-                  <div className="p-4 rounded-xl bg-black/60 border border-zinc-800 space-y-2">
-                    <div className="text-[10px] font-mono-tech text-zinc-400 uppercase">
+                  <div className="p-4 rounded-xl bg-[#06080E] border border-white/5 space-y-2">
+                    <div className="text-[10px] font-mono text-zinc-500 uppercase">
                       {currentInv.entende.diagramLabel}
                     </div>
                     <div className="space-y-1.5">
                       {currentInv.entende.diagramItems.map((item, idx) => (
                         <div
                           key={idx}
-                          className="p-2 rounded bg-zinc-950 border border-zinc-800/80 flex items-center justify-between text-xs font-mono-tech"
+                          className="p-2.5 rounded-lg bg-[#0C1019] border border-white/5 flex items-center justify-between text-xs font-sans"
                         >
-                          <span className="font-bold text-cyan-300">{item.label}</span>
-                          <span className="text-zinc-400 text-[11px]">{item.desc}</span>
+                          <span className="font-mono font-bold text-[#60CDFF]">{item.label}</span>
+                          <span className="text-zinc-400 text-xs">{item.desc}</span>
                         </div>
                       ))}
                     </div>
@@ -479,60 +484,60 @@ export const Tomo02Sector00View: React.FC<Tomo02Sector00ViewProps> = ({
                 )}
               </div>
 
-              {/* 3. PROFUNDIZÁ (Qué ocurre a bajo nivel) */}
+              {/* 3. PROFUNDIZÁ (Explicación técnica correcta) */}
               <div className="space-y-3 pt-2">
-                <div className="text-xs font-mono-tech text-purple-400 font-black uppercase tracking-wider flex items-center gap-2">
-                  <Cpu className="w-4 h-4" />
-                  3. PROFUNDIZÁ // {currentInv.profundiza.title}
+                <div className="text-xs font-mono text-[#60CDFF] font-bold uppercase tracking-wider flex items-center gap-2">
+                  <Cpu className="w-4 h-4 text-[#00A4EF]" />
+                  <span>3. PROFUNDIZÁ // {currentInv.profundiza.title}</span>
                 </div>
 
-                <div className="space-y-2 text-sm text-zinc-300 font-sans-editorial leading-relaxed">
+                <div className="space-y-2 text-sm text-zinc-300 font-sans leading-relaxed">
                   {currentInv.profundiza.technicalDetails.map((det, i) => (
                     <p key={i}>• {det}</p>
                   ))}
                 </div>
 
                 {currentInv.profundiza.lowLevelNote && (
-                  <div className="p-3 rounded-lg bg-purple-950/20 border border-purple-500/30 text-xs font-mono-tech text-purple-300">
+                  <div className="p-3 rounded-lg bg-[#0E131F] border border-[#00A4EF]/20 text-xs font-mono text-[#60CDFF]">
                     {currentInv.profundiza.lowLevelNote}
                   </div>
                 )}
               </div>
 
-              {/* 4. MÍRALO EN TU PC (Comando real) */}
-              <div className="p-4 rounded-xl bg-[#09111c] border border-cyan-500/30 space-y-3">
-                <div className="text-xs font-mono-tech text-cyan-300 font-black uppercase tracking-wider flex items-center gap-2">
-                  <Terminal className="w-4 h-4 text-cyan-400" />
-                  4. MÍRALO EN TU PC // {currentInv.miraloEnTuPc.actionName}
+              {/* 4. MÍRALO EN TU PC (Procedimiento real) */}
+              <div className="p-5 rounded-xl bg-[#0B0F17] border border-white/10 space-y-3">
+                <div className="text-xs font-mono text-[#00A4EF] font-bold uppercase tracking-wider flex items-center gap-2">
+                  <Terminal className="w-4 h-4 text-[#00A4EF]" />
+                  <span>4. MÍRALO EN TU PC // {currentInv.miraloEnTuPc.actionName}</span>
                 </div>
 
-                <div className="space-y-1 text-xs sm:text-sm text-zinc-300 font-sans-editorial">
+                <div className="space-y-1.5 text-xs sm:text-sm text-zinc-300 font-sans">
                   {currentInv.miraloEnTuPc.steps.map((st, i) => (
                     <div key={i}>{st}</div>
                   ))}
                 </div>
 
                 {currentInv.miraloEnTuPc.commandOrPath && (
-                  <div className="p-2.5 rounded-lg bg-black border border-zinc-800 font-mono-tech text-xs text-yellow-300 flex items-center justify-between">
+                  <div className="p-3 rounded-lg bg-[#05070B] border border-white/10 font-mono text-xs text-[#FFC700] flex items-center justify-between">
                     <span>{currentInv.miraloEnTuPc.commandOrPath}</span>
-                    <span className="text-[10px] text-zinc-400">CMD / Win+R</span>
+                    <span className="text-[10px] text-zinc-500">COMANDO / RUTAS</span>
                   </div>
                 )}
               </div>
 
               {/* 5. MICRODESAFÍO (Acción interactiva) */}
-              <div className="p-5 rounded-xl bg-[#0f1523] border border-yellow-500/40 space-y-4 shadow-lg">
+              <div className="p-5 rounded-xl bg-[#0D121B] border border-white/10 space-y-4 shadow-lg">
                 <div className="flex items-center justify-between">
-                  <div className="text-xs font-mono-tech text-yellow-400 font-black uppercase tracking-wider flex items-center gap-2">
-                    <HelpCircle className="w-4 h-4" />
-                    5. MICRODESAFÍO EVO // ACCIÓN CONCRETA
+                  <div className="text-xs font-mono text-[#FFC700] font-bold uppercase tracking-wider flex items-center gap-2">
+                    <HelpCircle className="w-4 h-4 text-[#FFC700]" />
+                    <span>5. MICRODESAFÍO EVO</span>
                   </div>
-                  <span className="text-[10px] font-mono-tech text-zinc-400">
-                    TIPO: {currentInv.microdesafio.type}
+                  <span className="text-[10px] font-mono text-zinc-500">
+                    {currentInv.microdesafio.type}
                   </span>
                 </div>
 
-                <p className="text-sm font-display font-bold text-white">
+                <p className="text-sm font-sans font-bold text-white">
                   {currentInv.microdesafio.question}
                 </p>
 
@@ -545,16 +550,16 @@ export const Tomo02Sector00View: React.FC<Tomo02Sector00ViewProps> = ({
                         <button
                           key={opt.id}
                           onClick={() => handleAnswerOption(opt.id)}
-                          className={`w-full text-left p-3 rounded-xl border text-xs sm:text-sm font-sans-editorial transition-all flex items-start gap-3 ${
+                          className={`w-full text-left p-3.5 rounded-xl border text-xs sm:text-sm font-sans transition-all flex items-start gap-3 cursor-pointer ${
                             isSelected
                               ? opt.isCorrect
-                                ? 'bg-emerald-950/60 border-emerald-500 text-emerald-100'
-                                : 'bg-red-950/40 border-red-500 text-red-200'
-                              : 'bg-black/40 border-zinc-800 hover:border-zinc-700 text-zinc-300'
+                                ? 'bg-[#0A1A14] border-emerald-500/60 text-emerald-100'
+                                : 'bg-[#1A0A0E] border-red-500/60 text-red-200'
+                              : 'bg-[#05070B] border-white/5 hover:border-white/20 text-zinc-300'
                           }`}
                         >
                           <div
-                            className={`w-4 h-4 rounded-full border shrink-0 flex items-center justify-center text-[10px] font-mono-tech font-bold mt-0.5 ${
+                            className={`w-4 h-4 rounded-full border shrink-0 flex items-center justify-center text-[10px] font-mono font-bold mt-0.5 ${
                               isSelected
                                 ? opt.isCorrect
                                   ? 'border-emerald-400 bg-emerald-500 text-black'
@@ -569,8 +574,8 @@ export const Tomo02Sector00View: React.FC<Tomo02Sector00ViewProps> = ({
                             <div>{opt.text}</div>
                             {isSelected && (
                               <div
-                                className={`mt-2 p-2 rounded text-xs font-mono-tech ${
-                                  opt.isCorrect ? 'bg-emerald-900/30 text-emerald-300' : 'bg-red-900/30 text-red-300'
+                                className={`mt-2 p-2 rounded text-xs font-mono ${
+                                  opt.isCorrect ? 'bg-emerald-950/50 text-emerald-300' : 'bg-red-950/50 text-red-300'
                                 }`}
                               >
                                 {opt.feedback}
@@ -586,7 +591,7 @@ export const Tomo02Sector00View: React.FC<Tomo02Sector00ViewProps> = ({
                 {/* Sortable order challenge */}
                 {currentInv.microdesafio.sortableItems && (
                   <div className="space-y-3">
-                    <p className="text-xs text-zinc-400 font-mono-tech">
+                    <p className="text-xs text-zinc-400 font-mono">
                       {currentInv.microdesafio.instruction}
                     </p>
 
@@ -597,21 +602,21 @@ export const Tomo02Sector00View: React.FC<Tomo02Sector00ViewProps> = ({
                         return (
                           <div
                             key={itemId}
-                            className="p-3 rounded-xl bg-black/60 border border-zinc-800 flex items-center justify-between gap-3 text-xs font-mono-tech"
+                            className="p-3 rounded-xl bg-[#05070B] border border-white/5 flex items-center justify-between gap-3 text-xs font-mono"
                           >
                             <span className="text-zinc-200">{it.text}</span>
                             <div className="flex items-center gap-1">
                               <button
                                 disabled={idx === 0}
                                 onClick={() => moveSortItem(idx, idx - 1)}
-                                className="px-2 py-1 bg-zinc-800 hover:bg-zinc-700 rounded text-zinc-300 disabled:opacity-30"
+                                className="px-2 py-1 bg-zinc-800 hover:bg-zinc-700 rounded text-zinc-300 disabled:opacity-30 cursor-pointer"
                               >
                                 ↑
                               </button>
                               <button
                                 disabled={idx === sortOrder.length - 1}
                                 onClick={() => moveSortItem(idx, idx + 1)}
-                                className="px-2 py-1 bg-zinc-800 hover:bg-zinc-700 rounded text-zinc-300 disabled:opacity-30"
+                                className="px-2 py-1 bg-zinc-800 hover:bg-zinc-700 rounded text-zinc-300 disabled:opacity-30 cursor-pointer"
                               >
                                 ↓
                               </button>
@@ -623,7 +628,7 @@ export const Tomo02Sector00View: React.FC<Tomo02Sector00ViewProps> = ({
 
                     <button
                       onClick={handleVerifyOrder}
-                      className="w-full py-2 rounded-xl bg-yellow-500 hover:bg-yellow-400 text-black font-mono-tech font-black text-xs uppercase tracking-wider transition-colors shadow-md"
+                      className="w-full py-2.5 rounded-xl bg-gradient-to-r from-[#0078D4] to-[#00A4EF] text-white font-mono font-bold text-xs uppercase tracking-wider transition-all cursor-pointer shadow-md"
                     >
                       COMPROBAR ORDEN JERÁRQUICO
                     </button>
@@ -632,24 +637,32 @@ export const Tomo02Sector00View: React.FC<Tomo02Sector00ViewProps> = ({
               </div>
 
               {/* 6. EVIDENCIA REGISTRADA */}
-              <div className="p-4 rounded-xl bg-[#080d14] border border-zinc-800 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+              <div className="p-4 rounded-xl bg-[#070A0F] border border-white/5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
                 <div className="space-y-1">
-                  <div className="text-[10px] font-mono-tech text-cyan-400 uppercase tracking-wider font-bold">
-                    6. EVIDENCIA PARA EL EXPEDIENTE 001
+                  <div className="text-[10px] font-mono text-[#00A4EF] uppercase tracking-wider font-bold">
+                    6. EVIDENCIA REGISTRADA
                   </div>
-                  <div className="text-xs font-mono-tech text-zinc-300">
+                  <div className="text-xs font-mono text-zinc-300">
                     Campo: <span className="text-white font-bold">{currentInv.evidencia.fieldName}</span> ({currentInv.evidencia.targetDescription})
                   </div>
-                  <div className="text-[10px] font-mono-tech text-zinc-400">
-                    Procedencia por defecto: <span className="text-yellow-400">{currentInv.evidencia.defaultProvenance}</span>
+                  <div className="text-[10px] font-mono text-zinc-500">
+                    Procedencia por defecto: <span className="text-[#60CDFF]">{currentInv.evidencia.defaultProvenance}</span>
                   </div>
                 </div>
 
                 <div className="flex items-center gap-2 shrink-0">
                   <button
+                    disabled={selectedInvIndex === 0}
+                    onClick={() => setSelectedInvIndex((prev) => prev - 1)}
+                    className="px-3.5 py-2 rounded-xl bg-[#11161D] hover:bg-[#151B23] border border-sky-500/20 text-zinc-300 hover:text-white font-mono font-bold text-xs uppercase tracking-wider transition-colors disabled:opacity-30 cursor-pointer flex items-center gap-1.5"
+                  >
+                    <ArrowLeft className="w-3.5 h-3.5" />
+                    <span>ANTERIOR</span>
+                  </button>
+                  <button
                     disabled={selectedInvIndex === SECTOR_00_INVESTIGATIONS.length - 1}
                     onClick={() => setSelectedInvIndex((prev) => prev + 1)}
-                    className="px-4 py-2 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-black font-mono-tech font-black text-xs uppercase tracking-wider transition-colors disabled:opacity-30 flex items-center gap-1.5"
+                    className="px-4 py-2 rounded-xl bg-gradient-to-r from-[#0078D4] to-[#00A4EF] hover:from-[#0067C0] hover:to-[#60CDFF] text-white font-mono font-bold text-xs uppercase tracking-wider transition-all disabled:opacity-30 cursor-pointer shadow-[0_0_12px_rgba(0,164,239,0.2)] flex items-center gap-1.5"
                   >
                     <span>SIGUIENTE</span>
                     <ChevronRight className="w-3.5 h-3.5" />

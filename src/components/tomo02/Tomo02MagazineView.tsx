@@ -56,6 +56,14 @@ import { EvoTomo02CompletionScreen } from './EvoTomo02CompletionScreen';
 import { Tomo02OfficialPdfMagazine } from './Tomo02OfficialPdfMagazine';
 import { Tomo02Sector00View } from './sector00/Tomo02Sector00View';
 import { Tomo02Sector01View } from './sector01/Tomo02Sector01View';
+import { Tomo02Sector02View } from './sector02/Tomo02Sector02View';
+import { Tomo02Sector03View } from './sector03/Tomo02Sector03View';
+import { Tomo02Sector05View } from './sector05/Tomo02Sector05View';
+import { Tomo02Sector06View } from './sector06/Tomo02Sector06View';
+import { Tomo02Sector07View } from './sector07/Tomo02Sector07View';
+import { Tomo02Sector08View } from './sector08/Tomo02Sector08View';
+import { Tomo02Sector09View } from './sector09/Tomo02Sector09View';
+import { Tomo02Sector10View } from './sector10/Tomo02Sector10View';
 
 export type Tomo02SubView =
   | 'cover'
@@ -66,7 +74,15 @@ export type Tomo02SubView =
   | 'completion'
   | 'a4_magazine'
   | 'sector_00'
-  | 'sector_01';
+  | 'sector_01'
+  | 'sector_02'
+  | 'sector_03'
+  | 'sector_05'
+  | 'sector_06'
+  | 'sector_07'
+  | 'sector_08'
+  | 'sector_09'
+  | 'sector_10';
 
 interface Tomo02MagazineViewProps {
   onBackToApp?: () => void;
@@ -427,6 +443,246 @@ export const Tomo02MagazineView: React.FC<Tomo02MagazineViewProps> = ({
     );
   }
 
+  if (subView === 'sector_02') {
+    return (
+      <Tomo02Sector02View
+        onBackToMagazine={() => {
+          setSubView('index');
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }}
+        onOpenSector00={() => {
+          setSubView('sector_00');
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }}
+        onOpenSector01={() => {
+          setSubView('sector_01');
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }}
+      />
+    );
+  }
+
+  if (subView === 'sector_03') {
+    return (
+      <Tomo02Sector03View
+        onBackToMagazine={() => {
+          setSubView('index');
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }}
+        onOpenSector00={() => {
+          setSubView('sector_00');
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }}
+        onOpenSector01={() => {
+          setSubView('sector_01');
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }}
+        onOpenSector02={() => {
+          setSubView('sector_02');
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }}
+      />
+    );
+  }
+
+  if (subView === 'sector_05') {
+    return (
+      <Tomo02Sector05View
+        onBackToMagazine={() => {
+          setSubView('index');
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }}
+        onOpenSector00={() => {
+          setSubView('sector_00');
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }}
+        onOpenSector01={() => {
+          setSubView('sector_01');
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }}
+        onOpenSector02={() => {
+          setSubView('sector_02');
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }}
+      />
+    );
+  }
+
+  if (subView === 'sector_06') {
+    return (
+      <Tomo02Sector06View
+        onBackToMagazine={() => {
+          setSubView('index');
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }}
+        onOpenSector00={() => {
+          setSubView('sector_00');
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }}
+        onOpenSector01={() => {
+          setSubView('sector_01');
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }}
+        onOpenSector02={() => {
+          setSubView('sector_02');
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }}
+        onOpenSector05={() => {
+          setSubView('sector_05');
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }}
+      />
+    );
+  }
+
+  if (subView === 'sector_07') {
+    return (
+      <Tomo02Sector07View
+        onBackToMagazine={() => {
+          setSubView('index');
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }}
+        onOpenSector00={() => {
+          setSubView('sector_00');
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }}
+        onOpenSector01={() => {
+          setSubView('sector_01');
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }}
+        onOpenSector02={() => {
+          setSubView('sector_02');
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }}
+        onOpenSector05={() => {
+          setSubView('sector_05');
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }}
+        onOpenSector06={() => {
+          setSubView('sector_06');
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }}
+      />
+    );
+  }
+
+  if (subView === 'sector_08') {
+    return (
+      <Tomo02Sector08View
+        onBackToMagazine={() => {
+          setSubView('index');
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }}
+        onOpenSector00={() => {
+          setSubView('sector_00');
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }}
+        onOpenSector01={() => {
+          setSubView('sector_01');
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }}
+        onOpenSector02={() => {
+          setSubView('sector_02');
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }}
+        onOpenSector05={() => {
+          setSubView('sector_05');
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }}
+        onOpenSector06={() => {
+          setSubView('sector_06');
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }}
+        onOpenSector07={() => {
+          setSubView('sector_07');
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }}
+      />
+    );
+  }
+
+  if (subView === 'sector_09') {
+    return (
+      <Tomo02Sector09View
+        onBackToMagazine={() => {
+          setSubView('index');
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }}
+        onOpenSector00={() => {
+          setSubView('sector_00');
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }}
+        onOpenSector01={() => {
+          setSubView('sector_01');
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }}
+        onOpenSector02={() => {
+          setSubView('sector_02');
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }}
+        onOpenSector05={() => {
+          setSubView('sector_05');
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }}
+        onOpenSector06={() => {
+          setSubView('sector_06');
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }}
+        onOpenSector07={() => {
+          setSubView('sector_07');
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }}
+        onOpenSector08={() => {
+          setSubView('sector_08');
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }}
+      />
+    );
+  }
+
+  if (subView === 'sector_10') {
+    return (
+      <Tomo02Sector10View
+        onBackToMagazine={() => {
+          setSubView('index');
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }}
+        onOpenSector00={() => {
+          setSubView('sector_00');
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }}
+        onOpenSector01={() => {
+          setSubView('sector_01');
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }}
+        onOpenSector02={() => {
+          setSubView('sector_02');
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }}
+        onOpenSector05={() => {
+          setSubView('sector_05');
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }}
+        onOpenSector06={() => {
+          setSubView('sector_06');
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }}
+        onOpenSector07={() => {
+          setSubView('sector_07');
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }}
+        onOpenSector08={() => {
+          setSubView('sector_08');
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }}
+        onOpenSector09={() => {
+          setSubView('sector_09');
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }}
+      />
+    );
+  }
+
   if (subView === 'cover') {
     return (
       <div className="min-h-screen bg-[#07090e] text-zinc-100 flex flex-col font-sans-editorial">
@@ -503,6 +759,38 @@ export const Tomo02MagazineView: React.FC<Tomo02MagazineViewProps> = ({
             }}
             onOpenSector01={() => {
               setSubView('sector_01');
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }}
+            onOpenSector02={() => {
+              setSubView('sector_02');
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }}
+            onOpenSector03={() => {
+              setSubView('sector_03');
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }}
+            onOpenSector05={() => {
+              setSubView('sector_05');
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }}
+            onOpenSector06={() => {
+              setSubView('sector_06');
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }}
+            onOpenSector07={() => {
+              setSubView('sector_07');
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }}
+            onOpenSector08={() => {
+              setSubView('sector_08');
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }}
+            onOpenSector09={() => {
+              setSubView('sector_09');
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }}
+            onOpenSector10={() => {
+              setSubView('sector_10');
               window.scrollTo({ top: 0, behavior: 'smooth' });
             }}
             onOpenA4Magazine={() => {

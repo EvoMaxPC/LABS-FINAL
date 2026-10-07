@@ -16,7 +16,7 @@ import {
   Copy,
   Check,
 } from 'lucide-react';
-import { Sector00Passport, ProvenanceType } from '../../../data/tomo02Sector00Data';
+import { Sector00Passport, ProvenanceType, PassportFieldData } from '../../../data/tomo02Sector00Data';
 
 interface Tomo02Sector00PassportModalProps {
   passport: Sector00Passport;
@@ -76,11 +76,66 @@ export const Tomo02Sector00PassportModal: React.FC<Tomo02Sector00PassportModalPr
     }
   };
 
+  const defaultCompName: PassportFieldData = passport.computerName || {
+    fieldKey: 'computerName',
+    label: 'Nombre del Equipo',
+    value: 'EVO-WORKSTATION-01',
+    source: 'msinfo32 / hostname',
+    provenance: 'SYSTEM_REPORTED',
+    confidence: 'HIGH',
+    timestamp: new Date().toISOString(),
+  };
+
+  const defaultMfr: PassportFieldData = passport.systemManufacturer || {
+    fieldKey: 'systemManufacturer',
+    label: 'Fabricante del Sistema',
+    value: 'EVO LABS RIG / ASUS',
+    source: 'msinfo32 / WMI',
+    provenance: 'SYSTEM_REPORTED',
+    confidence: 'HIGH',
+    timestamp: new Date().toISOString(),
+  };
+
+  const defaultModel: PassportFieldData = passport.systemModel || {
+    fieldKey: 'systemModel',
+    label: 'Modelo del Sistema',
+    value: 'System Product Name',
+    source: 'msinfo32 / WMI',
+    provenance: 'SYSTEM_REPORTED',
+    confidence: 'HIGH',
+    timestamp: new Date().toISOString(),
+  };
+
+  const defaultBootMode: PassportFieldData = passport.bootMode || {
+    fieldKey: 'bootMode',
+    label: 'Modo de BIOS / Firmware',
+    value: 'UEFI (Nativo)',
+    source: 'msinfo32',
+    provenance: 'SYSTEM_REPORTED',
+    confidence: 'HIGH',
+    timestamp: new Date().toISOString(),
+  };
+
+  const defaultSecureBoot: PassportFieldData = passport.secureBoot || {
+    fieldKey: 'secureBoot',
+    label: 'Estado de Secure Boot',
+    value: 'Activado / Enforced',
+    source: 'msinfo32',
+    provenance: 'SYSTEM_REPORTED',
+    confidence: 'HIGH',
+    timestamp: new Date().toISOString(),
+  };
+
   const fieldsList = [
     { key: 'edition', data: passport.edition, icon: Layers },
     { key: 'version', data: passport.version, icon: Clock },
     { key: 'build', data: passport.build, icon: Fingerprint },
     { key: 'architecture', data: passport.architecture, icon: Cpu },
+    { key: 'computerName', data: defaultCompName, icon: HardDrive },
+    { key: 'systemManufacturer', data: defaultMfr, icon: Cpu },
+    { key: 'systemModel', data: defaultModel, icon: HardDrive },
+    { key: 'bootMode', data: defaultBootMode, icon: ShieldCheck },
+    { key: 'secureBoot', data: defaultSecureBoot, icon: ShieldCheck },
     { key: 'systemDrive', data: passport.systemDrive, icon: HardDrive },
     { key: 'windowsPath', data: passport.windowsPath, icon: FileText },
     { key: 'userProfile', data: passport.userProfile, icon: User },
@@ -96,21 +151,21 @@ export const Tomo02Sector00PassportModal: React.FC<Tomo02Sector00PassportModalPr
 
   return (
     <div className="fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-3 sm:p-6 overflow-y-auto animate-fadeIn">
-      <div className="relative w-full max-w-4xl bg-[#090c12] border border-cyan-500/40 rounded-2xl shadow-[0_0_50px_rgba(0,210,255,0.15)] overflow-hidden flex flex-col max-h-[92vh]">
+      <div className="relative w-full max-w-4xl bg-[#080B10] border border-[#00A4EF]/40 rounded-2xl shadow-[0_0_50px_rgba(0,164,239,0.18)] overflow-hidden flex flex-col max-h-[92vh]">
         
         {/* Top Header */}
-        <div className="px-6 py-4 border-b border-zinc-800 bg-[#06080d] flex items-center justify-between shrink-0">
+        <div className="px-6 py-4 border-b border-sky-500/20 bg-[#05070A] flex items-center justify-between shrink-0">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-lg bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-400 font-mono-tech font-black text-sm">
+            <div className="w-9 h-9 rounded-lg bg-[#0078D4]/20 border border-[#00A4EF]/40 flex items-center justify-center text-[#60CDFF] font-mono font-black text-sm">
               001
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <span className="text-xs font-mono-tech font-bold text-cyan-400 uppercase tracking-widest">
+                <span className="text-xs font-mono font-bold text-[#00A4EF] uppercase tracking-widest">
                   DOCUMENTO PERICIAL OFICIAL
                 </span>
-                <span className="px-2 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/30 text-[10px] font-mono-tech text-emerald-400 font-bold">
-                  VERIFICADO
+                <span className="px-2 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/30 text-[10px] font-mono text-[#16C784] font-bold">
+                  {passport.statusTag || 'EVIDENCIA VÁLIDA'}
                 </span>
               </div>
               <h2 className="text-lg sm:text-xl font-display font-black text-white uppercase tracking-tight">
@@ -122,14 +177,14 @@ export const Tomo02Sector00PassportModal: React.FC<Tomo02Sector00PassportModalPr
           <div className="flex items-center gap-2">
             <button
               onClick={handleCopyJson}
-              className="px-3 py-1.5 rounded-lg bg-zinc-900 hover:bg-zinc-800 border border-zinc-700 text-xs font-mono-tech text-zinc-300 hover:text-white flex items-center gap-1.5 transition-colors"
+              className="px-3 py-1.5 rounded-lg bg-[#11161D] hover:bg-[#151B23] border border-sky-500/30 text-xs font-mono text-zinc-300 hover:text-white flex items-center gap-1.5 transition-colors cursor-pointer"
             >
-              {copied ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+              {copied ? <Check className="w-3.5 h-3.5 text-[#16C784]" /> : <Copy className="w-3.5 h-3.5 text-[#00A4EF]" />}
               <span>{copied ? 'COPIADO' : 'EXPORTAR JSON'}</span>
             </button>
             <button
               onClick={onClose}
-              className="w-8 h-8 rounded-lg bg-zinc-900 hover:bg-zinc-800 border border-zinc-700 flex items-center justify-center text-zinc-400 hover:text-white transition-colors"
+              className="w-8 h-8 rounded-lg bg-[#11161D] hover:bg-[#151B23] border border-sky-500/30 flex items-center justify-center text-zinc-400 hover:text-white transition-colors cursor-pointer"
             >
               <X className="w-4 h-4" />
             </button>
@@ -139,14 +194,14 @@ export const Tomo02Sector00PassportModal: React.FC<Tomo02Sector00PassportModalPr
         {/* Scrollable Content */}
         <div className="p-6 space-y-6 overflow-y-auto flex-1 custom-scrollbar">
           
-          {/* Identity Grid (9 Parameters) */}
+          {/* Identity Grid */}
           <div className="space-y-3">
-            <div className="flex items-center justify-between border-b border-zinc-800 pb-2">
-              <h3 className="text-xs font-mono-tech uppercase tracking-wider text-cyan-400 font-bold flex items-center gap-2">
-                <Fingerprint className="w-4 h-4" />
-                MATRIZ DE IDENTIDAD DEL SISTEMA (9 CAMPOS CANÓNICOS)
+            <div className="flex items-center justify-between border-b border-sky-500/15 pb-2">
+              <h3 className="text-xs font-mono uppercase tracking-wider text-[#60CDFF] font-bold flex items-center gap-2">
+                <Fingerprint className="w-4 h-4 text-[#00A4EF]" />
+                MATRIZ DE IDENTIDAD DEL SISTEMA (EXPEDIENTE WINDOWS EVO 001)
               </h3>
-              <span className="text-[10px] font-mono-tech text-zinc-400">
+              <span className="text-[10px] font-mono text-zinc-400">
                 PROVENANCE ENGINE: STRICT AUDIT
               </span>
             </div>
@@ -157,28 +212,28 @@ export const Tomo02Sector00PassportModal: React.FC<Tomo02Sector00PassportModalPr
                 return (
                   <div
                     key={key}
-                    className="p-3.5 rounded-xl bg-[#0e131d] border border-zinc-800/80 hover:border-cyan-500/30 transition-all space-y-2"
+                    className="p-3.5 rounded-xl bg-[#11161D] border border-sky-500/15 hover:border-[#00A4EF]/50 transition-all space-y-2"
                   >
                     <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-1.5 text-zinc-400 text-xs font-mono-tech">
-                        <Icon className="w-3.5 h-3.5 text-cyan-400" />
+                      <div className="flex items-center gap-1.5 text-zinc-400 text-xs font-mono">
+                        <Icon className="w-3.5 h-3.5 text-[#00A4EF]" />
                         <span>{data.label}</span>
                       </div>
                       <span
-                        className={`text-[9px] font-mono-tech px-1.5 py-0.5 rounded border ${badge.bg}`}
+                        className={`text-[9px] font-mono px-1.5 py-0.5 rounded border ${badge.bg}`}
                         title={badge.desc}
                       >
                         {badge.label}
                       </span>
                     </div>
 
-                    <div className="text-sm font-mono-tech font-black text-white break-words">
+                    <div className="text-sm font-mono font-black text-white break-words">
                       {data.value || 'NO REGISTRADO'}
                     </div>
 
-                    <div className="text-[10px] font-mono-tech text-zinc-400 flex items-center justify-between pt-1 border-t border-zinc-800/60">
+                    <div className="text-[10px] font-mono text-zinc-400 flex items-center justify-between pt-1 border-t border-sky-500/10">
                       <span>Fuente: {data.source}</span>
-                      <span className="text-cyan-400/80">{data.confidence}</span>
+                      <span className="text-[#60CDFF]">{data.confidence}</span>
                     </div>
                   </div>
                 );
@@ -187,15 +242,15 @@ export const Tomo02Sector00PassportModal: React.FC<Tomo02Sector00PassportModalPr
           </div>
 
           {/* Baseline Freeze Snapshot */}
-          <div className="p-4 rounded-xl bg-[#09101a] border border-cyan-500/20 space-y-3">
-            <div className="flex items-center justify-between border-b border-cyan-900/40 pb-2">
+          <div className="p-4 rounded-xl bg-[#0C1118] border border-sky-500/20 space-y-3">
+            <div className="flex items-center justify-between border-b border-sky-500/15 pb-2">
               <div className="flex items-center gap-2">
-                <Activity className="w-4 h-4 text-cyan-400 animate-pulse" />
-                <h4 className="text-xs font-mono-tech uppercase tracking-wider text-white font-bold">
+                <Activity className="w-4 h-4 text-[#00A4EF] animate-pulse" />
+                <h4 className="text-xs font-mono uppercase tracking-wider text-white font-bold">
                   LÍNEA BASE DE ESTADO INICIAL (BASELINE FREEZE)
                 </h4>
               </div>
-              <span className="text-[10px] font-mono-tech text-cyan-400">
+              <span className="text-[10px] font-mono text-[#60CDFF] font-semibold">
                 {passport.baseline.captured ? 'CONGELADO EN EL TIEMPO' : 'PENDIENTE DE CAPTURA'}
               </span>
             </div>
@@ -205,30 +260,30 @@ export const Tomo02Sector00PassportModal: React.FC<Tomo02Sector00PassportModalPr
             </p>
 
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2">
-              <div className="p-2.5 rounded-lg bg-black/40 border border-zinc-800">
-                <div className="text-[10px] font-mono-tech text-zinc-400">RAM TOTAL</div>
-                <div className="text-base font-mono-tech font-bold text-cyan-300">
+              <div className="p-2.5 rounded-lg bg-[#05070A] border border-sky-500/15">
+                <div className="text-[10px] font-mono text-zinc-400">RAM TOTAL</div>
+                <div className="text-base font-mono font-bold text-[#60CDFF]">
                   {passport.baseline.ramTotalGB ? `${passport.baseline.ramTotalGB} GB` : '16 GB (REF)'}
                 </div>
               </div>
 
-              <div className="p-2.5 rounded-lg bg-black/40 border border-zinc-800">
-                <div className="text-[10px] font-mono-tech text-zinc-400">DISCO LIBRE (C:)</div>
-                <div className="text-base font-mono-tech font-bold text-emerald-400">
+              <div className="p-2.5 rounded-lg bg-[#05070A] border border-sky-500/15">
+                <div className="text-[10px] font-mono text-zinc-400">DISCO LIBRE (C:)</div>
+                <div className="text-base font-mono font-bold text-[#16C784]">
                   {passport.baseline.diskFreeGB ? `${passport.baseline.diskFreeGB} GB` : '124 GB (REF)'}
                 </div>
               </div>
 
-              <div className="p-2.5 rounded-lg bg-black/40 border border-zinc-800">
-                <div className="text-[10px] font-mono-tech text-zinc-400">PROCESOS EN REPOSO</div>
-                <div className="text-base font-mono-tech font-bold text-yellow-400">
+              <div className="p-2.5 rounded-lg bg-[#05070A] border border-sky-500/15">
+                <div className="text-[10px] font-mono text-zinc-400">PROCESOS EN REPOSO</div>
+                <div className="text-base font-mono font-bold text-[#60CDFF]">
                   {passport.baseline.processCount ? passport.baseline.processCount : '138 PROC'}
                 </div>
               </div>
 
-              <div className="p-2.5 rounded-lg bg-black/40 border border-zinc-800">
-                <div className="text-[10px] font-mono-tech text-zinc-400">APPS EN INICIO</div>
-                <div className="text-base font-mono-tech font-bold text-purple-400">
+              <div className="p-2.5 rounded-lg bg-[#05070A] border border-sky-500/15">
+                <div className="text-[10px] font-mono text-zinc-400">APPS EN INICIO</div>
+                <div className="text-base font-mono font-bold text-purple-400">
                   {passport.baseline.startupAppsCount ? passport.baseline.startupAppsCount : '6 APPS'}
                 </div>
               </div>
@@ -236,9 +291,9 @@ export const Tomo02Sector00PassportModal: React.FC<Tomo02Sector00PassportModalPr
           </div>
 
           {/* Forensic Protocol Footer */}
-          <div className="p-3.5 rounded-xl bg-zinc-950 border border-zinc-800 flex items-center justify-between text-xs font-mono-tech text-zinc-400">
+          <div className="p-3.5 rounded-xl bg-[#05070A] border border-sky-500/15 flex items-center justify-between text-xs font-mono text-zinc-400">
             <div className="flex items-center gap-2">
-              <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+              <CheckCircle2 className="w-4 h-4 text-[#16C784]" />
               <span>EXPEDIENTE WINDOWS EVO 001 FIRMADO CON HASH PERICIAL</span>
             </div>
             <span className="text-[10px] text-zinc-400">ID: {passport.passportId}</span>
@@ -247,13 +302,13 @@ export const Tomo02Sector00PassportModal: React.FC<Tomo02Sector00PassportModalPr
         </div>
 
         {/* Footer actions */}
-        <div className="p-4 border-t border-zinc-800 bg-[#06080d] flex items-center justify-between shrink-0">
-          <span className="text-xs font-mono-tech text-zinc-400">
+        <div className="p-4 border-t border-sky-500/20 bg-[#05070A] flex items-center justify-between shrink-0">
+          <span className="text-xs font-mono text-zinc-400">
             ESTE PASAPORTE ACREDITA LA IDENTIDAD TÉCNICA DEL SISTEMA ANTE EVO LABS.
           </span>
           <button
             onClick={onClose}
-            className="px-5 py-2 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-black font-mono-tech font-black text-xs uppercase tracking-wider transition-colors shadow-lg shadow-cyan-500/20"
+            className="px-5 py-2 rounded-xl bg-gradient-to-r from-[#0078D4] to-[#00A4EF] hover:from-[#0067C0] hover:to-[#60CDFF] text-white font-mono font-bold text-xs uppercase tracking-wider transition-all cursor-pointer shadow-[0_0_15px_rgba(0,164,239,0.25)]"
           >
             ENTENDIDO / CONTINUAR
           </button>

@@ -297,7 +297,7 @@ export const TOMO_02_MASTER_SECTORS: MasterSectorMeta[] = [
   {
     sectorId: 'sector-07',
     sectorNumber: '07',
-    title: 'SYSMAIN Y CACHÉ',
+    title: 'SYSMMAIN Y CACHÉ',
     subtitle: 'Uno de los temas más mal entendidos de Windows',
     level: 'NIVEL I',
     levelTitle: 'ENTENDER WINDOWS',
@@ -1273,7 +1273,7 @@ export const TOMO_02_MASTER_SECTORS: MasterSectorMeta[] = [
     sectorId: 'sector-37',
     sectorNumber: '37',
     title: 'BASE DE PROBLEMAS RESUELTOS',
-    subtitle: 'Una biblioteca viva de cientos de expedientes.',
+    subtitle: 'No 20 ejemplos.',
     level: 'NIVEL V',
     levelTitle: 'DESMANTELAR WINDOWS',
     status: 'LOCKED',
@@ -1283,7 +1283,7 @@ export const TOMO_02_MASTER_SECTORS: MasterSectorMeta[] = [
       'Wi-Fi', 'Audio', 'Bluetooth', 'USB', 'Printer', 'Display', 'HDR',
       'Power', 'Services', 'Apps', 'Security', 'BSOD', 'Stutter', 'Recovery'
     ],
-    methodology: 'Cada expediente: Síntoma → hipótesis → prueba → evidencia → descarte → causa → solución → validación.',
+    methodology: 'Una biblioteca viva de cientos de expedientes. Cada expediente: Síntoma → hipótesis → prueba → evidencia → descarte → causa → solución → validación.',
     investigationsList: [],
   },
   {
