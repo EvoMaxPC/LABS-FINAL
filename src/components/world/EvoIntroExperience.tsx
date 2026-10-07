@@ -435,7 +435,7 @@ export const EvoIntroExperience: React.FC<EvoIntroExperienceProps> = ({
                   onClick={handleEnterCampusAction}
                   className="w-full py-4 px-8 rounded-xl bg-gradient-to-r from-amber-400 via-amber-300 to-amber-400 hover:from-amber-300 hover:to-amber-200 text-black font-mono-tech font-black text-sm uppercase tracking-wider transition-all shadow-[0_0_30px_rgba(251,191,36,0.35)] flex items-center justify-center gap-2.5 cursor-pointer transform hover:-translate-y-0.5"
                 >
-                  <span>INGRESAR A MUNDO EVO →</span>
+                  <span>INGRESAR A EVO LABS →</span>
                 </button>
 
                 {/* 2. Secondary CTA */}

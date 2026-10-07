@@ -364,7 +364,7 @@ export const EvoCaseResolverModal: React.FC<EvoCaseResolverModalProps> = ({
                 onClick={onClose}
                 className="w-full py-3 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-black font-mono-tech font-bold text-xs uppercase tracking-wider transition-colors cursor-pointer"
               >
-                CERRAR EXPEDIENTE Y VOLVER A MUNDO EVO →
+                CERRAR EXPEDIENTE Y VOLVER A EVO LABS →
               </button>
             </div>
           )}

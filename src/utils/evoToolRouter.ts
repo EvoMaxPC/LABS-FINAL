@@ -1,3 +1,5 @@
+import { getToolOwnerSection, getToolOwnershipEntry } from '../data/evoOwnershipMap';
+
 export interface EvoToolRouterContext {
   setCurrentView: (view: any) => void;
   setCampusSection?: (section: any) => void;
@@ -14,6 +16,8 @@ export interface EvoToolRouterContext {
   openContentFactory?: () => void;
   openTransferChallenge?: () => void;
   openDossierModal?: (tomoId: string) => void;
+  openLatencyCalculator?: () => void;
+  openBuildArchitect?: () => void;
 }
 
 /**
@@ -22,6 +26,11 @@ export interface EvoToolRouterContext {
  */
 export function executeToolById(toolId: string | undefined | null, ctx: EvoToolRouterContext): boolean {
   if (!toolId || typeof toolId !== 'string') return false;
+  
+  // Resolve canonical owner metadata for navigation decision
+  const ownership = getToolOwnershipEntry(toolId);
+  const ownerSection = ownership.owner;
+
   switch (toolId) {
     // =========================================================================
     // 1. DIAGNOSTICAR (8 HERRAMIENTAS)
@@ -92,8 +101,12 @@ export function executeToolById(toolId: string | undefined | null, ctx: EvoToolR
     // 2. MEDIR (6 HERRAMIENTAS)
     // =========================================================================
     case 'med-latency-calc':
-      if (ctx.setActiveLabPanel) ctx.setActiveLabPanel('hardware');
-      ctx.setCurrentView('hotswap-lab');
+      if (ctx.openLatencyCalculator) {
+        ctx.openLatencyCalculator();
+      } else {
+        if (ctx.setActiveLabPanel) ctx.setActiveLabPanel('hardware');
+        ctx.setCurrentView('hotswap-lab');
+      }
       return true;
 
     case 'med-frametime-analyzer':
@@ -215,8 +228,12 @@ export function executeToolById(toolId: string | undefined | null, ctx: EvoToolR
       return true;
 
     case 'opt-build-architect':
-      if (ctx.setLabCorePhase) ctx.setLabCorePhase('BUILD_PC');
-      ctx.setCurrentView('lab-core');
+      if (ctx.openBuildArchitect) {
+        ctx.openBuildArchitect();
+      } else {
+        if (ctx.setLabCorePhase) ctx.setLabCorePhase('BUILD_PC');
+        ctx.setCurrentView('lab-core');
+      }
       return true;
 
     // =========================================================================

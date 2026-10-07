@@ -78,7 +78,7 @@ export const EvoIntroModal: React.FC<EvoIntroModalProps> = ({
             </span>
             <span className="text-zinc-600 text-xs font-mono-tech">•</span>
             <span className="text-yellow-400 font-mono-tech text-xs tracking-wider uppercase font-semibold">
-              MUNDO EVO V1 // INGRESO
+              EVO LABS // INGRESO
             </span>
           </div>
 

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { ArrowRight, BookOpen, Sparkles } from 'lucide-react';
 import { EvoTomeExpandedItem } from '../../data/evoTomesExpandedData';
+import { normalizeVisibleStatus } from '../../utils/statusNormalizer';
 
 interface EvoTomeCommercialCardProps {
   tome: EvoTomeExpandedItem;
@@ -124,6 +125,8 @@ export const EvoTomeCommercialCard: React.FC<EvoTomeCommercialCardProps> = ({
     }
   };
 
+  const visibleStatus = normalizeVisibleStatus(tome.number === '01' || tome.number === '02' ? 'AVAILABLE' : tome.number === '03' || tome.number === '04' ? 'IN_DEVELOPMENT' : 'LOCKED');
+
   return (
     <div
       className={`group relative flex flex-col justify-between rounded-2xl bg-[#0b0e14] border border-zinc-800/90 ${meta.borderAccent} ${meta.glowColor} transition-all duration-300 p-3 sm:p-4 text-left overflow-hidden shadow-lg`}
@@ -212,7 +215,15 @@ export const EvoTomeCommercialCard: React.FC<EvoTomeCommercialCardProps> = ({
       <div className="pt-3 border-t border-zinc-800/80 space-y-2.5 relative z-10 mt-3">
         <div className="flex items-center justify-between text-[10px] font-mono-tech">
           <span className="text-zinc-400 uppercase font-medium">COMPRA PERMANENTE</span>
-          <span className="font-bold text-zinc-200">PRECIO A DEFINIR</span>
+          <span className={`px-2 py-0.5 rounded text-[9px] font-bold border ${
+            visibleStatus === 'Disponible'
+              ? 'bg-emerald-500/15 border-emerald-500/30 text-emerald-400'
+              : visibleStatus === 'En desarrollo'
+              ? 'bg-amber-500/15 border-amber-500/30 text-amber-300'
+              : 'bg-zinc-800/80 border-zinc-700/60 text-zinc-400'
+          }`}>
+            {visibleStatus}
+          </span>
         </div>
 
         <button

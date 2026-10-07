@@ -24,6 +24,7 @@ import {
 } from 'lucide-react';
 import { useEvoOperatingMode } from '../../../../hooks/useEvoOperatingMode';
 import { UserHardwarePassport } from '../../../../types';
+import { calculateRamLatency } from '../../../../utils/ramLatencyUtils';
 
 interface CpuPreset {
   id: string;
@@ -604,20 +605,18 @@ INTEGRIDAD     : SU VALIDEZ DEPENDE DEL ENTORNO DEL USUARIO
     [coolingPresetId]
   );
 
-  // Immediate Absolute Real Latency: Latency (ns) = (CL * 2000) / MT/s
-  const absoluteRamLatencyNs = useMemo(() => {
-    if (!ramFrequency || ramFrequency <= 0) return 0;
-    return +((ramCl * 2000) / ramFrequency).toFixed(2);
-  }, [ramCl, ramFrequency]);
+  // Single source of truth calculation via calculateRamLatency
+  const ramLatencyMetrics = useMemo(() => {
+    return calculateRamLatency({
+      frequencyMhz: ramFrequency,
+      cl: ramCl,
+      channelTopology,
+    });
+  }, [ramCl, ramFrequency, channelTopology]);
 
-  // Bottleneck flag if latency > 13.5 ns
-  const isLatencyBottleneck = absoluteRamLatencyNs > 13.5;
-
-  // Clock Cycle Time tCK (ns) = 2000 / Frequency(MT/s)
-  const tCkNs = useMemo(() => {
-    if (!ramFrequency || ramFrequency <= 0) return 0;
-    return +(2000 / ramFrequency).toFixed(3);
-  }, [ramFrequency]);
+  const absoluteRamLatencyNs = ramLatencyMetrics.absoluteLatencyNs;
+  const isLatencyBottleneck = ramLatencyMetrics.isBottleneck;
+  const tCkNs = ramLatencyMetrics.tCkNs;
 
   // Channel multiplier for bandwidth
   const channelMultiplier = channelTopology === 'single' ? 1 : channelTopology === 'dual' ? 2 : 4;

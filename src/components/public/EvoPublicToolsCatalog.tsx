@@ -25,6 +25,10 @@ import {
   EvoToolCategory,
 } from '../../data/evoToolsData';
 import { EVO_TOOLS_BY_INTENT } from '../../data/evoLearningPaths';
+import { normalizeVisibleStatus } from '../../utils/statusNormalizer';
+import { getToolOwnerSection } from '../../data/evoOwnershipMap';
+import { EvoLatencyCalculator } from '../tools/EvoLatencyCalculator';
+import { EvoPcBuildArchitect } from '../tools/EvoPcBuildArchitect';
 
 interface EvoPublicToolsCatalogProps {
   onExecuteToolAction: (tool: EvoToolDefinition) => void;
@@ -109,28 +113,18 @@ const TOOL_VISUAL_MAP: Record<string, { icon: React.ElementType; accent: string;
 export const EvoPublicToolsCatalog: React.FC<EvoPublicToolsCatalogProps> = ({
   onExecuteToolAction,
 }) => {
-  const [activeCategory, setActiveCategory] = useState<'ALL' | EvoToolCategory>('ALL');
   const [searchQuery, setSearchQuery] = useState('');
+  const [activeToolModal, setActiveToolModal] = useState<'latency' | 'build' | null>(null);
 
-  const categories = useMemo(() => {
-    return [
-      { id: 'ALL', label: 'TODAS', count: EVO_MASTER_TOOLS_CATALOG.length },
-      { id: 'DIAGNOSTICAR', label: 'DIAGNOSTICAR', count: EVO_MASTER_TOOLS_CATALOG.filter((t) => t.category === 'DIAGNOSTICAR').length },
-      { id: 'MEDIR', label: 'MEDIR', count: EVO_MASTER_TOOLS_CATALOG.filter((t) => t.category === 'MEDIR').length },
-      { id: 'INVESTIGAR', label: 'INVESTIGAR', count: EVO_MASTER_TOOLS_CATALOG.filter((t) => t.category === 'INVESTIGAR').length },
-      { id: 'REPARAR', label: 'REPARAR', count: EVO_MASTER_TOOLS_CATALOG.filter((t) => t.category === 'REPARAR').length },
-      { id: 'OPTIMIZAR', label: 'OPTIMIZAR', count: EVO_MASTER_TOOLS_CATALOG.filter((t) => t.category === 'OPTIMIZAR').length },
-      { id: 'DOCUMENTAR', label: 'DOCUMENTAR', count: EVO_MASTER_TOOLS_CATALOG.filter((t) => t.category === 'DOCUMENTAR').length },
-    ] as const;
+  // Source of truth: filter tools owned exclusively by HERRAMIENTAS section (2 tools)
+  const canonicalTools = useMemo(() => {
+    return EVO_MASTER_TOOLS_CATALOG.filter((t) => getToolOwnerSection(t.id) === 'HERRAMIENTAS');
   }, []);
 
   const filteredTools = useMemo(() => {
     const q = searchQuery.toLowerCase().trim();
-    return EVO_MASTER_TOOLS_CATALOG.filter((t) => {
+    return canonicalTools.filter((t) => {
       const displayName = HISTORIC_TOOL_NAMES[t.id] || t.name;
-      const matchesCategory = activeCategory === 'ALL' || t.category === activeCategory;
-      if (!matchesCategory) return false;
-
       if (!q) return true;
 
       return (
@@ -141,11 +135,10 @@ export const EvoPublicToolsCatalog: React.FC<EvoPublicToolsCatalogProps> = ({
         t.inputRequired.toLowerCase().includes(q) ||
         t.outputDelivered.toLowerCase().includes(q) ||
         t.category.toLowerCase().includes(q) ||
-        (t.labAssoc && t.labAssoc.toLowerCase().includes(q)) ||
         t.concepts.some((c) => c.toLowerCase().includes(q))
       );
     });
-  }, [activeCategory, searchQuery]);
+  }, [canonicalTools, searchQuery]);
 
   return (
     <div className="max-w-[1240px] mx-auto w-full px-4 sm:px-6 lg:px-8 py-8 space-y-10 font-mono-tech select-none">
@@ -155,15 +148,30 @@ export const EvoPublicToolsCatalog: React.FC<EvoPublicToolsCatalogProps> = ({
         <div className="flex items-center justify-center sm:justify-start gap-2">
           <Gauge className="w-5 h-5 text-emerald-400" />
           <span className="text-xs font-mono-tech tracking-widest text-emerald-400 uppercase font-black">
-            INSTRUMENTAL DE BANCO Y METROLOGÍA ({EVO_MASTER_TOOLS_CATALOG.length} HERRAMIENTAS ACTIVAS)
+            UTILIDADES INDEPENDIENTES ({canonicalTools.length} HERRAMIENTAS CANÓNICAS)
           </span>
         </div>
         <h1 className="text-3xl sm:text-5xl font-display font-black text-white uppercase tracking-tight">
           HERRAMIENTAS EVO LABS
         </h1>
         <p className="text-sm sm:text-base text-zinc-300 font-sans-editorial max-w-3xl leading-relaxed">
-          Catálogo completo y unificado de instrumental pericial. Herramientas reales para diagnosticar fallas de hardware, medir latencias en nanosegundos, investigar arquitectura de silicio, reparar Windows y documentar evidencia científica.
+          Sección de utilidades técnicas independientes. Herramientas autónomas con entrada y resultados propios para metrología de silicio y diseño de arquitecturas de armado.
         </p>
+      </div>
+
+      {/* BANNER INFORMATIVO DE PROPIEDAD Y REDIRECCIÓN DE SECCIONES */}
+      <div className="p-4 rounded-xl bg-zinc-950 border border-zinc-800 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs font-mono-tech">
+        <div className="flex items-center gap-2.5">
+          <HelpCircle className="w-4 h-4 text-emerald-400 shrink-0" />
+          <span className="text-zinc-300">
+            ¿Buscás laboratorios interactivos de entrenamiento o análisis de tu PC real?
+          </span>
+        </div>
+        <div className="flex items-center gap-2 shrink-0 font-bold">
+          <span className="text-zinc-500 uppercase text-[10px]">VER:</span>
+          <span className="text-emerald-400 bg-emerald-950/80 px-2 py-0.5 rounded border border-emerald-800">PRACTICAR (LABS)</span>
+          <span className="text-purple-400 bg-purple-950/80 px-2 py-0.5 rounded border border-purple-800">ANALIZAR MI PC</span>
+        </div>
       </div>
 
       {/* FILTROS Y BUSCADOR */}
@@ -176,7 +184,7 @@ export const EvoPublicToolsCatalog: React.FC<EvoPublicToolsCatalogProps> = ({
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="¿Qué problema querés resolver? Buscar: BSOD, latencia, frametime, VRM, POST, SSD, RAM..."
+              placeholder="Buscar herramienta: latencia, RAM, timings, build, arquitecto..."
               className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-zinc-950 border border-zinc-800 text-xs font-mono-tech text-white placeholder-zinc-500 focus:outline-none focus:border-emerald-400 transition-colors"
             />
             {searchQuery && (
@@ -192,36 +200,11 @@ export const EvoPublicToolsCatalog: React.FC<EvoPublicToolsCatalogProps> = ({
 
           {/* Contador de Resultados */}
           <div className="text-xs font-mono-tech text-zinc-400 flex items-center gap-2">
-            <span>MOSTRANDO:</span>
+            <span>HERRAMIENTAS VISIBLES:</span>
             <strong className="text-emerald-400">{filteredTools.length}</strong>
             <span className="text-zinc-600">/</span>
-            <span>{EVO_MASTER_TOOLS_CATALOG.length} TOTAL</span>
+            <span>{canonicalTools.length} CANÓNICAS</span>
           </div>
-        </div>
-
-        {/* Pestañas de Filtros Canónicos */}
-        <div className="flex items-center gap-1.5 overflow-x-auto pb-1.5 font-mono-tech text-xs custom-scrollbar">
-          {categories.map((cat) => (
-            <button
-              key={cat.id}
-              type="button"
-              onClick={() => setActiveCategory(cat.id as any)}
-              className={`px-3.5 py-1.5 rounded-xl font-bold uppercase transition-all whitespace-nowrap cursor-pointer flex items-center gap-1.5 ${
-                activeCategory === cat.id
-                  ? 'bg-emerald-400 text-black shadow-md'
-                  : 'bg-zinc-950 text-zinc-400 hover:text-white border border-zinc-800 hover:border-zinc-700'
-              }`}
-            >
-              <span>{cat.label}</span>
-              <span
-                className={`text-[10px] px-1.5 py-0.2 rounded font-mono ${
-                  activeCategory === cat.id ? 'bg-black/20 text-black font-black' : 'bg-zinc-900 text-zinc-500'
-                }`}
-              >
-                {cat.count}
-              </span>
-            </button>
-          ))}
         </div>
       </div>
 
@@ -232,18 +215,12 @@ export const EvoPublicToolsCatalog: React.FC<EvoPublicToolsCatalogProps> = ({
           <p className="text-sm text-zinc-300 font-bold uppercase">
             No se encontraron herramientas para "{searchQuery}"
           </p>
-          <p className="text-xs text-zinc-500 font-sans-editorial">
-            Intentá con términos más generales como "CPU", "latencia", "reparar", "voltaje" o "Windows".
-          </p>
           <button
             type="button"
-            onClick={() => {
-              setSearchQuery('');
-              setActiveCategory('ALL');
-            }}
+            onClick={() => setSearchQuery('')}
             className="px-4 py-2 rounded-xl bg-zinc-900 text-zinc-300 hover:text-white text-xs font-bold uppercase border border-zinc-800 transition-colors mt-2 cursor-pointer"
           >
-            VER TODAS LAS HERRAMIENTAS
+            VER LAS 2 HERRAMIENTAS CANÓNICAS
           </button>
         </div>
       )}
@@ -251,6 +228,7 @@ export const EvoPublicToolsCatalog: React.FC<EvoPublicToolsCatalogProps> = ({
       {/* GRID DE 34 HERRAMIENTAS (2 COLUMNAS EN DESKTOP, MISMO TAMAÑO DE TARJETA QUE TOMOS) */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
         {filteredTools.map((tool) => {
+          const ownerSection = getToolOwnerSection(tool.id);
           const displayName = HISTORIC_TOOL_NAMES[tool.id] || tool.name;
           const visual = TOOL_VISUAL_MAP[tool.id] || {
             icon: Gauge,
@@ -330,10 +308,13 @@ export const EvoPublicToolsCatalog: React.FC<EvoPublicToolsCatalogProps> = ({
                     {displayName}
                   </h3>
 
-                  {/* Badges de Estado y Procedencia */}
+                  {/* Badges de Estado y Procedencia y Propietario Canónico */}
                   <div className="flex items-center gap-1.5 flex-wrap pt-0.5">
                     <span className="text-[9px] px-1.5 py-0.2 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 font-bold">
                       ● {tool.status}
+                    </span>
+                    <span className="text-[9px] px-1.5 py-0.2 rounded bg-zinc-900 text-zinc-300 border border-zinc-800 font-mono font-bold uppercase">
+                      {ownerSection}
                     </span>
                     <span className="text-[9px] px-1.5 py-0.2 rounded bg-zinc-900 text-zinc-400 border border-zinc-800 font-mono">
                       {tool.provenance}
@@ -382,7 +363,11 @@ export const EvoPublicToolsCatalog: React.FC<EvoPublicToolsCatalogProps> = ({
                 <div className="pt-2 border-t border-zinc-900">
                   <button
                     type="button"
-                    onClick={() => onExecuteToolAction(tool)}
+                    onClick={() => {
+                      if (tool.id === 'med-latency-calc') setActiveToolModal('latency');
+                      else if (tool.id === 'opt-build-architect') setActiveToolModal('build');
+                      onExecuteToolAction(tool);
+                    }}
                     className="w-full py-2.5 px-3 rounded-xl bg-emerald-400 hover:bg-emerald-300 text-black text-xs font-black uppercase tracking-wider transition-all cursor-pointer shadow-[0_0_15px_rgba(52,211,153,0.2)] flex items-center justify-center gap-1.5 group-hover:scale-[1.01]"
                   >
                     <span>USAR HERRAMIENTA</span>
@@ -394,6 +379,21 @@ export const EvoPublicToolsCatalog: React.FC<EvoPublicToolsCatalogProps> = ({
           );
         })}
       </div>
+
+      {/* Standalone Tool Modals */}
+      {activeToolModal === 'latency' && (
+        <EvoLatencyCalculator
+          isModal={true}
+          onClose={() => setActiveToolModal(null)}
+        />
+      )}
+
+      {activeToolModal === 'build' && (
+        <EvoPcBuildArchitect
+          isModal={true}
+          onClose={() => setActiveToolModal(null)}
+        />
+      )}
 
     </div>
   );

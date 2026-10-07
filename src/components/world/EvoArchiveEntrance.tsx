@@ -58,7 +58,7 @@ export const EvoArchiveEntrance: React.FC<EvoArchiveEntranceProps> = ({
           className="flex items-center gap-1 text-zinc-400 hover:text-amber-400 transition-colors cursor-pointer"
         >
           <ChevronLeft className="w-4 h-4" />
-          <span>MUNDO EVO</span>
+          <span>EVO LABS</span>
         </button>
         <span>/</span>
         <span className="text-zinc-300">ARCHIVO EVO</span>

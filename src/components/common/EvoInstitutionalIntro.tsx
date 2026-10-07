@@ -445,7 +445,7 @@ export const EvoInstitutionalIntro: React.FC<EvoInstitutionalIntroProps> = ({
                 onClick={onEnterApp}
                 className="w-full sm:w-auto px-8 py-4 rounded-xl bg-amber-400 hover:bg-amber-300 text-black font-mono-tech font-black text-sm uppercase tracking-wider transition-all flex items-center justify-center gap-2.5 mx-auto cursor-pointer shadow-[0_0_30px_rgba(245,158,11,0.4)] hover:scale-105 duration-200"
               >
-                <span>ENTRAR A MUNDO EVO</span>
+                <span>ENTRAR A EVO LABS</span>
                 <ArrowRight className="w-5 h-5 text-black" />
               </button>
             </div>

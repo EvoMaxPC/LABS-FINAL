@@ -333,7 +333,7 @@ export const Tome01DossierView: React.FC<Tome01DossierViewProps> = ({
             </div>
 
             <h3 className="font-display font-black text-xl text-white uppercase tracking-tight">
-              MUNDO EVO LABS // TALLERES AVANZADOS
+              EVO LABS // TALLERES AVANZADOS
             </h3>
 
             <p className="font-sans-editorial text-xs text-zinc-400 leading-relaxed">

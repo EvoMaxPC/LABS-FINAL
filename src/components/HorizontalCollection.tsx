@@ -1,6 +1,7 @@
 import React, { useRef } from 'react';
 import { Lock, ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react';
 import { VolumeItem } from '../types';
+import { normalizeVisibleStatus } from '../utils/statusNormalizer';
 
 interface HorizontalCollectionProps {
   volumes: VolumeItem[];
@@ -158,7 +159,7 @@ export const HorizontalCollection: React.FC<HorizontalCollectionProps> = ({
                     </div>
                   ) : isRoadmap ? (
                     <div className="text-[11px] font-mono-tech text-zinc-500 flex items-center justify-between">
-                      <span className="font-bold">PRÓXIMAMENTE</span>
+                      <span className="font-bold">{normalizeVisibleStatus('COMING_SOON')}</span>
                       <span className="text-[9px] bg-zinc-950 px-1.5 py-0.5 rounded text-zinc-400 border border-zinc-900">PLANIFICADO 2026</span>
                     </div>
                   ) : (
