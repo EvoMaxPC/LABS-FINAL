@@ -10,6 +10,7 @@ import {
   Lock,
 } from 'lucide-react';
 import { EvoTomeExpandedItem } from '../../data/evoTomesExpandedData';
+import { useEvoAccess } from '../../auth/EvoAccessContext';
 
 interface EvoTomeCardExpandedProps {
   tome: EvoTomeExpandedItem;
@@ -33,10 +34,18 @@ export const EvoTomeCardExpanded: React.FC<EvoTomeCardExpandedProps> = ({
   onOpenMagazine,
 }) => {
   const [imageError, setImageError] = useState(false);
+  const { canAccess, openUpgradeModal, isFreeUser } = useEvoAccess();
   const isAvailableForContent = tome.technicalStatus === 'COMPLETE' || tome.commercialStatus === 'AVAILABLE';
   const isRealLab = tome.associatedLab.labRealStatus === 'REAL_FUNCTIONAL';
 
+  const tomeAccess = canAccess({ type: 'tomo_reader', tomoNumber: tome.number });
+  const isTomeGranted = tomeAccess.allowed;
+
   const handleReadClick = () => {
+    if (!isTomeGranted && isFreeUser && tome.number !== '01') {
+      openUpgradeModal(`Tomo ${tome.number} // ${tome.title}`);
+      return;
+    }
     if (isAvailableForContent && onOpenTomo) {
       onOpenTomo(tome.number);
     } else if (onOpenDossier) {
@@ -45,6 +54,10 @@ export const EvoTomeCardExpanded: React.FC<EvoTomeCardExpandedProps> = ({
   };
 
   const handleLabClick = () => {
+    if (isFreeUser) {
+      openUpgradeModal(`Laboratorio asociado: ${tome.associatedLab.name}`);
+      return;
+    }
     if (isRealLab && onOpenLab) {
       onOpenLab(tome.associatedLab.actionKey, tome.number);
     } else if (onOpenDossier) {
@@ -102,6 +115,22 @@ export const EvoTomeCardExpanded: React.FC<EvoTomeCardExpandedProps> = ({
   const getPrimaryCta = () => {
     switch (tome.commercialStatus) {
       case 'AVAILABLE':
+        if (tome.number === '01') {
+          return {
+            label: 'INGRESAR AL TOMO (DEMO GRATIS) →',
+            action: handleReadClick,
+            className: 'bg-amber-400 hover:bg-amber-300 text-black shadow-[0_0_15px_rgba(245,158,11,0.25)]',
+            disabled: false,
+          };
+        }
+        if (!isTomeGranted && isFreeUser) {
+          return {
+            label: 'REQUIERE ACCESO // VER PLANES',
+            action: handleReadClick,
+            className: 'bg-amber-400/20 text-amber-300 hover:bg-amber-400/30 border border-amber-400/50 shadow-md',
+            disabled: false,
+          };
+        }
         return {
           label: isAvailableForContent ? 'INGRESAR AL TOMO →' : 'VER DETALLE',
           action: handleReadClick,
@@ -179,9 +208,20 @@ export const EvoTomeCardExpanded: React.FC<EvoTomeCardExpandedProps> = ({
               <span className="px-1.5 py-0.5 rounded bg-black/80 backdrop-blur-sm text-zinc-300 border border-zinc-700/80 font-bold">
                 TOMO {tome.number}
               </span>
-              <span className={`px-1.5 py-0.5 rounded uppercase text-[8px] border backdrop-blur-sm ${commBadge.className}`}>
-                {commBadge.label}
-              </span>
+              {tome.number === '01' ? (
+                <span className="px-1.5 py-0.5 rounded uppercase text-[8px] border backdrop-blur-sm bg-emerald-500/20 text-emerald-300 border-emerald-500/40 font-black">
+                  DEMO // PLAN GRATIS
+                </span>
+              ) : isFreeUser ? (
+                <span className="px-1.5 py-0.5 rounded uppercase text-[8px] border backdrop-blur-sm bg-zinc-900/90 text-amber-300 border-amber-400/40 font-bold flex items-center gap-0.5">
+                  <Lock className="w-2 h-2 text-amber-400" />
+                  PREMIUM
+                </span>
+              ) : (
+                <span className={`px-1.5 py-0.5 rounded uppercase text-[8px] border backdrop-blur-sm ${commBadge.className}`}>
+                  {commBadge.label}
+                </span>
+              )}
             </div>
 
             {/* Cover Center Title */}
@@ -226,6 +266,16 @@ export const EvoTomeCardExpanded: React.FC<EvoTomeCardExpandedProps> = ({
               <span className="text-[10px] font-mono-tech tracking-widest text-zinc-500 uppercase font-bold">
                 TOMO {tome.number} // TRATADO TÉCNICO
               </span>
+              {tome.number === '01' ? (
+                <span className="px-2 py-0.5 rounded-full text-[8.5px] font-mono-tech font-bold text-emerald-300 bg-emerald-500/10 border border-emerald-500/40 uppercase">
+                  DEMO // INCLUIDO EN PLAN GRATIS
+                </span>
+              ) : isFreeUser ? (
+                <span className="px-2 py-0.5 rounded-full text-[8.5px] font-mono-tech font-bold text-amber-300 bg-amber-400/10 border border-amber-400/40 uppercase inline-flex items-center gap-1">
+                  <Lock className="w-2.5 h-2.5 text-amber-400" />
+                  CONTENIDO PREMIUM
+                </span>
+              ) : null}
               {isActiveStudy && (
                 <span className="px-2 py-0.5 rounded-full text-[8.5px] font-mono-tech font-bold text-amber-400 bg-amber-400/10 border border-amber-400/40 uppercase">
                   ESTUDIO ACTIVO

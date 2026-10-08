@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { PublicNavbar, PublicSection } from './PublicNavbar';
 import { PublicLanding } from './PublicLanding';
 import { EvoPublicTomosCatalog } from './EvoPublicTomosCatalog';
@@ -6,6 +6,9 @@ import { EvoPublicLabsCatalog } from './EvoPublicLabsCatalog';
 import { EvoPublicToolsCatalog } from './EvoPublicToolsCatalog';
 import { EvoPublicPricing } from './EvoPublicPricing';
 import { PublicFooter } from './PublicFooter';
+import { EVO_PRICING, EvoPriceItem } from '../../data/evoPricing';
+import { EvoPlanConfiguratorModal } from '../commerce/EvoPlanConfiguratorModal';
+import { EvoOrderSummaryModal } from '../commerce/EvoOrderSummaryModal';
 
 export type PublicNavigationTarget =
   | { type: 'APP_HOME' }
@@ -18,24 +21,52 @@ export type PublicNavigationTarget =
   | { type: 'APP_SECTION'; section: string };
 
 interface PublicShellProps {
-  onEnterPrivateApp?: () => void;
+  initialSection?: PublicSection;
+  onEnterPrivateApp?: (authContext?: string) => void;
   onNavigateTarget?: (target: PublicNavigationTarget) => void;
 }
 
-export const PublicShell: React.FC<PublicShellProps> = ({ onEnterPrivateApp, onNavigateTarget }) => {
-  const [activeSection, setActiveSection] = useState<PublicSection>('inicio');
+export const PublicShell: React.FC<PublicShellProps> = ({
+  initialSection = 'inicio',
+  onEnterPrivateApp,
+  onNavigateTarget,
+}) => {
+  const [activeSection, setActiveSection] = useState<PublicSection>(initialSection);
+
+  // Commerce Modals State
+  const [configuratorProduct, setConfiguratorProduct] = useState<EvoPriceItem | null>(null);
+  const [summaryProduct, setSummaryProduct] = useState<EvoPriceItem | null>(null);
+  const [summaryTomeIds, setSummaryTomeIds] = useState<string[]>([]);
+
+  useEffect(() => {
+    if (initialSection) {
+      setActiveSection(initialSection);
+    }
+  }, [initialSection]);
+
+  const handleSelectPlan = (planId: string) => {
+    const product = Object.values(EVO_PRICING).find((p) => p.id === planId);
+    if (!product) return;
+
+    if (product.selectionRule) {
+      setConfiguratorProduct(product);
+    } else {
+      setSummaryProduct(product);
+      setSummaryTomeIds([]);
+    }
+  };
 
   return (
     <div className="min-h-screen w-full bg-[#07090e] text-zinc-100 flex flex-col relative font-sans-editorial select-none">
       
-      {/* 1. Public Navbar (6 items: INICIO, CATÁLOGO, LABORATORIOS, HERRAMIENTAS, PLANES, [ ENTRAR ]) */}
+      {/* 1. Public Navbar */}
       <PublicNavbar
         activeSection={activeSection}
         onNavigateSection={(section) => {
           setActiveSection(section);
           window.scrollTo({ top: 0, behavior: 'smooth' });
         }}
-        onEnterPrivateApp={onEnterPrivateApp}
+        onEnterPrivateApp={() => onEnterPrivateApp?.()}
       />
 
       {/* 2. Public Content Stage */}
@@ -44,7 +75,7 @@ export const PublicShell: React.FC<PublicShellProps> = ({ onEnterPrivateApp, onN
           <PublicLanding
             onExploreClick={() => setActiveSection('catalogo')}
             onMethodClick={() => setActiveSection('inicio')}
-            onOpenAuthPlaceholder={onEnterPrivateApp}
+            onOpenAuthPlaceholder={() => onEnterPrivateApp?.()}
             onOpenTomo={(tomeNum) => {
               if (onNavigateTarget) {
                 onNavigateTarget({ type: 'TOME', tomeNumber: tomeNum });
@@ -101,9 +132,7 @@ export const PublicShell: React.FC<PublicShellProps> = ({ onEnterPrivateApp, onN
         )}
         {activeSection === 'planes' && (
           <EvoPublicPricing
-            onSelectPlan={(_planId) => {
-              if (onEnterPrivateApp) onEnterPrivateApp();
-            }}
+            onSelectPlan={handleSelectPlan}
             onSelectTomoOption={() => setActiveSection('catalogo')}
           />
         )}
@@ -111,6 +140,44 @@ export const PublicShell: React.FC<PublicShellProps> = ({ onEnterPrivateApp, onN
 
       {/* 3. Public Footer */}
       <PublicFooter />
+
+      {/* 4. Plan Configurator Modal (e.g. Pack 3 Tomos) */}
+      {configuratorProduct && (
+        <EvoPlanConfiguratorModal
+          product={configuratorProduct}
+          isOpen={true}
+          onClose={() => setConfiguratorProduct(null)}
+          onProceedToSummary={(tomeIds) => {
+            const prod = configuratorProduct;
+            setConfiguratorProduct(null);
+            setSummaryProduct(prod);
+            setSummaryTomeIds(tomeIds);
+          }}
+        />
+      )}
+
+      {/* 5. Order Summary Modal */}
+      {summaryProduct && (
+        <EvoOrderSummaryModal
+          product={summaryProduct}
+          selectedTomeIds={summaryTomeIds}
+          isOpen={true}
+          onClose={() => setSummaryProduct(null)}
+          onChangeSelection={() => {
+            const prod = summaryProduct;
+            setSummaryProduct(null);
+            if (prod.selectionRule) {
+              setConfiguratorProduct(prod);
+            } else {
+              setActiveSection('planes');
+            }
+          }}
+          onRequireAuthToCheckout={(_productId, _tomeIds) => {
+            setSummaryProduct(null);
+            onEnterPrivateApp?.("Creá tu cuenta o iniciá sesión para continuar con la compra.");
+          }}
+        />
+      )}
 
     </div>
   );

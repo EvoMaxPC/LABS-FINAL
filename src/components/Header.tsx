@@ -10,6 +10,10 @@ import {
 import { EvoAutoDetectPcModal } from './common/EvoAutoDetectPcModal';
 import { EvoTomoDossierModal, ForensicBenchTarget } from './common/EvoTomoDossierModal';
 import { EvoUnifiedHeaderShell } from './navigation/EvoUnifiedHeaderShell';
+import { useEvoAccess } from '../auth/EvoAccessContext';
+import { useEvoAuth } from '../auth/EvoAuthProvider';
+import { EvoUserAccountMenu } from './auth/EvoUserAccountMenu';
+import { Lock } from 'lucide-react';
 
 export interface HeaderProps {
   currentView?: string;
@@ -65,6 +69,8 @@ export const Header: React.FC<HeaderProps> = ({
 }) => {
   const [isAutoDetectOpen, setIsAutoDetectOpen] = useState(false);
   const [internalDossierTomoId, setInternalDossierTomoId] = useState<string | null>(null);
+  const { user } = useEvoAuth();
+  const { entitlements, isFreeUser, openUpgradeModal } = useEvoAccess();
 
   const activeDossierId = dossierModalTomoId || internalDossierTomoId;
 
@@ -201,14 +207,47 @@ export const Header: React.FC<HeaderProps> = ({
 
   const rightActions = (
     <div className="flex items-center gap-2 sm:gap-3 shrink-0">
-      {/* Indicador de Identidad Técnica / Pasaporte */}
+      {/* 1. Menú de Cuenta de Usuario Logueado (Avatar, Nombre, Email, Estado PLAN GRATIS / OWNER) */}
+      <EvoUserAccountMenu
+        onNavigatePlans={() => {
+          if (onNavigateCampusSection) onNavigateCampusSection('planes');
+          else if (onReturnToPublic) onReturnToPublic();
+        }}
+        onLogoutSuccess={() => {
+          if (onReturnToPublic) onReturnToPublic();
+        }}
+      />
+
+      {/* 1b. Badge PLAN GRATIS visible para usuario anónimo o sin sesión iniciada */}
+      {!user && (
+        <div className="flex items-center gap-1.5 sm:gap-2 px-2.5 py-1.5 rounded-xl border border-zinc-800 bg-zinc-900/90 font-mono-tech select-none">
+          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+          <span className="text-[10px] font-black uppercase tracking-wider text-zinc-300">
+            PLAN GRATIS
+          </span>
+          <span className="text-zinc-600 hidden sm:inline">•</span>
+          <button
+            type="button"
+            onClick={() => {
+              if (onNavigateCampusSection) onNavigateCampusSection('planes');
+              else if (onReturnToPublic) onReturnToPublic();
+              else openUpgradeModal('Planes EVO LABS');
+            }}
+            className="text-[10px] font-bold text-amber-400 hover:text-amber-300 uppercase transition-colors cursor-pointer"
+          >
+            VER PLANES
+          </button>
+        </div>
+      )}
+
+      {/* 2. Indicador de Identidad Técnica / Pasaporte */}
       <button
         type="button"
         onClick={() => {
           if (onNavigateCampusSection) onNavigateCampusSection('progreso');
           else if (onNavigateHome) onNavigateHome();
         }}
-        className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-xl border border-white/[0.08] bg-white/[0.03] hover:bg-white/[0.07] hover:border-amber-400/30 text-zinc-300 hover:text-white transition-all duration-200 cursor-pointer text-xs font-mono-tech select-none"
+        className="hidden lg:flex items-center gap-2 px-3 py-1.5 rounded-xl border border-white/[0.08] bg-white/[0.03] hover:bg-white/[0.07] hover:border-amber-400/30 text-zinc-300 hover:text-white transition-all duration-200 cursor-pointer text-xs font-mono-tech select-none"
         title="Mi Identidad Técnica // Expediente y Progreso"
       >
         <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
@@ -216,13 +255,12 @@ export const Header: React.FC<HeaderProps> = ({
         <span className="text-[11px] font-bold text-amber-300">ACTIVO</span>
       </button>
 
-      {/* User Account / Auth Actions */}
-      {/* Botón de retorno al sitio público EVO LABS */}
+      {/* 3. Botón de retorno al sitio público EVO LABS */}
       {onReturnToPublic && (
         <button
           type="button"
           onClick={onReturnToPublic}
-          className="px-3 py-1.5 rounded-xl border border-zinc-800 bg-zinc-900/90 hover:bg-zinc-800 text-zinc-300 hover:text-white transition-all text-xs font-mono-tech cursor-pointer"
+          className="hidden sm:inline-flex px-3 py-1.5 rounded-xl border border-zinc-800 bg-zinc-900/90 hover:bg-zinc-800 text-zinc-300 hover:text-white transition-all text-xs font-mono-tech cursor-pointer"
           title="Volver al Sitio Público EVO LABS"
         >
           VOLVER A EVO LABS

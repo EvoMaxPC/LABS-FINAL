@@ -58,6 +58,7 @@ import { EvoTechnicalDossierModal } from '../common/EvoTechnicalDossierModal';
 import { EvoWhyThisModal } from '../common/EvoWhyThisModal';
 import { EvoContentFactoryModal } from '../common/EvoContentFactoryModal';
 import { EvoMethodGuideModal } from '../common/EvoMethodGuideModal';
+import { useEvoAccess } from '../../auth/EvoAccessContext';
 import { EvoTransferChallengeModal } from '../common/EvoTransferChallengeModal';
 import { EvoMethodBadge } from '../common/EvoMethodBadge';
 import { EvoMethodEngine, TransferChallenge } from '../../services/evoMethodEngine';
@@ -385,6 +386,7 @@ export const EvoWorldMap: React.FC<EvoWorldMapProps> = ({
 }) => {
   // Navigation State
   const [activeIntention, setActiveIntention] = useState<MainIntention>(initialIntention);
+  const { canAccess, openUpgradeModal, isFreeUser } = useEvoAccess();
   const [selectedLevelNumber, setSelectedLevelNumber] = useState<number | null>(null);
   const [selectedTomeProfile, setSelectedTomeProfile] = useState<EvoTomePedagogicalProfile | null>(null);
   const [selectedLabGuide, setSelectedLabGuide] = useState<EvoLabPedagogicalGuide | null>(null);
@@ -1470,16 +1472,27 @@ export const EvoWorldMap: React.FC<EvoWorldMapProps> = ({
                   </div>
 
                   <div className="pt-2">
-                    <button
-                      type="button"
-                      onClick={() => {
-                        if (onNavigateBootLab) onNavigateBootLab();
-                        else if (onOpenTomo) onOpenTomo('08');
-                      }}
-                      className="px-6 py-3 rounded-xl bg-emerald-400 hover:bg-emerald-300 text-black font-mono font-bold text-xs uppercase tracking-wider transition-all cursor-pointer shadow-[0_0_20px_rgba(16,185,129,0.25)] hover:shadow-[0_0_30px_rgba(16,185,129,0.4)]"
-                    >
-                      {isBootLabDone ? 'REVISAR LABORATORIO BOOT →' : 'INICIAR LABORATORIO →'}
-                    </button>
+                    {isFreeUser ? (
+                      <button
+                        type="button"
+                        onClick={() => openUpgradeModal('Laboratorio de Arranque y POST (Tomo 08)')}
+                        className="px-6 py-3 rounded-xl bg-amber-400/20 hover:bg-amber-400/30 text-amber-300 border border-amber-400/50 font-mono font-bold text-xs uppercase tracking-wider transition-all cursor-pointer shadow-md flex items-center gap-2"
+                      >
+                        <Lock className="w-4 h-4 text-amber-400" />
+                        <span>REQUIERE PLAN // VER PLANES</span>
+                      </button>
+                    ) : (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          if (onNavigateBootLab) onNavigateBootLab();
+                          else if (onOpenTomo) onOpenTomo('08');
+                        }}
+                        className="px-6 py-3 rounded-xl bg-emerald-400 hover:bg-emerald-300 text-black font-mono font-bold text-xs uppercase tracking-wider transition-all cursor-pointer shadow-[0_0_20px_rgba(16,185,129,0.25)] hover:shadow-[0_0_30px_rgba(16,185,129,0.4)]"
+                      >
+                        {isBootLabDone ? 'REVISAR LABORATORIO BOOT →' : 'INICIAR LABORATORIO →'}
+                      </button>
+                    )}
                   </div>
                 </div>
 
@@ -1770,14 +1783,25 @@ export const EvoWorldMap: React.FC<EvoWorldMapProps> = ({
                   </div>
 
                   {!item.isDisabled ? (
-                    <button
-                      type="button"
-                      onClick={item.action}
-                      className="w-full py-2.5 px-4 rounded-xl bg-zinc-900 hover:bg-emerald-400 hover:text-black text-emerald-300 border border-emerald-500/30 hover:border-emerald-400 font-mono-tech text-xs font-bold uppercase tracking-wider transition-all flex items-center justify-center gap-2 cursor-pointer shadow-sm"
-                    >
-                      <span>{item.ctaText}</span>
-                      <ArrowRight className="w-3.5 h-3.5" />
-                    </button>
+                    isFreeUser ? (
+                      <button
+                        type="button"
+                        onClick={() => openUpgradeModal(`Laboratorio: ${item.title}`)}
+                        className="w-full py-2.5 px-4 rounded-xl bg-amber-400/20 hover:bg-amber-400/30 text-amber-300 border border-amber-400/50 font-mono-tech text-xs font-bold uppercase tracking-wider transition-all flex items-center justify-center gap-2 cursor-pointer shadow-sm"
+                      >
+                        <Lock className="w-3.5 h-3.5 text-amber-400" />
+                        <span>REQUIERE PLAN // VER PLANES</span>
+                      </button>
+                    ) : (
+                      <button
+                        type="button"
+                        onClick={item.action}
+                        className="w-full py-2.5 px-4 rounded-xl bg-zinc-900 hover:bg-emerald-400 hover:text-black text-emerald-300 border border-emerald-500/30 hover:border-emerald-400 font-mono-tech text-xs font-bold uppercase tracking-wider transition-all flex items-center justify-center gap-2 cursor-pointer shadow-sm"
+                      >
+                        <span>{item.ctaText}</span>
+                        <ArrowRight className="w-3.5 h-3.5" />
+                      </button>
+                    )
                   ) : (
                     <div className="w-full py-2.5 px-4 rounded-xl bg-zinc-900 text-zinc-500 font-mono-tech text-xs font-bold uppercase tracking-wider text-center border border-zinc-800">
                       {item.ctaText}
@@ -2002,16 +2026,27 @@ export const EvoWorldMap: React.FC<EvoWorldMapProps> = ({
                     Auditoría de integridad de datos, sensores activos y estado de telemetría del sistema.
                   </p>
                 </div>
-                <button
-                  type="button"
-                  onClick={() => {
-                    if (onOpenLiveScanAudit) onOpenLiveScanAudit();
-                  }}
-                  className="w-full py-2 px-3 rounded-lg bg-zinc-900 hover:bg-purple-500 hover:text-black text-purple-300 font-mono text-xs font-bold uppercase transition-all flex items-center justify-center gap-1.5 cursor-pointer mt-auto"
-                >
-                  <span>REVISAR INTEGRIDAD</span>
-                  <ArrowRight className="w-3.5 h-3.5" />
-                </button>
+                {isFreeUser ? (
+                  <button
+                    type="button"
+                    onClick={() => openUpgradeModal('Integridad y Telemetría Live Scan')}
+                    className="w-full py-2 px-3 rounded-lg bg-amber-400/20 hover:bg-amber-400/30 text-amber-300 border border-amber-400/50 font-mono text-xs font-bold uppercase transition-all flex items-center justify-center gap-1.5 cursor-pointer mt-auto"
+                  >
+                    <Lock className="w-3.5 h-3.5 text-amber-400" />
+                    <span>REQUIERE PLAN // VER PLANES</span>
+                  </button>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      if (onOpenLiveScanAudit) onOpenLiveScanAudit();
+                    }}
+                    className="w-full py-2 px-3 rounded-lg bg-zinc-900 hover:bg-purple-500 hover:text-black text-purple-300 font-mono text-xs font-bold uppercase transition-all flex items-center justify-center gap-1.5 cursor-pointer mt-auto"
+                  >
+                    <span>REVISAR INTEGRIDAD</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </button>
+                )}
               </div>
 
               {/* 3. diag-bottleneck-calc */}
@@ -2062,16 +2097,27 @@ export const EvoWorldMap: React.FC<EvoWorldMapProps> = ({
                     Ensayo de estabilidad térmica y eléctrica de componentes bajo carga en EVO Core.
                   </p>
                 </div>
-                <button
-                  type="button"
-                  onClick={() => {
-                    if (onNavigateLabCore) onNavigateLabCore();
-                  }}
-                  className="w-full py-2 px-3 rounded-lg bg-zinc-900 hover:bg-purple-500 hover:text-black text-purple-300 font-mono text-xs font-bold uppercase transition-all flex items-center justify-center gap-1.5 cursor-pointer mt-auto"
-                >
-                  <span>PROBAR ESTABILIDAD</span>
-                  <ArrowRight className="w-3.5 h-3.5" />
-                </button>
+                {isFreeUser ? (
+                  <button
+                    type="button"
+                    onClick={() => openUpgradeModal('Pruebas de Estrés y Estabilidad (EVO Core)')}
+                    className="w-full py-2 px-3 rounded-lg bg-amber-400/20 hover:bg-amber-400/30 text-amber-300 border border-amber-400/50 font-mono text-xs font-bold uppercase transition-all flex items-center justify-center gap-1.5 cursor-pointer mt-auto"
+                  >
+                    <Lock className="w-3.5 h-3.5 text-amber-400" />
+                    <span>REQUIERE PLAN // VER PLANES</span>
+                  </button>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      if (onNavigateLabCore) onNavigateLabCore();
+                    }}
+                    className="w-full py-2 px-3 rounded-lg bg-zinc-900 hover:bg-purple-500 hover:text-black text-purple-300 font-mono text-xs font-bold uppercase transition-all flex items-center justify-center gap-1.5 cursor-pointer mt-auto"
+                  >
+                    <span>PROBAR ESTABILIDAD</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </button>
+                )}
               </div>
 
               {/* 5. rep-core-repair-view */}
@@ -2092,16 +2138,27 @@ export const EvoWorldMap: React.FC<EvoWorldMapProps> = ({
                     Taller de descarte físico de fallas de arranque y rieles de tensión.
                   </p>
                 </div>
-                <button
-                  type="button"
-                  onClick={() => {
-                    if (onNavigateLabCore) onNavigateLabCore();
-                  }}
-                  className="w-full py-2 px-3 rounded-lg bg-zinc-900 hover:bg-purple-500 hover:text-black text-purple-300 font-mono text-xs font-bold uppercase transition-all flex items-center justify-center gap-1.5 cursor-pointer mt-auto"
-                >
-                  <span>ABRIR BENCH REPARACIÓN</span>
-                  <ArrowRight className="w-3.5 h-3.5" />
-                </button>
+                {isFreeUser ? (
+                  <button
+                    type="button"
+                    onClick={() => openUpgradeModal('Reparación & Bench EVO Core')}
+                    className="w-full py-2 px-3 rounded-lg bg-amber-400/20 hover:bg-amber-400/30 text-amber-300 border border-amber-400/50 font-mono text-xs font-bold uppercase transition-all flex items-center justify-center gap-1.5 cursor-pointer mt-auto"
+                  >
+                    <Lock className="w-3.5 h-3.5 text-amber-400" />
+                    <span>REQUIERE PLAN // VER PLANES</span>
+                  </button>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      if (onNavigateLabCore) onNavigateLabCore();
+                    }}
+                    className="w-full py-2 px-3 rounded-lg bg-zinc-900 hover:bg-purple-500 hover:text-black text-purple-300 font-mono text-xs font-bold uppercase transition-all flex items-center justify-center gap-1.5 cursor-pointer mt-auto"
+                  >
+                    <span>ABRIR BENCH REPARACIÓN</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </button>
+                )}
               </div>
 
               {/* 6. opt-core-optimization */}
@@ -2122,16 +2179,27 @@ export const EvoWorldMap: React.FC<EvoWorldMapProps> = ({
                     Ajustes de latencia, servicios NT y rendimiento para el sistema del usuario.
                   </p>
                 </div>
-                <button
-                  type="button"
-                  onClick={() => {
-                    if (onNavigateLabCore) onNavigateLabCore();
-                  }}
-                  className="w-full py-2 px-3 rounded-lg bg-zinc-900 hover:bg-purple-500 hover:text-black text-purple-300 font-mono text-xs font-bold uppercase transition-all flex items-center justify-center gap-1.5 cursor-pointer mt-auto"
-                >
-                  <span>OPTIMIZAR SISTEMA</span>
-                  <ArrowRight className="w-3.5 h-3.5" />
-                </button>
+                {isFreeUser ? (
+                  <button
+                    type="button"
+                    onClick={() => openUpgradeModal('Optimización Core de Windows')}
+                    className="w-full py-2 px-3 rounded-lg bg-amber-400/20 hover:bg-amber-400/30 text-amber-300 border border-amber-400/50 font-mono text-xs font-bold uppercase transition-all flex items-center justify-center gap-1.5 cursor-pointer mt-auto"
+                  >
+                    <Lock className="w-3.5 h-3.5 text-amber-400" />
+                    <span>REQUIERE PLAN // VER PLANES</span>
+                  </button>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      if (onNavigateLabCore) onNavigateLabCore();
+                    }}
+                    className="w-full py-2 px-3 rounded-lg bg-zinc-900 hover:bg-purple-500 hover:text-black text-purple-300 font-mono text-xs font-bold uppercase transition-all flex items-center justify-center gap-1.5 cursor-pointer mt-auto"
+                  >
+                    <span>OPTIMIZAR SISTEMA</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </button>
+                )}
               </div>
 
               {/* 7. opt-upgrade-simulator */}
@@ -2152,16 +2220,27 @@ export const EvoWorldMap: React.FC<EvoWorldMapProps> = ({
                     Estimación de retorno de inversión de FPS/Rendimiento por cambio de componente.
                   </p>
                 </div>
-                <button
-                  type="button"
-                  onClick={() => {
-                    if (onNavigateLabCore) onNavigateLabCore();
-                  }}
-                  className="w-full py-2 px-3 rounded-lg bg-zinc-900 hover:bg-purple-500 hover:text-black text-purple-300 font-mono text-xs font-bold uppercase transition-all flex items-center justify-center gap-1.5 cursor-pointer mt-auto"
-                >
-                  <span>EVALUAR UPGRADE</span>
-                  <ArrowRight className="w-3.5 h-3.5" />
-                </button>
+                {isFreeUser ? (
+                  <button
+                    type="button"
+                    onClick={() => openUpgradeModal('Simulador ROI Upgrade')}
+                    className="w-full py-2 px-3 rounded-lg bg-amber-400/20 hover:bg-amber-400/30 text-amber-300 border border-amber-400/50 font-mono text-xs font-bold uppercase transition-all flex items-center justify-center gap-1.5 cursor-pointer mt-auto"
+                  >
+                    <Lock className="w-3.5 h-3.5 text-amber-400" />
+                    <span>REQUIERE PLAN // VER PLANES</span>
+                  </button>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      if (onNavigateLabCore) onNavigateLabCore();
+                    }}
+                    className="w-full py-2 px-3 rounded-lg bg-zinc-900 hover:bg-purple-500 hover:text-black text-purple-300 font-mono text-xs font-bold uppercase transition-all flex items-center justify-center gap-1.5 cursor-pointer mt-auto"
+                  >
+                    <span>EVALUAR UPGRADE</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </button>
+                )}
               </div>
             </div>
           </div>

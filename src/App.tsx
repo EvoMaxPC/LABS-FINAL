@@ -22,6 +22,7 @@ import { getChapterRequirements, ChapterRequirementInfo } from './utils/chapterP
 import { ChapterItem, EvoNarrativeProfile, EvoLabZone, UserHardwarePassport, Tome01DossierSummary } from './types';
 import { EvoWorldMap } from './components/world/EvoWorldMap';
 import { PublicShell, PublicNavigationTarget } from './components/public/PublicShell';
+import { EvoPaymentSuccessView } from './components/commerce/EvoPaymentSuccessView';
 import { executeToolById, executeTomoById } from './utils/evoToolRouter';
 import { EVO_MASTER_TOOLS_CATALOG } from './data/evoToolsData';
 import { EvoIntroExperience } from './components/world/EvoIntroExperience';
@@ -52,6 +53,10 @@ import { EvoCase } from './components/evoLabCore/types';
 import { EvoTomo01FinalExam } from './components/tomo01/EvoTomo01FinalExam';
 import { EvoTomo01CompletionScreen } from './components/tomo01/EvoTomo01CompletionScreen';
 import { CheckCircle2, X, History } from 'lucide-react';
+import { useEvoAuth } from './auth/EvoAuthProvider';
+import { EvoAuthModal } from './components/auth/EvoAuthModal';
+import { useEvoAccess, EvoAccessProvider } from './auth/EvoAccessContext';
+import { EvoContentGate } from './components/common/EvoContentGate';
 import {
   TutorEvoProvider,
   useTutorEvo,
@@ -288,12 +293,15 @@ function AppContent({
   initialPendingTarget,
   onClearPendingTarget,
   onReturnToPublic,
+  onNavigateToPlans,
 }: {
   initialPendingTarget?: PublicNavigationTarget | null;
   onClearPendingTarget?: () => void;
   onReturnToPublic?: () => void;
+  onNavigateToPlans?: () => void;
 }) {
   const { updateLocation, saveCurrentLocationHistory } = useTutorEvo();
+  const { canAccess, openUpgradeModal, isFreeUser } = useEvoAccess();
 
   useEffect(() => {
     if (initialPendingTarget) {
@@ -315,36 +323,61 @@ function AppContent({
       } else if (initialPendingTarget.type === 'BOOT_LAB') {
         handleNavigateBootLab();
       } else if (initialPendingTarget.type === 'HOTSWAP') {
-        setCurrentView('hotswap-lab');
-        const sp = (initialPendingTarget as any).subPanel;
-        if (sp && ['sandbox', 'hardware', 'software', 'telemetry', 'matrix', 'all'].includes(sp)) {
-          setActiveLabPanel(sp);
+        if (isFreeUser) {
+          openUpgradeModal('Laboratorio Hot-Swap de Hardware');
+          setCurrentView('world-map');
+          setCampusSection('laboratorios');
         } else {
-          setActiveLabPanel('hardware');
+          setCurrentView('hotswap-lab');
+          const sp = (initialPendingTarget as any).subPanel;
+          if (sp && ['sandbox', 'hardware', 'software', 'telemetry', 'matrix', 'all'].includes(sp)) {
+            setActiveLabPanel(sp);
+          } else {
+            setActiveLabPanel('hardware');
+          }
         }
       } else if (initialPendingTarget.type === 'WINDOWS_MATRIX') {
-        setMatrixInitialScenario((initialPendingTarget as any).scenario);
-        setCurrentView('windows-matrix-lab');
+        if (isFreeUser) {
+          openUpgradeModal('Laboratorio Windows Matrix & Kernel NT');
+          setCurrentView('world-map');
+          setCampusSection('laboratorios');
+        } else {
+          setMatrixInitialScenario((initialPendingTarget as any).scenario);
+          setCurrentView('windows-matrix-lab');
+        }
       } else if (initialPendingTarget.type === 'LAB_CORE') {
-        setCurrentView('lab-core');
-        const ph = (initialPendingTarget as any).phase;
-        if (ph) setLabCorePhase(ph);
-        const ms = (initialPendingTarget as any).mission;
-        if (ms) setActiveLabMission(ms);
+        if (isFreeUser) {
+          openUpgradeModal('EVO Lab Core');
+          setCurrentView('world-map');
+          setCampusSection('laboratorios');
+        } else {
+          setCurrentView('lab-core');
+          const ph = (initialPendingTarget as any).phase;
+          if (ph) setLabCorePhase(ph);
+          const ms = (initialPendingTarget as any).mission;
+          if (ms) setActiveLabMission(ms);
+        }
       } else if (initialPendingTarget.type === 'TOOL') {
         const toolId = (initialPendingTarget as any).toolId;
-        executeToolById(toolId, {
-          setCurrentView,
-          setCampusSection,
-          setActiveLabPanel,
-          setActiveLabMission,
-          setLabCorePhase,
-          setMatrixInitialScenario,
-          setShowDiscoveryModal,
-          setShowCoverageDashboard,
-          setShowIntegrityModal,
-          openDossierModal: (tId) => setDossierModalTomoId(tId),
-        });
+        const freeTools = ['med-latency-calc', 'diag-autodetect-pc', 'diag-bottleneck-calc'];
+        if (isFreeUser && !freeTools.includes(toolId)) {
+          openUpgradeModal('Herramienta Técnica Premium');
+          setCurrentView('world-map');
+          setCampusSection('herramientas');
+        } else {
+          executeToolById(toolId, {
+            setCurrentView,
+            setCampusSection,
+            setActiveLabPanel,
+            setActiveLabMission,
+            setLabCorePhase,
+            setMatrixInitialScenario,
+            setShowDiscoveryModal,
+            setShowCoverageDashboard,
+            setShowIntegrityModal,
+            openDossierModal: (tId) => setDossierModalTomoId(tId),
+          });
+        }
       } else if (initialPendingTarget.type === 'APP_SECTION') {
         setCurrentView('world-map');
         setCampusSection((initialPendingTarget as any).section);
@@ -354,7 +387,7 @@ function AppContent({
       }
       onClearPendingTarget?.();
     }
-  }, [initialPendingTarget]);
+  }, [initialPendingTarget, isFreeUser]);
   const [currentView, setCurrentView] = useState<
     | 'magazine'
     | 'tomo-02'
@@ -967,26 +1000,46 @@ function AppContent({
   };
 
   const handleStartChapter03 = () => {
+    if (isFreeUser) {
+      openUpgradeModal('Tomo 01 · Capítulo 03: CUANDO LOS FPS MIENTEN');
+      return;
+    }
     setCurrentView('chapter-03');
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const handleStartChapter04 = () => {
+    if (isFreeUser) {
+      openUpgradeModal('Tomo 01 · Capítulo 04: ENCONTRÁ EL LÍMITE');
+      return;
+    }
     setCurrentView('chapter-04');
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const handleStartChapter05 = () => {
+    if (isFreeUser) {
+      openUpgradeModal('Tomo 01 · Capítulo 05: PRIMERA INTERVENCIÓN');
+      return;
+    }
     setCurrentView('chapter-05');
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const handleStartChapter06 = () => {
+    if (isFreeUser) {
+      openUpgradeModal('Tomo 01 · Capítulo 06: TALLER DE DIAGNÓSTICO EVO');
+      return;
+    }
     setCurrentView('chapter-06');
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const handleStartChapter07 = () => {
+    if (isFreeUser) {
+      openUpgradeModal('Tomo 01 · Capítulo 07: LABORATORIO FINAL');
+      return;
+    }
     setCurrentView('chapter-07');
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
@@ -1207,6 +1260,10 @@ function AppContent({
   };
 
   const handleStartFinalExam = () => {
+    if (isFreeUser) {
+      openUpgradeModal('Examen Final y Certificación Oficial // Tomo 01');
+      return;
+    }
     setCurrentView('tomo01-quiz');
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
@@ -1253,15 +1310,23 @@ function AppContent({
   const handleOpenVolume = (volume: (typeof VOLUMES_COLLECTION)[0]) => {
     if (volume.id === 'tomo-01') {
       handleOpenEdition();
-    } else if (volume.id === 'tomo-02') {
-      setCurrentView('tomo-02');
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    } else if (volume.id === 'tomo-03') {
-      setCurrentView('tomo-03');
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    } else if (volume.id === 'tomo-04') {
-      setCurrentView('tomo-04');
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else {
+      const tomoCleanNum = volume.id.replace('tomo-', '').padStart(2, '0');
+      if (isFreeUser) {
+        openUpgradeModal(`Tomo ${tomoCleanNum} // ${volume.title}`);
+        setDossierModalTomoId(volume.id);
+        return;
+      }
+      if (volume.id === 'tomo-02') {
+        setCurrentView('tomo-02');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else if (volume.id === 'tomo-03') {
+        setCurrentView('tomo-03');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else if (volume.id === 'tomo-04') {
+        setCurrentView('tomo-04');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
     }
   };
 
@@ -1274,6 +1339,12 @@ function AppContent({
   const handleNavigateCampusSection = (
     section: 'campus' | 'escuela' | 'biblioteca' | 'laboratorios' | 'diagnosticar' | 'progreso' | 'herramientas' | 'como-usar' | 'planes'
   ) => {
+    if (section === 'planes') {
+      if (onNavigateToPlans) {
+        onNavigateToPlans();
+        return;
+      }
+    }
     setCampusSection(section);
     setCurrentView('world-map');
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -1443,6 +1514,10 @@ function AppContent({
   };
 
   const handleOpenForensicBench = (target: ForensicBenchTarget) => {
+    if (isFreeUser) {
+      openUpgradeModal(`Banco Forense de Laboratorio // ${target.moduleNumber || 'Simulación'}`);
+      return;
+    }
     if (target.labView === 'boot-lab') {
       setCurrentView('boot-lab');
       setActiveNotice(`Cargando Laboratorio de Arranque y Fallas: ${target.moduleNumber}`);
@@ -1520,122 +1595,272 @@ function AppContent({
           )}
 
           {currentView === 'tomo-02' && (
-            <Tomo02MagazineView
-              onBackToApp={handleNavigateHome}
-              onNavigateTomo={handleNavigateTomo}
-              onOpenLab={() => {
-                setCurrentView('windows-matrix-lab');
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-              }}
-            />
+            isFreeUser ? (
+              <EvoContentGate
+                title="Tomo 02 // La Biblia Negra de Windows"
+                subtitle="La lectura integral de la Biblia Negra de Windows, arquitectura del Kernel NT y optimización de drivers requiere Plan Complete."
+                requiredPlan="Tomo 02 o Plan Complete"
+                onReturnHome={handleNavigateHome}
+                onReturnToDemo={handleNavigateTomo01}
+              />
+            ) : (
+              <Tomo02MagazineView
+                onBackToApp={handleNavigateHome}
+                onNavigateTomo={handleNavigateTomo}
+                onOpenLab={() => {
+                  setCurrentView('windows-matrix-lab');
+                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                }}
+              />
+            )
           )}
 
           {currentView === 'tomo-03' && (
-            <Tomo03MagazineView
-              onBackToApp={handleNavigateHome}
-              onNavigateTomo={handleNavigateTomo}
-            />
+            isFreeUser ? (
+              <EvoContentGate
+                title="Tomo 03 // Reparación de PC"
+                subtitle="El manual de reparación física de motherboard, VRM, fuentes ATX y osciloscopio requiere Plan Complete."
+                requiredPlan="Tomo 03 o Plan Complete"
+                onReturnHome={handleNavigateHome}
+                onReturnToDemo={handleNavigateTomo01}
+              />
+            ) : (
+              <Tomo03MagazineView
+                onBackToApp={handleNavigateHome}
+                onNavigateTomo={handleNavigateTomo}
+              />
+            )
           )}
 
           {currentView === 'tomo-04' && (
-            <Tomo04MagazineView
-              onBackToApp={handleNavigateHome}
-              onNavigateTomo={handleNavigateTomo}
-            />
+            isFreeUser ? (
+              <EvoContentGate
+                title="Tomo 04 // Reparación de Notebooks"
+                subtitle="La ingeniería inversa de esquemáticos boardview y microsoldadura de portátiles requiere Plan Complete."
+                requiredPlan="Tomo 04 o Plan Complete"
+                onReturnHome={handleNavigateHome}
+                onReturnToDemo={handleNavigateTomo01}
+              />
+            ) : (
+              <Tomo04MagazineView
+                onBackToApp={handleNavigateHome}
+                onNavigateTomo={handleNavigateTomo}
+              />
+            )
           )}
 
           {currentView === 'tomo-05' && (
-            <Tomo05MagazineView
-              onBack={handleNavigateHome}
-            />
+            isFreeUser ? (
+              <EvoContentGate
+                title="Tomo 05 // Redes y Tráfico"
+                subtitle="El tratado de protocolos TCP/IP, Wireshark, switches y VLANs requiere Plan Complete."
+                requiredPlan="Tomo 05 o Plan Complete"
+                onReturnHome={handleNavigateHome}
+                onReturnToDemo={handleNavigateTomo01}
+              />
+            ) : (
+              <Tomo05MagazineView
+                onBack={handleNavigateHome}
+              />
+            )
           )}
 
           {currentView === 'tomo-06' && (
-            <Tomo06MagazineView
-              onBack={handleNavigateHome}
-            />
+            isFreeUser ? (
+              <EvoContentGate
+                title="Tomo 06 // Ciberseguridad Defensiva"
+                subtitle="El mapa táctico MITRE ATT&CK, hardening y contención de incidentes requiere Plan Complete."
+                requiredPlan="Tomo 06 o Plan Complete"
+                onReturnHome={handleNavigateHome}
+                onReturnToDemo={handleNavigateTomo01}
+              />
+            ) : (
+              <Tomo06MagazineView
+                onBack={handleNavigateHome}
+              />
+            )
           )}
 
           {currentView === 'tomo-07' && (
-            <Tomo07MagazineView
-              onBack={handleNavigateHome}
-            />
+            isFreeUser ? (
+              <EvoContentGate
+                title="Tomo 07 // Optimización y Rendimiento"
+                subtitle="La calibración de latencia de entrada, DPC/ISR y frametimes competitivos requiere Plan Complete."
+                requiredPlan="Tomo 07 o Plan Complete"
+                onReturnHome={handleNavigateHome}
+                onReturnToDemo={handleNavigateTomo01}
+              />
+            ) : (
+              <Tomo07MagazineView
+                onBack={handleNavigateHome}
+              />
+            )
           )}
 
           {currentView === 'tomo-08' && (
-            <Tomo08MagazineView
-              onBackToApp={handleNavigateHome}
-              onNavigateTomo={handleNavigateTomo}
-              onOpenLab={handleNavigateBootLab}
-            />
+            isFreeUser ? (
+              <EvoContentGate
+                title="Tomo 08 // Arquitectura de Arranque y POST"
+                subtitle="El desglose de los 35 estados de inicio, Power Good y BIOS/UEFI requiere Plan Complete."
+                requiredPlan="Tomo 08 o Plan Complete"
+                onReturnHome={handleNavigateHome}
+                onReturnToDemo={handleNavigateTomo01}
+              />
+            ) : (
+              <Tomo08MagazineView
+                onBackToApp={handleNavigateHome}
+                onNavigateTomo={handleNavigateTomo}
+                onOpenLab={handleNavigateBootLab}
+              />
+            )
           )}
 
           {currentView === 'tomo-09' && (
-            <Tomo09MagazineView
-              onBack={handleNavigateHome}
-            />
+            isFreeUser ? (
+              <EvoContentGate
+                title="Tomo 09 // Ingeniería de Código y Software"
+                subtitle="La optimización de compiladores y arquitectura de bajo nivel requiere Plan Complete."
+                requiredPlan="Tomo 09 o Plan Complete"
+                onReturnHome={handleNavigateHome}
+                onReturnToDemo={handleNavigateTomo01}
+              />
+            ) : (
+              <Tomo09MagazineView
+                onBack={handleNavigateHome}
+              />
+            )
           )}
 
           {currentView === 'tomo-10' && (
-            <Tomo10MagazineView
-              onBack={handleNavigateHome}
-            />
+            isFreeUser ? (
+              <EvoContentGate
+                title="Tomo 10 // Sistemas de Inteligencia Artificial"
+                subtitle="La infraestructura de hardware para entrenamiento y aceleración por GPU requiere Plan Complete."
+                requiredPlan="Tomo 10 o Plan Complete"
+                onReturnHome={handleNavigateHome}
+                onReturnToDemo={handleNavigateTomo01}
+              />
+            ) : (
+              <Tomo10MagazineView
+                onBack={handleNavigateHome}
+              />
+            )
           )}
 
           {currentView === 'tomo-11' && (
-            <Tomo11MagazineView
-              onBack={handleNavigateHome}
-            />
+            isFreeUser ? (
+              <EvoContentGate
+                title="Tomo 11 // Peritaje Judicial Informático"
+                subtitle="Los protocolos de cadena de custodia y análisis forense digital requieren Plan Complete."
+                requiredPlan="Tomo 11 o Plan Complete"
+                onReturnHome={handleNavigateHome}
+                onReturnToDemo={handleNavigateTomo01}
+              />
+            ) : (
+              <Tomo11MagazineView
+                onBack={handleNavigateHome}
+              />
+            )
           )}
 
           {currentView === 'tomo-12' && (
-            <Tomo12MagazineView
-              onBack={handleNavigateHome}
-            />
+            isFreeUser ? (
+              <EvoContentGate
+                title="Tomo 12 // Laboratorio Maestro e Innovación"
+                subtitle="El compendio final de laboratorio e investigaciones avanzadas requiere Plan Complete."
+                requiredPlan="Tomo 12 o Plan Complete"
+                onReturnHome={handleNavigateHome}
+                onReturnToDemo={handleNavigateTomo01}
+              />
+            ) : (
+              <Tomo12MagazineView
+                onBack={handleNavigateHome}
+              />
+            )
           )}
 
           {currentView === 'boot-lab' && (
-            <div className="max-w-7xl mx-auto px-4 sm:px-8 py-6">
-              <EvoBootLab
-                onClose={handleNavigateHome}
-                onOpenTomo08={handleNavigateTomo08}
+            isFreeUser ? (
+              <EvoContentGate
+                title="Laboratorio de Arranque y POST (Tomo 08)"
+                subtitle="El laboratorio interactivo de 35 estados de encendido y multímetro virtual requiere Plan Complete."
+                requiredPlan="Plan Complete"
+                onReturnHome={handleNavigateHome}
+                onReturnToDemo={handleNavigateTomo01}
               />
-            </div>
+            ) : (
+              <div className="max-w-7xl mx-auto px-4 sm:px-8 py-6">
+                <EvoBootLab
+                  onClose={handleNavigateHome}
+                  onOpenTomo08={handleNavigateTomo08}
+                />
+              </div>
+            )
           )}
 
           {currentView === 'lab-core' && (
-            <EvoLabCore
-              initialPhase={labCorePhase}
-              initialMission={activeLabMission}
-              onNavigateToTomo={handleNavigateTomo}
-              onOpenGlobalAutoDetectModal={() => {
-                const event = new CustomEvent('evo_open_autodetect');
-                window.dispatchEvent(event);
-              }}
-              onExitToWorld={handleNavigateHome}
-            />
+            isFreeUser ? (
+              <EvoContentGate
+                title="EVO Lab Core // Entorno de Pruebas"
+                subtitle="El simulador de estabilidad, arquitecto de hardware y banco de estrés requiere Plan Complete."
+                requiredPlan="Plan Complete"
+                onReturnHome={handleNavigateHome}
+                onReturnToDemo={handleNavigateTomo01}
+              />
+            ) : (
+              <EvoLabCore
+                initialPhase={labCorePhase}
+                initialMission={activeLabMission}
+                onNavigateToTomo={handleNavigateTomo}
+                onOpenGlobalAutoDetectModal={() => {
+                  const event = new CustomEvent('evo_open_autodetect');
+                  window.dispatchEvent(event);
+                }}
+                onExitToWorld={handleNavigateHome}
+              />
+            )
           )}
 
           {currentView === 'windows-matrix-lab' && (
-            <div className="max-w-7xl mx-auto px-4 sm:px-8 py-8 space-y-6">
-              <EvoWindowsMatrixLab
-                initialScenario={matrixInitialScenario}
-                onNavigateToHardwareBench={() => {
-                  setActiveLabPanel('hardware');
-                  setCurrentView('hotswap-lab');
-                }}
-                onOpenTomo={handleNavigateTomo}
+            isFreeUser ? (
+              <EvoContentGate
+                title="Laboratorio de Windows Matrix & Kernel NT"
+                subtitle="La matriz de análisis de BSOD, latencias DPC/ISR y controladores requiere Plan Complete."
+                requiredPlan="Plan Complete"
+                onReturnHome={handleNavigateHome}
+                onReturnToDemo={handleNavigateTomo01}
               />
-            </div>
+            ) : (
+              <div className="max-w-7xl mx-auto px-4 sm:px-8 py-8 space-y-6">
+                <EvoWindowsMatrixLab
+                  initialScenario={matrixInitialScenario}
+                  onNavigateToHardwareBench={() => {
+                    setActiveLabPanel('hardware');
+                    setCurrentView('hotswap-lab');
+                  }}
+                  onOpenTomo={handleNavigateTomo}
+                />
+              </div>
+            )
           )}
 
           {currentView === 'hotswap-lab' && (
-            <EvoMasterLabSuite
-              initialPanel={activeLabPanel}
-              onNavigateTomo={handleNavigateTomo}
-              onNavigateHome={handleNavigateHome}
-              passport={userPassport}
-            />
+            isFreeUser ? (
+              <EvoContentGate
+                title="Banco de Hardware Hot-Swap"
+                subtitle="El banco de componentes y simulación eléctrica de taller requiere Plan Complete."
+                requiredPlan="Plan Complete"
+                onReturnHome={handleNavigateHome}
+                onReturnToDemo={handleNavigateTomo01}
+              />
+            ) : (
+              <EvoMasterLabSuite
+                initialPanel={activeLabPanel}
+                onNavigateTomo={handleNavigateTomo}
+                onNavigateHome={handleNavigateHome}
+                passport={userPassport}
+              />
+            )
           )}
 
           {currentView === 'world-map' && (
@@ -1744,65 +1969,125 @@ function AppContent({
           )}
 
           {currentView === 'chapter-03' && (
-            <Chapter03View
-              onBackToIndex={handleBackToIndex}
-              onOpenChapter02={handleStartChapter02}
-              onOpenChapter04={handleStartChapter04}
-              onChapterCompleted={handleChapter03Completed}
-            />
+            isFreeUser ? (
+              <EvoContentGate
+                title="Tomo 01 · Capítulo 03: CUANDO LOS FPS MIENTEN"
+                subtitle="El análisis de frametimes, percentiles 1% / 0.1% Low y telemetría de micro-stuttering requiere el Tomo 01 o Plan Complete."
+                requiredPlan="Tomo 01 o Plan Complete"
+                onReturnHome={handleNavigateHome}
+                onReturnToDemo={handleBackToIndex}
+              />
+            ) : (
+              <Chapter03View
+                onBackToIndex={handleBackToIndex}
+                onOpenChapter02={handleStartChapter02}
+                onOpenChapter04={handleStartChapter04}
+                onChapterCompleted={handleChapter03Completed}
+              />
+            )
           )}
 
           {currentView === 'chapter-04' && (
-            <Chapter04View
-              onBackToIndex={handleBackToIndex}
-              onOpenChapter03={handleStartChapter03}
-              onOpenChapter05={handleStartChapter05}
-              onChapterCompleted={handleChapter04Completed}
-            />
+            isFreeUser ? (
+              <EvoContentGate
+                title="Tomo 01 · Capítulo 04: ENCONTRÁ EL LÍMITE"
+                subtitle="La matriz de saturación y diagnóstico de componentes limitantes requiere el Tomo 01 o Plan Complete."
+                requiredPlan="Tomo 01 o Plan Complete"
+                onReturnHome={handleNavigateHome}
+                onReturnToDemo={handleBackToIndex}
+              />
+            ) : (
+              <Chapter04View
+                onBackToIndex={handleBackToIndex}
+                onOpenChapter03={handleStartChapter03}
+                onOpenChapter05={handleStartChapter05}
+                onChapterCompleted={handleChapter04Completed}
+              />
+            )
           )}
 
           {currentView === 'chapter-05' && (
-            <Chapter05View
-              onBackToIndex={handleBackToIndex}
-              onOpenChapter04={handleStartChapter04}
-              onOpenChapter06={handleStartChapter06}
-              onChapterCompleted={handleChapter05Completed}
-            />
+            isFreeUser ? (
+              <EvoContentGate
+                title="Tomo 01 · Capítulo 05: PRIMERA INTERVENCIÓN"
+                subtitle="La optimización guiada de 8 estaciones y ajustes de latencia requiere el Tomo 01 o Plan Complete."
+                requiredPlan="Tomo 01 o Plan Complete"
+                onReturnHome={handleNavigateHome}
+                onReturnToDemo={handleBackToIndex}
+              />
+            ) : (
+              <Chapter05View
+                onBackToIndex={handleBackToIndex}
+                onOpenChapter04={handleStartChapter04}
+                onOpenChapter06={handleStartChapter06}
+                onChapterCompleted={handleChapter05Completed}
+              />
+            )
           )}
 
           {currentView === 'chapter-06' && (
-            <Chapter06View
-              onBackToIndex={handleBackToIndex}
-              onOpenChapter05={handleStartChapter05}
-              onOpenChapter07={handleStartChapter07}
-              onChapterCompleted={handleChapter06Completed}
-            />
+            isFreeUser ? (
+              <EvoContentGate
+                title="Tomo 01 · Capítulo 06: TALLER DE DIAGNÓSTICO EVO"
+                subtitle="El taller de descarte deductivo y formulación de hipótesis periciales requiere el Tomo 01 o Plan Complete."
+                requiredPlan="Tomo 01 o Plan Complete"
+                onReturnHome={handleNavigateHome}
+                onReturnToDemo={handleBackToIndex}
+              />
+            ) : (
+              <Chapter06View
+                onBackToIndex={handleBackToIndex}
+                onOpenChapter05={handleStartChapter05}
+                onOpenChapter07={handleStartChapter07}
+                onChapterCompleted={handleChapter06Completed}
+              />
+            )
           )}
 
           {currentView === 'chapter-07' && (
-            <Chapter07View
-              onBackToIndex={handleBackToIndex}
-              onOpenChapter06={handleStartChapter06}
-              onGoToFinalExam={handleStartFinalExam}
-              onChapterCompleted={handleChapter07Completed}
-            />
+            isFreeUser ? (
+              <EvoContentGate
+                title="Tomo 01 · Capítulo 07: LABORATORIO FINAL"
+                subtitle="El laboratorio final de optimización A/B y emisión de dictamen requiere el Tomo 01 o Plan Complete."
+                requiredPlan="Tomo 01 o Plan Complete"
+                onReturnHome={handleNavigateHome}
+                onReturnToDemo={handleBackToIndex}
+              />
+            ) : (
+              <Chapter07View
+                onBackToIndex={handleBackToIndex}
+                onOpenChapter06={handleStartChapter06}
+                onGoToFinalExam={handleStartFinalExam}
+                onChapterCompleted={handleChapter07Completed}
+              />
+            )
           )}
 
           {currentView === 'tomo01-quiz' && (
-            <div className="max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-4">
-              <EvoTomo01FinalExam
-                onBackToIndex={handleBackToIndex}
-                onBackToTomoCover={handleNavigateTomo01}
-                onGoToChapter={(ch) => handleGoToMissing(ch)}
-                onCompleteExam={handleCompleteExam}
-                onOpenCompletionScreen={handleOpenCompletionScreen}
-                onContinueToLab={() => {
-                  setActiveLabPanel('hardware');
-                  setCurrentView('hotswap-lab');
-                  window.scrollTo({ top: 0, behavior: 'smooth' });
-                }}
+            isFreeUser ? (
+              <EvoContentGate
+                title="Examen Final y Certificación Oficial // Tomo 01"
+                subtitle="La rendición del examen cronometrado de 20 preguntas y expedición de certificado oficial requiere Plan Complete o Tomo 01."
+                requiredPlan="Tomo 01 o Plan Complete"
+                onReturnHome={handleNavigateHome}
+                onReturnToDemo={handleBackToIndex}
               />
-            </div>
+            ) : (
+              <div className="max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-4">
+                <EvoTomo01FinalExam
+                  onBackToIndex={handleBackToIndex}
+                  onBackToTomoCover={handleNavigateTomo01}
+                  onGoToChapter={(ch) => handleGoToMissing(ch)}
+                  onCompleteExam={handleCompleteExam}
+                  onOpenCompletionScreen={handleOpenCompletionScreen}
+                  onContinueToLab={() => {
+                    setActiveLabPanel('hardware');
+                    setCurrentView('hotswap-lab');
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                  }}
+                />
+              </div>
+            )
           )}
 
           {currentView === 'tomo01-completion' && (
@@ -1982,7 +2267,50 @@ function AppContent({
   );
 }
 
+function getTargetFriendlyLabel(target: PublicNavigationTarget | null): string | null {
+  if (!target) return null;
+  switch (target.type) {
+    case 'TOME':
+      return `Tomo ${target.tomeNumber}`;
+    case 'BOOT_LAB':
+      return 'Laboratorio de Arranque y POST';
+    case 'HOTSWAP':
+      return 'Laboratorio de Hardware y Hot-Swap';
+    case 'WINDOWS_MATRIX':
+      return 'Laboratorio Matriz de Windows';
+    case 'LAB_CORE':
+      return 'Laboratorio EVO Core';
+    case 'TOOL':
+      return `Herramienta (${target.toolId})`;
+    case 'APP_SECTION':
+      return `Sección ${target.section}`;
+    case 'APP_HOME':
+      return 'Campus EVO LABS';
+    default:
+      return null;
+  }
+}
+
 export default function App() {
+  const isPaymentSuccessRoute = window.location.pathname.includes('/payment/success') || window.location.search.includes('order_id');
+  if (isPaymentSuccessRoute) {
+    return (
+      <EvoPaymentSuccessView
+        onEnterApp={() => {
+          window.history.pushState({}, '', '/');
+          window.location.reload();
+        }}
+        onReturnToPlans={() => {
+          window.history.pushState({}, '', '/');
+          window.location.reload();
+        }}
+      />
+    );
+  }
+
+  const { user, emailVerified, loading } = useEvoAuth();
+  const [isAuthGateOpen, setIsAuthGateOpen] = useState<boolean>(false);
+
   const [isAppMode, setIsAppMode] = useState<boolean>(() => {
     try {
       const url = new URL(window.location.href);
@@ -1995,26 +2323,82 @@ export default function App() {
   });
 
   const [pendingPublicTarget, setPendingPublicTarget] = useState<PublicNavigationTarget | null>(null);
+  const [publicSection, setPublicSection] = useState<'inicio' | 'catalogo' | 'laboratorios' | 'herramientas' | 'planes'>('inicio');
 
-  if (!isAppMode) {
-    return (
-      <PublicShell
-        onEnterPrivateApp={() => setIsAppMode(true)}
-        onNavigateTarget={(target) => {
-          setPendingPublicTarget(target);
-          setIsAppMode(true);
-        }}
-      />
-    );
-  }
+  // Universal Auth Gate check: Verified authenticated users only
+  const canEnterPrivateApp = !loading && !!user && emailVerified === true;
+  const showPrivateApp = isAppMode && canEnterPrivateApp;
+
+  // Si el usuario está registrado/logueado pero no verificado, mantener el modal en vista de verificación fija
+  useEffect(() => {
+    if (!loading && user && !emailVerified) {
+      setIsAuthGateOpen(true);
+    }
+  }, [loading, user, emailVerified]);
+
+  // Al detectarse emailVerified === true: desbloquear y continuar automáticamente al target o app
+  useEffect(() => {
+    if (!loading && user && emailVerified && isAuthGateOpen) {
+      setIsAuthGateOpen(false);
+      setIsAppMode(true);
+    }
+  }, [loading, user, emailVerified, isAuthGateOpen]);
+
+  const handleRequestPrivateAccess = (action?: () => void) => {
+    if (canEnterPrivateApp) {
+      action?.();
+      setIsAppMode(true);
+    } else {
+      setIsAuthGateOpen(true);
+    }
+  };
+
+  const handleNavigateToPlans = () => {
+    setPublicSection('planes');
+    setIsAppMode(false);
+    setPendingPublicTarget(null);
+  };
 
   return (
-    <TutorEvoProvider>
-      <AppContent
-        initialPendingTarget={pendingPublicTarget}
-        onClearPendingTarget={() => setPendingPublicTarget(null)}
-        onReturnToPublic={() => setIsAppMode(false)}
-      />
-    </TutorEvoProvider>
+    <EvoAccessProvider onNavigateToPlans={handleNavigateToPlans}>
+      {!showPrivateApp ? (
+        <>
+          <PublicShell
+            initialSection={publicSection}
+            onEnterPrivateApp={() => {
+              handleRequestPrivateAccess();
+            }}
+            onNavigateTarget={(target) => {
+              setPendingPublicTarget(target);
+              handleRequestPrivateAccess();
+            }}
+          />
+          <EvoAuthModal
+            isOpen={isAuthGateOpen}
+            onClose={() => {
+              setIsAuthGateOpen(false);
+            }}
+            targetLabel={getTargetFriendlyLabel(pendingPublicTarget)}
+            onVerifiedSuccess={() => {
+              setIsAuthGateOpen(false);
+              setIsAppMode(true);
+            }}
+          />
+        </>
+      ) : (
+        <TutorEvoProvider>
+          <AppContent
+            initialPendingTarget={pendingPublicTarget}
+            onClearPendingTarget={() => setPendingPublicTarget(null)}
+            onReturnToPublic={() => {
+              setPublicSection('inicio');
+              setIsAppMode(false);
+              setPendingPublicTarget(null);
+            }}
+            onNavigateToPlans={handleNavigateToPlans}
+          />
+        </TutorEvoProvider>
+      )}
+    </EvoAccessProvider>
   );
 }

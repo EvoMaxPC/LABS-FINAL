@@ -29,6 +29,7 @@ import { EvoDefensiveSecurityLab } from '../labs/tomo06/EvoDefensiveSecurityLab'
 import { EvoPerformanceMetrologyLab } from '../labs/tomo07/EvoPerformanceMetrologyLab';
 import { EvoCodeEngineeringLab } from '../labs/tomo09/EvoCodeEngineeringLab';
 import { EvoAiSystemsLab } from '../labs/tomo10/EvoAiSystemsLab';
+import { useEvoAccess } from '../../auth/EvoAccessContext';
 
 export interface ForensicBenchTarget {
   tomoId: string;
@@ -979,6 +980,7 @@ export const EvoTomoDossierModal: React.FC<EvoTomoDossierModalProps> = ({
   const [isBootLabOpen, setIsBootLabOpen] = useState<boolean>(false);
   const [isTomoLabOpen, setIsTomoLabOpen] = useState<boolean>(false);
   const [isExamOpen, setIsExamOpen] = useState<boolean>(false);
+  const { canAccess, openUpgradeModal, isFreeUser } = useEvoAccess();
 
   // Reset to 'portada' whenever the modal opens or tomoId changes
   useEffect(() => {
@@ -1076,6 +1078,12 @@ export const EvoTomoDossierModal: React.FC<EvoTomoDossierModalProps> = ({
   };
 
   const handleOpenInteractive = () => {
+    const tomoCleanNum = resolvedTomoId.replace('tomo-', '');
+    const tomoAccess = canAccess({ type: 'tomo_reader', tomoNumber: tomoCleanNum });
+    if (!tomoAccess.allowed && isFreeUser && tomoCleanNum !== '01') {
+      openUpgradeModal(`Tomo ${tomoCleanNum} // ${volume.title}`);
+      return;
+    }
     if (onOpenTomoView) {
       onOpenTomoView(resolvedTomoId);
     } else {
@@ -1303,26 +1311,38 @@ export const EvoTomoDossierModal: React.FC<EvoTomoDossierModalProps> = ({
 
                       <button
                         type="button"
-                        onClick={() => setIsBootLabOpen(true)}
+                        onClick={() => {
+                          if (isFreeUser) {
+                            openUpgradeModal('Laboratorio de Arranque y POST (Tomo 08)');
+                            return;
+                          }
+                          setIsBootLabOpen(true);
+                        }}
                         className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl font-mono-tech font-bold text-xs tracking-wider uppercase text-emerald-300 bg-emerald-950/80 hover:bg-emerald-900 border border-emerald-500/40 shadow-lg transition-all cursor-pointer"
                       >
-                        <Power className="w-4 h-4 text-emerald-400" />
-                        <span>LABORATORIO DE ARRANQUE</span>
+                        {isFreeUser ? <Lock className="w-4 h-4 text-emerald-400" /> : <Power className="w-4 h-4 text-emerald-400" />}
+                        <span>{isFreeUser ? 'LAB ARRANQUE (REQUIERE PLAN)' : 'LABORATORIO DE ARRANQUE'}</span>
                       </button>
                     </>
                   ) : ['tomo-05', 'tomo-06', 'tomo-07', 'tomo-09', 'tomo-10'].includes(resolvedTomoId) ? (
                     <button
                       type="button"
-                      onClick={() => setIsTomoLabOpen(true)}
+                      onClick={() => {
+                        if (isFreeUser) {
+                          openUpgradeModal(`Laboratorio Especializado // ${coverMeta.volumeLabel}`);
+                          return;
+                        }
+                        setIsTomoLabOpen(true);
+                      }}
                       className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-mono-tech font-black text-xs tracking-wider uppercase text-black shadow-xl hover:brightness-110 transition-all cursor-pointer hover:scale-[1.02] active:scale-[0.98]"
                       style={{
                         background: coverMeta.primaryColor,
                         boxShadow: `0 8px 24px -6px ${coverMeta.primaryColor}50`,
                       }}
                     >
-                      <Zap className="w-4 h-4 text-black" />
+                      {isFreeUser ? <Lock className="w-4 h-4 text-black" /> : <Zap className="w-4 h-4 text-black" />}
                       <span>
-                        {resolvedTomoId === 'tomo-05'
+                        {isFreeUser ? 'LABORATORIO (REQUIERE PLAN)' : resolvedTomoId === 'tomo-05'
                           ? 'INICIAR NETWORK FORENSICS LAB'
                           : resolvedTomoId === 'tomo-06'
                           ? 'INICIAR DEFENSIVE SECURITY LAB'
@@ -1350,11 +1370,17 @@ export const EvoTomoDossierModal: React.FC<EvoTomoDossierModalProps> = ({
 
                   <button
                     type="button"
-                    onClick={() => setIsExamOpen(true)}
+                    onClick={() => {
+                      if (isFreeUser) {
+                        openUpgradeModal(`Examen Final y Acreditación // ${coverMeta.volumeLabel}`);
+                        return;
+                      }
+                      setIsExamOpen(true);
+                    }}
                     className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl font-mono-tech font-bold text-xs tracking-wider uppercase bg-zinc-900 hover:bg-zinc-800 text-white border border-zinc-700 transition-all duration-200 cursor-pointer shadow-lg"
                   >
-                    <Award className="w-4 h-4 text-amber-400" />
-                    <span>EXAMEN FINAL</span>
+                    {isFreeUser ? <Lock className="w-4 h-4 text-amber-400" /> : <Award className="w-4 h-4 text-amber-400" />}
+                    <span>{isFreeUser ? 'EXAMEN FINAL (REQUIERE PLAN)' : 'EXAMEN FINAL'}</span>
                   </button>
 
                   <button

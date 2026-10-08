@@ -21,6 +21,7 @@ import { TutorTomo01WelcomeModal } from './tutor/TutorTomo01WelcomeModal';
 import { TutorProgressMapModal } from './tutor/TutorProgressMapModal';
 import { TutorPreFlightModal } from './tutor/TutorPreFlightModal';
 import { useTutorEvo } from './tutor/TutorEvoContext';
+import { useEvoAccess } from '../auth/EvoAccessContext';
 import {
   isTomo01ExamPassed,
   areAllTomo01ChaptersComplete,
@@ -65,6 +66,7 @@ export const EditorialIndex: React.FC<EditorialIndexProps> = ({
   onOpenCompletionScreen,
 }) => {
   const { openTutorWithTab, setMode, lastSavedLocation } = useTutorEvo();
+  const { canAccess, openUpgradeModal, isFreeUser } = useEvoAccess();
   const [isTourOpen, setIsTourOpen] = useState(false);
   const [isWelcomeOpen, setIsWelcomeOpen] = useState(false);
   const [isMapOpen, setIsMapOpen] = useState(false);
@@ -333,28 +335,39 @@ export const EditorialIndex: React.FC<EditorialIndexProps> = ({
             )}
 
             {onStartFinalExam && (
-              <button
-                type="button"
-                data-evo-tour="exam"
-                onClick={onStartFinalExam}
-                className={`px-6 py-3.5 rounded-xl font-mono-tech font-bold text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2 cursor-pointer ${
-                  hasPassedFinalExam
-                    ? 'bg-zinc-900 border border-zinc-700 text-zinc-300 hover:text-white hover:border-yellow-400'
-                    : 'bg-yellow-400 text-black hover:bg-yellow-300 shadow-xl'
-                }`}
-              >
-                {hasPassedFinalExam ? (
-                  <>
-                    <RotateCcw className="w-4 h-4" />
-                    <span>REPETIR PRUEBA FINAL</span>
-                  </>
-                ) : (
-                  <>
-                    <Award className="w-4 h-4" />
-                    <span>REALIZAR PRUEBA FINAL EVO →</span>
-                  </>
-                )}
-              </button>
+              isFreeUser ? (
+                <button
+                  type="button"
+                  onClick={() => openUpgradeModal('Examen Final // Certificación Oficial Tomo 01')}
+                  className="px-6 py-3.5 rounded-xl font-mono-tech font-bold text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2 cursor-pointer bg-amber-400/20 text-amber-300 hover:bg-amber-400/30 border border-amber-400/50 shadow-lg"
+                >
+                  <Lock className="w-4 h-4 text-amber-400" />
+                  <span>REQUIERE PLAN // CERTIFICACIÓN OFICIAL</span>
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  data-evo-tour="exam"
+                  onClick={onStartFinalExam}
+                  className={`px-6 py-3.5 rounded-xl font-mono-tech font-bold text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2 cursor-pointer ${
+                    hasPassedFinalExam
+                      ? 'bg-zinc-900 border border-zinc-700 text-zinc-300 hover:text-white hover:border-yellow-400'
+                      : 'bg-yellow-400 text-black hover:bg-yellow-300 shadow-xl'
+                  }`}
+                >
+                  {hasPassedFinalExam ? (
+                    <>
+                      <RotateCcw className="w-4 h-4" />
+                      <span>REPETIR PRUEBA FINAL</span>
+                    </>
+                  ) : (
+                    <>
+                      <Award className="w-4 h-4" />
+                      <span>REALIZAR PRUEBA FINAL EVO →</span>
+                    </>
+                  )}
+                </button>
+              )
             )}
           </div>
         </div>
@@ -392,9 +405,12 @@ export const EditorialIndex: React.FC<EditorialIndexProps> = ({
                   >
                     {/* Header badge & status */}
                     <div className="flex items-center justify-between gap-4 mb-5">
-                      <div className="flex items-center gap-2.5">
+                      <div className="flex items-center gap-2.5 flex-wrap">
                         <span className="px-2.5 py-0.5 rounded text-[10px] font-mono-tech uppercase font-black tracking-widest bg-yellow-400 text-black">
                           {cap.categoryTag || 'PUNTO DE PARTIDA'}
+                        </span>
+                        <span className="px-2 py-0.5 rounded text-[10px] font-mono-tech uppercase font-black tracking-widest bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">
+                          DEMO // INCLUIDO EN PLAN GRATIS
                         </span>
                         <span className="text-[11px] font-mono-tech text-yellow-400 font-bold tracking-wider hidden sm:inline">
                           {isCompleted ? 'EVIDENCIA REGISTRADA' : 'COMENZÁ POR ACÁ'}
@@ -576,12 +592,24 @@ export const EditorialIndex: React.FC<EditorialIndexProps> = ({
 
                   {/* Top Bar: Category & Status */}
                   <div className="flex items-center justify-between gap-3 mb-4">
-                    <span 
-                      className="text-[10px] font-mono-tech uppercase font-bold tracking-widest px-2 py-0.5 rounded bg-zinc-900/90 border border-zinc-800"
-                      style={{ color: accent }}
-                    >
-                      {cap.categoryTag}
-                    </span>
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <span 
+                        className="text-[10px] font-mono-tech uppercase font-bold tracking-widest px-2 py-0.5 rounded bg-zinc-900/90 border border-zinc-800"
+                        style={{ color: accent }}
+                      >
+                        {cap.categoryTag}
+                      </span>
+                      {cap.number === '02' ? (
+                        <span className="px-2 py-0.5 rounded text-[10px] font-mono-tech uppercase font-black tracking-widest bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">
+                          DEMO // INCLUIDO EN PLAN GRATIS
+                        </span>
+                      ) : isFreeUser ? (
+                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-mono-tech uppercase font-bold tracking-widest bg-amber-400/10 text-amber-300 border border-amber-400/30">
+                          <Lock className="w-2.5 h-2.5 text-amber-400" />
+                          CONTENIDO PREMIUM
+                        </span>
+                      ) : null}
+                    </div>
 
                     {isCompleted ? (
                       <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-mono-tech uppercase font-bold tracking-widest ${statusObj.style}`}>
@@ -702,20 +730,36 @@ export const EditorialIndex: React.FC<EditorialIndexProps> = ({
                       <span className="text-xs font-mono-tech text-zinc-400">
                         {isCompleted
                           ? 'Telemetría registrada. Podés volver a consultar el análisis.'
+                          : isFreeUser
+                          ? 'Capítulo Premium. Desbloqueá con Tomo 01 o Plan Complete.'
                           : 'Capítulo desbloqueado. Listo para investigar la estabilidad real de cuadros.'}
                       </span>
-                      <button
-                        type="button"
-                        id="btn-comenzar-capitulo-03"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          onStartChapter03();
-                        }}
-                        className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-mono-tech font-bold text-xs uppercase bg-yellow-400 text-black hover:bg-yellow-300 transition-all cursor-pointer shadow-lg hover:shadow-yellow-400/20 group/btn"
-                      >
-                        <span>{isCompleted ? 'REVISAR CAPÍTULO 03' : 'COMENZAR CAPÍTULO 03'}</span>
-                        <ArrowRight className="w-4 h-4 text-black group-hover/btn:translate-x-1 transition-transform" />
-                      </button>
+                      {isFreeUser ? (
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            openUpgradeModal('Tomo 01 · Capítulo 03: CUANDO LOS FPS MIENTEN');
+                          }}
+                          className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl font-mono-tech font-bold text-xs uppercase bg-amber-400/20 text-amber-300 hover:bg-amber-400/30 border border-amber-400/50 transition-all cursor-pointer shadow-lg group/btn"
+                        >
+                          <Lock className="w-3.5 h-3.5 text-amber-400" />
+                          <span>REQUIERE ACCESO // VER PLANES</span>
+                        </button>
+                      ) : (
+                        <button
+                          type="button"
+                          id="btn-comenzar-capitulo-03"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            onStartChapter03();
+                          }}
+                          className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-mono-tech font-bold text-xs uppercase bg-yellow-400 text-black hover:bg-yellow-300 transition-all cursor-pointer shadow-lg hover:shadow-yellow-400/20 group/btn"
+                        >
+                          <span>{isCompleted ? 'REVISAR CAPÍTULO 03' : 'COMENZAR CAPÍTULO 03'}</span>
+                          <ArrowRight className="w-4 h-4 text-black group-hover/btn:translate-x-1 transition-transform" />
+                        </button>
+                      )}
                     </div>
                   )}
 
@@ -725,20 +769,36 @@ export const EditorialIndex: React.FC<EditorialIndexProps> = ({
                       <span className="text-xs font-mono-tech text-zinc-400">
                         {isCompleted
                           ? 'Matriz de Limitación consolidada. Podés volver a consultar el análisis.'
+                          : isFreeUser
+                          ? 'Capítulo Premium. Desbloqueá con Tomo 01 o Plan Complete.'
                           : 'Capítulo desbloqueado. Listo para diagnosticar qué componente limita tu sistema.'}
                       </span>
-                      <button
-                        type="button"
-                        id="btn-comenzar-capitulo-04"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          onStartChapter04();
-                        }}
-                        className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-mono-tech font-bold text-xs uppercase bg-yellow-400 text-black hover:bg-yellow-300 transition-all cursor-pointer shadow-lg hover:shadow-yellow-400/20 group/btn"
-                      >
-                        <span>{isCompleted ? 'REVISAR CAPÍTULO 04' : 'COMENZAR CAPÍTULO 04'}</span>
-                        <ArrowRight className="w-4 h-4 text-black group-hover/btn:translate-x-1 transition-transform" />
-                      </button>
+                      {isFreeUser ? (
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            openUpgradeModal('Tomo 01 · Capítulo 04: ENCONTRÁ EL LÍMITE');
+                          }}
+                          className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl font-mono-tech font-bold text-xs uppercase bg-amber-400/20 text-amber-300 hover:bg-amber-400/30 border border-amber-400/50 transition-all cursor-pointer shadow-lg group/btn"
+                        >
+                          <Lock className="w-3.5 h-3.5 text-amber-400" />
+                          <span>REQUIERE ACCESO // VER PLANES</span>
+                        </button>
+                      ) : (
+                        <button
+                          type="button"
+                          id="btn-comenzar-capitulo-04"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            onStartChapter04();
+                          }}
+                          className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-mono-tech font-bold text-xs uppercase bg-yellow-400 text-black hover:bg-yellow-300 transition-all cursor-pointer shadow-lg hover:shadow-yellow-400/20 group/btn"
+                        >
+                          <span>{isCompleted ? 'REVISAR CAPÍTULO 04' : 'COMENZAR CAPÍTULO 04'}</span>
+                          <ArrowRight className="w-4 h-4 text-black group-hover/btn:translate-x-1 transition-transform" />
+                        </button>
+                      )}
                     </div>
                   )}
 
@@ -748,20 +808,36 @@ export const EditorialIndex: React.FC<EditorialIndexProps> = ({
                       <span className="text-xs font-mono-tech text-zinc-400">
                         {isCompleted
                           ? 'Expediente de optimización consolidado. Podés volver a revisar las 8 estaciones.'
+                          : isFreeUser
+                          ? 'Capítulo Premium. Desbloqueá con Tomo 01 o Plan Complete.'
                           : 'Laboratorio desbloqueado. Listo para investigar procesos, servicios y realizar tu primera intervención controlada.'}
                       </span>
-                      <button
-                        type="button"
-                        id="btn-comenzar-capitulo-05"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          onStartChapter05();
-                        }}
-                        className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-mono-tech font-bold text-xs uppercase bg-yellow-400 text-black hover:bg-yellow-300 transition-all cursor-pointer shadow-lg hover:shadow-yellow-400/20 group/btn"
-                      >
-                        <span>{isCompleted ? 'REVISAR CAPÍTULO 05' : 'COMENZAR CAPÍTULO 05'}</span>
-                        <ArrowRight className="w-4 h-4 text-black group-hover/btn:translate-x-1 transition-transform" />
-                      </button>
+                      {isFreeUser ? (
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            openUpgradeModal('Tomo 01 · Capítulo 05: WINDOWS EN MOVIMIENTO');
+                          }}
+                          className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl font-mono-tech font-bold text-xs uppercase bg-amber-400/20 text-amber-300 hover:bg-amber-400/30 border border-amber-400/50 transition-all cursor-pointer shadow-lg group/btn"
+                        >
+                          <Lock className="w-3.5 h-3.5 text-amber-400" />
+                          <span>REQUIERE ACCESO // VER PLANES</span>
+                        </button>
+                      ) : (
+                        <button
+                          type="button"
+                          id="btn-comenzar-capitulo-05"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            onStartChapter05();
+                          }}
+                          className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-mono-tech font-bold text-xs uppercase bg-yellow-400 text-black hover:bg-yellow-300 transition-all cursor-pointer shadow-lg hover:shadow-yellow-400/20 group/btn"
+                        >
+                          <span>{isCompleted ? 'REVISAR CAPÍTULO 05' : 'COMENZAR CAPÍTULO 05'}</span>
+                          <ArrowRight className="w-4 h-4 text-black group-hover/btn:translate-x-1 transition-transform" />
+                        </button>
+                      )}
                     </div>
                   )}
 
@@ -771,20 +847,36 @@ export const EditorialIndex: React.FC<EditorialIndexProps> = ({
                       <span className="text-xs font-mono-tech text-zinc-400">
                         {isCompleted
                           ? 'Expediente pericial consolidado. Podés volver a ingresar al taller para nuevos casos.'
+                          : isFreeUser
+                          ? 'Capítulo Premium. Desbloqueá con Tomo 01 o Plan Complete.'
                           : 'Taller EVO desbloqueado. Listo para diagnosticar fallas reales paso a paso con rigor técnico.'}
                       </span>
-                      <button
-                        type="button"
-                        id="btn-comenzar-capitulo-06"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          onStartChapter06();
-                        }}
-                        className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-mono-tech font-bold text-xs uppercase bg-yellow-400 text-black hover:bg-yellow-300 transition-all cursor-pointer shadow-lg hover:shadow-yellow-400/20 group/btn"
-                      >
-                        <span>{isCompleted ? 'REVISAR CAPÍTULO 06' : 'COMENZAR CAPÍTULO 06'}</span>
-                        <ArrowRight className="w-4 h-4 text-black group-hover/btn:translate-x-1 transition-transform" />
-                      </button>
+                      {isFreeUser ? (
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            openUpgradeModal('Tomo 01 · Capítulo 06: TALLER EVO');
+                          }}
+                          className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl font-mono-tech font-bold text-xs uppercase bg-amber-400/20 text-amber-300 hover:bg-amber-400/30 border border-amber-400/50 transition-all cursor-pointer shadow-lg group/btn"
+                        >
+                          <Lock className="w-3.5 h-3.5 text-amber-400" />
+                          <span>REQUIERE ACCESO // VER PLANES</span>
+                        </button>
+                      ) : (
+                        <button
+                          type="button"
+                          id="btn-comenzar-capitulo-06"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            onStartChapter06();
+                          }}
+                          className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-mono-tech font-bold text-xs uppercase bg-yellow-400 text-black hover:bg-yellow-300 transition-all cursor-pointer shadow-lg hover:shadow-yellow-400/20 group/btn"
+                        >
+                          <span>{isCompleted ? 'REVISAR CAPÍTULO 06' : 'COMENZAR CAPÍTULO 06'}</span>
+                          <ArrowRight className="w-4 h-4 text-black group-hover/btn:translate-x-1 transition-transform" />
+                        </button>
+                      )}
                     </div>
                   )}
 
@@ -794,20 +886,36 @@ export const EditorialIndex: React.FC<EditorialIndexProps> = ({
                       <span className="text-xs font-mono-tech text-zinc-400">
                         {isCompleted
                           ? 'Laboratorio final e Informe EVO 001 completados. Podés revisar el Dossier del Tomo 01.'
+                          : isFreeUser
+                          ? 'Capítulo Premium. Desbloqueá con Tomo 01 o Plan Complete.'
                           : 'Laboratorio final desbloqueado. Listo para realizar tu experimento A/B con evidencia.'}
                       </span>
-                      <button
-                        type="button"
-                        id="btn-comenzar-capitulo-07"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          onStartChapter07();
-                        }}
-                        className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-mono-tech font-bold text-xs uppercase bg-yellow-400 text-black hover:bg-yellow-300 transition-all cursor-pointer shadow-lg hover:shadow-yellow-400/20 group/btn"
-                      >
-                        <span>{isCompleted ? 'REVISAR LABORATORIO FINAL' : 'COMENZAR LABORATORIO FINAL'}</span>
-                        <ArrowRight className="w-4 h-4 text-black group-hover/btn:translate-x-1 transition-transform" />
-                      </button>
+                      {isFreeUser ? (
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            openUpgradeModal('Tomo 01 · Capítulo 07: LABORATORIO FINAL');
+                          }}
+                          className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl font-mono-tech font-bold text-xs uppercase bg-amber-400/20 text-amber-300 hover:bg-amber-400/30 border border-amber-400/50 transition-all cursor-pointer shadow-lg group/btn"
+                        >
+                          <Lock className="w-3.5 h-3.5 text-amber-400" />
+                          <span>REQUIERE ACCESO // VER PLANES</span>
+                        </button>
+                      ) : (
+                        <button
+                          type="button"
+                          id="btn-comenzar-capitulo-07"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            onStartChapter07();
+                          }}
+                          className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-mono-tech font-bold text-xs uppercase bg-yellow-400 text-black hover:bg-yellow-300 transition-all cursor-pointer shadow-lg hover:shadow-yellow-400/20 group/btn"
+                        >
+                          <span>{isCompleted ? 'REVISAR LABORATORIO FINAL' : 'COMENZAR LABORATORIO FINAL'}</span>
+                          <ArrowRight className="w-4 h-4 text-black group-hover/btn:translate-x-1 transition-transform" />
+                        </button>
+                      )}
                     </div>
                   )}
 

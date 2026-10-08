@@ -6,6 +6,7 @@ import {
   CheckCircle2,
   Lock,
   Clock,
+  Sparkles,
 } from 'lucide-react';
 import { EVO_TOMES_EXPANDED_DATA, EvoTomeExpandedItem } from '../../data/evoTomesExpandedData';
 import { CANONICAL_TOMES, getTomeById } from '../../data/evoCatalog';
@@ -148,6 +149,16 @@ export const EvoPublicTomosCatalog: React.FC<EvoPublicTomosCatalogProps> = ({
                   className="absolute top-0 bottom-0 left-0 w-1.5"
                   style={{ backgroundColor: acc.spineColor }}
                 />
+                {tome.number === '01' ? (
+                  <span className="absolute top-1.5 right-1.5 px-1.5 py-0.5 rounded bg-emerald-500 text-black text-[8px] font-black uppercase tracking-wider shadow">
+                    DEMO
+                  </span>
+                ) : (
+                  <span className="absolute top-1.5 right-1.5 px-1.5 py-0.5 rounded bg-black/85 text-amber-300 border border-amber-400/40 text-[8px] font-bold uppercase tracking-wider flex items-center gap-0.5 shadow">
+                    <Lock className="w-2.5 h-2.5" />
+                    PREMIUM
+                  </span>
+                )}
                 <span className="absolute bottom-1.5 right-1.5 px-1.5 py-0.5 rounded bg-black/85 text-[10px] font-mono-tech font-black text-white">
                   TOMO {tome.number}
                 </span>
@@ -159,6 +170,17 @@ export const EvoPublicTomosCatalog: React.FC<EvoPublicTomosCatalogProps> = ({
                   <span className={`text-[10px] px-2 py-0.5 rounded font-mono-tech font-bold uppercase border ${acc.badgeColor}`}>
                     TOMO {tome.number}
                   </span>
+                  {tome.number === '01' ? (
+                    <span className="px-2 py-0.5 rounded text-[10px] font-mono-tech font-black tracking-wider uppercase bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 flex items-center gap-1">
+                      <Sparkles className="w-3 h-3 text-emerald-400" />
+                      DEMO // INCLUIDO EN PLAN GRATIS
+                    </span>
+                  ) : (
+                    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-mono-tech font-bold tracking-wider uppercase bg-zinc-900 text-amber-300 border border-amber-400/30">
+                      <Lock className="w-2.5 h-2.5 text-amber-400" />
+                      CONTENIDO PREMIUM
+                    </span>
+                  )}
                   <span className="text-[10px] text-zinc-400 font-mono-tech font-bold uppercase">
                     {isFullReader ? 'DISPONIBLE' : isDossierOnly ? 'NO DISPONIBLE' : 'EN PROCESO'}
                   </span>
@@ -173,20 +195,34 @@ export const EvoPublicTomosCatalog: React.FC<EvoPublicTomosCatalogProps> = ({
                 </p>
 
                 <div className="flex items-center gap-3 text-[11px] font-mono-tech text-zinc-400 pt-1">
-                  <span className="text-zinc-400 font-medium uppercase">COMPRA PERMANENTE</span>
+                  <span className="text-zinc-400 font-medium uppercase">
+                    {tome.number === '01' ? 'DEMO LIBRE // COMPRA OPCIONAL' : 'COMPRA PERMANENTE O PLAN COMPLETE'}
+                  </span>
                   <span>•</span>
-                  <span className="text-white font-bold">PRECIO A DEFINIR</span>
+                  <span className="text-white font-bold">
+                    {tome.number === '01' ? 'PLAN GRATIS' : 'PREMIUM'}
+                  </span>
                 </div>
 
                 {/* CTAs estrictos según canonicalStatus */}
                 <div className="pt-2 flex flex-wrap items-center gap-2">
-                  {isFullReader ? (
+                  {tome.number === '01' ? (
                     <button
                       type="button"
                       onClick={() => onOpenTomo(tome.number)}
-                      className="px-4 py-2 rounded-xl bg-amber-400 hover:bg-amber-300 text-black font-mono-tech text-xs font-black uppercase tracking-wider transition-all cursor-pointer shadow-[0_0_15px_rgba(245,158,11,0.2)]"
+                      className="px-4 py-2 rounded-xl bg-amber-400 hover:bg-amber-300 text-black font-mono-tech text-xs font-black uppercase tracking-wider transition-all cursor-pointer shadow-[0_0_15px_rgba(245,158,11,0.2)] flex items-center gap-1.5"
                     >
-                      ENTRAR AL TOMO →
+                      <Sparkles className="w-3.5 h-3.5 text-black" />
+                      <span>ABRIR DEMO (PLAN GRATIS) →</span>
+                    </button>
+                  ) : isFullReader ? (
+                    <button
+                      type="button"
+                      onClick={() => onOpenTomo(tome.number)}
+                      className="px-4 py-2 rounded-xl bg-amber-400 hover:bg-amber-300 text-black font-mono-tech text-xs font-black uppercase tracking-wider transition-all cursor-pointer shadow-[0_0_15px_rgba(245,158,11,0.2)] flex items-center gap-1.5"
+                    >
+                      <Lock className="w-3.5 h-3.5 text-black" />
+                      <span>ENTRAR AL TOMO →</span>
                     </button>
                   ) : isInDev ? (
                     <button

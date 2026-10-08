@@ -46,5 +46,18 @@ service cloud.firestore {
 
       allow delete: if false;
     }
+
+    // Entitlements: user can read their own entitlements, client cannot write/create/delete
+    match /entitlements/{entitlementId} {
+      allow read: if isSignedIn() && resource.data.uid == request.auth.uid;
+      allow write: if false;
+    }
+
+    // Orders: user can read their own orders, cannot approve or modify status
+    match /orders/{orderId} {
+      allow read: if isSignedIn() && resource.data.uid == request.auth.uid;
+      allow create: if isSignedIn() && request.resource.data.uid == request.auth.uid && request.resource.data.status == 'CREATED';
+      allow update, delete: if false;
+    }
   }
 }

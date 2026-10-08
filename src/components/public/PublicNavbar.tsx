@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, LayoutDashboard } from 'lucide-react';
 import { EvoUnifiedHeaderShell } from '../navigation/EvoUnifiedHeaderShell';
 import { EvoAuthModal } from '../auth/EvoAuthModal';
+import { useEvoAuth } from '../../auth/EvoAuthProvider';
+import { EvoUserAccountMenu } from '../auth/EvoUserAccountMenu';
 
 export type PublicSection = 'inicio' | 'catalogo' | 'laboratorios' | 'herramientas' | 'planes';
 
@@ -14,9 +16,18 @@ interface PublicNavbarProps {
 export const PublicNavbar: React.FC<PublicNavbarProps> = ({
   activeSection,
   onNavigateSection,
-  onEnterPrivateApp: _onEnterPrivateApp,
+  onEnterPrivateApp,
 }) => {
+  const { user, emailVerified } = useEvoAuth();
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+
+  const handleOpenAuth = () => {
+    if (onEnterPrivateApp) {
+      onEnterPrivateApp();
+    } else {
+      setIsAuthModalOpen(true);
+    }
+  };
 
   const navItems: { id: PublicSection; label: string }[] = [
     { id: 'catalogo', label: 'APRENDER' },
@@ -46,15 +57,35 @@ export const PublicNavbar: React.FC<PublicNavbarProps> = ({
   );
 
   const rightActions = (
-    <div className="flex items-center gap-3 font-mono-tech">
-      <button
-        type="button"
-        onClick={() => setIsAuthModalOpen(true)}
-        className="px-5 py-2 rounded-xl bg-amber-400 hover:bg-amber-300 text-black text-xs font-black tracking-wider uppercase transition-all shadow-[0_0_15px_rgba(251,191,36,0.3)] hover:shadow-[0_0_22px_rgba(251,191,36,0.5)] cursor-pointer flex items-center gap-1.5"
-      >
-        <span>ENTRAR</span>
-        <ArrowRight className="w-3.5 h-3.5" />
-      </button>
+    <div className="flex items-center gap-2 sm:gap-3 font-mono-tech">
+      {user && emailVerified ? (
+        <>
+          <EvoUserAccountMenu
+            onNavigatePlans={() => onNavigateSection('planes')}
+            onLogoutSuccess={() => {}}
+          />
+          {onEnterPrivateApp && (
+            <button
+              type="button"
+              onClick={onEnterPrivateApp}
+              className="px-3 sm:px-4 py-2 rounded-xl bg-amber-400 hover:bg-amber-300 text-black text-xs font-black tracking-wider uppercase transition-all shadow-[0_0_15px_rgba(251,191,36,0.3)] hover:shadow-[0_0_22px_rgba(251,191,36,0.5)] cursor-pointer flex items-center gap-1.5"
+            >
+              <LayoutDashboard className="w-3.5 h-3.5" />
+              <span className="hidden sm:inline">IR A MI CAMPUS</span>
+              <span className="sm:hidden">CAMPUS</span>
+            </button>
+          )}
+        </>
+      ) : (
+        <button
+          type="button"
+          onClick={handleOpenAuth}
+          className="px-5 py-2 rounded-xl bg-amber-400 hover:bg-amber-300 text-black text-xs font-black tracking-wider uppercase transition-all shadow-[0_0_15px_rgba(251,191,36,0.3)] hover:shadow-[0_0_22px_rgba(251,191,36,0.5)] cursor-pointer flex items-center gap-1.5"
+        >
+          <span>ENTRAR</span>
+          <ArrowRight className="w-3.5 h-3.5" />
+        </button>
+      )}
     </div>
   );
 
@@ -78,7 +109,7 @@ export const PublicNavbar: React.FC<PublicNavbarProps> = ({
       <div className="pt-3 border-t border-zinc-800/80">
         <button
           type="button"
-          onClick={() => setIsAuthModalOpen(true)}
+          onClick={handleOpenAuth}
           className="w-full py-2.5 rounded-xl bg-amber-400 text-black text-xs font-black uppercase tracking-wider text-center flex items-center justify-center gap-2 cursor-pointer shadow-md"
         >
           <span>ENTRAR A EVO LABS</span>
@@ -97,10 +128,12 @@ export const PublicNavbar: React.FC<PublicNavbarProps> = ({
         rightActions={rightActions}
         mobileNavItems={mobileNav}
       />
-      <EvoAuthModal
-        isOpen={isAuthModalOpen}
-        onClose={() => setIsAuthModalOpen(false)}
-      />
+      {!onEnterPrivateApp && (
+        <EvoAuthModal
+          isOpen={isAuthModalOpen}
+          onClose={() => setIsAuthModalOpen(false)}
+        />
+      )}
     </>
   );
 };
