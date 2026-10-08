@@ -52,7 +52,7 @@ export const EVO_TOMES_EXPANDED_DATA: EvoTomeExpandedItem[] = [
     id: 'tomo-01',
     number: '01',
     title: 'CONOCÉ TU PC',
-    subtitle: 'Arquitectura de Silicio, Buses y Límites de Hardware',
+    subtitle: 'Arquitectura, componentes y funcionamiento',
     tagline: 'Entendé tu máquina desde adentro.',
     valuePhrase: 'Dejá de ver componentes. Empezá a entender el sistema.',
     shortExplanation: 'Comprendé qué hardware tenés frente a vos, cómo dialogan sus componentes de silicio y dónde radican los límites reales del rendimiento sin mitos ni placebos.',

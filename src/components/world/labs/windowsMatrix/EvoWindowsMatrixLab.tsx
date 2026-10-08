@@ -42,6 +42,7 @@ import { WindowsBootExperienceLab } from './boot/WindowsBootExperienceLab';
 import { WindowsInstallExperienceLab } from './install/WindowsInstallExperienceLab';
 import { WindowsServicesTelemetryLab } from './services/WindowsServicesTelemetryLab';
 import { WindowsFailureRepairLab } from './repair/WindowsFailureRepairLab';
+import { EvoWindowsXRayLab } from './EvoWindowsXRayLab';
 
 export interface EvoWindowsMatrixLabProps {
   initialBuild?: 'win10-22h2' | 'win10-ltsc' | 'win11-23h2' | 'win11-24h2';
@@ -177,17 +178,18 @@ export const EvoWindowsMatrixLab: React.FC<EvoWindowsMatrixLabProps> = ({
   const [activeTab, setActiveTab] = useState<'advisor' | 'matrix' | 'deep'>(() => {
     if (initialScenario === 'matrix') return 'matrix';
     if (initialScenario === 'advisor') return 'advisor';
-    if (['boot', 'install', 'services', 'repair', 'scheduler', 'scheduler-hybrid'].includes(initialScenario || '')) {
+    if (['boot', 'install', 'services', 'repair', 'scheduler', 'scheduler-hybrid', 'xray', 'kernel-crash'].includes(initialScenario || '')) {
       return 'deep';
     }
     return 'advisor';
   });
 
-  const [deepLabSubTab, setDeepLabSubTab] = useState<'boot' | 'install' | 'services' | 'repair' | 'scheduler'>(() => {
+  const [deepLabSubTab, setDeepLabSubTab] = useState<'boot' | 'install' | 'services' | 'repair' | 'scheduler' | 'xray'>(() => {
     if (initialScenario === 'boot') return 'boot';
     if (initialScenario === 'install') return 'install';
     if (initialScenario === 'services') return 'services';
     if (initialScenario === 'repair') return 'repair';
+    if (initialScenario === 'xray' || initialScenario === 'kernel-crash') return 'xray';
     if (initialScenario === 'scheduler' || initialScenario === 'scheduler-hybrid') return 'scheduler';
     return 'scheduler';
   });
@@ -817,6 +819,14 @@ export const EvoWindowsMatrixLab: React.FC<EvoWindowsMatrixLabProps> = ({
             >
               REPAIR LAB
             </button>
+            <button
+              onClick={() => setDeepLabSubTab('xray')}
+              className={`px-3 py-1.5 rounded text-xs font-mono font-bold transition-all ${
+                deepLabSubTab === 'xray' ? 'bg-cyan-500 text-zinc-950' : 'bg-zinc-800 text-zinc-400 hover:text-white'
+              }`}
+            >
+              WINDOWS X-RAY
+            </button>
           </div>
 
           {/* DEDICATED SCHEDULER & SILICON SIMULATOR (deepLabSubTab === 'scheduler') */}
@@ -1122,6 +1132,7 @@ export const EvoWindowsMatrixLab: React.FC<EvoWindowsMatrixLabProps> = ({
           {deepLabSubTab === 'install' && <WindowsInstallExperienceLab />}
           {deepLabSubTab === 'services' && <WindowsServicesTelemetryLab />}
           {deepLabSubTab === 'repair' && <WindowsFailureRepairLab />}
+          {deepLabSubTab === 'xray' && <EvoWindowsXRayLab initialScenario={initialScenario} />}
 
         </div>
       )}

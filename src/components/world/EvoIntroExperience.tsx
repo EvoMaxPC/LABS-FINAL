@@ -357,7 +357,7 @@ export const EvoIntroExperience: React.FC<EvoIntroExperienceProps> = ({
                     <span className="font-mono-tech font-bold text-xs text-white">APRENDER</span>
                   </div>
                   <p className="text-zinc-400 text-[11px] leading-snug">
-                    Colección canónica de 10 Tomos, Tutor EVO y recorrido didáctico estructurado.
+                    Colección canónica de 12 Tomos, Tutor EVO y recorrido didáctico estructurado.
                   </p>
                 </div>
 

@@ -272,7 +272,7 @@ export const EvoPublicPricing: React.FC<EvoPublicPricingProps> = ({
                   <div className="pt-2 border-t border-zinc-900 space-y-1.5 text-[11px] text-zinc-400">
                     <div className="flex items-center gap-1.5 text-zinc-300">
                       <CheckCircle2 className="w-3 h-3 text-amber-400 shrink-0" />
-                      <span>Acceso a los 10 Tomos</span>
+                      <span>Acceso a los 12 Tomos</span>
                     </div>
                     <div className="flex items-center gap-1.5 text-zinc-300">
                       <CheckCircle2 className="w-3 h-3 text-amber-400 shrink-0" />

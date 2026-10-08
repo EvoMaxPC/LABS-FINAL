@@ -7,7 +7,7 @@ export const TUTOR_ACADEMY_SECTORS: TutorAcademySector[] = [
     name: 'MUNDO EVO',
     subtitle: 'El mapa interactivo y visión global de EVO LABS',
     whatIs: 'Es el centro de control y visualización de toda la colección EVO LABS.',
-    whatFor: 'Te permite ver el panorama completo de los 10 Tomos, los laboratorios disponibles y continuar donde quedaste.',
+    whatFor: 'Te permite ver el panorama completo de los 12 Tomos, los laboratorios disponibles y continuar donde quedaste.',
     whenToUse: 'Al iniciar tu sesión o cuando quieras cambiar de área de estudio.',
     whatToDo: 'Explorá los Tomos, seleccioná el que quieras estudiar o hacé clic en "Continuar mi recorrido" para retomar tu último avance.',
     targetViewId: 'world-map',

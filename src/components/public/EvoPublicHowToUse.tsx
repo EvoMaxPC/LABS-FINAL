@@ -51,7 +51,7 @@ export const EvoPublicHowToUse: React.FC<EvoPublicHowToUseProps> = ({
       title: 'CÓMO APRENDER // TOMOS & MAGAZINES',
       color: 'text-amber-400',
       badge: 'APRENDER',
-      desc: 'Accedé a los 10 tomos canónicos y publicaciones técnicas. Cada tomo desglosa arquitectura de silicio, kernel, subsistemas y fallas reales.',
+      desc: 'Accedé a los 12 tomos canónicos y publicaciones técnicas. Cada tomo desglosa arquitectura de silicio, kernel, subsistemas y fallas reales.',
       actionLabel: 'IR A APRENDER →',
       onAction: onNavigateTomos,
     },

@@ -122,6 +122,7 @@ export interface EvoWorldMapProps {
   passport: UserHardwarePassport | null;
   completedChaptersCount: number;
   onEnterZone: (zone: EvoLabZone) => void;
+  initialZoneId?: string;
   onInspectCore?: () => void;
   activeProfile?: EvoNarrativeProfile;
   onChangeProfile?: (profile: EvoNarrativeProfile) => void;
@@ -363,6 +364,7 @@ export const EvoWorldMap: React.FC<EvoWorldMapProps> = ({
   passport,
   completedChaptersCount,
   onEnterZone,
+  initialZoneId,
   activeProfile = 'investigador',
   onChangeProfile = () => {},
   onOpenTomo = (_tomoId: '01' | '02' | '03' | '04' | '08') => {},
@@ -491,21 +493,25 @@ export const EvoWorldMap: React.FC<EvoWorldMapProps> = ({
     });
   }, [activeToolCategory, toolSearchQuery]);
 
-  // Sync initialIntention when changed externally
+  // Sub-navigation tabs
+  const [labSubTab, setLabSubTab] = useState<LabSubTab>('todos');
+  const [diagnoseTab, setDiagnoseTab] = useState<DiagnoseSubTab>(() => initialZoneId ? 'consola' : 'expedientes');
+
+  // Diagnostic area sub-state
+  const [activeConsoleZoneId, setActiveConsoleZoneId] = useState<string>(() => initialZoneId || 'zona-1');
+
+  // Sync initialIntention and initialZoneId when changed externally
   useEffect(() => {
-    if (initialIntention) {
+    if (initialZoneId) {
+      setActiveIntention('diagnosticar');
+      setDiagnoseTab('consola');
+      setActiveConsoleZoneId(initialZoneId);
+    } else if (initialIntention) {
       setActiveIntention(initialIntention);
       setSelectedLevelNumber(null);
       setSelectedTomeProfile(null);
     }
-  }, [initialIntention]);
-
-  // Sub-navigation tabs
-  const [labSubTab, setLabSubTab] = useState<LabSubTab>('todos');
-  const [diagnoseTab, setDiagnoseTab] = useState<DiagnoseSubTab>('expedientes');
-
-  // Diagnostic area sub-state
-  const [activeConsoleZoneId, setActiveConsoleZoneId] = useState<string>('zona-1');
+  }, [initialIntention, initialZoneId]);
   const [activeOverlay, setActiveOverlay] = useState<'default' | 'thermal' | 'signals' | 'power'>('default');
   const [inspectedComponent, setInspectedComponent] = useState<{
     id: string;
@@ -1005,7 +1011,7 @@ export const EvoWorldMap: React.FC<EvoWorldMapProps> = ({
                   className="px-3 py-1.5 rounded-lg font-bold transition-all cursor-pointer text-zinc-400 hover:text-white flex items-center gap-1.5"
                 >
                   <BookOpen className="w-3.5 h-3.5 text-amber-400" />
-                  <span>COLECCIÓN EVO · 10 TOMOS</span>
+                  <span>COLECCIÓN EVO · 12 TOMOS</span>
                 </button>
                 <button
                   type="button"
@@ -1264,7 +1270,7 @@ export const EvoWorldMap: React.FC<EvoWorldMapProps> = ({
                   onClick={() => setActiveIntention('biblioteca')}
                   className="px-3 py-1.5 rounded-lg font-bold bg-amber-400 text-black shadow-md cursor-pointer"
                 >
-                  COLECCIÓN EVO (10 TOMOS)
+                  COLECCIÓN EVO (12 TOMOS)
                 </button>
                 <button
                   type="button"
@@ -1280,7 +1286,7 @@ export const EvoWorldMap: React.FC<EvoWorldMapProps> = ({
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs font-mono-tech">
               <div className="p-3 rounded-xl bg-zinc-950 border border-zinc-900 text-center">
                 <span className="text-[9px] text-zinc-500 uppercase block">CATÁLOGO COMPLETO</span>
-                <span className="font-bold text-white">10 TOMOS MAESTROS</span>
+                <span className="font-bold text-white">12 TOMOS MAESTROS</span>
               </div>
               <div className="p-3 rounded-xl bg-zinc-950 border border-zinc-900 text-center">
                 <span className="text-[9px] text-zinc-500 uppercase block">METROLOGÍA</span>
@@ -2427,7 +2433,7 @@ export const EvoWorldMap: React.FC<EvoWorldMapProps> = ({
               <EvoLabConsole
                 initialZoneId={activeConsoleZoneId}
                 passport={passport}
-                onBackToMap={() => {}}
+                onBackToMap={() => setDiagnoseTab('sectores')}
                 onEnterTomo01={onNavigateTomo01 || (() => {})}
                 onEnterMagazine={onNavigateMagazine || (() => {})}
                 onEnterTomo02={() => onOpenTomo?.('02')}
@@ -3510,6 +3516,15 @@ export const EvoWorldMap: React.FC<EvoWorldMapProps> = ({
         claim={inspectingClaim}
         isOpen={!!inspectingClaim}
         onClose={() => setInspectingClaim(null)}
+      />
+
+      {/* Auto Detect PC Modal */}
+      <EvoAutoDetectPcModal
+        isOpen={isAutoDetectOpen}
+        onClose={() => setIsAutoDetectOpen(false)}
+        onHardwareDetected={(hw) => {
+          if (onHardwareDetected) onHardwareDetected(hw);
+        }}
       />
 
       {/* Content & Lab Factory Modal */}

@@ -2,15 +2,16 @@ import React, { useState } from 'react';
 import { BookOpen, FileText } from 'lucide-react';
 import { EvoPublicTomosCatalog } from './EvoPublicTomosCatalog';
 import { EvoPublicMagazinesCatalog } from './EvoPublicMagazinesCatalog';
+import { EvoPedagogicalManifesto } from './EvoPedagogicalManifesto';
 
 interface EvoPublicAprenderHubProps {
   initialTab?: 'tomos' | 'magazines';
   onOpenTomo: (tomoNumber: string) => void;
-  onOpenMagazineTomo01: () => void;
-  onOpenMagazineTomo02: () => void;
-  onOpenMagazineTomo03: () => void;
-  onOpenMagazineTomo04: () => void;
-  onOpenMagazineTomo08: () => void;
+  onOpenMagazineTomo01?: () => void;
+  onOpenMagazineTomo02?: () => void;
+  onOpenMagazineTomo03?: () => void;
+  onOpenMagazineTomo04?: () => void;
+  onOpenMagazineTomo08?: () => void;
 }
 
 export const EvoPublicAprenderHub: React.FC<EvoPublicAprenderHubProps> = ({
@@ -48,7 +49,7 @@ export const EvoPublicAprenderHub: React.FC<EvoPublicAprenderHubProps> = ({
             }`}
           >
             <BookOpen className="w-3.5 h-3.5" />
-            <span>10 TOMOS</span>
+            <span>12 TOMOS</span>
           </button>
           <button
             type="button"
@@ -65,16 +66,29 @@ export const EvoPublicAprenderHub: React.FC<EvoPublicAprenderHubProps> = ({
         </div>
       </div>
 
+      {/* MANIFIESTO PEDAGÓGICO E IDENTIDAD EVO */}
+      <EvoPedagogicalManifesto />
+
       {/* VIEW RENDER */}
       {activeTab === 'tomos' ? (
-        <EvoPublicTomosCatalog onOpenTomo={onOpenTomo} />
+        <EvoPublicTomosCatalog
+          onOpenTomo={onOpenTomo}
+          onOpenMagazine={(tomeNum) => {
+            if (tomeNum === '01') onOpenMagazineTomo01();
+            else if (tomeNum === '02') onOpenMagazineTomo02();
+            else if (tomeNum === '03') onOpenMagazineTomo03();
+            else if (tomeNum === '04') onOpenMagazineTomo04();
+            else if (tomeNum === '08') onOpenMagazineTomo08();
+            else onOpenTomo(tomeNum || '01');
+          }}
+        />
       ) : (
         <EvoPublicMagazinesCatalog
-          onOpenMagazineTomo01={onOpenMagazineTomo01}
-          onOpenMagazineTomo02={onOpenMagazineTomo02}
-          onOpenMagazineTomo03={onOpenMagazineTomo03}
-          onOpenMagazineTomo04={onOpenMagazineTomo04}
-          onOpenMagazineTomo08={onOpenMagazineTomo08}
+          onOpenMagazineTomo01={onOpenMagazineTomo01 || (() => onOpenTomo('01'))}
+          onOpenMagazineTomo02={onOpenMagazineTomo02 || (() => onOpenTomo('02'))}
+          onOpenMagazineTomo03={onOpenMagazineTomo03 || (() => onOpenTomo('03'))}
+          onOpenMagazineTomo04={onOpenMagazineTomo04 || (() => onOpenTomo('04'))}
+          onOpenMagazineTomo08={onOpenMagazineTomo08 || (() => onOpenTomo('08'))}
         />
       )}
     </div>

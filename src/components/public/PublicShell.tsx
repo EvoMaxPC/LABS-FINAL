@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { PublicNavbar, PublicSection } from './PublicNavbar';
 import { PublicLanding } from './PublicLanding';
-import { EvoPublicTomosCatalog } from './EvoPublicTomosCatalog';
+import { EvoPublicAprenderHub } from './EvoPublicAprenderHub';
 import { EvoPublicLabsCatalog } from './EvoPublicLabsCatalog';
 import { EvoPublicToolsCatalog } from './EvoPublicToolsCatalog';
 import { EvoPublicPricing } from './EvoPublicPricing';
@@ -16,7 +16,9 @@ export type PublicNavigationTarget =
   | { type: 'BOOT_LAB' }
   | { type: 'HOTSWAP'; subPanel?: string }
   | { type: 'WINDOWS_MATRIX'; scenario?: string }
+  | { type: 'WINDOWS_XRAY'; scenario?: string }
   | { type: 'LAB_CORE'; phase?: string }
+  | { type: 'CAMPUS_ZONE'; zoneId: string }
   | { type: 'TOOL'; toolId: string }
   | { type: 'APP_SECTION'; section: string };
 
@@ -84,10 +86,35 @@ export const PublicShell: React.FC<PublicShellProps> = ({
           />
         )}
         {activeSection === 'catalogo' && (
-          <EvoPublicTomosCatalog
+          <EvoPublicAprenderHub
             onOpenTomo={(tomeNum) => {
               if (onNavigateTarget) {
                 onNavigateTarget({ type: 'TOME', tomeNumber: tomeNum });
+              }
+            }}
+            onOpenMagazineTomo01={() => {
+              if (onNavigateTarget) {
+                onNavigateTarget({ type: 'TOME', tomeNumber: '01' });
+              }
+            }}
+            onOpenMagazineTomo02={() => {
+              if (onNavigateTarget) {
+                onNavigateTarget({ type: 'TOME', tomeNumber: '02' });
+              }
+            }}
+            onOpenMagazineTomo03={() => {
+              if (onNavigateTarget) {
+                onNavigateTarget({ type: 'TOME', tomeNumber: '03' });
+              }
+            }}
+            onOpenMagazineTomo04={() => {
+              if (onNavigateTarget) {
+                onNavigateTarget({ type: 'TOME', tomeNumber: '04' });
+              }
+            }}
+            onOpenMagazineTomo08={() => {
+              if (onNavigateTarget) {
+                onNavigateTarget({ type: 'TOME', tomeNumber: '08' });
               }
             }}
           />
@@ -104,6 +131,11 @@ export const PublicShell: React.FC<PublicShellProps> = ({
                 onNavigateTarget({ type: 'WINDOWS_MATRIX', scenario });
               }
             }}
+            onOpenWindowsXRayLab={(scenario) => {
+              if (onNavigateTarget) {
+                onNavigateTarget({ type: 'WINDOWS_XRAY', scenario });
+              }
+            }}
             onOpenBootLab={() => {
               if (onNavigateTarget) {
                 onNavigateTarget({ type: 'BOOT_LAB' });
@@ -114,9 +146,59 @@ export const PublicShell: React.FC<PublicShellProps> = ({
                 onNavigateTarget({ type: 'LAB_CORE', phase: phase || 'SELECT_PC' });
               }
             }}
-            onOpenCampusLab={(_labId) => {
+            onOpenCampusLab={(labId) => {
               if (onNavigateTarget) {
-                onNavigateTarget({ type: 'HOTSWAP', subPanel: 'all' });
+                onNavigateTarget({ type: 'CAMPUS_ZONE', zoneId: labId });
+              }
+            }}
+            onOpenTomo={(tomeNum) => {
+              if (onNavigateTarget) {
+                onNavigateTarget({ type: 'TOME', tomeNumber: tomeNum });
+              }
+            }}
+            onOpenCaseResolver={() => {
+              if (onNavigateTarget) {
+                onNavigateTarget({ type: 'TOOL', toolId: 'diag-case-resolver' });
+              }
+            }}
+            onOpenDigitalTwin={() => {
+              if (onNavigateTarget) {
+                onNavigateTarget({ type: 'TOOL', toolId: 'inv-digital-twin' });
+              }
+            }}
+            onOpenTransferChallenge={() => {
+              if (onNavigateTarget) {
+                onNavigateTarget({ type: 'TOOL', toolId: 'doc-transfer-challenge' });
+              }
+            }}
+            onOpenPerfMetrology={() => {
+              if (onNavigateTarget) {
+                onNavigateTarget({ type: 'TOOL', toolId: 'med-frametime-analyzer' });
+              }
+            }}
+            onOpenNetForensics={() => {
+              if (onNavigateTarget) {
+                onNavigateTarget({ type: 'TOME', tomeNumber: '05' });
+              }
+            }}
+            onOpenDefensiveSec={() => {
+              if (onNavigateTarget) {
+                onNavigateTarget({ type: 'TOME', tomeNumber: '06' });
+              }
+            }}
+            onOpenCodeEng={() => {
+              if (onNavigateTarget) {
+                onNavigateTarget({ type: 'TOME', tomeNumber: '09' });
+              }
+            }}
+            onOpenAiSystems={() => {
+              if (onNavigateTarget) {
+                onNavigateTarget({ type: 'TOME', tomeNumber: '10' });
+              }
+            }}
+            onOpenGameForge={() => {
+              if (onNavigateTarget) {
+                onNavigateTarget({ type: 'TOME', tomeNumber: '12' });
               }
             }}
           />

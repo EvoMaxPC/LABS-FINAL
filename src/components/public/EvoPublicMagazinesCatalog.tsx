@@ -116,7 +116,7 @@ export const EvoPublicMagazinesCatalog: React.FC<EvoPublicMagazinesCatalogProps>
         {magazines.map((mag) => (
           <div
             key={mag.id}
-            className={`p-5 rounded-2xl bg-zinc-950 border ${mag.color} transition-all flex flex-col justify-between space-y-4 shadow-xl group`}
+            className="p-5 rounded-2xl bg-zinc-950 border evo-card-graphite flex flex-col justify-between space-y-4 group"
           >
             <div className="space-y-3">
               {/* Portada Vertical */}
@@ -127,7 +127,7 @@ export const EvoPublicMagazinesCatalog: React.FC<EvoPublicMagazinesCatalogProps>
                 <img
                   src={mag.coverImage}
                   alt={mag.title}
-                  className="w-full h-full object-cover object-top opacity-85 group-hover:opacity-100 transition-opacity"
+                  className="w-full h-full object-contain bg-zinc-950 opacity-90 group-hover:opacity-100 transition-opacity"
                   loading="lazy"
                 />
                 <span className="absolute top-2 left-2 px-2 py-0.5 rounded bg-black/85 text-[10px] font-mono-tech font-bold text-white border border-zinc-700">

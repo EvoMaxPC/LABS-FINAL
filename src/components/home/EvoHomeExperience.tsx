@@ -593,7 +593,7 @@ export const EvoHomeExperience: React.FC<EvoHomeExperienceProps> = ({
                   01 // APRENDER
                 </div>
                 <div className="absolute bottom-3 left-3 text-[10px] font-mono-tech text-zinc-300 px-2 py-0.5 rounded bg-black/75">
-                  10 TOMOS CANÓNICOS & MAGAZINES
+                  12 TOMOS CANÓNICOS & MAGAZINES
                 </div>
               </div>
 

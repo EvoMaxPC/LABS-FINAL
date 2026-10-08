@@ -25,10 +25,10 @@ export const EvoUnifiedHeaderShell: React.FC<EvoUnifiedHeaderShellProps> = ({
 
   return (
     <header className={`sticky top-0 z-50 w-full bg-[#07090e]/95 backdrop-blur-2xl border-b border-zinc-800/80 shadow-xl font-mono-tech select-none print:hidden ${className}`}>
-      <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 h-15 sm:h-16 flex items-center justify-between gap-2 sm:gap-4">
+      <div className="max-w-[1400px] mx-auto px-4 sm:px-8 lg:px-12 h-15 sm:h-16 flex items-center justify-between gap-4">
         
-        {/* Brand Area */}
-        <div className="flex items-center gap-3 shrink-0">
+        {/* Brand Area - Desplazado hacia el margen izquierdo */}
+        <div className="flex items-center gap-4 shrink-0 pl-1">
           <button
             type="button"
             onClick={onBrandClick}
@@ -56,15 +56,15 @@ export const EvoUnifiedHeaderShell: React.FC<EvoUnifiedHeaderShellProps> = ({
           )}
         </div>
 
-        {/* Desktop Navigation links */}
+        {/* Desktop Navigation links - Zona central equilibrada */}
         {desktopNavItems && (
-          <div className="hidden lg:flex items-center">
+          <div className="hidden lg:flex items-center justify-center flex-1 max-w-md mx-auto">
             {desktopNavItems}
           </div>
         )}
 
         {/* Right Actions + Mobile Hamburger Toggle */}
-        <div className="flex items-center gap-2 sm:gap-3 shrink-0">
+        <div className="flex items-center gap-3 shrink-0 pr-1">
           {rightActions}
 
           {/* Mobile Menu Hamburger button */}

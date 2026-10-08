@@ -51,6 +51,12 @@ export const EvoLabConsole: React.FC<EvoLabConsoleProps> = ({
 }) => {
   const [activeZoneId, setActiveZoneId] = useState<string>(initialZoneId || 'zona-1');
 
+  React.useEffect(() => {
+    if (initialZoneId) {
+      setActiveZoneId(initialZoneId);
+    }
+  }, [initialZoneId]);
+
   const zoneIcons: Record<string, any> = {
     'zona-1': ShieldAlert,
     'zona-2': Gauge,

@@ -2,81 +2,8 @@
 // Diseño técnico editorial pericial, alta definición, sin dependencias externas ni marcas ajenas.
 
 export const TOMO_COVERS: Record<string, string> = {
-  '01': `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="400" height="600" viewBox="0 0 400 600">
-    <rect width="400" height="600" fill="%2307090e"/>
-    <defs>
-      <linearGradient id="g1" x1="0" y1="0" x2="1" y2="1">
-        <stop offset="0%" stop-color="%23eab308" stop-opacity="0.3"/>
-        <stop offset="100%" stop-color="%2307090e" stop-opacity="0.9"/>
-      </linearGradient>
-    </defs>
-    <rect width="400" height="600" fill="url(%23g1)"/>
-    <rect x="20" y="20" width="360" height="560" fill="none" stroke="%23eab308" stroke-width="1.5" stroke-opacity="0.5"/>
-    <path d="M 40 40 L 40 80 M 40 40 L 80 40 M 360 40 L 360 80 M 360 40 L 320 40 M 40 560 L 40 520 M 40 560 L 80 560 M 360 560 L 360 520 M 360 560 L 320 560" fill="none" stroke="%23eab308" stroke-width="2"/>
-    
-    <!-- Header -->
-    <text x="45" y="65" fill="%23eab308" font-family="monospace" font-size="11" font-weight="bold" letter-spacing="3">EVO LABS // VOL. 01</text>
-    <text x="355" y="65" text-anchor="end" fill="%2371717a" font-family="monospace" font-size="10">REV. 2026</text>
-    
-    <!-- Central Diagram: CPU & Silicon Bus -->
-    <g transform="translate(100, 150)" stroke="%23eab308" stroke-opacity="0.6" fill="none">
-      <rect x="25" y="25" width="150" height="150" rx="8" fill="%230c1018" stroke-width="2"/>
-      <rect x="55" y="55" width="90" height="90" rx="4" fill="%23eab308" fill-opacity="0.1" stroke-width="1.5"/>
-      <circle cx="100" cy="100" r="25" stroke-dasharray="4,4"/>
-      <path d="M 0 50 L 25 50 M 0 100 L 25 100 M 0 150 L 25 150 M 175 50 L 200 50 M 175 100 L 200 100 M 175 150 L 200 150 M 50 0 L 50 25 M 100 0 L 100 25 M 150 0 L 150 25 M 50 175 L 50 200 M 100 175 L 100 200 M 150 175 L 150 200" stroke-width="1.5"/>
-      <text x="100" y="105" text-anchor="middle" fill="%23eab308" font-family="monospace" font-size="12" font-weight="bold">CPU DIE</text>
-    </g>
-
-    <!-- Title & Typography -->
-    <text x="45" y="410" fill="%23eab308" font-family="monospace" font-size="13" font-weight="bold" letter-spacing="4">TOMO 01</text>
-    <text x="45" y="445" fill="%23ffffff" font-family="sans-serif" font-size="28" font-weight="900" letter-spacing="1">CONOC%C3%89 TU PC</text>
-    <text x="45" y="475" fill="%23a1a1aa" font-family="sans-serif" font-size="13">Arquitectura del silicio, buses y l%C3%ADmites</text>
-    
-    <!-- Footer Tag -->
-    <line x1="45" y1="505" x2="355" y2="505" stroke="%2327272a" stroke-width="1"/>
-    <text x="45" y="535" fill="%23eab308" font-family="monospace" font-size="10" font-weight="bold">EST%C3%81NDAR // HARDWARE TOPOLOGY &amp; BUS SPEC</text>
-  </svg>`,
-
-  '02': `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="400" height="600" viewBox="0 0 400 600">
-    <rect width="400" height="600" fill="%23050912"/>
-    <defs>
-      <linearGradient id="g2" x1="0" y1="0" x2="1" y2="1">
-        <stop offset="0%" stop-color="%2300D2FF" stop-opacity="0.3"/>
-        <stop offset="100%" stop-color="%23050912" stop-opacity="0.9"/>
-      </linearGradient>
-    </defs>
-    <rect width="400" height="600" fill="url(%23g2)"/>
-    <rect x="20" y="20" width="360" height="560" fill="none" stroke="%2300D2FF" stroke-width="1.5" stroke-opacity="0.5"/>
-    <path d="M 40 40 L 40 80 M 40 40 L 80 40 M 360 40 L 360 80 M 360 40 L 320 40 M 40 560 L 40 520 M 40 560 L 80 560 M 360 560 L 360 520 M 360 560 L 320 560" fill="none" stroke="%2300D2FF" stroke-width="2"/>
-    
-    <!-- Header -->
-    <text x="45" y="65" fill="%2300D2FF" font-family="monospace" font-size="11" font-weight="bold" letter-spacing="3">EVO LABS // VOL. 02</text>
-    <text x="355" y="65" text-anchor="end" fill="%2371717a" font-family="monospace" font-size="10">REV. 2026</text>
-    
-    <!-- Central Diagram: Kernel NT Matrix -->
-    <g transform="translate(80, 150)" stroke="%2300D2FF" stroke-opacity="0.7" fill="none">
-      <rect x="0" y="0" width="240" height="170" rx="8" fill="%2306121e" stroke-width="2"/>
-      <line x1="0" y1="35" x2="240" y2="35" stroke-width="1.5"/>
-      <circle cx="15" cy="18" r="4" fill="%2300D2FF"/>
-      <circle cx="30" cy="18" r="4" fill="%2300D2FF" fill-opacity="0.4"/>
-      <circle cx="45" cy="18" r="4" fill="%2300D2FF" fill-opacity="0.4"/>
-      <text x="70" y="22" fill="%2300D2FF" font-family="monospace" font-size="10" font-weight="bold">NTOSKRNL.EXE // RING 0</text>
-      <path d="M 20 60 L 220 60 M 20 90 L 220 90 M 20 120 L 220 120 M 20 150 L 160 150" stroke-width="1" stroke-dasharray="8,4"/>
-      <rect x="20" y="75" width="80" height="22" rx="4" fill="%2300D2FF" fill-opacity="0.2"/>
-      <text x="25" y="90" fill="%23ffffff" font-family="monospace" font-size="9">DPC / ISR 0.04ms</text>
-    </g>
-
-    <!-- Title & Typography -->
-    <text x="45" y="390" fill="%2300D2FF" font-family="monospace" font-size="13" font-weight="bold" letter-spacing="4">TOMO 02</text>
-    <text x="45" y="425" fill="%23ffffff" font-family="sans-serif" font-size="24" font-weight="900" letter-spacing="1">LA BIBLIA NEGRA</text>
-    <text x="45" y="455" fill="%2300D2FF" font-family="sans-serif" font-size="24" font-weight="900" letter-spacing="1">DE WINDOWS</text>
-    <text x="45" y="485" fill="%23a1a1aa" font-family="sans-serif" font-size="13">Kernel NT, telemetr%C3%ADa, DPC y servicios</text>
-    
-    <!-- Footer Tag -->
-    <line x1="45" y1="505" x2="355" y2="505" stroke="%2327272a" stroke-width="1"/>
-    <text x="45" y="535" fill="%2300D2FF" font-family="monospace" font-size="10" font-weight="bold">EST%C3%81NDAR // WINDOWS INTERNALS &amp; SYSINTERNALS</text>
-  </svg>`,
-
+  '01': '/covers/tomo-01.jpg',
+  '02': '/covers/tomo-02.jpg',
   '03': `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="400" height="600" viewBox="0 0 400 600">
     <rect width="400" height="600" fill="%23060d0a"/>
     <defs>

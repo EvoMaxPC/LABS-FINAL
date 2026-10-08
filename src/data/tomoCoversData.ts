@@ -78,12 +78,12 @@ function createCoverSvg({
   </g>
 
   <!-- Title & Subtitle Container -->
-  <rect x="30" y="420" width="360" height="106" fill="#0b0f17" fill-opacity="0.9" rx="4" stroke="${themeColor}" stroke-width="1" stroke-opacity="0.4" />
-  <line x1="30" y1="420" x2="390" y2="420" stroke="url(#accentGrad_${tomoNum})" stroke-width="2.5" />
+  <rect x="30" y="410" width="360" height="120" fill="#0b0f17" fill-opacity="0.95" rx="4" stroke="${themeColor}" stroke-width="1" stroke-opacity="0.4" />
+  <line x1="30" y1="410" x2="390" y2="410" stroke="url(#accentGrad_${tomoNum})" stroke-width="2.5" />
   
-  <text x="44" y="452" fill="#ffffff" font-family="sans-serif" font-size="20" font-weight="900" letter-spacing="0.5">${title}</text>
-  <text x="44" y="475" fill="${themeColor}" font-family="sans-serif" font-size="11" font-weight="700" letter-spacing="0.5">${subtitle}</text>
-  <text x="44" y="505" fill="#a1a1aa" font-family="sans-serif" font-size="9" font-weight="400">METROLOGÍA DETERMINISTA · RIGOR FORENSE · LAB INTERACTIVO</text>
+  <text x="44" y="442" fill="#ffffff" font-family="sans-serif" font-size="16" font-weight="900" letter-spacing="0.5">${title}</text>
+  <text x="44" y="468" fill="${themeColor}" font-family="sans-serif" font-size="10.5" font-weight="700" letter-spacing="0.5">${subtitle}</text>
+  <text x="44" y="502" fill="#a1a1aa" font-family="sans-serif" font-size="8.5" font-weight="400">METROLOGÍA DETERMINISTA · RIGOR FORENSE · LAB INTERACTIVO</text>
 
   <!-- Bottom Spec & Status Bar -->
   <line x1="30" y1="540" x2="390" y2="540" stroke="#27272a" stroke-width="1" />
@@ -96,68 +96,9 @@ function createCoverSvg({
 }
 
 // Artwork for each Tomo
-export const TOMO_01_COVER = createCoverSvg({
-  tomoNum: '01',
-  title: 'CONOCÉ TU PC',
-  subtitle: 'TOPOLOGÍA DE SILICIO, BUSES & CACHÉ',
-  themeColor: '#f59e0b',
-  accentColor: '#fbbf24',
-  secondaryColor: '#fde68a',
-  categoryBadge: 'HARDWARE & ARQUITECTURA',
-  specTag: 'DIE 3nm // RING 0 BUS // PCIe 5.0',
-  graphicSvg: `
-    <rect width="360" height="295" fill="#070a0f" rx="6" stroke="#f59e0b" stroke-width="0.8" stroke-opacity="0.3" />
-    <circle cx="180" cy="147" r="95" fill="none" stroke="#f59e0b" stroke-width="1" stroke-dasharray="4,4" stroke-opacity="0.4" />
-    <circle cx="180" cy="147" r="70" fill="none" stroke="#f59e0b" stroke-width="1.5" stroke-opacity="0.6" />
-    
-    <!-- CPU Die Central Square -->
-    <rect x="125" y="92" width="110" height="110" fill="#0e1420" stroke="#f59e0b" stroke-width="2" rx="4" />
-    <rect x="135" y="102" width="40" height="40" fill="#1e293b" stroke="#f59e0b" stroke-width="1" />
-    <text x="155" y="126" text-anchor="middle" fill="#f59e0b" font-family="monospace" font-size="9" font-weight="bold">CORE 0</text>
-    <rect x="185" y="102" width="40" height="40" fill="#1e293b" stroke="#f59e0b" stroke-width="1" />
-    <text x="205" y="126" text-anchor="middle" fill="#f59e0b" font-family="monospace" font-size="9" font-weight="bold">CORE 1</text>
-    <rect x="135" y="152" width="90" height="40" fill="#151e2e" stroke="#fbbf24" stroke-width="1" />
-    <text x="180" y="176" text-anchor="middle" fill="#fde68a" font-family="monospace" font-size="10" font-weight="bold">L3 CACHE 32MB</text>
-    
-    <!-- Traces and Buses -->
-    <path d="M 40 147 L 125 147" stroke="#f59e0b" stroke-width="2" />
-    <path d="M 235 147 L 320 147" stroke="#f59e0b" stroke-width="2" />
-    <path d="M 180 30 L 180 92" stroke="#f59e0b" stroke-width="2" />
-    <path d="M 180 202 L 180 265" stroke="#f59e0b" stroke-width="2" />
-    <text x="50" y="140" fill="#f59e0b" font-family="monospace" font-size="8">IMC BUS</text>
-    <text x="270" y="140" fill="#f59e0b" font-family="monospace" font-size="8">PCIe x16</text>
-  `,
-});
+export const TOMO_01_COVER = '/covers/tomo-01.jpg';
 
-export const TOMO_02_COVER = createCoverSvg({
-  tomoNum: '02',
-  title: 'LA BIBLIA NEGRA DE WINDOWS',
-  subtitle: 'KERNEL NT, SERVICIOS & INTERRUPCIONES DPC',
-  themeColor: '#00d2ff',
-  accentColor: '#38bdf8',
-  secondaryColor: '#bae6fd',
-  categoryBadge: 'SISTEMA OPERATIVO & RING 0',
-  specTag: 'NTOSKRNL.EXE // ISR-DPC &lt; 15µs',
-  graphicSvg: `
-    <rect width="360" height="295" fill="#070a0f" rx="6" stroke="#00d2ff" stroke-width="0.8" stroke-opacity="0.3" />
-    <!-- Concentric Rings (Ring 0 to Ring 3) -->
-    <circle cx="180" cy="147" r="115" fill="#031525" stroke="#00d2ff" stroke-width="1" stroke-opacity="0.3" />
-    <text x="180" y="42" text-anchor="middle" fill="#0284c7" font-family="monospace" font-size="8">RING 3: USER MODE / APPS</text>
-    
-    <circle cx="180" cy="147" r="85" fill="#052338" stroke="#00d2ff" stroke-width="1.2" stroke-opacity="0.5" />
-    <text x="180" y="72" text-anchor="middle" fill="#38bdf8" font-family="monospace" font-size="8">RING 1 & 2: DRIVERS & SERVICES</text>
-    
-    <circle cx="180" cy="147" r="55" fill="#08334c" stroke="#00d2ff" stroke-width="2" />
-    <text x="180" y="105" text-anchor="middle" fill="#e0f2fe" font-family="monospace" font-size="9" font-weight="900">RING 0</text>
-    <text x="180" y="135" text-anchor="middle" fill="#00d2ff" font-family="monospace" font-size="11" font-weight="bold">MICROKERNEL</text>
-    <text x="180" y="153" text-anchor="middle" fill="#bae6fd" font-family="monospace" font-size="8">NT EXECUTIVE</text>
-    <text x="180" y="170" text-anchor="middle" fill="#7dd3fc" font-family="monospace" font-size="8">HAL.DLL</text>
-    
-    <!-- Oscilloscope DPC Wave at bottom of graphic -->
-    <path d="M 40 250 L 100 250 L 120 220 L 130 270 L 140 250 L 220 250 L 230 230 L 240 250 L 320 250" fill="none" stroke="#00d2ff" stroke-width="2" />
-    <text x="45" y="240" fill="#00d2ff" font-family="monospace" font-size="8">DPC LATENCY: 8.4 µs</text>
-  `,
-});
+export const TOMO_02_COVER = '/covers/tomo-02.jpg';
 
 export const TOMO_03_COVER = createCoverSvg({
   tomoNum: '03',

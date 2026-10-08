@@ -873,3 +873,25 @@
 
 
 
+
+/* APRENDER CARDS: Graphite subtle pulse in normal state, EVO yellow on hover */
+@keyframes evo-graphite-pulse {
+  0%, 100% {
+    border-color: rgba(39, 39, 42, 0.65);
+  }
+  50% {
+    border-color: rgba(63, 63, 70, 0.9);
+  }
+}
+
+.evo-card-graphite {
+  border-color: rgba(39, 39, 42, 0.65);
+  animation: evo-graphite-pulse 4s ease-in-out infinite;
+  transition: border-color 0.3s ease-out, box-shadow 0.3s ease-out;
+}
+
+.evo-card-graphite:hover {
+  animation: none;
+  border-color: rgba(245, 158, 11, 0.8) !important;
+  box-shadow: 0 0 16px rgba(245, 158, 11, 0.1) !important;
+}

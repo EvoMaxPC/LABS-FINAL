@@ -174,14 +174,14 @@ export const EvoInstitutionalIntro: React.FC<EvoInstitutionalIntroProps> = ({
             </div>
 
             <h2 className="text-2xl sm:text-4xl lg:text-5xl font-black font-display tracking-tight text-white uppercase">
-              10 TOMOS EVO LABS
+              12 TOMOS EVO LABS
             </h2>
 
             <p className="text-xs sm:text-sm text-zinc-300 font-sans-editorial max-w-xl mx-auto">
               Revistas técnicas en formato Magazine creadas para llevarte desde los fundamentos hasta áreas técnicas avanzadas.
             </p>
 
-            <div className="grid grid-cols-2 sm:grid-cols-5 gap-2 max-w-3xl mx-auto text-left text-xs font-mono-tech pt-2">
+            <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-2 max-w-4xl mx-auto text-left text-xs font-mono-tech pt-2">
               {[
                 { n: '01', t: 'Hardware & Silicio', c: '#EAB308' },
                 { n: '02', t: 'Windows NT', c: '#00D2FF' },
@@ -191,12 +191,14 @@ export const EvoInstitutionalIntro: React.FC<EvoInstitutionalIntroProps> = ({
                 { n: '06', t: 'Ciberseguridad', c: '#EF4444' },
                 { n: '07', t: 'Gaming Pro', c: '#F59E0B' },
                 { n: '08', t: 'Arranque 35 Estados', c: '#10B981' },
-                { n: '09', t: 'Sistemas & Kernel', c: '#38BDF8' },
-                { n: '10', t: 'Forense & Reversing', c: '#A855F7' },
+                { n: '09', t: 'Programación', c: '#22C55E' },
+                { n: '10', t: 'Prompt & IA Avanzada', c: '#8B5CF6' },
+                { n: '11', t: 'Electrónica Aplicada', c: '#EAB308' },
+                { n: '12', t: 'Game Forge', c: '#EC4899' },
               ].map((item) => (
                 <div
                   key={item.n}
-                  className="p-2.5 rounded-xl bg-[#090d16]/90 border border-white/[0.08] flex flex-col justify-between gap-1 shadow-sm"
+                  className="p-2 rounded-xl bg-[#090d16]/90 border border-white/[0.08] flex flex-col justify-between gap-1 shadow-sm"
                 >
                   <span className="text-[10px] font-bold" style={{ color: item.c }}>
                     TOMO {item.n}
@@ -209,7 +211,7 @@ export const EvoInstitutionalIntro: React.FC<EvoInstitutionalIntroProps> = ({
             </div>
 
             <p className="text-xs text-zinc-400 font-sans-editorial italic">
-              “Diez Tomos creados para llevarte desde los fundamentos hasta áreas técnicas avanzadas.”
+              “Doce Tomos creados para llevarte desde los fundamentos hasta la ingeniería técnica avanzada.”
             </p>
           </div>
         )}
@@ -225,7 +227,7 @@ export const EvoInstitutionalIntro: React.FC<EvoInstitutionalIntroProps> = ({
             </div>
 
             <h2 className="text-2xl sm:text-4xl lg:text-5xl font-black font-display tracking-tight text-white uppercase">
-              10 TOMOS + 10 LABORATORIOS GUIADOS
+              12 TOMOS + 12 LABORATORIOS GUIADOS
             </h2>
 
             <div className="max-w-2xl mx-auto p-5 sm:p-6 rounded-2xl bg-[#090d16]/90 border border-white/[0.1] text-left space-y-4 shadow-xl">

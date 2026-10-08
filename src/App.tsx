@@ -9,17 +9,17 @@ import { Header } from './components/Header';
 import { MagazineCover } from './components/MagazineCover';
 import { HorizontalCollection } from './components/HorizontalCollection';
 import { EditorialIndex } from './components/EditorialIndex';
-import { Chapter01View } from './components/Chapter01View';
-import { Chapter02View, Chapter02Station } from './components/Chapter02View';
-import { Chapter03View } from './components/Chapter03View';
-import { Chapter04View } from './components/Chapter04View';
-import { Chapter05View } from './components/Chapter05View';
-import { Chapter06View } from './components/Chapter06View';
-import { Chapter07View } from './components/Chapter07View';
+const Chapter01View = React.lazy(() => import('./components/Chapter01View').then(m => ({ default: m.Chapter01View })));
+const Chapter02View = React.lazy(() => import('./components/Chapter02View').then(m => ({ default: m.Chapter02View })));
+const Chapter03View = React.lazy(() => import('./components/Chapter03View').then(m => ({ default: m.Chapter03View })));
+const Chapter04View = React.lazy(() => import('./components/Chapter04View').then(m => ({ default: m.Chapter04View })));
+const Chapter05View = React.lazy(() => import('./components/Chapter05View').then(m => ({ default: m.Chapter05View })));
+const Chapter06View = React.lazy(() => import('./components/Chapter06View').then(m => ({ default: m.Chapter06View })));
+const Chapter07View = React.lazy(() => import('./components/Chapter07View').then(m => ({ default: m.Chapter07View })));
 import { LockedChapterModal } from './components/LockedChapterModal';
 import { ChapterUnlockedCelebrationModal } from './components/ChapterUnlockedCelebrationModal';
 import { getChapterRequirements, ChapterRequirementInfo } from './utils/chapterPrerequisites';
-import { ChapterItem, EvoNarrativeProfile, EvoLabZone, UserHardwarePassport, Tome01DossierSummary } from './types';
+import { ChapterItem, EvoNarrativeProfile, EvoLabZone, UserHardwarePassport, Tome01DossierSummary } from './types';import { Chapter02Station } from './components/Chapter02View';
 import { EvoWorldMap } from './components/world/EvoWorldMap';
 import { PublicShell, PublicNavigationTarget } from './components/public/PublicShell';
 import { EvoPaymentSuccessView } from './components/commerce/EvoPaymentSuccessView';
@@ -28,21 +28,22 @@ import { EVO_MASTER_TOOLS_CATALOG } from './data/evoToolsData';
 import { EvoIntroExperience } from './components/world/EvoIntroExperience';
 import { EvoArchiveEntrance } from './components/world/EvoArchiveEntrance';
 import { EvoMagazineView } from './components/magazine/EvoMagazineView';
-import { Tomo02MagazineView } from './components/tomo02/Tomo02MagazineView';
-import { Tomo03MagazineView } from './components/tomo03/Tomo03MagazineView';
-import { Tomo04MagazineView } from './components/tomo04/Tomo04MagazineView';
-import { Tomo05MagazineView } from './components/tomo05/Tomo05MagazineView';
-import { Tomo06MagazineView } from './components/tomo06/Tomo06MagazineView';
-import { Tomo07MagazineView } from './components/tomo07/Tomo07MagazineView';
-import { Tomo08MagazineView } from './components/tomo08/Tomo08MagazineView';
-import { Tomo09MagazineView } from './components/tomo09/Tomo09MagazineView';
-import { Tomo10MagazineView } from './components/tomo10/Tomo10MagazineView';
-import { Tomo11MagazineView } from './components/tomo11/Tomo11MagazineView';
-import { Tomo12MagazineView } from './components/tomo12/Tomo12MagazineView';
-import { EvoBootLab } from './components/tomo08/EvoBootLab';
-import { EvoMasterLabSuite } from './components/world/labs/EvoMasterLabSuite';
-import { EvoWindowsMatrixLab } from './components/world/labs/windowsMatrix/EvoWindowsMatrixLab';
-import { EvoLabCore } from './components/evoLabCore/EvoLabCore';
+const Tomo02MagazineView = React.lazy(() => import('./components/tomo02/Tomo02MagazineView').then(m => ({ default: m.Tomo02MagazineView })));
+const Tomo03MagazineView = React.lazy(() => import('./components/tomo03/Tomo03MagazineView').then(m => ({ default: m.Tomo03MagazineView })));
+const Tomo04MagazineView = React.lazy(() => import('./components/tomo04/Tomo04MagazineView').then(m => ({ default: m.Tomo04MagazineView })));
+const Tomo05MagazineView = React.lazy(() => import('./components/tomo05/Tomo05MagazineView').then(m => ({ default: m.Tomo05MagazineView })));
+const Tomo06MagazineView = React.lazy(() => import('./components/tomo06/Tomo06MagazineView').then(m => ({ default: m.Tomo06MagazineView })));
+const Tomo07MagazineView = React.lazy(() => import('./components/tomo07/Tomo07MagazineView').then(m => ({ default: m.Tomo07MagazineView })));
+const Tomo08MagazineView = React.lazy(() => import('./components/tomo08/Tomo08MagazineView').then(m => ({ default: m.Tomo08MagazineView })));
+const Tomo09MagazineView = React.lazy(() => import('./components/tomo09/Tomo09MagazineView').then(m => ({ default: m.Tomo09MagazineView })));
+const Tomo10MagazineView = React.lazy(() => import('./components/tomo10/Tomo10MagazineView').then(m => ({ default: m.Tomo10MagazineView })));
+const Tomo11MagazineView = React.lazy(() => import('./components/tomo11/Tomo11MagazineView').then(m => ({ default: m.Tomo11MagazineView })));
+const Tomo12MagazineView = React.lazy(() => import('./components/tomo12/Tomo12MagazineView').then(m => ({ default: m.Tomo12MagazineView })));
+const EvoBootLab = React.lazy(() => import('./components/tomo08/EvoBootLab').then(m => ({ default: m.EvoBootLab })));
+const EvoMasterLabSuite = React.lazy(() => import('./components/world/labs/EvoMasterLabSuite').then(m => ({ default: m.EvoMasterLabSuite })));
+const EvoWindowsMatrixLab = React.lazy(() => import('./components/world/labs/windowsMatrix/EvoWindowsMatrixLab').then(m => ({ default: m.EvoWindowsMatrixLab })));
+const EvoWindowsXRayLab = React.lazy(() => import('./components/world/labs/windowsMatrix/EvoWindowsXRayLab').then(m => ({ default: m.EvoWindowsXRayLab })));
+const EvoLabCore = React.lazy(() => import('./components/evoLabCore/EvoLabCore').then(m => ({ default: m.EvoLabCore })));
 import { ForensicBenchTarget } from './components/common/EvoTomoDossierModal';
 import { EvoHardwareDiscoveryModal } from './components/evoLabCore/components/EvoHardwareDiscoveryModal';
 import { CatalogCoverageDashboard } from './components/evoLabCore/components/CatalogCoverageDashboard';
@@ -52,7 +53,7 @@ import { EvoCaseRepository } from './components/evoLabCore/services/caseReposito
 import { EvoCase } from './components/evoLabCore/types';
 import { EvoTomo01FinalExam } from './components/tomo01/EvoTomo01FinalExam';
 import { EvoTomo01CompletionScreen } from './components/tomo01/EvoTomo01CompletionScreen';
-import { CheckCircle2, X, History } from 'lucide-react';
+import { CheckCircle2, X, History, ArrowLeft } from 'lucide-react';
 import { useEvoAuth } from './auth/EvoAuthProvider';
 import { EvoAuthModal } from './components/auth/EvoAuthModal';
 import { useEvoAccess, EvoAccessProvider } from './auth/EvoAccessContext';
@@ -187,8 +188,8 @@ const TOOL_TARGET_MAP: Record<string, (actions: {
     setCurrentView('hotswap-lab');
   },
   'inv-xray-kernel': ({ setCurrentView, setMatrixInitialScenario }) => {
-    setMatrixInitialScenario('scheduler');
-    setCurrentView('windows-matrix-lab');
+    setMatrixInitialScenario('xray');
+    setCurrentView('windows-xray-lab');
   },
   'inv-cache-imc-flow': ({ setCurrentView, setActiveLabPanel }) => {
     setActiveLabPanel('hardware');
@@ -345,6 +346,20 @@ function AppContent({
           setMatrixInitialScenario((initialPendingTarget as any).scenario);
           setCurrentView('windows-matrix-lab');
         }
+      } else if (initialPendingTarget.type === 'WINDOWS_XRAY') {
+        if (isFreeUser) {
+          openUpgradeModal('Laboratorio Windows X-Ray Kernel');
+          setCurrentView('world-map');
+          setCampusSection('laboratorios');
+        } else {
+          setMatrixInitialScenario((initialPendingTarget as any).scenario || 'xray');
+          setCurrentView('windows-xray-lab');
+        }
+      } else if (initialPendingTarget.type === 'CAMPUS_ZONE') {
+        const zId = (initialPendingTarget as any).zoneId || 'zona-1';
+        setActiveZoneId(zId);
+        setCampusSection('diagnosticar');
+        setCurrentView('world-map');
       } else if (initialPendingTarget.type === 'LAB_CORE') {
         if (isFreeUser) {
           openUpgradeModal('EVO Lab Core');
@@ -415,6 +430,7 @@ function AppContent({
     | 'chapter-07'
     | 'hotswap-lab'
     | 'windows-matrix-lab'
+    | 'windows-xray-lab'
     | 'lab-core'
     | 'tomo01-quiz'
     | 'tomo01-completion'
@@ -433,6 +449,7 @@ function AppContent({
       if (initialPendingTarget.type === 'BOOT_LAB') return 'boot-lab';
       if (initialPendingTarget.type === 'HOTSWAP') return 'hotswap-lab';
       if (initialPendingTarget.type === 'WINDOWS_MATRIX') return 'windows-matrix-lab';
+      if (initialPendingTarget.type === 'WINDOWS_XRAY') return 'windows-xray-lab';
       if (initialPendingTarget.type === 'LAB_CORE') return 'lab-core';
     }
     try {
@@ -441,6 +458,7 @@ function AppContent({
       const viewParam = url.searchParams.get('view');
       if (viewParam === 'hotswap') return 'hotswap-lab';
       if (viewParam === 'matrix') return 'windows-matrix-lab';
+      if (viewParam === 'xray' || viewParam === 'windows-xray' || viewParam === 'windows-xray-lab') return 'windows-xray-lab';
       if (viewParam === 'core' || viewParam === 'lab-core') return 'lab-core';
       if (vol === '02' || vol === '2') return 'tomo-02';
       if (vol === '03' || vol === '3') return 'tomo-03';
@@ -482,6 +500,7 @@ function AppContent({
   });
 
   // Sub-panel & Lab states
+  const [activeZoneId, setActiveZoneId] = useState<string | undefined>(undefined);
   const [activeLabPanel, setActiveLabPanel] = useState<'sandbox' | 'hardware' | 'software' | 'telemetry' | 'matrix' | 'all'>('sandbox');
   const [activeLabMission, setActiveLabMission] = useState<'IDLE' | 'REPAIR' | 'TEST' | 'BOTTLENECK' | 'OPTIMIZE' | 'UPGRADE'>('IDLE');
   const [labCorePhase, setLabCorePhase] = useState<'SELECT_PC' | 'BUILD_PC' | 'LAB_ACTIVE'>('SELECT_PC');
@@ -690,9 +709,9 @@ function AppContent({
           activityTitle: 'Mapa Principal',
           activityType: 'mundo',
           whatIs: 'Centro principal de navegación y exploración de EVO LABS.',
-          whatFor: 'Permite visualizar todos los 10 Tomos, acceder al recorrido guiado y retomar tu progreso.',
+          whatFor: 'Permite visualizar todos los 12 Tomos, acceder al recorrido guiado y retomar tu progreso.',
           currentAction: 'Seleccioná un Tomo de la colección o hacé clic en "Continuar mi recorrido".',
-          whatToLookFor: 'Observá los 10 tomos organizados correlativamente con sus badges de estado.',
+          whatToLookFor: 'Observá los 12 tomos organizados correlativamente con sus badges de estado.',
           whyItMatters: 'Comprender el mapa global de EVO LABS te ayuda a trazar tu plan de estudio sin perderte.',
           nextStep: 'Ingresá al Tomo 01 (Conocé tu PC) para aprender la base del silicio y componentes.',
         });
@@ -873,7 +892,7 @@ function AppContent({
           whatIs: 'Taller pericial donde se combinan hardware, sistema y telemetría en casos reales.',
           whatFor: 'Resolver expedientes complejos de clientes y auditorías de taller.',
           currentAction: 'Seleccioná un caso abierto, armá la PC de pruebas o diagnosticá la máquina cliente.',
-          whyItMatters: 'Es el entorno pericial donde aplicás todo lo aprendido en los 10 Tomos.',
+          whyItMatters: 'Es el entorno pericial donde aplicás todo lo aprendido en los 12 Tomos.',
           nextStep: 'Completá el expediente y emití el informe pericial.',
         });
         saveCurrentLocationHistory('lab-core', undefined, 'Taller Multitomo');
@@ -1297,14 +1316,10 @@ function AppContent({
   };
 
   const handleEnterZone = (zone: EvoLabZone) => {
-    if (zone.id === 'zona-3') {
-      setCurrentView('archivo');
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    } else {
-      setActiveNotice(
-        `Sector ${zone.number} // ${zone.title}: Este sector está siendo preparado con 3 módulos de investigación.`
-      );
-    }
+    setActiveZoneId(zone.id);
+    setCampusSection('diagnosticar');
+    setCurrentView('world-map');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const handleOpenVolume = (volume: (typeof VOLUMES_COLLECTION)[0]) => {
@@ -1585,6 +1600,12 @@ function AppContent({
 
         {/* Main View Render Stage */}
         <main className="flex-1 w-full print:p-0 print:m-0 print:min-h-0">
+          <React.Suspense fallback={
+            <div className="min-h-[70vh] flex flex-col items-center justify-center bg-[#090b11] text-amber-400 font-mono-tech text-xs uppercase tracking-widest gap-3.5">
+              <div className="w-8 h-8 rounded-full border-2 border-amber-400 border-t-transparent animate-spin" />
+              <span>CARGANDO MÓDULO PERICIAL EVO...</span>
+            </div>
+          }>
           {currentView === 'magazine' && (
             <EvoMagazineView
               onBackToApp={handleNavigateTomo01}
@@ -1844,6 +1865,31 @@ function AppContent({
             )
           )}
 
+          {currentView === 'windows-xray-lab' && (
+            isFreeUser ? (
+              <EvoContentGate
+                title="Laboratorio de Windows X-Ray Kernel"
+                subtitle="La inspección radiológica del kernel NT y subsistemas de Windows requiere Plan Complete."
+                requiredPlan="Plan Complete"
+                onReturnHome={handleNavigateHome}
+                onReturnToDemo={handleNavigateTomo01}
+              />
+            ) : (
+              <div className="max-w-7xl mx-auto px-4 sm:px-8 py-8 space-y-6">
+                <div className="flex items-center justify-between pb-3 border-b border-zinc-800">
+                  <button
+                    onClick={handleNavigateHome}
+                    className="flex items-center gap-2 text-xs font-mono text-cyan-400 hover:text-white transition-colors cursor-pointer"
+                  >
+                    <ArrowLeft className="w-4 h-4" />
+                    VOLVER AL MUNDO EVO
+                  </button>
+                </div>
+                <EvoWindowsXRayLab initialScenario={matrixInitialScenario} />
+              </div>
+            )
+          )}
+
           {currentView === 'hotswap-lab' && (
             isFreeUser ? (
               <EvoContentGate
@@ -1866,6 +1912,7 @@ function AppContent({
           {currentView === 'world-map' && (
             <EvoWorldMap
               initialIntention={campusSection}
+              initialZoneId={activeZoneId}
               onOpenIntroPresentation={() => setIsIntroActive(true)}
               passport={userPassport}
               completedChaptersCount={completedChaptersCount}
@@ -2105,6 +2152,7 @@ function AppContent({
               />
             </div>
           )}
+          </React.Suspense>
         </main>
 
         {/* Minimal Footer */}
@@ -2278,6 +2326,10 @@ function getTargetFriendlyLabel(target: PublicNavigationTarget | null): string |
       return 'Laboratorio de Hardware y Hot-Swap';
     case 'WINDOWS_MATRIX':
       return 'Laboratorio Matriz de Windows';
+    case 'WINDOWS_XRAY':
+      return 'Laboratorio Windows X-Ray Kernel';
+    case 'CAMPUS_ZONE':
+      return `Zona del Campus (${target.zoneId})`;
     case 'LAB_CORE':
       return 'Laboratorio EVO Core';
     case 'TOOL':

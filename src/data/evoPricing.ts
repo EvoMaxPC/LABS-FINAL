@@ -54,7 +54,7 @@ export const EVO_PRICING: Record<string, EvoPriceItem> = {
       'Acceso pericial permanente'
     ],
     excludedFeatures: [
-      'Acceso a los 10 tomos completos',
+      'Acceso a los 12 tomos completos',
       'Soporte técnico dedicado 1on1'
     ],
     description: 'Elegí 3 tomos canónicos para armar tu propia ruta formativa personalizada.',
@@ -75,7 +75,7 @@ export const EVO_PRICING: Record<string, EvoPriceItem> = {
       'Acceso pericial permanente'
     ],
     excludedFeatures: [
-      'Acceso a los 10 tomos completos'
+      'Acceso a los 12 tomos completos'
     ],
     description: 'Lotes agrupados de 5 tomos especializados con mayor bonificación.',
   },
@@ -89,7 +89,7 @@ export const EVO_PRICING: Record<string, EvoPriceItem> = {
     selectionRule: null,
     entitlementType: 'PLAN_FULL',
     includedFeatures: [
-      'Acceso completo a los 10 Tomos publicados',
+      'Acceso completo a los 12 Tomos publicados',
       'Todos los laboratorios y herramientas',
       'Actualizaciones mensuales'
     ],
@@ -108,7 +108,7 @@ export const EVO_PRICING: Record<string, EvoPriceItem> = {
     selectionRule: null,
     entitlementType: 'PLAN_FULL',
     includedFeatures: [
-      'Acceso completo a los 10 Tomos publicados',
+      'Acceso completo a los 12 Tomos publicados',
       'Todos los laboratorios y herramientas',
       'Optimizado para formación continua'
     ],
@@ -127,7 +127,7 @@ export const EVO_PRICING: Record<string, EvoPriceItem> = {
     selectionRule: null,
     entitlementType: 'PLAN_FULL',
     includedFeatures: [
-      'Acceso completo a los 10 Tomos',
+      'Acceso completo a los 12 Tomos',
       'Laboratorios ilimitados',
       'Tarifa preferencial semestral'
     ],

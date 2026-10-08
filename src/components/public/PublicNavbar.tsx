@@ -57,24 +57,28 @@ export const PublicNavbar: React.FC<PublicNavbarProps> = ({
   );
 
   const rightActions = (
-    <div className="flex items-center gap-2 sm:gap-3 font-mono-tech">
+    <div className="flex items-center gap-4 font-mono-tech">
       {user && emailVerified ? (
         <>
-          <EvoUserAccountMenu
-            onNavigatePlans={() => onNavigateSection('planes')}
-            onLogoutSuccess={() => {}}
-          />
+          {/* Botón IR A MI CAMPUS primero */}
           {onEnterPrivateApp && (
             <button
               type="button"
               onClick={onEnterPrivateApp}
-              className="px-3 sm:px-4 py-2 rounded-xl bg-amber-400 hover:bg-amber-300 text-black text-xs font-black tracking-wider uppercase transition-all shadow-[0_0_15px_rgba(251,191,36,0.3)] hover:shadow-[0_0_22px_rgba(251,191,36,0.5)] cursor-pointer flex items-center gap-1.5"
+              className="px-3.5 sm:px-5 py-2 rounded-xl bg-amber-400 hover:bg-amber-300 text-black text-xs font-black tracking-wider uppercase transition-all shadow-[0_0_15px_rgba(251,191,36,0.3)] hover:shadow-[0_0_22px_rgba(251,191,36,0.5)] cursor-pointer flex items-center gap-1.5 shrink-0"
             >
               <LayoutDashboard className="w-3.5 h-3.5" />
               <span className="hidden sm:inline">IR A MI CAMPUS</span>
               <span className="sm:hidden">CAMPUS</span>
             </button>
           )}
+          {/* Bloque de sesión (avatar + nombre + estado) después */}
+          <div className="flex items-center ml-1">
+            <EvoUserAccountMenu
+              onNavigatePlans={() => onNavigateSection('planes')}
+              onLogoutSuccess={() => {}}
+            />
+          </div>
         </>
       ) : (
         <button

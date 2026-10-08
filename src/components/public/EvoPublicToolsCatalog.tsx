@@ -114,16 +114,20 @@ export const EvoPublicToolsCatalog: React.FC<EvoPublicToolsCatalogProps> = ({
   onExecuteToolAction,
 }) => {
   const [searchQuery, setSearchQuery] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState<'ALL' | EvoToolCategory>('ALL');
   const [activeToolModal, setActiveToolModal] = useState<'latency' | 'build' | null>(null);
 
-  // Source of truth: filter tools owned exclusively by HERRAMIENTAS section (2 tools)
+  // Full canonical set of 34 tools available across EVO LABS
   const canonicalTools = useMemo(() => {
-    return EVO_MASTER_TOOLS_CATALOG.filter((t) => getToolOwnerSection(t.id) === 'HERRAMIENTAS');
+    return EVO_MASTER_TOOLS_CATALOG;
   }, []);
 
   const filteredTools = useMemo(() => {
     const q = searchQuery.toLowerCase().trim();
     return canonicalTools.filter((t) => {
+      if (selectedCategory !== 'ALL' && t.category.toUpperCase() !== selectedCategory.toUpperCase()) {
+        return false;
+      }
       const displayName = HISTORIC_TOOL_NAMES[t.id] || t.name;
       if (!q) return true;
 
@@ -138,7 +142,17 @@ export const EvoPublicToolsCatalog: React.FC<EvoPublicToolsCatalogProps> = ({
         t.concepts.some((c) => c.toLowerCase().includes(q))
       );
     });
-  }, [canonicalTools, searchQuery]);
+  }, [canonicalTools, searchQuery, selectedCategory]);
+
+  const categoriesList: { id: 'ALL' | EvoToolCategory; label: string; count: number }[] = useMemo(() => [
+    { id: 'ALL', label: 'TODAS', count: canonicalTools.length },
+    { id: 'DIAGNOSTICAR', label: 'DIAGNÓSTICO', count: canonicalTools.filter(t => t.category.toUpperCase() === 'DIAGNOSTICAR').length },
+    { id: 'MEDIR', label: 'MEDICIÓN', count: canonicalTools.filter(t => t.category.toUpperCase() === 'MEDIR').length },
+    { id: 'INVESTIGAR', label: 'INVESTIGACIÓN', count: canonicalTools.filter(t => t.category.toUpperCase() === 'INVESTIGAR').length },
+    { id: 'REPARAR', label: 'REPARACIÓN', count: canonicalTools.filter(t => t.category.toUpperCase() === 'REPARAR').length },
+    { id: 'OPTIMIZAR', label: 'OPTIMIZACIÓN', count: canonicalTools.filter(t => t.category.toUpperCase() === 'OPTIMIZAR').length },
+    { id: 'DOCUMENTAR', label: 'DOCUMENTACIÓN', count: canonicalTools.filter(t => t.category.toUpperCase() === 'DOCUMENTAR').length },
+  ], [canonicalTools]);
 
   return (
     <div className="max-w-[1240px] mx-auto w-full px-4 sm:px-6 lg:px-8 py-8 space-y-10 font-mono-tech select-none">
@@ -206,6 +220,30 @@ export const EvoPublicToolsCatalog: React.FC<EvoPublicToolsCatalogProps> = ({
             <span>{canonicalTools.length} CANÓNICAS</span>
           </div>
         </div>
+
+        {/* Category Pills Selector */}
+        <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none">
+          {categoriesList.map((cat) => {
+            const isSelected = selectedCategory === cat.id;
+            return (
+              <button
+                key={cat.id}
+                type="button"
+                onClick={() => setSelectedCategory(cat.id)}
+                className={`px-3 py-1.5 rounded-lg text-xs font-mono-tech font-bold uppercase transition-all whitespace-nowrap cursor-pointer border ${
+                  isSelected
+                    ? 'bg-emerald-400 text-black border-emerald-400 shadow-sm'
+                    : 'bg-zinc-950 text-zinc-400 border-zinc-800 hover:text-white hover:border-zinc-700'
+                }`}
+              >
+                <span>{cat.label}</span>
+                <span className={`ml-1.5 text-[10px] ${isSelected ? 'text-zinc-800' : 'text-zinc-600'}`}>
+                  ({cat.count})
+                </span>
+              </button>
+            );
+          })}
+        </div>
       </div>
 
       {/* RESULTADO VACÍO SI NO COINCIDE LA BÚSQUEDA */}
@@ -217,10 +255,13 @@ export const EvoPublicToolsCatalog: React.FC<EvoPublicToolsCatalogProps> = ({
           </p>
           <button
             type="button"
-            onClick={() => setSearchQuery('')}
+            onClick={() => {
+              setSearchQuery('');
+              setSelectedCategory('ALL');
+            }}
             className="px-4 py-2 rounded-xl bg-zinc-900 text-zinc-300 hover:text-white text-xs font-bold uppercase border border-zinc-800 transition-colors mt-2 cursor-pointer"
           >
-            VER LAS 2 HERRAMIENTAS CANÓNICAS
+            VER LAS {canonicalTools.length} HERRAMIENTAS CANÓNICAS
           </button>
         </div>
       )}

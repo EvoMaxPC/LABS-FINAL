@@ -144,8 +144,8 @@ export function executeToolById(toolId: string | undefined | null, ctx: EvoToolR
       return true;
 
     case 'inv-xray-kernel':
-      if (ctx.setMatrixInitialScenario) ctx.setMatrixInitialScenario('scheduler');
-      ctx.setCurrentView('windows-matrix-lab');
+      if (ctx.setMatrixInitialScenario) ctx.setMatrixInitialScenario('xray');
+      ctx.setCurrentView('windows-xray-lab');
       return true;
 
     case 'inv-cache-imc-flow':
