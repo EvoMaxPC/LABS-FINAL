@@ -406,6 +406,44 @@ export const EvoWorldMap: React.FC<EvoWorldMapProps> = ({
   const [inspectingClaim, setInspectingClaim] = useState<VerifiedClaim | null>(null);
   const [tomeInDevMessage, setTomeInDevMessage] = useState<string | null>(null);
 
+  // Event listeners para apertura canónica y herramientas técnicas desacopladas
+  useEffect(() => {
+    const handleOpenAutoDetect = () => setIsAutoDetectOpen(true);
+    const handleOpenCaseResolver = () => setIsCaseResolverOpen(true);
+    const handleOpenDigitalTwin = () => setIsDigitalTwinOpen(true);
+    const handleOpenForensicReport = () => setIsForensicReportOpen(true);
+    const handleOpenContentFactory = () => setIsContentFactoryOpen(true);
+    const handleOpenTransferChallenge = () => setIsTransferModalOpen(true);
+    const handleOpenLatencyCalc = () => setIsLatencyCalculatorOpen(true);
+    const handleOpenBuildArchitect = () => setIsBuildArchitectOpen(true);
+    const handleOpenTechnicalDossier = () => setIsTechnicalDossierOpen(true);
+    const handleOpenMethodGuide = () => setIsMethodGuideOpen(true);
+
+    window.addEventListener('evo_open_autodetect', handleOpenAutoDetect);
+    window.addEventListener('evo_open_case_resolver', handleOpenCaseResolver);
+    window.addEventListener('evo_open_digital_twin', handleOpenDigitalTwin);
+    window.addEventListener('evo_open_forensic_report', handleOpenForensicReport);
+    window.addEventListener('evo_open_content_factory', handleOpenContentFactory);
+    window.addEventListener('evo_open_transfer_challenge', handleOpenTransferChallenge);
+    window.addEventListener('evo_open_latency_calc', handleOpenLatencyCalc);
+    window.addEventListener('evo_open_build_architect', handleOpenBuildArchitect);
+    window.addEventListener('evo_open_technical_dossier', handleOpenTechnicalDossier);
+    window.addEventListener('evo_open_method_guide', handleOpenMethodGuide);
+
+    return () => {
+      window.removeEventListener('evo_open_autodetect', handleOpenAutoDetect);
+      window.removeEventListener('evo_open_case_resolver', handleOpenCaseResolver);
+      window.removeEventListener('evo_open_digital_twin', handleOpenDigitalTwin);
+      window.removeEventListener('evo_open_forensic_report', handleOpenForensicReport);
+      window.removeEventListener('evo_open_content_factory', handleOpenContentFactory);
+      window.removeEventListener('evo_open_transfer_challenge', handleOpenTransferChallenge);
+      window.removeEventListener('evo_open_latency_calc', handleOpenLatencyCalc);
+      window.removeEventListener('evo_open_build_architect', handleOpenBuildArchitect);
+      window.removeEventListener('evo_open_technical_dossier', handleOpenTechnicalDossier);
+      window.removeEventListener('evo_open_method_guide', handleOpenMethodGuide);
+    };
+  }, []);
+
   // Evidence Engine State
   const [selectedCapabilityId, setSelectedCapabilityId] = useState<string | null>(null);
 
@@ -1320,11 +1358,8 @@ export const EvoWorldMap: React.FC<EvoWorldMapProps> = ({
                       if (tomoNum === '01') {
                         if (onNavigateTomo01) onNavigateTomo01();
                         else if (onOpenTomo) onOpenTomo('01');
-                      } else if (tomoNum === '02' || tomoNum === '03' || tomoNum === '04' || tomoNum === '08') {
-                        if (onOpenTomo) onOpenTomo(tomoNum as any);
                       } else {
-                        if (onOpenDossier) onOpenDossier(tomoNum as any);
-                        else setTomeInDevMessage(`El Tomo ${tomoNum} (${tomeItem.title}) está planificado para el Roadmap 2026 de EVO LABS y estará disponible próximamente.`);
+                        if (onOpenTomo) onOpenTomo(tomoNum as any);
                       }
                     }}
                     onOpenLab={(actionKey, tomoNum) => {
@@ -1337,24 +1372,21 @@ export const EvoWorldMap: React.FC<EvoWorldMapProps> = ({
                         if (onNavigateLabCore) onNavigateLabCore();
                       } else if (actionKey === 'boot-lab') {
                         if (onNavigateBootLab) onNavigateBootLab();
+                      } else if (tomoNum) {
+                        if (onOpenTomo) onOpenTomo(tomoNum as any);
                       } else {
                         if (onOpenDossier) onOpenDossier((tomoNum || '01') as any);
-                        else setTomeInDevMessage(`El laboratorio asociado al Tomo ${tomoNum} está en fase de desarrollo activo.`);
                       }
                     }}
                     onOpenDossier={(tomoNum) => {
                       if (onOpenDossier) onOpenDossier(tomoNum as any);
-                      else setTomeInDevMessage(`Ficha curricular del Tomo ${tomoNum} disponible en expediente pericial.`);
                     }}
                     onOpenMagazine={(tomoNum) => {
                       if (tomoNum === '01') {
                         if (onNavigateMagazine) onNavigateMagazine();
                         else if (onOpenTomo) onOpenTomo('01');
-                      } else if (tomoNum === '02' || tomoNum === '03' || tomoNum === '04' || tomoNum === '08') {
-                        if (onOpenTomo) onOpenTomo(tomoNum as any);
                       } else {
-                        if (onOpenDossier) onOpenDossier(tomoNum as any);
-                        else setTomeInDevMessage(`La portada y arte editorial del Tomo ${tomoNum} se encuentran en el roadmap.`);
+                        if (onOpenTomo) onOpenTomo(tomoNum as any);
                       }
                     }}
                   />
@@ -1529,7 +1561,7 @@ export const EvoWorldMap: React.FC<EvoWorldMapProps> = ({
 
             <div className="flex flex-wrap items-center gap-1.5 p-1 rounded-xl bg-zinc-900 border border-zinc-800 font-mono-tech text-xs">
               {[
-                { id: 'todos', label: 'TODOS (10 LABS)' },
+                { id: 'todos', label: 'TODOS (12 LABS)' },
                 { id: 'sistemas', label: 'SISTEMAS' },
                 { id: 'hardware', label: 'HARDWARE' },
                 { id: 'peritaje', label: 'PERITAJE' },
@@ -1655,61 +1687,97 @@ export const EvoWorldMap: React.FC<EvoWorldMapProps> = ({
                 id: 'lab-07-network',
                 number: 'LAB 07',
                 familyKey: 'especializados',
-                title: 'Laboratorio Forense de Redes & Protocolos',
-                status: 'En desarrollo',
-                statusColor: 'text-amber-400 bg-amber-400/10 border-amber-400/30',
+                title: 'Laboratorio Forense de Redes & Protocolos (Tomo 05)',
+                status: 'Disponible',
+                statusColor: 'text-indigo-400 bg-indigo-400/10 border-indigo-400/30',
                 whatYouDo: 'Inspección de tramas Ethernet, pila TCP/IP, resolución DNS e ingeniería inversa de tráfico.',
-                whatYouVerify: 'Auditoría pericial de latencias de sockets y paquetes perdidos.',
-                ctaText: 'EN DESARROLLO PERICIAL',
-                scenarios: [],
-                action: () => {},
-                isDisabled: true,
+                whatYouVerify: 'Auditoría pericial de latencias de sockets, cálculo CIDR y paquetes perdidos.',
+                ctaText: 'ABRIR LAB DE REDES & PROTOCOLOS →',
+                scenarios: ['net-wireshark-inspect', 'net-cidr-calculator', 'net-dns-diagnostics'],
+                action: () => {
+                  if (onOpenTomo) onOpenTomo('05');
+                },
                 icon: <Globe className="w-5 h-5 text-indigo-400" />,
               },
               {
                 id: 'lab-08-security',
                 number: 'LAB 08',
                 familyKey: 'especializados',
-                title: 'Laboratorio de Ciberseguridad Defensiva',
-                status: 'En desarrollo',
-                statusColor: 'text-amber-400 bg-amber-400/10 border-amber-400/30',
-                whatYouDo: 'Aislamiento de procesos sospechosos, análisis de Ring 0 y firma de controladores.',
-                whatYouVerify: 'Comprobar firmas digitales y aislamiento de memoria del kernel.',
-                ctaText: 'EN DESARROLLO PERICIAL',
-                scenarios: [],
-                action: () => {},
-                isDisabled: true,
+                title: 'Laboratorio de Ciberseguridad Defensiva (Tomo 06)',
+                status: 'Disponible',
+                statusColor: 'text-rose-400 bg-rose-400/10 border-rose-400/30',
+                whatYouDo: 'Matriz táctica MITRE ATT&CK, contención de ransomware y análisis de privilegios Ring 0.',
+                whatYouVerify: 'Comprobar firmas digitales, políticas de hardening y aislamiento de memoria del kernel.',
+                ctaText: 'ABRIR LAB DE CIBERSEGURIDAD →',
+                scenarios: ['sec-mitre-attack-matrix', 'sec-ransomware-containment', 'sec-kernel-isolation'],
+                action: () => {
+                  if (onOpenTomo) onOpenTomo('06');
+                },
                 icon: <Shield className="w-5 h-5 text-rose-400" />,
               },
               {
                 id: 'lab-09-code',
                 number: 'LAB 09',
                 familyKey: 'especializados',
-                title: 'Laboratorio de Ingeniería de Software & C/C++',
-                status: 'Próximamente',
-                statusColor: 'text-zinc-500 bg-zinc-900 border-zinc-800',
+                title: 'Laboratorio de Ingeniería de Software & Código (Tomo 09)',
+                status: 'Disponible',
+                statusColor: 'text-emerald-400 bg-emerald-400/10 border-emerald-400/30',
                 whatYouDo: 'Punteros, estructuras en memoria, compilación y optimización de código de bajo nivel.',
-                whatYouVerify: 'Verificar asignación dinámica y prevención de desbordamientos.',
-                ctaText: 'PRÓXIMAMENTE',
-                scenarios: [],
-                action: () => {},
-                isDisabled: true,
+                whatYouVerify: 'Verificar asignación dinámica, complejidad algorítmica y prevención de desbordamientos.',
+                ctaText: 'ABRIR LAB DE CÓDIGO & SOFTWARE →',
+                scenarios: ['code-complexity-analyzer', 'code-memory-allocation', 'code-pointer-safety'],
+                action: () => {
+                  if (onOpenTomo) onOpenTomo('09');
+                },
                 icon: <Code className="w-5 h-5 text-emerald-400" />,
               },
               {
                 id: 'lab-10-ai',
                 number: 'LAB 10',
                 familyKey: 'especializados',
-                title: 'Laboratorio de Sistemas de Inteligencia Artificial',
-                status: 'Próximamente',
-                statusColor: 'text-zinc-500 bg-zinc-900 border-zinc-800',
-                whatYouDo: 'Infraestructura de inferencia local, asignación de VRAM y aceleración por NPU/GPU.',
-                whatYouVerify: 'Medir la eficiencia de cuantización y latencia de inferencia.',
-                ctaText: 'PRÓXIMAMENTE',
-                scenarios: [],
-                action: () => {},
-                isDisabled: true,
+                title: 'Laboratorio de Sistemas de Inteligencia Artificial (Tomo 10)',
+                status: 'Disponible',
+                statusColor: 'text-yellow-400 bg-yellow-400/10 border-yellow-400/30',
+                whatYouDo: 'Simulador de fragmentación de tokens, ventanas de contexto y arquitectura de embeddings vectoriales.',
+                whatYouVerify: 'Medir la eficiencia de cuantización, latencia de inferencia y precisión contextual RAG.',
+                ctaText: 'ABRIR LAB DE SISTEMAS DE IA →',
+                scenarios: ['ai-token-fragmentation', 'ai-context-window-calc', 'ai-vector-embeddings'],
+                action: () => {
+                  if (onOpenTomo) onOpenTomo('10');
+                },
                 icon: <Sparkles className="w-5 h-5 text-yellow-400" />,
+              },
+              {
+                id: 'lab-11-electronics',
+                number: 'LAB 11',
+                familyKey: 'especializados',
+                title: 'Electronics Lab Hub & Mediciones VRM (Tomo 11)',
+                status: 'Disponible',
+                statusColor: 'text-amber-400 bg-amber-400/10 border-amber-400/30',
+                whatYouDo: 'Multímetro virtual en modos voltaje, resistencia y diodo con pruebas de cortocircuito en placa madre.',
+                whatYouVerify: 'Validar rieles de alimentación, Ley de Ohm y conmutación de etapas MOSFET.',
+                ctaText: 'ABRIR ELECTRONICS LAB HUB →',
+                scenarios: ['elec-multimeter-diode', 'elec-ohm-law-calc', 'elec-vrm-buck-converter'],
+                action: () => {
+                  if (onOpenTomo) onOpenTomo('11');
+                },
+                icon: <Cpu className="w-5 h-5 text-amber-400" />,
+              },
+              {
+                id: 'lab-12-game-forge',
+                number: 'LAB 12',
+                familyKey: 'especializados',
+                title: 'EVO Game Forge Studio & Simulación (Tomo 12)',
+                status: 'Disponible',
+                statusColor: 'text-cyan-400 bg-cyan-400/10 border-cyan-400/30',
+                whatYouDo: 'Arquitectura de motores de videojuego, game loop con delta time (dt) y shaders de renderizado.',
+                whatYouVerify: 'Comprobar estabilidad de física de colisiones y rendimiento de bucles gráficos.',
+                ctaText: 'ABRIR GAME FORGE STUDIO →',
+                scenarios: ['forge-game-loop-dt', 'forge-vector-physics', 'forge-shaders-pipeline'],
+                action: () => {
+                  if (onOpenTomo) onOpenTomo('12');
+                },
+                icon: <Boxes className="w-5 h-5 text-cyan-400" />,
               },
               {
                 id: 'lab-eval-transfer',
@@ -2439,6 +2507,7 @@ export const EvoWorldMap: React.FC<EvoWorldMapProps> = ({
                 onEnterTomo02={() => onOpenTomo?.('02')}
                 onEnterTomo03={() => onOpenTomo?.('03')}
                 onEnterTomo04={() => onOpenTomo?.('04')}
+                onOpenTomo={handleOpenTomoDirectly}
               />
             </div>
           )}
@@ -3296,9 +3365,18 @@ export const EvoWorldMap: React.FC<EvoWorldMapProps> = ({
                     <span>LEER TOMO 04</span>
                   </button>
                 ) : (
-                  <span className="w-full sm:w-auto px-4 py-2.5 rounded-xl bg-zinc-900 text-zinc-500 border border-zinc-800 text-center text-xs font-bold uppercase">
-                    CONTENIDO EN DESARROLLO
-                  </span>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const num = selectedTomeProfile.tomoNumber;
+                      setSelectedTomeProfile(null);
+                      if (onOpenTomo) onOpenTomo(num as any);
+                    }}
+                    className="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-amber-400 hover:bg-amber-300 text-black font-bold text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2 cursor-pointer shadow-[0_0_20px_rgba(245,158,11,0.3)]"
+                  >
+                    <BookOpen className="w-4 h-4 text-black" />
+                    <span>LEER TOMO {selectedTomeProfile.tomoNumber}</span>
+                  </button>
                 )}
               </div>
             </div>
