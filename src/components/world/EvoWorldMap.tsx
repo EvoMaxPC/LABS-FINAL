@@ -367,7 +367,7 @@ export const EvoWorldMap: React.FC<EvoWorldMapProps> = ({
   initialZoneId,
   activeProfile = 'investigador',
   onChangeProfile = () => {},
-  onOpenTomo = (_tomoId: '01' | '02' | '03' | '04' | '08') => {},
+  onOpenTomo = (_tomoId: string) => {},
   onNavigateBootLab,
   onNavigateHotSwapLab,
   onNavigateWindowsMatrixLab,
@@ -1856,7 +1856,7 @@ export const EvoWorldMap: React.FC<EvoWorldMapProps> = ({
                     )}
                   </div>
 
-                  {!item.status !== 'Disponible' ? (
+                  {item.status === 'Disponible' ? (
                     isFreeUser ? (
                       <button
                         type="button"
