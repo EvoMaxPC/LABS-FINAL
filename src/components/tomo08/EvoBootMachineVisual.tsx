@@ -584,41 +584,116 @@ export const EvoBootMachineVisual: React.FC<EvoBootMachineVisualProps> = ({
             preserveAspectRatio="xMidYMid meet"
           >
             <defs>
-              {/* Glow Filters */}
+              {/* Premium Glow Filters */}
               <filter id="atx-glow-amber" x="-20%" y="-20%" width="140%" height="140%">
-                <feGaussianBlur stdDeviation="4" result="blur" />
+                <feGaussianBlur stdDeviation="3.5" result="blur" />
                 <feMerge>
                   <feMergeNode in="blur" />
                   <feMergeNode in="SourceGraphic" />
                 </feMerge>
               </filter>
               <filter id="atx-glow-cyan" x="-20%" y="-20%" width="140%" height="140%">
-                <feGaussianBlur stdDeviation="4" result="blur" />
+                <feGaussianBlur stdDeviation="3.5" result="blur" />
                 <feMerge>
                   <feMergeNode in="blur" />
                   <feMergeNode in="SourceGraphic" />
                 </feMerge>
               </filter>
               <filter id="atx-glow-emerald" x="-20%" y="-20%" width="140%" height="140%">
-                <feGaussianBlur stdDeviation="4" result="blur" />
+                <feGaussianBlur stdDeviation="3.5" result="blur" />
                 <feMerge>
                   <feMergeNode in="blur" />
                   <feMergeNode in="SourceGraphic" />
                 </feMerge>
               </filter>
               <filter id="atx-glow-rose" x="-20%" y="-20%" width="140%" height="140%">
-                <feGaussianBlur stdDeviation="5" result="blur" />
+                <feGaussianBlur stdDeviation="4" result="blur" />
                 <feMerge>
                   <feMergeNode in="blur" />
                   <feMergeNode in="SourceGraphic" />
                 </feMerge>
               </filter>
+              <filter id="atx-soft-shadow" x="-5%" y="-5%" width="115%" height="115%">
+                <feDropShadow dx="1.5" dy="3" stdDeviation="2.5" floodColor="#000000" floodOpacity="0.85" />
+              </filter>
 
-              {/* Textura de Fibra de Vidrio PCB de Alto Contraste */}
-              <pattern id="pcb-weave-dense" width="10" height="10" patternUnits="userSpaceOnUse">
-                <rect width="10" height="10" fill="#080c16" />
-                <path d="M 0 5 L 10 5 M 5 0 L 5 10" stroke="#121b2d" strokeWidth="1" />
-                <circle cx="5" cy="5" r="0.8" fill="#1e293b" />
+              {/* Realistic Material Gradients */}
+              <linearGradient id="atx-metal-dark" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stopColor="#0b0f19" />
+                <stop offset="30%" stopColor="#1e293b" />
+                <stop offset="60%" stopColor="#334155" />
+                <stop offset="85%" stopColor="#1e293b" />
+                <stop offset="100%" stopColor="#0b0f19" />
+              </linearGradient>
+
+              <linearGradient id="atx-metal-fin" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stopColor="#0a0e18" />
+                <stop offset="50%" stopColor="#243044" />
+                <stop offset="100%" stopColor="#0a0e18" />
+              </linearGradient>
+
+              <linearGradient id="atx-steel-armor" x1="0%" y1="0%" x2="100%" y2="60%">
+                <stop offset="0%" stopColor="#475569" />
+                <stop offset="25%" stopColor="#94a3b8" />
+                <stop offset="50%" stopColor="#e2e8f0" />
+                <stop offset="75%" stopColor="#94a3b8" />
+                <stop offset="100%" stopColor="#475569" />
+              </linearGradient>
+
+              <linearGradient id="atx-gold-flash" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stopColor="#b45309" />
+                <stop offset="40%" stopColor="#f59e0b" />
+                <stop offset="65%" stopColor="#fef08a" />
+                <stop offset="100%" stopColor="#d97706" />
+              </linearGradient>
+
+              <linearGradient id="atx-heatpipe-grad" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" stopColor="#64748b" />
+                <stop offset="35%" stopColor="#cbd5e1" />
+                <stop offset="60%" stopColor="#f1f5f9" />
+                <stop offset="85%" stopColor="#94a3b8" />
+                <stop offset="100%" stopColor="#475569" />
+              </linearGradient>
+
+              <linearGradient id="atx-choke-body" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stopColor="#141417" />
+                <stop offset="40%" stopColor="#27272a" />
+                <stop offset="70%" stopColor="#3f3f46" />
+                <stop offset="100%" stopColor="#18181b" />
+              </linearGradient>
+
+              <radialGradient id="atx-cr2032" cx="42%" cy="38%" r="60%">
+                <stop offset="0%" stopColor="#ffffff" />
+                <stop offset="45%" stopColor="#e2e8f0" />
+                <stop offset="75%" stopColor="#94a3b8" />
+                <stop offset="100%" stopColor="#334155" />
+              </radialGradient>
+
+              <linearGradient id="atx-pch-metallic" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stopColor="#08101e" />
+                <stop offset="30%" stopColor="#111d33" />
+                <stop offset="60%" stopColor="#1e3458" />
+                <stop offset="80%" stopColor="#14223d" />
+                <stop offset="100%" stopColor="#091222" />
+              </linearGradient>
+
+              <linearGradient id="atx-m2-shield" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stopColor="#0d1424" />
+                <stop offset="50%" stopColor="#1f2d47" />
+                <stop offset="100%" stopColor="#121b2d" />
+              </linearGradient>
+
+              {/* Textura de Fibra de Vidrio PCB de Alto Contraste & Malla de Pistas */}
+              <pattern id="pcb-weave-dense" width="12" height="12" patternUnits="userSpaceOnUse">
+                <rect width="12" height="12" fill="#080c14" />
+                <path d="M 0 6 L 12 6 M 6 0 L 6 12" stroke="#101826" strokeWidth="0.8" />
+                <circle cx="6" cy="6" r="0.9" fill="#182338" />
+              </pattern>
+
+              {/* Matriz Micro-Pines LGA */}
+              <pattern id="lga-pin-mesh" width="6" height="6" patternUnits="userSpaceOnUse">
+                <circle cx="3" cy="3" r="1.1" fill="#ca8a04" opacity="0.75" />
+                <circle cx="3" cy="3" r="0.5" fill="#fef08a" opacity="0.9" />
               </pattern>
             </defs>
 
@@ -626,34 +701,41 @@ export const EvoBootMachineVisual: React.FC<EvoBootMachineVisualProps> = ({
             {/* 1. SUSTRATO PCB NEGRO MATE ATX (305mm x 244mm)                      */}
             {/* =================================================================== */}
             <rect x="15" y="10" width="970" height="1180" rx="14" fill="url(#pcb-weave-dense)" stroke="#334155" strokeWidth="3.5" />
+            <rect x="19" y="14" width="962" height="1172" rx="11" fill="none" stroke="#1e293b" strokeWidth="1" />
 
-            {/* Serigrafía de Marca de Alta Legibilidad */}
-            <text x="35" y="42" fill="#94a3b8" fontSize="13" fontWeight="900" letterSpacing="1.5">EVO LABS</text>
-            <text x="125" y="42" fill="#38bdf8" fontSize="11" fontWeight="bold">MAGNUS Z790 // REV 2.4</text>
-            <text x="35" y="55" fill="#64748b" fontSize="7.5" fontWeight="bold">ATX FORM FACTOR (305x244mm) • 8-LAYER HIGH-TG PCB</text>
+            {/* Serigrafía de Marca Técnica & Especificaciones */}
+            <g opacity="0.9">
+              <text x="35" y="40" fill="#f8fafc" fontSize="13" fontWeight="900" letterSpacing="1.5">EVO LABS</text>
+              <text x="125" y="40" fill="#38bdf8" fontSize="11" fontWeight="bold">MAGNUS Z790 // ARQUITECTURA LGA1700 + DDR5</text>
+              <text x="35" y="52" fill="#64748b" fontSize="7.5" fontWeight="bold">
+                ATX FORM FACTOR (305×244mm) • 8-LAYER HIGH-TG SERVER-GRADE PCB • REV 2.4
+              </text>
+            </g>
 
-            {/* Pistas de Cobre de Alto Contraste (Trace Bus Pairs) */}
-            <g stroke="#22d3ee" strokeWidth="1.2" opacity="0.65" fill="none" className="pcb-trace-glow">
+            {/* Rutas de Pistas de Cobre Pulido en Ángulos de 45° & Serpentinas */}
+            <g stroke="#38bdf8" strokeWidth="1.3" opacity="0.7" fill="none" className="pcb-trace-glow">
               {/* Bus IMC -> DDR5 Channel A/B Serpentines */}
-              <path d="M 630 200 Q 660 200 660 170 T 690 170" />
-              <path d="M 630 220 Q 660 220 660 200 T 690 200" />
-              <path d="M 630 240 Q 660 240 660 230 T 690 230" />
-              <path d="M 630 260 Q 660 260 660 260 T 690 260" />
-              <path d="M 630 320 Q 660 320 660 330 T 690 330" />
-              <path d="M 630 340 Q 660 340 660 360 T 690 360" />
-              <path d="M 630 360 Q 660 360 660 390 T 690 390" />
-              <path d="M 630 380 Q 660 380 660 420 T 690 420" />
+              <path d="M 630 190 L 660 190 L 675 175 L 695 175" />
+              <path d="M 630 210 L 655 210 L 670 195 L 695 195" />
+              <path d="M 630 230 L 660 230 L 670 240 L 695 240" />
+              <path d="M 630 250 L 655 250 L 665 260 L 695 260" />
+              <path d="M 630 310 L 660 310 L 675 325 L 695 325" />
+              <path d="M 630 330 L 655 330 L 670 345 L 695 345" />
+              <path d="M 630 350 L 660 350 L 675 365 L 695 365" />
+              <path d="M 630 370 L 655 370 L 670 385 L 695 385" />
               {/* Bus CPU -> PCIe 5.0 Root Lines */}
-              <path d="M 440 500 L 440 565" />
-              <path d="M 460 500 L 460 565" />
-              <path d="M 480 500 L 480 565" />
-              <path d="M 500 500 L 500 565" />
+              <path d="M 430 495 L 430 568" />
+              <path d="M 450 495 L 450 568" />
+              <path d="M 470 495 L 470 568" />
+              <path d="M 490 495 L 490 568" />
               {/* Bus CPU -> Z790 DMI 4.0 Lines */}
-              <path d="M 530 500 L 530 630 L 720 630" />
-              <path d="M 545 500 L 545 645 L 720 645" />
-              {/* PCH -> SATA / Audio Lines */}
-              <path d="M 850 865 L 850 1115" />
-              <path d="M 720 780 L 640 780 L 640 945" />
+              <path d="M 530 495 L 530 635 L 720 635" />
+              <path d="M 545 495 L 545 650 L 720 650" />
+              {/* PCH -> SATA Lines */}
+              <path d="M 850 865 L 850 920 L 920 920" />
+              <path d="M 865 865 L 865 965 L 920 965" />
+              {/* PCH -> SPI BIOS */}
+              <path d="M 720 780 L 665 780 L 665 945" />
             </g>
 
             {/* 9 Orificios de Montaje Estandarizados ATX con Puntos de Soldadura Dorados */}
@@ -663,10 +745,23 @@ export const EvoBootMachineVisual: React.FC<EvoBootMachineVisualProps> = ({
               [45, 1155], [500, 1155], [955, 1155],
             ].map(([hx, hy], idx) => (
               <g key={`hole-${idx}`} transform={`translate(${hx}, ${hy})`}>
-                <circle r="14" fill="#78350f" opacity="0.6" />
-                <circle r="10" fill="#eab308" stroke="#fef08a" strokeWidth="1.8" />
-                <circle r="5.5" fill="#020617" stroke="#451a03" strokeWidth="1.2" />
-                <text x="0" y="22" textAnchor="middle" fill="#94a3b8" fontSize="6.5" fontWeight="bold">STANDOFF</text>
+                <circle r="15" fill="#78350f" opacity="0.5" />
+                <circle r="11" fill="url(#atx-gold-flash)" stroke="#fef08a" strokeWidth="1.5" />
+                <circle r="5" fill="#020617" stroke="#451a03" strokeWidth="1.2" />
+                {/* Corona de contactos de tierra radiales */}
+                {Array.from({ length: 8 }).map((_, rIdx) => {
+                  const angle = (rIdx * 45 * Math.PI) / 180;
+                  return (
+                    <circle
+                      key={`gnd-dot-${rIdx}`}
+                      cx={Math.cos(angle) * 8.5}
+                      cy={Math.sin(angle) * 8.5}
+                      r="1.2"
+                      fill="#fef08a"
+                    />
+                  );
+                })}
+                <text x="0" y="23" textAnchor="middle" fill="#94a3b8" fontSize="6.5" fontWeight="bold">STANDOFF</text>
               </g>
             ))}
 
@@ -676,42 +771,65 @@ export const EvoBootMachineVisual: React.FC<EvoBootMachineVisualProps> = ({
             <g
               onClick={() => handleSelectComponent('rear_io')}
               className="cursor-pointer transition-all hover:opacity-95"
+              filter="url(#atx-soft-shadow)"
             >
-              <rect x="25" y="60" width="100" height="400" rx="5" fill="#0f172a" stroke="#475569" strokeWidth="2.5" />
-              <text x="75" y="82" textAnchor="middle" fill="#f8fafc" fontSize="10" fontWeight="bold">I/O SHIELD</text>
-              <text x="75" y="93" textAnchor="middle" fill="#38bdf8" fontSize="6.5" fontWeight="bold">PRE-INSTALLED</text>
+              {/* Carcasa exterior blindada de acero */}
+              <rect x="25" y="60" width="100" height="400" rx="5" fill="url(#atx-metal-dark)" stroke="#475569" strokeWidth="2.5" />
+              <rect x="28" y="63" width="94" height="394" rx="3" fill="none" stroke="#334155" strokeWidth="1" />
+              
+              <text x="75" y="80" textAnchor="middle" fill="#f8fafc" fontSize="10" fontWeight="900" letterSpacing="1">I/O SHIELD</text>
+              <text x="75" y="91" textAnchor="middle" fill="#38bdf8" fontSize="6.5" fontWeight="bold">PRE-INSTALLED STEEL</text>
 
               {/* Botón BIOS Flashback & Clear CMOS */}
-              <rect x="35" y="105" width="35" height="20" rx="3" fill="#1e293b" stroke="#64748b" strokeWidth="1" />
-              <circle cx="52" cy="115" r="4" fill="#ef4444" />
-              <text x="80" y="118" fill="#94a3b8" fontSize="6" fontWeight="bold">FLASHBACK</text>
+              <g transform="translate(35, 103)">
+                <rect width="36" height="22" rx="3" fill="#1e293b" stroke="#64748b" strokeWidth="1" />
+                <circle cx="18" cy="11" r="5" fill="#dc2626" stroke="#f87171" strokeWidth="1" />
+                <text x="44" y="14" fill="#94a3b8" fontSize="6" fontWeight="bold">FLASHBACK</text>
+              </g>
 
-              {/* Puertos USB 3.2 Gen 2 (Rojos / Azules) */}
-              <rect x="35" y="135" width="40" height="24" rx="2" fill="#1e3a8a" stroke="#60a5fa" strokeWidth="1.5" />
-              <rect x="35" y="165" width="40" height="24" rx="2" fill="#7f1d1d" stroke="#f87171" strokeWidth="1.5" />
-              <text x="80" y="150" fill="#60a5fa" fontSize="6" fontWeight="bold">USB 3.2</text>
-              <text x="80" y="180" fill="#f87171" fontSize="6" fontWeight="bold">10Gbps</text>
+              {/* Puertos USB 3.2 Gen 2 (Azul y Rojo) */}
+              <g transform="translate(35, 135)">
+                <rect width="40" height="23" rx="2" fill="#1e3a8a" stroke="#60a5fa" strokeWidth="1.5" />
+                <rect x="4" y="5" width="32" height="13" fill="#020617" />
+                <rect x="8" y="9" width="24" height="4" fill="#3b82f6" />
+                <text x="47" y="15" fill="#60a5fa" fontSize="6.5" fontWeight="bold">USB 3.2</text>
+              </g>
+              <g transform="translate(35, 166)">
+                <rect width="40" height="23" rx="2" fill="#7f1d1d" stroke="#f87171" strokeWidth="1.5" />
+                <rect x="4" y="5" width="32" height="13" fill="#020617" />
+                <rect x="8" y="9" width="24" height="4" fill="#ef4444" />
+                <text x="47" y="15" fill="#f87171" fontSize="6.5" fontWeight="bold">10Gbps</text>
+              </g>
 
-              {/* Puerto Type-C 20Gbps */}
-              <rect x="35" y="198" width="38" height="16" rx="8" fill="#020617" stroke="#e2e8f0" strokeWidth="1.5" />
-              <text x="80" y="210" fill="#e2e8f0" fontSize="6" fontWeight="bold">TYPE-C 20G</text>
+              {/* Puerto Type-C 20Gbps (USB 3.2 Gen 2x2) */}
+              <g transform="translate(35, 198)">
+                <rect width="38" height="17" rx="8" fill="#090d16" stroke="url(#atx-steel-armor)" strokeWidth="1.5" />
+                <rect x="6" y="6" width="26" height="5" rx="2.5" fill="#334155" />
+                <text x="47" y="12" fill="#e2e8f0" fontSize="6.5" fontWeight="bold">TYPE-C 20G</text>
+              </g>
 
               {/* Puerto LAN 2.5G RJ-45 con LEDs de Actividad */}
-              <rect x="35" y="224" width="42" height="32" rx="2" fill="#1e293b" stroke="#64748b" strokeWidth="1.5" />
-              <rect x="42" y="232" width="28" height="16" rx="1" fill="#020617" />
-              <circle cx="40" cy="229" r="1.8" fill="#22c55e" />
-              <circle cx="72" cy="229" r="1.8" fill="#f59e0b" />
-              <text x="82" y="242" fill="#22c55e" fontSize="6.5" fontWeight="bold">2.5G LAN</text>
+              <g transform="translate(35, 224)">
+                <rect width="42" height="32" rx="2" fill="url(#atx-metal-dark)" stroke="#64748b" strokeWidth="1.5" />
+                <rect x="6" y="8" width="30" height="18" rx="1.5" fill="#020617" stroke="#334155" strokeWidth="1" />
+                <circle cx="9" cy="5" r="2" fill="#22c55e" />
+                <circle cx="33" cy="5" r="2" fill="#f59e0b" />
+                <text x="48" y="20" fill="#22c55e" fontSize="6.5" fontWeight="bold">2.5G LAN</text>
+              </g>
 
-              {/* Salidas de Video HDMI / DisplayPort */}
-              <rect x="35" y="266" width="42" height="20" rx="1.5" fill="#020617" stroke="#94a3b8" strokeWidth="1.2" />
-              <text x="82" y="280" fill="#94a3b8" fontSize="6.5" fontWeight="bold">DP / HDMI</text>
+              {/* Salidas de Video Digital HDMI / DisplayPort */}
+              <g transform="translate(35, 266)">
+                <rect width="42" height="22" rx="2" fill="#090d16" stroke="url(#atx-steel-armor)" strokeWidth="1.2" />
+                <polygon points="6,16 36,16 32,8 10,8" fill="#1e293b" stroke="#64748b" strokeWidth="0.8" />
+                <text x="48" y="15" fill="#94a3b8" fontSize="6.5" fontWeight="bold">DP / HDMI</text>
+              </g>
 
-              {/* Conectores Dorados de Audio Jack HD */}
+              {/* Conectores Dorados de Audio Jack HD 7.1 con Anillo Dorado */}
               {[305, 335, 365, 395, 425].map((jy, i) => (
-                <g key={`io-jack-${i}`}>
-                  <circle cx="75" cy={jy} r="11" fill="#0f172a" stroke="#d97706" strokeWidth="2.5" />
-                  <circle cx="75" cy={jy} r="5" fill="#020617" />
+                <g key={`io-jack-${i}`} transform={`translate(75, ${jy})`}>
+                  <circle r="12" fill="#0f172a" stroke="url(#atx-gold-flash)" strokeWidth="2.5" />
+                  <circle r="7" fill="#020617" stroke="#334155" strokeWidth="1" />
+                  <circle r="3" fill="#000000" />
                 </g>
               ))}
             </g>
@@ -722,6 +840,7 @@ export const EvoBootMachineVisual: React.FC<EvoBootMachineVisualProps> = ({
             <g
               onClick={() => handleSelectComponent('eps')}
               className="cursor-pointer"
+              filter={isComponentActive('eps') ? 'url(#atx-glow-amber)' : 'url(#atx-soft-shadow)'}
             >
               {/* Conector EPS 1 (8 Pines) */}
               <rect
@@ -729,11 +848,10 @@ export const EvoBootMachineVisual: React.FC<EvoBootMachineVisualProps> = ({
                 y="25"
                 width="60"
                 height="45"
-                rx="3"
+                rx="3.5"
                 fill="#18181b"
                 stroke={isComponentActive('eps') ? '#f59e0b' : '#64748b'}
                 strokeWidth={isComponentActive('eps') ? 2.5 : 1.5}
-                filter={isComponentActive('eps') ? 'url(#atx-glow-amber)' : 'none'}
               />
               {/* Conector EPS 2 (8 Pines Auxiliar) */}
               <rect
@@ -741,30 +859,44 @@ export const EvoBootMachineVisual: React.FC<EvoBootMachineVisualProps> = ({
                 y="25"
                 width="60"
                 height="45"
-                rx="3"
+                rx="3.5"
                 fill="#18181b"
                 stroke={isComponentActive('eps') ? '#f59e0b' : '#64748b'}
                 strokeWidth={isComponentActive('eps') ? 2.5 : 1.5}
-                filter={isComponentActive('eps') ? 'url(#atx-glow-amber)' : 'none'}
               />
-              <text x="198" y="20" textAnchor="middle" fill={isComponentActive('eps') ? '#fbbf24' : '#cbd5e1'} fontSize="8" fontWeight="bold">
-                CPU_PWR1 / CPU_PWR2 (2x 8-PIN EPS 12V)
+              <text x="198" y="19" textAnchor="middle" fill={isComponentActive('eps') ? '#fbbf24' : '#cbd5e1'} fontSize="8" fontWeight="bold">
+                CPU_PWR1 / CPU_PWR2 (2× 8-PIN EPS 12V)
               </text>
-              {/* Traba Superior & Pines Cuadrados */}
-              <rect x="155" y="22" width="20" height="5" fill="#71717a" rx="1" />
-              <rect x="220" y="22" width="20" height="5" fill="#71717a" rx="1" />
+              {/* Rampas mecánicas superiores de traba */}
+              <rect x="155" y="21" width="20" height="6" fill="#52525b" stroke="#71717a" strokeWidth="0.8" rx="1" />
+              <rect x="220" y="21" width="20" height="6" fill="#52525b" stroke="#71717a" strokeWidth="0.8" rx="1" />
+              
+              {/* Terminales hembra con perfil polarizado (cuadrados y biselados) */}
               {[0, 1, 2, 3].map((c) => (
                 <g key={`eps1-pin-${c}`}>
-                  <rect x={140 + c * 13} y="31" width="10" height="14" fill="#09090b" stroke="#71717a" strokeWidth="0.8" />
-                  <rect x={140 + c * 13} y="48" width="10" height="14" fill="#09090b" stroke="#71717a" strokeWidth="0.8" />
-                  <rect x={205 + c * 13} y="31" width="10" height="14" fill="#09090b" stroke="#71717a" strokeWidth="0.8" />
-                  <rect x={205 + c * 13} y="48" width="10" height="14" fill="#09090b" stroke="#71717a" strokeWidth="0.8" />
-                  {isComponentActive('eps') && (
+                  {/* Fila Superior */}
+                  <rect x={140 + c * 13} y="31" width="10" height="14" fill="#09090b" stroke="#71717a" strokeWidth="1" rx="1" />
+                  {/* Fila Inferior */}
+                  <rect x={140 + c * 13} y="48" width="10" height="14" fill="#09090b" stroke="#71717a" strokeWidth="1" rx="1" />
+                  {/* EPS 2 Fila Superior */}
+                  <rect x={205 + c * 13} y="31" width="10" height="14" fill="#09090b" stroke="#71717a" strokeWidth="1" rx="1" />
+                  {/* EPS 2 Fila Inferior */}
+                  <rect x={205 + c * 13} y="48" width="10" height="14" fill="#09090b" stroke="#71717a" strokeWidth="1" rx="1" />
+                  
+                  {/* Pines dorados interiores que se iluminan al energizar */}
+                  {isComponentActive('eps') ? (
                     <>
-                      <circle cx={145 + c * 13} cy="38" r="2.2" fill="#fbbf24" />
-                      <circle cx={145 + c * 13} cy="55" r="2.2" fill="#fbbf24" />
-                      <circle cx={210 + c * 13} cy="38" r="2.2" fill="#fbbf24" />
-                      <circle cx={210 + c * 13} cy="55" r="2.2" fill="#fbbf24" />
+                      <circle cx={145 + c * 13} cy="38" r="2.8" fill="#fbbf24" stroke="#f59e0b" strokeWidth="0.8" />
+                      <circle cx={145 + c * 13} cy="55" r="2.8" fill="#fbbf24" stroke="#f59e0b" strokeWidth="0.8" />
+                      <circle cx={210 + c * 13} cy="38" r="2.8" fill="#fbbf24" stroke="#f59e0b" strokeWidth="0.8" />
+                      <circle cx={210 + c * 13} cy="55" r="2.8" fill="#fbbf24" stroke="#f59e0b" strokeWidth="0.8" />
+                    </>
+                  ) : (
+                    <>
+                      <circle cx={145 + c * 13} cy="38" r="2" fill="#52525b" />
+                      <circle cx={145 + c * 13} cy="55" r="2" fill="#52525b" />
+                      <circle cx={210 + c * 13} cy="38" r="2" fill="#52525b" />
+                      <circle cx={210 + c * 13} cy="55" r="2.8" fill="#52525b" />
                     </>
                   )}
                 </g>
@@ -777,28 +909,28 @@ export const EvoBootMachineVisual: React.FC<EvoBootMachineVisualProps> = ({
             <g
               onClick={() => handleSelectComponent('vrm')}
               className="cursor-pointer"
+              filter={isComponentActive('vrm') ? 'url(#atx-glow-amber)' : 'url(#atx-soft-shadow)'}
             >
-              {/* Disipador Superior de Alta Densidad */}
+              {/* Disipador Superior Maquinado CNC */}
               <rect
                 x="268"
                 y="20"
                 width="405"
                 height="100"
-                rx="5"
-                fill="#161f30"
+                rx="6"
+                fill="url(#atx-metal-dark)"
                 stroke={isComponentActive('vrm') ? (isFailed && currentStep.stepNumber === 4 ? '#f43f5e' : '#f59e0b') : '#475569'}
                 strokeWidth={isComponentActive('vrm') ? 2.8 : 1.8}
-                filter={isComponentActive('vrm') ? 'url(#atx-glow-amber)' : 'none'}
               />
-              {/* Aletas de refrigeración maquinadas */}
-              {Array.from({ length: 14 }).map((_, f) => (
-                <line key={`vfin-top-${f}`} x1={280 + f * 28} y1="26" x2={300 + f * 28} y2="114" stroke="#0b111e" strokeWidth="3.5" />
+              {/* Ranurado térmico con aletas profundas */}
+              {Array.from({ length: 15 }).map((_, f) => (
+                <line key={`vfin-top-${f}`} x1={280 + f * 26} y1="26" x2={298 + f * 26} y2="114" stroke="#0a0e18" strokeWidth="3" />
               ))}
-              <text x="470" y="70" textAnchor="middle" fill="#f8fafc" fontSize="12" fontWeight="900" letterSpacing="2">
+              <text x="470" y="68" textAnchor="middle" fill="#f8fafc" fontSize="12" fontWeight="900" letterSpacing="1.5">
                 16+1+1 POWER PHASES // DrMOS 70A
               </text>
-              <text x="470" y="86" textAnchor="middle" fill="#38bdf8" fontSize="8" fontWeight="bold">
-                DIGITAL PWM RAA229131 CONTROLLER
+              <text x="470" y="85" textAnchor="middle" fill="#38bdf8" fontSize="8" fontWeight="bold">
+                DIGITAL PWM RAA229131 CONTROLLER • DIRECT 12V
               </text>
 
               {/* Disipador Lateral Izquierdo */}
@@ -807,30 +939,37 @@ export const EvoBootMachineVisual: React.FC<EvoBootMachineVisualProps> = ({
                 y="95"
                 width="135"
                 height="380"
-                rx="5"
-                fill="#141c2b"
+                rx="6"
+                fill="url(#atx-metal-dark)"
                 stroke={isComponentActive('vrm') ? (isFailed && currentStep.stepNumber === 4 ? '#f43f5e' : '#f59e0b') : '#475569'}
                 strokeWidth={isComponentActive('vrm') ? 2.8 : 1.8}
-                filter={isComponentActive('vrm') ? 'url(#atx-glow-amber)' : 'none'}
               />
-              {Array.from({ length: 10 }).map((_, f) => (
-                <line key={`vfin-side-${f}`} x1="145" y1={115 + f * 34} x2="258" y2={135 + f * 34} stroke="#090d16" strokeWidth="4" />
+              {Array.from({ length: 11 }).map((_, f) => (
+                <line key={`vfin-side-${f}`} x1="145" y1={115 + f * 32} x2="258" y2={132 + f * 32} stroke="#090d16" strokeWidth="3.5" />
               ))}
-              <text x="202" y="290" textAnchor="middle" fill="#94a3b8" fontSize="10" fontWeight="bold" transform="rotate(-90, 202, 290)">
-                MAGNUS EXTENDED HEATSINK
+              <text x="202" y="290" textAnchor="middle" fill="#cbd5e1" fontSize="10.5" fontWeight="900" letterSpacing="1" transform="rotate(-90, 202, 290)">
+                MAGNUS EXTENDED VRM ARMOR
               </text>
 
-              {/* Heatpipe de Cobre Niquelado Direct-Touch */}
-              <path d="M 235 440 L 235 90 Q 235 55 270 55 L 650 55" fill="none" stroke="#94a3b8" strokeWidth="7" strokeLinecap="round" />
-              <path d="M 235 440 L 235 90 Q 235 55 270 55 L 650 55" fill="none" stroke="#cbd5e1" strokeWidth="3" strokeLinecap="round" />
+              {/* Heatpipe de Cobre Niquelado con Curvatura Suave */}
+              <path d="M 235 440 L 235 90 Q 235 55 270 55 L 650 55" fill="none" stroke="url(#atx-heatpipe-grad)" strokeWidth="7" strokeLinecap="round" />
+              <path d="M 235 440 L 235 90 Q 235 55 270 55 L 650 55" fill="none" stroke="#f1f5f9" strokeWidth="2.5" strokeLinecap="round" opacity="0.8" />
 
-              {/* Chokes de Ferrita Blindados R22 & Capacitores Sólidos de 5K */}
+              {/* 8 Chokes de Ferrita R22 Blindados + 8 Capacitores Sólidos de 5K + DrMOS */}
               {[130, 175, 220, 265, 310, 355, 400, 445].map((cy, i) => (
                 <g key={`choke-${i}`} transform={`translate(280, ${cy})`}>
-                  <rect x="0" y="0" width="26" height="26" rx="3" fill="#0f172a" stroke="#64748b" strokeWidth="1.5" />
-                  <text x="13" y="16" textAnchor="middle" fill="#f8fafc" fontSize="8" fontWeight="bold">R22</text>
-                  <circle cx="38" cy="13" r="8.5" fill="#020617" stroke="#94a3b8" strokeWidth="2" />
-                  <path d="M 32 13 A 6 6 0 0 1 44 13" stroke="#f59e0b" strokeWidth="1.5" fill="none" />
+                  {/* DrMOS Power Stage IC */}
+                  <rect x="-8" y="4" width="6" height="18" rx="1" fill="#09090b" stroke="#71717a" strokeWidth="0.6" />
+                  
+                  {/* Choke R22 Inductor de Ferrita */}
+                  <rect x="0" y="0" width="26" height="26" rx="3.5" fill="url(#atx-choke-body)" stroke="#71717a" strokeWidth="1.2" />
+                  <rect x="2" y="2" width="22" height="22" rx="2" fill="none" stroke="#3f3f46" strokeWidth="0.8" />
+                  <text x="13" y="16.5" textAnchor="middle" fill="#ffffff" fontSize="8" fontWeight="bold">R22</text>
+                  
+                  {/* Capacitor Sólido Polímero Negro 5K */}
+                  <circle cx="38" cy="13" r="9" fill="#18181b" stroke="#94a3b8" strokeWidth="1.5" />
+                  <circle cx="38" cy="13" r="6.5" fill="#27272a" />
+                  <path d="M 32 13 A 6 6 0 0 1 44 13" stroke="#f59e0b" strokeWidth="1.8" fill="none" />
                 </g>
               ))}
             </g>
@@ -841,15 +980,16 @@ export const EvoBootMachineVisual: React.FC<EvoBootMachineVisualProps> = ({
             <g
               onClick={() => handleSelectComponent('cpu')}
               className="cursor-pointer"
+              filter={isComponentActive('cpu') ? 'url(#atx-glow-emerald)' : 'url(#atx-soft-shadow)'}
             >
-              {/* Marco Metálico ILM (Independent Loading Mechanism) */}
+              {/* Marco Metálico ILM de Acero Inoxidable (Independent Loading Mechanism) */}
               <rect
                 x="335"
                 y="135"
                 width="315"
                 height="350"
                 rx="10"
-                fill="#1e293b"
+                fill="url(#atx-metal-dark)"
                 stroke={
                   isComponentActive('cpu')
                     ? isFailed && [6, 7, 8, 9, 10, 12, 13].includes(currentStep.stepNumber)
@@ -858,59 +998,76 @@ export const EvoBootMachineVisual: React.FC<EvoBootMachineVisualProps> = ({
                     : '#64748b'
                 }
                 strokeWidth={isComponentActive('cpu') ? 3.5 : 2}
-                filter={isComponentActive('cpu') ? 'url(#atx-glow-emerald)' : 'none'}
               />
+              <rect x="340" y="140" width="305" height="340" rx="8" fill="none" stroke="#334155" strokeWidth="1" />
 
-              {/* Palanca de Retención Metálica (Lever & Locking Clip) */}
-              <rect x="655" y="150" width="10" height="310" rx="4" fill="#64748b" stroke="#cbd5e1" strokeWidth="1.5" />
-              <circle cx="660" cy="460" r="9" fill="#475569" stroke="#cbd5e1" strokeWidth="2" />
+              {/* Palanca de Retención Metálica (Lever Arm) & Clip de Traba */}
+              <rect x="655" y="145" width="11" height="315" rx="5" fill="url(#atx-steel-armor)" stroke="#cbd5e1" strokeWidth="1.5" />
+              <circle cx="660" cy="460" r="10" fill="#475569" stroke="#cbd5e1" strokeWidth="2" />
+              <rect x="652" y="455" width="16" height="10" rx="2" fill="#334155" />
 
-              {/* Tornillos Torx de Fijación ILM */}
-              <circle cx="360" cy="155" r="7" fill="#334155" stroke="#94a3b8" strokeWidth="1.5" />
-              <circle cx="625" cy="155" r="7" fill="#334155" stroke="#94a3b8" strokeWidth="1.5" />
-              <circle cx="492" cy="468" r="7" fill="#334155" stroke="#94a3b8" strokeWidth="1.5" />
+              {/* 3 Tornillos Torx T20 de Fijación ILM */}
+              <g transform="translate(360, 155)">
+                <circle r="7.5" fill="#334155" stroke="#94a3b8" strokeWidth="1.5" />
+                <path d="M -3 -3 L 3 3 M -3 3 L 3 -3" stroke="#f1f5f9" strokeWidth="1.2" />
+              </g>
+              <g transform="translate(625, 155)">
+                <circle r="7.5" fill="#334155" stroke="#94a3b8" strokeWidth="1.5" />
+                <path d="M -3 -3 L 3 3 M -3 3 L 3 -3" stroke="#f1f5f9" strokeWidth="1.2" />
+              </g>
+              <g transform="translate(492, 468)">
+                <circle r="7.5" fill="#334155" stroke="#94a3b8" strokeWidth="1.5" />
+                <path d="M -3 -3 L 3 3 M -3 3 L 3 -3" stroke="#f1f5f9" strokeWidth="1.2" />
+              </g>
 
-              {/* Cavidad del Socket LGA1700 */}
+              {/* Cavidad del Socket con Matriz de Pines LGA Dorados */}
               <rect x="360" y="160" width="265" height="300" rx="6" fill="#090d16" stroke="#475569" strokeWidth="1.5" />
+              <rect x="366" y="166" width="253" height="288" rx="4" fill="url(#lga-pin-mesh)" opacity="0.6" />
 
-              {/* IHS Alargado Rectangular de LGA1700 (37.5 x 45 mm) con Muescas Laterales */}
+              {/* IHS Alargado Rectangular de LGA1700 (37.5 × 45 mm) con Acabado Níquel Cepillado */}
               <g transform="translate(378, 175)">
-                {/* Cuerpo del Difusor Térmico de Níquel */}
-                <rect x="0" y="0" width="230" height="270" rx="8" fill="#334155" stroke="#cbd5e1" strokeWidth="2.5" />
+                {/* Cuerpo del Difusor Térmico de Cobre Niquelado */}
+                <rect x="0" y="0" width="230" height="270" rx="9" fill="url(#atx-metal-dark)" stroke="url(#atx-steel-armor)" strokeWidth="2.5" />
+                <rect x="4" y="4" width="222" height="262" rx="7" fill="none" stroke="#475569" strokeWidth="0.8" />
+
                 {/* Muescas laterales de orientación LGA1700 */}
-                <circle cx="0" cy="135" r="7" fill="#090d16" />
-                <circle cx="230" cy="135" r="7" fill="#090d16" />
+                <circle cx="0" cy="135" r="7.5" fill="#090d16" stroke="#334155" strokeWidth="1" />
+                <circle cx="230" cy="135" r="7.5" fill="#090d16" stroke="#334155" strokeWidth="1" />
 
                 {/* Triángulo Dorado de Pin 1 (Esquina Inferior Izquierda en LGA1700) */}
-                <polygon points="12,258 26,258 12,244" fill="#facc15" stroke="#ca8a04" strokeWidth="1" />
+                <polygon points="12,258 26,258 12,244" fill="url(#atx-gold-flash)" stroke="#ca8a04" strokeWidth="1" />
 
                 {/* Grabado Láser Oficial en el IHS */}
-                <text x="115" y="55" textAnchor="middle" fill="#ffffff" fontSize="13" fontWeight="900" letterSpacing="1">
+                <text x="115" y="52" textAnchor="middle" fill="#ffffff" fontSize="13" fontWeight="900" letterSpacing="1.2">
                   INTEL® CORE™ COMPATIBLE
                 </text>
-                <text x="115" y="80" textAnchor="middle" fill="#38bdf8" fontSize="11" fontWeight="bold">
-                  LGA1700 // SOCKET V
+                <text x="115" y="76" textAnchor="middle" fill="#38bdf8" fontSize="11" fontWeight="bold">
+                  LGA1700 // SOCKET V ARCHITECTURE
                 </text>
-                <text x="115" y="105" textAnchor="middle" fill="#cbd5e1" fontSize="8.5" fontWeight="bold">
+                <text x="115" y="98" textAnchor="middle" fill="#cbd5e1" fontSize="8.5" fontWeight="bold">
                   HYBRID ARCHITECTURE (P-CORE + E-CORE)
                 </text>
-                <text x="115" y="125" textAnchor="middle" fill="#94a3b8" fontSize="8" fontWeight="bold">
+                <text x="115" y="118" textAnchor="middle" fill="#94a3b8" fontSize="8" fontWeight="bold">
                   INTEGRATED MEMORY CONTROLLER (DDR5)
                 </text>
-                <text x="115" y="145" textAnchor="middle" fill="#cbd5e1" fontSize="8" fontWeight="bold">
+                <text x="115" y="138" textAnchor="middle" fill="#cbd5e1" fontSize="8" fontWeight="bold">
                   PCIe 5.0 (16 LANES) • DMI 4.0 (8 LANES)
                 </text>
 
-                {/* 2D DataMatrix Laser Etch */}
-                <rect x="180" y="180" width="34" height="34" fill="#0f172a" stroke="#94a3b8" strokeWidth="1" />
-                <rect x="185" y="185" width="10" height="10" fill="#ffffff" />
-                <rect x="200" y="195" width="8" height="8" fill="#ffffff" />
+                {/* 2D DataMatrix Laser Etch & Micro-Serial */}
+                <g transform="translate(180, 175)">
+                  <rect width="36" height="36" fill="#0a0f1d" stroke="#64748b" strokeWidth="1" />
+                  <rect x="4" y="4" width="10" height="10" fill="#ffffff" />
+                  <rect x="20" y="8" width="8" height="8" fill="#ffffff" />
+                  <rect x="8" y="22" width="6" height="6" fill="#ffffff" />
+                  <rect x="22" y="20" width="10" height="10" fill="#ffffff" />
+                </g>
 
                 {/* Indicador de Estado Operativo */}
-                <rect x="40" y="195" width="150" height="26" rx="4" fill="#090d16" stroke={isComponentActive('cpu') ? '#10b981' : '#64748b'} strokeWidth="1.8" />
+                <rect x="35" y="195" width="140" height="28" rx="5" fill="#090d16" stroke={isComponentActive('cpu') ? '#10b981' : '#64748b'} strokeWidth="1.8" />
                 <text
-                  x="115"
-                  y="212"
+                  x="105"
+                  y="213"
                   textAnchor="middle"
                   fill={isComponentActive('cpu') ? '#34d399' : '#94a3b8'}
                   fontSize="9.5"
@@ -927,16 +1084,17 @@ export const EvoBootMachineVisual: React.FC<EvoBootMachineVisualProps> = ({
             <g
               onClick={() => handleSelectComponent('ram')}
               className="cursor-pointer"
+              filter={isComponentActive('ram') ? 'url(#atx-glow-cyan)' : 'url(#atx-soft-shadow)'}
             >
-              <text x="785" y="75" textAnchor="middle" fill={isComponentActive('ram') ? '#60a5fa' : '#f8fafc'} fontSize="10.5" fontWeight="bold">
+              <text x="785" y="72" textAnchor="middle" fill={isComponentActive('ram') ? '#60a5fa' : '#f8fafc'} fontSize="10.5" fontWeight="bold">
                 4x DDR5 DIMM (DUAL-CH 7200+ MT/s)
               </text>
 
               {[
-                { name: 'DIMM_A1', x: 695, color: '#111827' },
-                { name: 'DIMM_A2 (PRI)', x: 745, color: '#1e3a8a' },
-                { name: 'DIMM_B1', x: 795, color: '#111827' },
-                { name: 'DIMM_B2 (PRI)', x: 845, color: '#1e3a8a' },
+                { name: 'DIMM_A1', x: 695, color: '#0f172a', isPri: false },
+                { name: 'DIMM_A2 (PRI)', x: 745, color: '#1e3a8a', isPri: true },
+                { name: 'DIMM_B1', x: 795, color: '#0f172a', isPri: false },
+                { name: 'DIMM_B2 (PRI)', x: 845, color: '#1e3a8a', isPri: true },
               ].map((dimm, dIdx) => (
                 <g key={`dimm5-${dIdx}`}>
                   {/* Cuerpo del Slot DDR5 con fijación superficial SMT */}
@@ -955,28 +1113,29 @@ export const EvoBootMachineVisual: React.FC<EvoBootMachineVisualProps> = ({
                         : '#64748b'
                     }
                     strokeWidth={isComponentActive('ram') ? 2.5 : 1.5}
-                    filter={isComponentActive('ram') ? 'url(#atx-glow-cyan)' : 'none'}
                   />
 
-                  {/* Traba Superior Unilateral Q-Latch de DDR5 */}
-                  <polygon points={`${dimm.x},88 ${dimm.x + 32},88 ${dimm.x + 24},106 ${dimm.x + 8},106`} fill="#cbd5e1" stroke="#475569" strokeWidth="1" />
+                  {/* Traba Superior Unilateral Q-Latch de DDR5 con textura */}
+                  <polygon points={`${dimm.x},88 ${dimm.x + 32},88 ${dimm.x + 24},106 ${dimm.x + 8},106`} fill="url(#atx-steel-armor)" stroke="#475569" strokeWidth="1" />
+                  <circle cx={dimm.x + 16} cy="96" r="2.5" fill="#1e293b" />
+                  
                   {/* Guía Inferior Fija de DDR5 */}
-                  <rect x={dimm.x + 4} y="514" width="24" height="14" rx="2" fill="#475569" />
+                  <rect x={dimm.x + 4} y="514" width="24" height="14" rx="2" fill="#334155" stroke="#475569" strokeWidth="0.8" />
 
                   {/* Muesca Asimétrica Específica de DDR5 (Key Notch en Y: 325) */}
                   <rect x={dimm.x + 2} y="325" width="28" height="9" fill="#050811" />
 
-                  {/* Carril de Pines Dorados DDR5 (288 pines) */}
-                  <line x1={dimm.x + 16} y1="112" x2={dimm.x + 16} y2="320" stroke="#facc15" strokeWidth="2.5" strokeDasharray="2 3" />
-                  <line x1={dimm.x + 16} y1="338" x2={dimm.x + 16} y2="510" stroke="#facc15" strokeWidth="2.5" strokeDasharray="2 3" />
+                  {/* Carril de Pines Dorados DDR5 (288 pines SMT) */}
+                  <line x1={dimm.x + 16} y1="112" x2={dimm.x + 16} y2="320" stroke="url(#atx-gold-flash)" strokeWidth="3" strokeDasharray="2 3" />
+                  <line x1={dimm.x + 16} y1="338" x2={dimm.x + 16} y2="510" stroke="url(#atx-gold-flash)" strokeWidth="3" strokeDasharray="2 3" />
 
                   {/* Array de Capacitores SMD Cerámicos de Desacoplo DDR5 */}
                   {[140, 200, 260, 380, 440].map((smdY, sI) => (
                     <rect key={`smd-${sI}`} x={dimm.x - 5} y={smdY} width="4" height="8" fill="#d97706" stroke="#92400e" strokeWidth="0.5" />
                   ))}
 
-                  {/* Etiqueta de Canal */}
-                  <text x={dimm.x + 16} y="542" textAnchor="middle" fill="#cbd5e1" fontSize="7.5" fontWeight="bold">
+                  {/* Etiqueta de Canal con badge de prioridad */}
+                  <text x={dimm.x + 16} y="542" textAnchor="middle" fill={dimm.isPri ? '#38bdf8' : '#cbd5e1'} fontSize="7.5" fontWeight="bold">
                     {dimm.name}
                   </text>
                 </g>
@@ -989,23 +1148,25 @@ export const EvoBootMachineVisual: React.FC<EvoBootMachineVisualProps> = ({
             <g
               onClick={() => handleSelectComponent('atx')}
               className="cursor-pointer"
+              filter={isComponentActive('atx') ? 'url(#atx-glow-amber)' : 'url(#atx-soft-shadow)'}
             >
               <rect
                 x="910"
                 y="170"
                 width="60"
                 height="285"
-                rx="4"
+                rx="4.5"
                 fill="#18181b"
                 stroke={isComponentActive('atx') ? '#f59e0b' : '#64748b'}
                 strokeWidth={isComponentActive('atx') ? 2.8 : 1.8}
-                filter={isComponentActive('atx') ? 'url(#atx-glow-amber)' : 'none'}
               />
               <text x="940" y="160" textAnchor="middle" fill={isComponentActive('atx') ? '#fbbf24' : '#f8fafc'} fontSize="9" fontWeight="bold">
                 24-PIN ATX
               </text>
-              {/* Presilla Lateral de Enganche ATX */}
-              <rect x="902" y="270" width="8" height="90" rx="2" fill="#71717a" stroke="#d4d4d8" strokeWidth="1" />
+              {/* Presilla Lateral de Enganche ATX Mecánica */}
+              <rect x="902" y="270" width="8" height="90" rx="2" fill="#52525b" stroke="#71717a" strokeWidth="1" />
+              <circle cx="906" cy="315" r="2.5" fill="#18181b" />
+              
               {/* 24 Pines con Clave Alternada Cuadrada / Biselada */}
               {Array.from({ length: 12 }).map((_, pIdx) => (
                 <g key={`atx24-pin-${pIdx}`}>
@@ -1013,8 +1174,8 @@ export const EvoBootMachineVisual: React.FC<EvoBootMachineVisualProps> = ({
                   <rect x="944" y={180 + pIdx * 22} width="18" height="17" rx="1.5" fill="#09090b" stroke="#71717a" strokeWidth="1" />
                   {isComponentActive('atx') && (
                     <>
-                      <circle cx={927} cy={188.5 + pIdx * 22} r="3" fill={pIdx === 8 ? '#c084fc' : '#fbbf24'} />
-                      <circle cx={953} cy={188.5 + pIdx * 22} r="3" fill={pIdx === 3 ? '#22c55e' : '#fbbf24'} />
+                      <circle cx={927} cy={188.5 + pIdx * 22} r="3.2" fill={pIdx === 8 ? '#c084fc' : '#fbbf24'} />
+                      <circle cx={953} cy={188.5 + pIdx * 22} r="3.2" fill={pIdx === 3 ? '#22c55e' : '#fbbf24'} />
                     </>
                   )}
                 </g>
@@ -1042,10 +1203,10 @@ export const EvoBootMachineVisual: React.FC<EvoBootMachineVisualProps> = ({
                   <circle
                     cx="921"
                     cy={led.y}
-                    r="4"
+                    r="4.2"
                     fill={led.active ? led.color : '#27272a'}
                     stroke={led.active ? '#ffffff' : '#52525b'}
-                    strokeWidth="1"
+                    strokeWidth="1.2"
                     filter={led.active ? 'url(#atx-glow-amber)' : 'none'}
                     className={led.active && isFailed ? 'animate-pulse' : ''}
                   />
@@ -1062,30 +1223,32 @@ export const EvoBootMachineVisual: React.FC<EvoBootMachineVisualProps> = ({
             <g
               onClick={() => handleSelectComponent('m2')}
               className="cursor-pointer"
+              filter={isComponentActive('m2') ? 'url(#atx-glow-emerald)' : 'url(#atx-soft-shadow)'}
             >
-              {/* Disipador de Aluminio Ranurado */}
+              {/* Disipador de Aluminio Ranurado M.2 Shield Frozr */}
               <rect
                 x="195"
                 y="495"
                 width="480"
                 height="54"
-                rx="4"
-                fill="#161f30"
+                rx="5"
+                fill="url(#atx-m2-shield)"
                 stroke={isComponentActive('m2') ? '#10b981' : '#475569'}
                 strokeWidth={isComponentActive('m2') ? 2.5 : 1.5}
-                filter={isComponentActive('m2') ? 'url(#atx-glow-emerald)' : 'none'}
               />
-              {/* Ranuras térmicas mecanizadas */}
+              <rect x="198" y="498" width="474" height="48" rx="3" fill="none" stroke="#334155" strokeWidth="0.8" />
+              
+              {/* Ranuras térmicas mecanizadas CNC */}
               {[0, 1, 2, 3, 4, 5].map((idx) => (
-                <line key={`m2-groove-${idx}`} x1={220 + idx * 75} y1="502" x2={270 + idx * 75} y2="542" stroke="#0b111e" strokeWidth="3" />
+                <line key={`m2-groove-${idx}`} x1={220 + idx * 75} y1="502" x2={270 + idx * 75} y2="542" stroke="#080d18" strokeWidth="3.5" />
               ))}
-              <text x="435" y="527" textAnchor="middle" fill="#f8fafc" fontSize="10" fontWeight="900">
-                M.2_1 (CPU DIRECT PCIe 5.0 x4) // SHIELD FROZR 2280
+              <text x="435" y="527" textAnchor="middle" fill="#f8fafc" fontSize="10.5" fontWeight="900" letterSpacing="0.8">
+                M.2_1 (CPU DIRECT PCIe 5.0 ×4) // SHIELD FROZR 2280
               </text>
               {/* Conector M.2 M-Key a la Izquierda */}
               <rect x="198" y="502" width="18" height="40" fill="#020617" stroke="#64748b" strokeWidth="1" />
-              {/* Tornillo EZ M.2 Latch a la Derecha */}
-              <circle cx="660" cy="522" r="7.5" fill="#475569" stroke="#cbd5e1" strokeWidth="1.5" />
+              {/* Tornillo EZ M.2 Latch Moledado a la Derecha */}
+              <circle cx="660" cy="522" r="8" fill="url(#atx-steel-armor)" stroke="#cbd5e1" strokeWidth="1.5" />
               <circle cx="660" cy="522" r="3.5" fill="#020617" />
             </g>
 
@@ -1095,18 +1258,19 @@ export const EvoBootMachineVisual: React.FC<EvoBootMachineVisualProps> = ({
             <g
               onClick={() => handleSelectComponent('pcie')}
               className="cursor-pointer"
+              filter={isComponentActive('pcie') ? 'url(#atx-glow-cyan)' : 'url(#atx-soft-shadow)'}
             >
               <text x="435" y="560" textAnchor="middle" fill={isComponentActive('pcie') ? '#a5b4fc' : '#f8fafc'} fontSize="10" fontWeight="bold">
-                PCI_E1 // PCIe 5.0 x16 STEEL ARMOR (SAFESLOT dGPU)
+                PCI_E1 // PCIe 5.0 ×16 STEEL ARMOR (SAFESLOT dGPU)
               </text>
-              {/* Ranura PCIe 1: Blindaje Macizo de Acero Inoxidable */}
+              {/* Ranura PCIe 1: Blindaje Macizo de Acero Inoxidable (SafeSlot) */}
               <rect
                 x="150"
                 y="568"
                 width="565"
                 height="48"
-                rx="4"
-                fill="#334155"
+                rx="4.5"
+                fill="url(#atx-steel-armor)"
                 stroke={
                   isComponentActive('pcie')
                     ? isFailed && [14, 15].includes(currentStep.stepNumber)
@@ -1115,29 +1279,29 @@ export const EvoBootMachineVisual: React.FC<EvoBootMachineVisualProps> = ({
                     : '#94a3b8'
                 }
                 strokeWidth={isComponentActive('pcie') ? 3 : 2}
-                filter={isComponentActive('pcie') ? 'url(#atx-glow-cyan)' : 'none'}
               />
               {/* Muesca divisoria física de PCIe (separación de 11 pines de alimentación y 71 pines de datos) */}
               <rect x="165" y="585" width="60" height="14" fill="#090d16" />
               <rect x="235" y="585" width="430" height="14" fill="#090d16" />
-              <line x1="168" y1="592" x2="222" y2="592" stroke="#facc15" strokeWidth="2.5" strokeDasharray="3 3" />
-              <line x1="238" y1="592" x2="660" y2="592" stroke="#facc15" strokeWidth="2.5" strokeDasharray="3 3" />
-              {/* Traba Q-Release / Wing Latch en el Extremo Derecho */}
-              <polygon points="695,568 728,568 720,616 695,616" fill="#cbd5e1" stroke="#475569" strokeWidth="1.5" />
-              <circle cx="708" cy="592" r="4" fill="#475569" />
+              <line x1="168" y1="592" x2="222" y2="592" stroke="url(#atx-gold-flash)" strokeWidth="2.8" strokeDasharray="3 3" />
+              <line x1="238" y1="592" x2="660" y2="592" stroke="url(#atx-gold-flash)" strokeWidth="2.8" strokeDasharray="3 3" />
+              
+              {/* Traba Q-Release Reforzada con Pestillo Mecánico en el Extremo Derecho */}
+              <polygon points="695,568 730,568 722,616 695,616" fill="url(#atx-steel-armor)" stroke="#475569" strokeWidth="1.5" />
+              <circle cx="710" cy="592" r="4.5" fill="#334155" stroke="#cbd5e1" strokeWidth="1" />
 
-              {/* Ranura PCIe x1 Secundaria (36 Pines) */}
-              <text x="240" y="695" fill="#94a3b8" fontSize="8" fontWeight="bold">PCI_E2 (PCIe 3.0 x1)</text>
-              <rect x="150" y="700" width="180" height="36" rx="2.5" fill="#1e293b" stroke="#475569" strokeWidth="1.5" />
+              {/* Ranura PCIe x1 Secundaria (PCI_E2) */}
+              <text x="240" y="694" fill="#94a3b8" fontSize="8" fontWeight="bold">PCI_E2 (PCIe 3.0 ×1)</text>
+              <rect x="150" y="700" width="180" height="36" rx="3" fill="#18181b" stroke="#475569" strokeWidth="1.5" />
               <rect x="162" y="713" width="155" height="10" fill="#090d16" />
 
-              {/* Ranura PCIe x16 Secundaria (Enlazada al PCH) */}
+              {/* Ranura PCIe x16 Secundaria (PCI_E3 - Enlazada al PCH) */}
               <text x="435" y="805" textAnchor="middle" fill="#94a3b8" fontSize="9" fontWeight="bold">
-                PCI_E3 // PCIe 4.0 x16 (PCH BUS x4)
+                PCI_E3 // PCIe 4.0 ×16 (PCH BUS ×4)
               </text>
-              <rect x="150" y="810" width="565" height="44" rx="3.5" fill="#1e293b" stroke="#64748b" strokeWidth="1.8" />
+              <rect x="150" y="810" width="565" height="44" rx="3.5" fill="#18181b" stroke="#64748b" strokeWidth="1.8" />
               <rect x="165" y="826" width="500" height="12" fill="#090d16" stroke="#334155" strokeWidth="1" />
-              <polygon points="695,810 722,810 715,854 695,854" fill="#64748b" />
+              <polygon points="695,810 722,810 715,854 695,854" fill="#52525b" />
             </g>
 
             {/* =================================================================== */}
@@ -1146,21 +1310,26 @@ export const EvoBootMachineVisual: React.FC<EvoBootMachineVisualProps> = ({
             <g
               onClick={() => handleSelectComponent('cmos')}
               className="cursor-pointer"
+              filter="url(#atx-soft-shadow)"
             >
               {/* Zócalo Metálico Circular para Pila de Botón */}
-              <circle cx="530" cy="735" r="44" fill="#1e293b" stroke="#64748b" strokeWidth="2.5" />
-              <circle cx="530" cy="735" r="40" fill="#94a3b8" stroke="#cbd5e1" strokeWidth="2" />
-              <circle cx="530" cy="735" r="34" fill="#cbd5e1" />
-              {/* Relieve y Texto de la Pila de Litio */}
-              <text x="530" y="728" textAnchor="middle" fill="#0f172a" fontSize="16" fontWeight="900">+</text>
-              <text x="530" y="746" textAnchor="middle" fill="#1e293b" fontSize="9.5" fontWeight="900">CR2032</text>
-              <text x="530" y="758" textAnchor="middle" fill="#334155" fontSize="8" fontWeight="bold">3V LITHIUM</text>
+              <circle cx="530" cy="735" r="45" fill="#0f172a" stroke="#64748b" strokeWidth="2.5" />
+              <circle cx="530" cy="735" r="41" fill="url(#atx-cr2032)" stroke="#cbd5e1" strokeWidth="1.8" />
+              <circle cx="530" cy="735" r="35" fill="none" stroke="#94a3b8" strokeWidth="0.8" />
+              
+              {/* Relieve y Grabado de la Pila de Litio */}
+              <text x="530" y="726" textAnchor="middle" fill="#0f172a" fontSize="18" fontWeight="900">+</text>
+              <text x="530" y="745" textAnchor="middle" fill="#0f172a" fontSize="10" fontWeight="900" letterSpacing="1">CR2032</text>
+              <text x="530" y="758" textAnchor="middle" fill="#334155" fontSize="8" fontWeight="bold">3V LITHIUM CELL</text>
+
+              {/* Clip de expulsión metálico superior */}
+              <rect x="522" y="688" width="16" height="6" rx="1.5" fill="#cbd5e1" stroke="#475569" strokeWidth="0.8" />
 
               {/* Jumper de 2 Pines JBAT1 / Clear CMOS */}
               <g transform="translate(598, 720)">
                 <rect x="0" y="0" width="32" height="28" rx="2.5" fill="#090d16" stroke="#64748b" strokeWidth="1.2" />
-                <circle cx="9" cy="14" r="3" fill="#facc15" />
-                <circle cx="23" cy="14" r="3" fill="#facc15" />
+                <circle cx="9" cy="14" r="3" fill="url(#atx-gold-flash)" />
+                <circle cx="23" cy="14" r="3" fill="url(#atx-gold-flash)" />
                 <text x="16" y="38" textAnchor="middle" fill="#cbd5e1" fontSize="7" fontWeight="bold">JBAT1</text>
               </g>
             </g>
@@ -1171,21 +1340,22 @@ export const EvoBootMachineVisual: React.FC<EvoBootMachineVisualProps> = ({
             <g
               onClick={() => handleSelectComponent('m2')}
               className="cursor-pointer"
+              filter={isComponentActive('m2') ? 'url(#atx-glow-emerald)' : 'url(#atx-soft-shadow)'}
             >
               <rect
                 x="195"
                 y="870"
                 width="480"
                 height="50"
-                rx="4"
-                fill="#161f30"
+                rx="4.5"
+                fill="url(#atx-m2-shield)"
                 stroke={isComponentActive('m2') ? '#10b981' : '#475569'}
                 strokeWidth={isComponentActive('m2') ? 2.2 : 1.5}
               />
               <text x="435" y="900" textAnchor="middle" fill="#cbd5e1" fontSize="9.5" fontWeight="bold">
-                M.2_2 (PCH LINK PCIe 4.0 x4) // 2280 THERMAL SHIELD
+                M.2_2 (PCH LINK PCIe 4.0 ×4) // 2280 THERMAL SHIELD
               </text>
-              <circle cx="660" cy="895" r="7" fill="#475569" stroke="#cbd5e1" strokeWidth="1.2" />
+              <circle cx="660" cy="895" r="7.5" fill="url(#atx-steel-armor)" stroke="#cbd5e1" strokeWidth="1.2" />
             </g>
 
             {/* =================================================================== */}
@@ -1194,15 +1364,16 @@ export const EvoBootMachineVisual: React.FC<EvoBootMachineVisualProps> = ({
             <g
               onClick={() => handleSelectComponent('pch')}
               className="cursor-pointer"
+              filter={isComponentActive('pch') ? 'url(#atx-glow-cyan)' : 'url(#atx-soft-shadow)'}
             >
-              {/* Disipador Metálico Cuadrado del Chipset Z790 */}
+              {/* Disipador Metálico Facetado del Chipset Z790 */}
               <rect
                 x="720"
                 y="620"
                 width="235"
                 height="245"
                 rx="8"
-                fill="#0f172a"
+                fill="url(#atx-pch-metallic)"
                 stroke={
                   isComponentActive('pch')
                     ? isFailed && [13, 16, 18].includes(currentStep.stepNumber)
@@ -1211,41 +1382,44 @@ export const EvoBootMachineVisual: React.FC<EvoBootMachineVisualProps> = ({
                     : '#475569'
                 }
                 strokeWidth={isComponentActive('pch') ? 3 : 2}
-                filter={isComponentActive('pch') ? 'url(#atx-glow-cyan)' : 'none'}
               />
-              {/* Ranuras de Ventilación Diagonales Estilizadas */}
+              <rect x="725" y="625" width="225" height="235" rx="6" fill="none" stroke="#1e293b" strokeWidth="1" />
+              
+              {/* Ranuras de Ventilación Diagonales Estilizadas CNC */}
               {[0, 1, 2, 3, 4].map((s) => (
                 <path
                   key={`pch-groove-${s}`}
                   d={`M ${740 + s * 34} 635 L ${775 + s * 34} 845`}
-                  stroke="#1e293b"
+                  stroke="#080e1a"
                   strokeWidth="7"
                   strokeLinecap="round"
                 />
               ))}
 
-              {/* Insignia Láser Central del Chipset */}
-              <circle cx="837" cy="742" r="42" fill="#1e293b" stroke="#06b6d4" strokeWidth="2" />
-              <text x="837" y="736" textAnchor="middle" fill="#ffffff" fontSize="15" fontWeight="900" letterSpacing="1.5">
+              {/* Insignia Láser Central del Chipset con Aro Iluminado */}
+              <circle cx="837" cy="742" r="44" fill="#0b1324" stroke="#06b6d4" strokeWidth="2.2" />
+              <circle cx="837" cy="742" r="40" fill="#070c18" stroke="#1e3a5f" strokeWidth="1" />
+              <text x="837" y="736" textAnchor="middle" fill="#ffffff" fontSize="15" fontWeight="900" letterSpacing="2">
                 INTEL
               </text>
-              <text x="837" y="754" textAnchor="middle" fill="#22d3ee" fontSize="10" fontWeight="bold">
+              <text x="837" y="754" textAnchor="middle" fill="#22d3ee" fontSize="10.5" fontWeight="bold">
                 Z790 PCH
               </text>
               <text x="837" y="798" textAnchor="middle" fill="#94a3b8" fontSize="8.5" fontWeight="bold">
-                DMI 4.0 x8 PLATFORM HUB
+                DMI 4.0 ×8 PLATFORM HUB
               </text>
             </g>
 
             {/* =================================================================== */}
-            {/* 14. 4x PUERTOS SATA 6Gb/s ACOdados (X: 920-975, Y: 880-1070)        */}
+            {/* 14. 4x PUERTOS SATA 6Gb/s ACODADOS (X: 920-975, Y: 880-1070)        */}
             {/* =================================================================== */}
             <g
               onClick={() => handleSelectComponent('sata')}
               className="cursor-pointer"
+              filter={isComponentActive('sata') ? 'url(#atx-glow-emerald)' : 'url(#atx-soft-shadow)'}
             >
               <text x="945" y="872" textAnchor="middle" fill={isComponentActive('sata') ? '#34d399' : '#f8fafc'} fontSize="8.5" fontWeight="bold">
-                4x SATA 6G
+                4× SATA 6G
               </text>
               {/* 4 Conectores en 2 Bloques Apilados con traba metálica */}
               {[885, 930, 975, 1020].map((sy, sIdx) => (
@@ -1260,8 +1434,8 @@ export const EvoBootMachineVisual: React.FC<EvoBootMachineVisualProps> = ({
                     stroke={isComponentActive('sata') ? '#10b981' : '#64748b'}
                     strokeWidth={isComponentActive('sata') ? 2.5 : 1.5}
                   />
-                  {/* Traba metálica exterior de retención */}
-                  <rect x="914" y={sy + 12} width="6" height="16" fill="#94a3b8" />
+                  {/* Traba metálica exterior de retención con pestillo */}
+                  <rect x="914" y={sy + 12} width="6" height="16" fill="url(#atx-steel-armor)" />
                   {/* Ranura en 'L' auténtica de SATA */}
                   <path d={`M 928 ${sy + 10} L 962 ${sy + 10} L 962 ${sy + 16} L 938 ${sy + 16} L 938 ${sy + 28} L 928 ${sy + 28} Z`} fill="#090d16" />
                   <text x="948" y={sy + 36} textAnchor="middle" fill="#cbd5e1" fontSize="7" fontWeight="bold">
@@ -1277,6 +1451,7 @@ export const EvoBootMachineVisual: React.FC<EvoBootMachineVisualProps> = ({
             <g
               onClick={() => handleSelectComponent('bios')}
               className="cursor-pointer"
+              filter={isComponentActive('bios') ? 'url(#atx-glow-amber)' : 'url(#atx-soft-shadow)'}
             >
               {/* Encapsulado SOIC-8 de 8 Pines */}
               <rect
@@ -1294,15 +1469,14 @@ export const EvoBootMachineVisual: React.FC<EvoBootMachineVisualProps> = ({
                     : '#64748b'
                 }
                 strokeWidth={isComponentActive('bios') ? 2.8 : 1.5}
-                filter={isComponentActive('bios') ? 'url(#atx-glow-amber)' : 'none'}
               />
               {/* Punto y muesca Pin 1 */}
-              <circle cx="644" cy="954" r="3" fill="#c084fc" />
-              {/* 8 Pines plateados */}
+              <circle cx="644" cy="954" r="3.2" fill="#c084fc" />
+              {/* 8 Pines plateados gull-wing */}
               {[0, 1, 2, 3].map((pin) => (
                 <g key={`bios-lead-${pin}`}>
-                  <rect x="626" y={951 + pin * 11} width="9" height="5" rx="1" fill="#cbd5e1" />
-                  <rect x="695" y={951 + pin * 11} width="9" height="5" rx="1" fill="#cbd5e1" />
+                  <rect x="625" y={951 + pin * 11} width="10" height="5" rx="1" fill="url(#atx-steel-armor)" />
+                  <rect x="695" y={951 + pin * 11} width="10" height="5" rx="1" fill="url(#atx-steel-armor)" />
                 </g>
               ))}
               <text x="665" y="970" textAnchor="middle" fill="#ffffff" fontSize="8" fontWeight="bold">
@@ -1317,37 +1491,67 @@ export const EvoBootMachineVisual: React.FC<EvoBootMachineVisualProps> = ({
             {/* 16. SUBSISTEMA DE AUDIO AUDIO BOOST HD (X: 25-140, Y: 870-1170)     */}
             {/* =================================================================== */}
             <g>
-              {/* Línea de Aislamiento de Cobre Iluminada */}
+              {/* Línea de Aislamiento de Cobre Iluminada (PCB Isolation Trace) */}
               <path
                 d="M 25 870 L 140 870 L 140 1175"
                 fill="none"
                 stroke={isPoweredOn ? '#f59e0b' : '#475569'}
-                strokeWidth="3"
-                strokeDasharray="5 3"
+                strokeWidth="3.2"
+                strokeDasharray="6 3"
                 filter={isPoweredOn ? 'url(#atx-glow-amber)' : 'none'}
               />
               <text x="82" y="890" textAnchor="middle" fill="#f8fafc" fontSize="9" fontWeight="bold">
                 AUDIO BOOST 5
               </text>
-              {/* 5 Capacitores Dorados de Audio Nichicon */}
+              {/* 5 Capacitores Dorados de Audio Nichicon Fine Gold */}
               {[920, 960, 1000, 1040, 1080].map((ay, i) => (
-                <g key={`aud-cap-${i}`}>
-                  <circle cx="82" cy={ay} r="15" fill="#0f172a" stroke="#eab308" strokeWidth="2.5" />
-                  <circle cx="82" cy={ay} r="11" fill="#78350f" />
-                  <line x1="71" y1={ay} x2="93" y2={ay} stroke="#fef08a" strokeWidth="2" />
+                <g key={`aud-cap-${i}`} transform={`translate(82, ${ay})`}>
+                  <circle r="15" fill="#0f172a" stroke="url(#atx-gold-flash)" strokeWidth="2.5" />
+                  <circle r="11" fill="#78350f" />
+                  {/* Línea negra característica Nichicon */}
+                  <line x1="-11" y1="0" x2="11" y2="0" stroke="#fef08a" strokeWidth="2" />
                 </g>
               ))}
-              {/* Chip Códec de Audio Protegido */}
-              <rect x="58" y="1115" width="50" height="48" rx="3" fill="#1e293b" stroke="#cbd5e1" strokeWidth="1.5" />
-              <text x="83" y="1144" textAnchor="middle" fill="#ffffff" fontSize="7.5" fontWeight="bold">ALC1220</text>
+              {/* Chip Códec de Audio Protegido Realtek ALC1220 con blindaje EMI */}
+              <rect x="58" y="1115" width="50" height="48" rx="3.5" fill="url(#atx-steel-armor)" stroke="#cbd5e1" strokeWidth="1.5" />
+              <text x="83" y="1144" textAnchor="middle" fill="#0f172a" fontSize="8" fontWeight="bold">ALC1220</text>
             </g>
 
             {/* =================================================================== */}
-            {/* 17. HEADER PANEL FRONTAL JFP1 (X: 815-950, Y: 1115-1170)            */}
+            {/* 17. HEADERS DE VENTILADOR (PWM 4-PIN) & INTERNOS USB                 */}
+            {/* =================================================================== */}
+            {/* CPU_FAN1 Header */}
+            <g transform="translate(685, 30)">
+              <rect width="30" height="15" rx="1.5" fill="#090d16" stroke="#64748b" strokeWidth="1" />
+              <rect x="0" y="0" width="30" height="3" fill="#64748b" />
+              {[0, 1, 2, 3].map((fp) => (
+                <circle key={`cpufan-p-${fp}`} cx={5 + fp * 6.5} cy="9" r="1.5" fill="url(#atx-gold-flash)" />
+              ))}
+              <text x="15" y="-3" textAnchor="middle" fill="#94a3b8" fontSize="6" fontWeight="bold">CPU_FAN1</text>
+            </g>
+            {/* PUMP_FAN1 Header */}
+            <g transform="translate(735, 30)">
+              <rect width="30" height="15" rx="1.5" fill="#090d16" stroke="#64748b" strokeWidth="1" />
+              <rect x="0" y="0" width="30" height="3" fill="#64748b" />
+              {[0, 1, 2, 3].map((fp) => (
+                <circle key={`pumpfan-p-${fp}`} cx={5 + fp * 6.5} cy="9" r="1.5" fill="url(#atx-gold-flash)" />
+              ))}
+              <text x="15" y="-3" textAnchor="middle" fill="#94a3b8" fontSize="6" fontWeight="bold">PUMP_FAN1</text>
+            </g>
+            {/* Front USB 3.0 19-Pin Internal Header */}
+            <g transform="translate(915, 480)">
+              <rect width="55" height="26" rx="2" fill="#18181b" stroke="#64748b" strokeWidth="1.2" />
+              <rect x="0" y="8" width="4" height="10" fill="#090d16" />
+              <text x="28" y="38" textAnchor="middle" fill="#94a3b8" fontSize="6" fontWeight="bold">JUSB3 (USB 3.0)</text>
+            </g>
+
+            {/* =================================================================== */}
+            {/* 18. HEADER PANEL FRONTAL JFP1 (X: 815-950, Y: 1115-1170)            */}
             {/* =================================================================== */}
             <g
               onClick={() => handleSelectComponent('fpanel')}
               className="cursor-pointer"
+              filter={isComponentActive('fpanel') ? 'url(#atx-glow-amber)' : 'url(#atx-soft-shadow)'}
             >
               <rect
                 x="815"
@@ -1364,17 +1568,16 @@ export const EvoBootMachineVisual: React.FC<EvoBootMachineVisualProps> = ({
                     : '#64748b'
                 }
                 strokeWidth={isComponentActive('fpanel') ? 2.8 : 1.5}
-                filter={isComponentActive('fpanel') ? 'url(#atx-glow-amber)' : 'none'}
               />
               <text x="882" y="1108" textAnchor="middle" fill={isComponentActive('fpanel') ? '#fbbf24' : '#f8fafc'} fontSize="8.5" fontWeight="bold">
-                JFP1 // FRONT PANEL (PWR_SW / RESET)
+                JFP1 // FRONT PANEL (PWR_SW / RESET / LEDs)
               </text>
               {/* 9 Pines Estandarizados (Hilera superior 5, inferior 4 con pin 10 ausente) */}
               {[0, 1, 2, 3, 4].map((pinX) => (
-                <circle key={`jfp1-t-${pinX}`} cx={830 + pinX * 22} cy="1130" r="4" fill="#facc15" stroke="#ca8a04" strokeWidth="1.2" />
+                <circle key={`jfp1-t-${pinX}`} cx={830 + pinX * 22} cy="1130" r="4" fill="url(#atx-gold-flash)" stroke="#ca8a04" strokeWidth="1.2" />
               ))}
               {[0, 1, 2, 3].map((pinX) => (
-                <circle key={`jfp1-b-${pinX}`} cx={830 + pinX * 22} cy="1152" r="4" fill="#facc15" stroke="#ca8a04" strokeWidth="1.2" />
+                <circle key={`jfp1-b-${pinX}`} cx={830 + pinX * 22} cy="1152" r="4" fill="url(#atx-gold-flash)" stroke="#ca8a04" strokeWidth="1.2" />
               ))}
               {/* Indicador de Pulsación Activa en Paso 02 */}
               {currentStep.stepNumber === 2 && (
@@ -1383,7 +1586,7 @@ export const EvoBootMachineVisual: React.FC<EvoBootMachineVisualProps> = ({
             </g>
 
             {/* =================================================================== */}
-            {/* 18. BUSES DE SEÑALES VIAJERAS DINÁMICAS (34 ETAPAS EN TIEMPO REAL)  */}
+            {/* 19. BUSES DE SEÑALES VIAJERAS DINÁMICAS (34 ETAPAS EN TIEMPO REAL)  */}
             {/* =================================================================== */}
             {/* STANDBY: Riel +5VSB desde ATX hacia Lógica y F_PANEL (Paso 01) */}
             <path
