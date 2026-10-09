@@ -126,7 +126,7 @@ export interface EvoWorldMapProps {
   onInspectCore?: () => void;
   activeProfile?: EvoNarrativeProfile;
   onChangeProfile?: (profile: EvoNarrativeProfile) => void;
-  onOpenTomo?: (tomoId: '01' | '02' | '03' | '04' | '08') => void;
+  onOpenTomo?: (tomoId: string) => void;
   onNavigateBootLab?: () => void;
   onNavigateHotSwapLab?: (panel?: 'sandbox' | 'hardware' | 'software' | 'telemetry' | 'matrix' | 'all') => void;
   onNavigateWindowsMatrixLab?: (scenario?: string) => void;
@@ -367,7 +367,7 @@ export const EvoWorldMap: React.FC<EvoWorldMapProps> = ({
   initialZoneId,
   activeProfile = 'investigador',
   onChangeProfile = () => {},
-  onOpenTomo = (_tomoId: '01' | '02' | '03' | '04' | '08') => {},
+  onOpenTomo = (_tomoId: string) => {},
   onNavigateBootLab,
   onNavigateHotSwapLab,
   onNavigateWindowsMatrixLab,
@@ -1801,7 +1801,7 @@ export const EvoWorldMap: React.FC<EvoWorldMapProps> = ({
                 <div
                   key={item.id}
                   className={`p-5 rounded-2xl evo-surface-level2 border transition-all flex flex-col justify-between gap-4 group ${
-                    item.isDisabled
+                    item.status !== 'Disponible'
                       ? 'border-zinc-900/80 opacity-75'
                       : 'border-zinc-900 hover:border-emerald-400/30'
                   }`}
@@ -1856,7 +1856,7 @@ export const EvoWorldMap: React.FC<EvoWorldMapProps> = ({
                     )}
                   </div>
 
-                  {!item.isDisabled ? (
+                  {item.status === 'Disponible' ? (
                     isFreeUser ? (
                       <button
                         type="button"
