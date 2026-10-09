@@ -52,6 +52,10 @@ import {
 } from 'lucide-react';
 import { EvoThermalHistoryModal } from './EvoThermalHistoryModal';
 import { EvoSingleTruthSurface } from './EvoSingleTruthSurface';
+import { GameWorkloadRegistry } from '../../../evoLabCore/services/digitalTwin/gameWorkloadRegistry';
+import { deriveGameLoad, type EvoGameQuality } from './evoGameRecoveryModel';
+
+const RECOVERED_GAMES = GameWorkloadRegistry.getByCategory('JUEGOS');
 
 // ============================================================================
 // HARDWARE DEFINITIONS & TIERS
@@ -985,6 +989,8 @@ export const EvoUltimateSandbox: React.FC<EvoUltimateSandboxProps> = ({
     initialHardware.isIgpu ? 'esports' : 'aaa'
   );
   const [gameResolution, setGameResolution] = useState<'1080p' | '1440p' | '4k'>('1080p');
+  const [selectedGameId, setSelectedGameId] = useState<string>(() => initialHardware.isIgpu ? 'cs2' : 'cyberpunk_2077');
+  const [gameQuality, setGameQuality] = useState<EvoGameQuality>(() => initialHardware.isIgpu ? 'LOW_COMPETITIVE' : 'HIGH');
 
   // =========================================================================
   // 1. HOOK DE SINCRONIZACIÓN INICIAL (useEffect) & BLOQUEO DE AUTO-ENGAÑO
@@ -1189,6 +1195,12 @@ export const EvoUltimateSandbox: React.FC<EvoUltimateSandboxProps> = ({
   const selectedRam = useMemo(() => RAM_OPTIONS.find((r) => r.id === selectedRamId) || RAM_OPTIONS[1], [selectedRamId]);
   const selectedStorage = useMemo(() => STORAGE_OPTIONS.find((s) => s.id === selectedStorageId) || STORAGE_OPTIONS[3], [selectedStorageId]);
   const selectedPsu = useMemo(() => PSU_OPTIONS.find((p) => p.id === selectedPsuId) || PSU_OPTIONS[1], [selectedPsuId]);
+  const selectedGame = useMemo(() => GameWorkloadRegistry.get(selectedGameId) ?? RECOVERED_GAMES[0], [selectedGameId]);
+  const gameLoad = useMemo(() => {
+    const baselineId = selectedGameType === 'esports' ? 'cs2' : 'cyberpunk_2077';
+    const baseline = GameWorkloadRegistry.get(baselineId) ?? selectedGame;
+    return deriveGameLoad(selectedGame, baseline, gameResolution, gameQuality, selectedGameType === 'esports' ? 'LOW_COMPETITIVE' : 'HIGH');
+  }, [selectedGame, selectedGameType, gameResolution, gameQuality]);
 
   // Canvas Reference
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -1475,11 +1487,11 @@ export const EvoUltimateSandbox: React.FC<EvoUltimateSandboxProps> = ({
     const is4k = gameResolution === '4k';
     const is1440p = gameResolution === '1440p';
 
-    const gameVramDemandGb = selectedGameType === 'aaa' ? (is4k ? 14.8 : is1440p ? 9.8 : 7.2) : (is4k ? 5.2 : 3.4);
+    const gameVramDemandGb = gameLoad.vramGb;
     const totalVramDemanded = +(gameVramDemandGb + windowsMetrics.backgroundVramGb).toFixed(1);
     const isVramSaturated = totalVramDemanded > selectedGpu.vramGb;
 
-    const gameRamDemandGb = selectedGameType === 'aaa' ? 12.5 : 6.0;
+    const gameRamDemandGb = gameLoad.ramGb;
     const totalRamDemanded = +(gameRamDemandGb + windowsMetrics.backgroundRamGb).toFixed(1);
     const isRamSaturated = totalRamDemanded > selectedRam.sizeGb;
 
@@ -1503,7 +1515,8 @@ export const EvoUltimateSandbox: React.FC<EvoUltimateSandboxProps> = ({
       else if (selectedGpu.tier === '4k') baseGpuFps = is4k ? 115 : is1440p ? 165 : 210;
     }
 
-    let maxCpuFps = selectedGameType === 'esports' ? selectedCpu.gamingPowerScore * 4.8 : selectedCpu.gamingPowerScore * 2.2 + 30;
+    baseGpuFps = Math.max(1, baseGpuFps * gameLoad.gpuFpsFactor);
+    let maxCpuFps = (selectedGameType === 'esports' ? selectedCpu.gamingPowerScore * 4.8 : selectedCpu.gamingPowerScore * 2.2 + 30) * gameLoad.cpuFpsFactor;
     
     // Impact of XMP on CPU limit: If disabled, JEDEC limits cache throughput
     if (!xmpEnabled) {
@@ -1680,6 +1693,7 @@ export const EvoUltimateSandbox: React.FC<EvoUltimateSandboxProps> = ({
     powerMetrics,
     gameResolution,
     selectedGameType,
+    gameLoad,
     windowsMetrics,
     selectedGpu,
     selectedRam,
@@ -2972,7 +2986,7 @@ export const EvoUltimateSandbox: React.FC<EvoUltimateSandboxProps> = ({
                   </span>
                   <button
                     type="button"
-                    onClick={() => setSelectedGameType('esports')}
+                    onClick={() => { setSelectedGameType('esports'); setSelectedGameId('cs2'); setGameQuality('LOW_COMPETITIVE'); }}
                     className={`px-3 py-1.5 rounded-lg text-xs font-mono-tech font-bold transition-all cursor-pointer ${
                       selectedGameType === 'esports'
                         ? 'bg-cyan-400 text-black shadow'
@@ -2983,7 +2997,7 @@ export const EvoUltimateSandbox: React.FC<EvoUltimateSandboxProps> = ({
                   </button>
                   <button
                     type="button"
-                    onClick={() => setSelectedGameType('aaa')}
+                    onClick={() => { setSelectedGameType('aaa'); setSelectedGameId('cyberpunk_2077'); setGameQuality('HIGH'); }}
                     className={`px-3 py-1.5 rounded-lg text-xs font-mono-tech font-bold transition-all cursor-pointer ${
                       selectedGameType === 'aaa'
                         ? 'bg-amber-400 text-black shadow'
@@ -3015,6 +3029,43 @@ export const EvoUltimateSandbox: React.FC<EvoUltimateSandboxProps> = ({
                 </div>
               </div>
 
+              <div className="flex flex-wrap items-center gap-3 rounded-xl border border-cyan-500/25 bg-[#071119] px-4 py-3 text-xs">
+                <label className="flex items-center gap-2 font-bold text-amber-300">
+                  JUEGO
+                  <select aria-label="Juego a simular" value={selectedGameId}
+                    onChange={(event) => {
+                      const game = GameWorkloadRegistry.get(event.target.value);
+                      if (!game) return;
+                      setSelectedGameId(game.id);
+                      const type = game.category === 'GAME_ESPORTS' ? 'esports' : 'aaa';
+                      setSelectedGameType(type);
+                      setGameQuality(type === 'esports' ? 'LOW_COMPETITIVE' : 'HIGH');
+                    }}
+                    className="min-w-[170px] max-w-[260px] rounded-lg border border-amber-500/40 bg-zinc-950 px-2 py-1.5 text-white">
+                    {RECOVERED_GAMES.map((game) => <option key={game.id} value={game.id}>{game.title}</option>)}
+                  </select>
+                </label>
+                <label className="flex items-center gap-2 font-bold text-cyan-300">
+                  CALIDAD
+                  <select aria-label="Calidad gráfica estimada" value={gameQuality}
+                    onChange={(event) => setGameQuality(event.target.value as EvoGameQuality)}
+                    className="rounded-lg border border-cyan-500/40 bg-[#060a10] px-2 py-1.5 text-white">
+                    <option value="LOW_COMPETITIVE">Baja / competitiva</option>
+                    <option value="MEDIUM">Media</option>
+                    <option value="HIGH">Alta</option>
+                    {selectedGame.demandProfile.supportsRayTracing && <option value="ULTRA_RAYTRACING">Ultra / Ray Tracing</option>}
+                  </select>
+                </label>
+                <div className="min-w-0 flex-1 text-zinc-300">
+                  <strong className="text-amber-300">{selectedGame.title}</strong>
+                  <span className="ml-2">RAM de juego ≈ {gameLoad.ramGb} GB · VRAM ≈ {gameLoad.vramGb} GB</span>
+                  <div className="mt-1 truncate text-[11px] text-zinc-500" title={selectedCpu.name + ' / ' + selectedGpu.name}>
+                    PC: {selectedCpu.name} · {selectedGpu.name} · {selectedRam.sizeGb} GB RAM
+                  </div>
+                </div>
+                <button type="button" onClick={() => setActiveStep('assembler')} className="rounded-lg border border-amber-500/50 px-3 py-2 font-bold text-amber-300 hover:bg-amber-500/10">CAMBIAR PC</button>
+                <span className="w-full text-[10px] text-cyan-300/80">SIMULADO · Valores derivados de perfiles históricos; no son FPS medidos ni predicción validada para un equipo real.</span>
+              </div>
               {/* Viewport Canvas + Live In-Game OSD */}
               <div className="relative w-full h-[400px] sm:h-[480px] rounded-2xl overflow-hidden border-2 border-zinc-800 shadow-2xl bg-black">
                 <canvas ref={canvasRef} className="w-full h-full block" />
@@ -3054,6 +3105,7 @@ export const EvoUltimateSandbox: React.FC<EvoUltimateSandboxProps> = ({
                       <span className="text-zinc-500 text-[10px]">/ {selectedRam.sizeGb} GB</span>
                     </div>
 
+                    <div className="text-[9px] font-bold uppercase tracking-widest text-amber-300">FPS ESTIMADOS · NO MEDIDOS</div>
                     {/* D3D12 FPS Line */}
                     <div className="pt-2 border-t border-zinc-700/80 flex items-baseline justify-between gap-3">
                       <span className={`font-black text-sm sm:text-base ${telemetry.fpsAvg < 30 ? 'text-rose-400' : 'text-amber-400'}`}>
@@ -3671,7 +3723,7 @@ export const EvoUltimateSandbox: React.FC<EvoUltimateSandboxProps> = ({
 
             <div className="p-3.5 rounded-xl bg-zinc-900/80 border border-zinc-800 flex justify-between items-center text-xs font-mono">
               <span className="text-zinc-300">
-                Rendimiento Actual ({selectedGameType === 'esports' ? 'eSports' : 'AAA'} {gameResolution}):
+                Rendimiento simulado ({selectedGame.title} {gameResolution}):
               </span>
               <span className="text-amber-400 font-bold text-sm">{roiCalculations.currentFps} FPS</span>
             </div>
