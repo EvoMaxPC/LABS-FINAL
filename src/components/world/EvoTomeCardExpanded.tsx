@@ -8,6 +8,7 @@ import {
   Layers,
   Sparkles,
   Lock,
+  FileText,
 } from 'lucide-react';
 import { EvoTomeExpandedItem } from '../../data/evoTomesExpandedData';
 import { useEvoAccess } from '../../auth/EvoAccessContext';
@@ -411,9 +412,10 @@ export const EvoTomeCardExpanded: React.FC<EvoTomeCardExpandedProps> = ({
               <button
                 type="button"
                 onClick={() => onOpenDossier && onOpenDossier(tome.number)}
-                className="w-full py-2 px-3 rounded-lg bg-zinc-950 hover:bg-zinc-900 text-zinc-400 hover:text-white border border-zinc-800 text-[11px] transition-colors text-center cursor-pointer"
+                className="w-full py-2.5 px-3.5 rounded-xl bg-amber-400/10 hover:bg-amber-400/20 text-amber-300 hover:text-white border border-amber-400/40 text-[11px] font-mono-tech font-bold transition-all text-center cursor-pointer flex items-center justify-center gap-2 shadow-md hover:shadow-amber-500/10"
               >
-                CONSULTAR TEMARIO CURRICULAR
+                <FileText className="w-4 h-4 text-amber-400" />
+                <span>VER FICHA PEDAGÓGICA</span>
               </button>
             </div>
 

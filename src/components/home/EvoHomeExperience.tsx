@@ -593,7 +593,7 @@ export const EvoHomeExperience: React.FC<EvoHomeExperienceProps> = ({
                   01 // APRENDER
                 </div>
                 <div className="absolute bottom-3 left-3 text-[10px] font-mono-tech text-zinc-300 px-2 py-0.5 rounded bg-black/75">
-                  12 TOMOS CANÓNICOS & MAGAZINES
+                  12 TOMOS CANÓNICOS
                 </div>
               </div>
 
@@ -622,19 +622,19 @@ export const EvoHomeExperience: React.FC<EvoHomeExperienceProps> = ({
             </button>
           </div>
 
-          {/* CARD 02: PRACTICAR */}
+          {/* CARD 02: LABORATORIOS */}
           <div className="group rounded-3xl bg-zinc-950/90 border border-zinc-800/90 hover:border-cyan-400/60 p-6 flex flex-col justify-between space-y-6 transition-all duration-300 hover:shadow-[0_0_30px_rgba(6,182,212,0.12)] relative overflow-hidden">
             <div className="space-y-4">
               {/* Imagen técnica */}
               <div className="relative h-44 w-full rounded-2xl overflow-hidden border border-zinc-800/80">
                 <img
                   src={cap07Lab}
-                  alt="Módulo Practicar Laboratorios EVO"
+                  alt="Módulo Laboratorios EVO"
                   className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 via-zinc-950/30 to-transparent" />
                 <div className="absolute top-3 left-3 px-2.5 py-1 rounded-md bg-black/85 border border-zinc-700 font-mono-tech text-[11px] font-black text-cyan-400">
-                  02 // PRACTICAR
+                  02 // LABORATORIOS
                 </div>
                 <div className="absolute bottom-3 left-3 text-[10px] font-mono-tech text-zinc-300 px-2 py-0.5 rounded bg-black/75">
                   8 BANCOS & SIMULADORES ACTIVOS
@@ -644,7 +644,7 @@ export const EvoHomeExperience: React.FC<EvoHomeExperienceProps> = ({
               {/* Título y descripción */}
               <div className="space-y-1.5">
                 <h3 className="text-2xl font-display font-black text-white uppercase group-hover:text-cyan-300 transition-colors">
-                  PRACTICAR
+                  LABORATORIOS
                 </h3>
                 <p className="font-mono-tech text-xs text-cyan-400/90 font-bold uppercase">
                   Laboratorios, simuladores y escenarios.

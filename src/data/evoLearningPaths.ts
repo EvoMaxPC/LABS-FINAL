@@ -96,7 +96,7 @@ export const EVO_SCHOOL_LEVELS: EvoSchoolLevel[] = [
     title: 'DIAGNÓSTICO Y REPARACIÓN',
     subtitle: 'Metodología pericial deductiva para computadoras de escritorio y portátiles.',
     objective: 'Transformar conocimiento teórico en metodología comprobable de diagnóstico físico, descarte y reparación de banco.',
-    tomos: ['03', '04'],
+    tomos: ['03', '04', '11'],
     accentColor: '#F59E0B',
     iconName: 'Wrench',
     recommendedTag: 'TALLER & BANCO',
@@ -129,7 +129,7 @@ export const EVO_SCHOOL_LEVELS: EvoSchoolLevel[] = [
     title: 'SISTEMAS, KERNEL Y FORENSE',
     subtitle: 'Gobernanza del kernel monolítico, ingeniería inversa y análisis de evidencia digital.',
     objective: 'Comprender las capas más profundas del sistema operativo y reconstruir incidentes técnicos a partir de evidencias periciales.',
-    tomos: ['09', '10'],
+    tomos: ['09', '10', '12'],
     accentColor: '#A855F7',
     iconName: 'Binary',
     recommendedTag: 'ESPECIALIZACIÓN FORENSE',
@@ -161,7 +161,7 @@ export const EVO_TOMES_PEDAGOGY: Record<string, EvoTomePedagogicalProfile> = {
     ],
     associatedMagazine: 'Tomo 01 // Revista Técnica A4 (Capítulos 01 al 07)',
     associatedLabTitle: 'Laboratorio de Silicio y Peritaje de Hardware',
-    associatedLabStatus: 'EN DESARROLLO',
+    associatedLabStatus: 'ACTIVO',
     expectedOutcome:
       'Capacidad de auditar cualquier PC real, generar su pasaporte de hardware y diagnosticar desacoples de rendimiento entre procesador y memoria.',
     methodSteps: [
@@ -193,7 +193,7 @@ export const EVO_TOMES_PEDAGOGY: Record<string, EvoTomePedagogicalProfile> = {
     ],
     associatedMagazine: 'Tomo 02 // Edición Maestra de Kernel NT 2026',
     associatedLabTitle: 'Laboratorio de Windows NT y Scheduler Híbrido',
-    associatedLabStatus: 'EN DESARROLLO',
+    associatedLabStatus: 'ACTIVO',
     expectedOutcome:
       'Control total de los procesos en segundo plano, eliminación de micro-tirones por DPC latency y configuración de Windows basada en telemetría de kernel.',
     methodSteps: [
@@ -226,7 +226,7 @@ export const EVO_TOMES_PEDAGOGY: Record<string, EvoTomePedagogicalProfile> = {
     ],
     associatedMagazine: 'Tomo 03 // Edición de Taller y Protocolos de Banco 2026',
     associatedLabTitle: 'Banco de Reparación de PC y Multímetro ATX',
-    associatedLabStatus: 'EN DESARROLLO',
+    associatedLabStatus: 'ACTIVO',
     expectedOutcome:
       'Habilidad para diagnosticar cualquier fallo de hardware en computadoras de escritorio siguiendo un árbol de decisiones con multímetro y descarte metódico.',
     methodSteps: [
@@ -258,7 +258,7 @@ export const EVO_TOMES_PEDAGOGY: Record<string, EvoTomePedagogicalProfile> = {
     ],
     associatedMagazine: 'Tomo 04 // Edición Micromecánica y Portátiles 2026',
     associatedLabTitle: 'Banco de Micromecánica Portátil y Diagnóstico eDP',
-    associatedLabStatus: 'EN DESARROLLO',
+    associatedLabStatus: 'ACTIVO',
     expectedOutcome:
       'Capacidad para desarmar, diagnosticar líneas de alimentación portátiles y resolver problemas térmicos y de pantalla en laptops modernas.',
     methodSteps: [
@@ -290,7 +290,7 @@ export const EVO_TOMES_PEDAGOGY: Record<string, EvoTomePedagogicalProfile> = {
     ],
     associatedMagazine: 'Tomo 05 // Edición Redes & Análisis de Paquetes 2026',
     associatedLabTitle: 'Laboratorio Forense de Redes y Captura de Paquetes',
-    associatedLabStatus: 'EN DESARROLLO',
+    associatedLabStatus: 'ACTIVO',
     expectedOutcome:
       'Capacidad de diagnosticar pérdidas de paquetes, cuellos de botella de red, fallos de DNS y optimizar la conexión para mínima latencia.',
     methodSteps: [
@@ -323,7 +323,7 @@ export const EVO_TOMES_PEDAGOGY: Record<string, EvoTomePedagogicalProfile> = {
     ],
     associatedMagazine: 'Tomo 06 // Edición Ciberseguridad & Defensa en Profundidad 2026',
     associatedLabTitle: 'Laboratorio de Superficie de Ataque y Defensa',
-    associatedLabStatus: 'EN DESARROLLO',
+    associatedLabStatus: 'ACTIVO',
     expectedOutcome:
       'Capacidad para auditar la seguridad de un equipo, descubrir canales de comunicación encubiertos y aislar amenazas sin formatear innecesariamente.',
     methodSteps: [
@@ -356,7 +356,7 @@ export const EVO_TOMES_PEDAGOGY: Record<string, EvoTomePedagogicalProfile> = {
     ],
     associatedMagazine: 'Tomo 07 // Edición Gaming Pro & Metrología Competitiva 2026',
     associatedLabTitle: 'Banco Metrológico de Gaming, Frametimes y Latencias',
-    associatedLabStatus: 'EN DESARROLLO',
+    associatedLabStatus: 'ACTIVO',
     expectedOutcome:
       'Dominio de la telemetría metrológica para lograr frametimes planos y consistentes, eliminando el stuttering sin caer en optimizaciones placebo.',
     methodSteps: [
@@ -423,7 +423,7 @@ export const EVO_TOMES_PEDAGOGY: Record<string, EvoTomePedagogicalProfile> = {
     ],
     associatedMagazine: 'Tomo 09 // Edición Programación desde Cero 2026',
     associatedLabTitle: 'Laboratorio de Algoritmos, APIs y Código',
-    associatedLabStatus: 'EN DESARROLLO',
+    associatedLabStatus: 'ACTIVO',
     expectedOutcome:
       'Comprensión sólida de la programación moderna, capacidad de construir scripts y colaborar en repositorios de código.',
     methodSteps: [
@@ -456,7 +456,7 @@ export const EVO_TOMES_PEDAGOGY: Record<string, EvoTomePedagogicalProfile> = {
     ],
     associatedMagazine: 'Tomo 10 // Edición Prompt e IA Avanzada 2026',
     associatedLabTitle: 'Laboratorio de Ingeniería de Prompts y Agentes',
-    associatedLabStatus: 'EN DESARROLLO',
+    associatedLabStatus: 'ACTIVO',
     expectedOutcome:
       'Capacidad para orquestar modelos de lenguaje, crear flujos con tool calling y auditar la fiabilidad de agentes inteligentes.',
     methodSteps: [
@@ -466,6 +466,72 @@ export const EVO_TOMES_PEDAGOGY: Record<string, EvoTomePedagogicalProfile> = {
       { stage: 'PRACTICAR', description: 'Diseñar prompts con delimitadores claros y razonamiento guiado.' },
       { stage: 'DIAGNOSTICAR', description: 'Identificar alucinaciones, derivas de contexto y sesgos de respuesta.' },
       { stage: 'COMPROBAR', description: 'Comprobar empíricamente las respuestas frente a fuentes de verdad verificables.' },
+    ],
+  },
+  '11': {
+    tomoId: 'tomo-11',
+    tomoNumber: '11',
+    title: 'EVO LABS // ELECTRÓNICA APLICADA A LA INFORMÁTICA',
+    levelNumber: 3,
+    levelName: 'NIVEL 3: DIAGNÓSTICO Y REPARACIÓN',
+    tagline: 'Desde la física del electrón hasta el diagnóstico a nivel componente.',
+    whatYouWillLearn: [
+      'Leyes de Ohm y Kirchhoff aplicadas a rieles de alimentación de 180A.',
+      'Física de semiconductores, diodos Schottky y transistores MOSFET de potencia.',
+      'Controladores PWM, convertidores Buck DC-DC y filtrado de rizado en VRM.',
+      'Metrología de banco con multímetro en escala de diodo y osciloscopio digital.',
+    ],
+    whyItMatters:
+      'Sin comprender cómo viajan los electrones por el cobre ni cómo conmuta un MOSFET, el diagnóstico de placas madre es pura conjetura.',
+    recommendedPrerequisites: [
+      'Tomo 01: Conocé tu PC.',
+      'Tomo 03: Reparación de PC.',
+    ],
+    associatedMagazine: 'Tomo 11 // Edición Microelectrónica & VRMs 2026',
+    associatedLabTitle: 'Electronics Lab Hub & Mediciones VRM',
+    associatedLabStatus: 'ACTIVO',
+    expectedOutcome:
+      'Capacidad para auditar rieles de tensión en motherboard y GPU, medir caídas en diodo y aislar cortocircuitos de banco.',
+    methodSteps: [
+      { stage: 'ENTENDER', description: 'Comprender la física de la corriente y la caída de potencial en conductores.' },
+      { stage: 'LEER', description: 'Estudiar la topología de convertidores reductores Buck y control PWM.' },
+      { stage: 'PREPARARSE', description: 'Alistar multímetro con puntas de aguja finas y fuente de alimentación regulada.' },
+      { stage: 'PRACTICAR', description: 'Medir resistencia a masa de rieles principales y comparar con tolerancias.' },
+      { stage: 'DIAGNOSTICAR', description: 'Localizar componentes en fuga o conmutaciones anómalas en fases VRM.' },
+      { stage: 'COMPROBAR', description: 'Verificar la estabilización de voltaje bajo osciloscopio en carga.' },
+    ],
+  },
+  '12': {
+    tomoId: 'tomo-12',
+    tomoNumber: '12',
+    title: 'EVO LABS // INGENIERÍA Y CREACIÓN DE VIDEOJUEGOS',
+    levelNumber: 6,
+    levelName: 'NIVEL 6: DESARROLLO, CÓDIGO E INTELIGENCIA ARTIFICIAL',
+    tagline: 'EVO Game Forge: De las matemáticas vectoriales al proyecto Mundo Max.',
+    whatYouWillLearn: [
+      'Arquitectura de game loop desacoplado con timestep fijo para física y variable para render.',
+      'Álgebra lineal, matrices de proyección y vectores para transformaciones espaciales.',
+      'Detección de colisiones mediante teorema de separación de ejes (SAT).',
+      'Shaders GLSL, pipelines gráficos y desarrollo del motor para el proyecto Mundo Max.',
+    ],
+    whyItMatters:
+      'Un videojuego exige el máximo rigor de sincronía de hardware y software; dominar el motor lúdico capacita para cualquier software de alta exigencia.',
+    recommendedPrerequisites: [
+      'Tomo 01: Conocé tu PC (GPU y buses).',
+      'Tomo 09: Programación desde Cero.',
+    ],
+    associatedMagazine: 'Tomo 12 // Edición EVO Game Forge & Mundo Max 2026',
+    associatedLabTitle: 'EVO Game Forge Studio & Simulación Física',
+    associatedLabStatus: 'ACTIVO',
+    expectedOutcome:
+      'Capacidad para construir motores lúdicos interactivos, simular físicas deterministas y programar shaders optimizados.',
+    methodSteps: [
+      { stage: 'ENTENDER', description: 'Comprender la diferencia entre tiempo de simulación física y tasa de refresco.' },
+      { stage: 'LEER', description: 'Revisar la arquitectura del game loop determinista y matrices de proyección.' },
+      { stage: 'PREPARARSE', description: 'Disponer del canvas gráfico WebGL y perfiles de framerate.' },
+      { stage: 'PRACTICAR', description: 'Implementar cálculo vectorial de aceleración, colisión y rebotes.' },
+      { stage: 'DIAGNOSTICAR', description: 'Depurar desincronizaciones de delta time y cuellos de botella de draw calls.' },
+      { stage: 'COMPROBAR', description: 'Validar la fluidez a 60 FPS estables con telemetría de frametimes planos.' },
     ],
   },
 };

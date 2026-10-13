@@ -345,7 +345,7 @@ export class EvoEvidenceEngine {
         evidences: evidences.filter((e) => e.skillId === 'ANALIZAR_ARRANQUE'),
         whyExplanation: isBootLabDone
           ? 'Inyectaste fallas y mediste señales en el Pipeline Forense de Arranque (Tomo 08).'
-          : 'Completá el Laboratorio de Arranque en la pestaña PRACTICAR.',
+          : 'Completá el Laboratorio de Arranque en la pestaña LABORATORIOS.',
         nextStepRequirement: 'Iniciá el Laboratorio de Arranque (Tomo 08).',
       },
       {

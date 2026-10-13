@@ -286,12 +286,12 @@ export const EvoIntroExperience: React.FC<EvoIntroExperienceProps> = ({
                   <p className="text-[10px] text-zinc-400 font-sans leading-tight">Esquemáticos y flujo de señales reales.</p>
                 </div>
 
-                {/* 3. PRACTICAR */}
+                {/* 3. LABORATORIOS */}
                 <div className="p-3.5 rounded-xl bg-zinc-950/80 border border-zinc-800 space-y-2 hover:border-emerald-400/40 transition-colors">
                   <div className="w-8 h-8 rounded-lg bg-emerald-400/10 border border-emerald-400/40 flex items-center justify-center text-emerald-400 mx-auto">
                     <Zap className="w-4 h-4" />
                   </div>
-                  <div className="font-bold text-white uppercase">3. PRACTICAR</div>
+                  <div className="font-bold text-white uppercase">3. LABORATORIOS</div>
                   <p className="text-[10px] text-zinc-400 font-sans leading-tight">Laboratorios guiados y bancos de prueba.</p>
                 </div>
 
@@ -361,11 +361,11 @@ export const EvoIntroExperience: React.FC<EvoIntroExperienceProps> = ({
                   </p>
                 </div>
 
-                {/* 2. PRACTICAR */}
+                {/* 2. LABORATORIOS */}
                 <div className="p-3.5 rounded-xl bg-zinc-950/80 border border-zinc-850 space-y-2 hover:border-emerald-400/40 transition-colors">
                   <div className="flex items-center gap-2">
                     <Zap className="w-4 h-4 text-emerald-400 shrink-0" />
-                    <span className="font-mono-tech font-bold text-xs text-white">PRACTICAR</span>
+                    <span className="font-mono-tech font-bold text-xs text-white">LABORATORIOS</span>
                   </div>
                   <p className="text-zinc-400 text-[11px] leading-snug">
                     Suite de laboratorios interactivos guiados, bancos de medición y simuladores.

@@ -30,6 +30,7 @@ export interface HeaderProps {
   onNavigateTomo05?: () => void;
   onNavigateTomo06?: () => void;
   onNavigateTomo08?: () => void;
+  onNavigateTomo?: (tomoNumber: string) => void;
   onNavigateBootLab?: () => void;
   onNavigateMagazine?: () => void;
   onNavigateHotSwapLab?: (subPanel?: 'sandbox' | 'hardware' | 'software' | 'telemetry' | 'all') => void;
@@ -61,6 +62,7 @@ export const Header: React.FC<HeaderProps> = ({
   onNavigateTomo05,
   onNavigateTomo06,
   onNavigateTomo08,
+  onNavigateTomo,
   onOpenForensicBench,
   onHardwareDetected,
   dossierModalTomoId = null,
@@ -89,6 +91,8 @@ export const Header: React.FC<HeaderProps> = ({
       onNavigateTomo04();
     } else if (cleanId === '08' && onNavigateTomo08) {
       onNavigateTomo08();
+    } else if (onNavigateTomo) {
+      onNavigateTomo(cleanId);
     } else {
       setInternalDossierTomoId(`tomo-${cleanId}`);
     }
@@ -135,21 +139,21 @@ export const Header: React.FC<HeaderProps> = ({
         <span>APRENDER</span>
       </button>
 
-      {/* 2. PRACTICAR */}
+      {/* 2. LABORATORIOS */}
       <button
         type="button"
         onClick={() => {
           if (onNavigateCampusSection) onNavigateCampusSection('laboratorios');
           else if (onNavigateHome) onNavigateHome();
         }}
-        title="Practicar // Suite de Laboratorios e Instrumental"
+        title="Laboratorios // Suite de Laboratorios e Instrumental"
         className={`px-3 py-1.5 rounded-xl flex items-center gap-1.5 transition-all duration-200 cursor-pointer select-none group relative ${
           isPracticarActive
             ? 'bg-gradient-to-b from-amber-400/20 via-amber-500/12 to-amber-500/5 text-amber-200 border border-amber-400/40 font-bold shadow-[0_0_16px_rgba(245,158,11,0.2),inset_0_1px_0_rgba(255,255,255,0.18)]'
             : 'text-zinc-300 hover:text-white hover:bg-white/[0.06] border border-transparent hover:border-white/[0.08]'
         }`}
       >
-        <span>PRACTICAR</span>
+        <span>LABORATORIOS</span>
       </button>
 
       {/* 3. ANALIZAR MI PC */}
@@ -288,7 +292,7 @@ export const Header: React.FC<HeaderProps> = ({
         <span>APRENDER</span>
       </button>
 
-      {/* 2. PRACTICAR */}
+      {/* 2. LABORATORIOS */}
       <button
         type="button"
         onClick={() => {
@@ -302,7 +306,7 @@ export const Header: React.FC<HeaderProps> = ({
         }`}
       >
         <Zap className="w-4 h-4 text-amber-400 shrink-0" />
-        <span>PRACTICAR</span>
+        <span>LABORATORIOS</span>
       </button>
 
       {/* 3. ANALIZAR MI PC */}

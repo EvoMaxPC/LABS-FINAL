@@ -801,3 +801,5 @@ export const EvoCodeEngineeringLab: React.FC<EvoCodeEngineeringLabProps> = ({
     />
   );
 };
+
+export default EvoCodeEngineeringLab;

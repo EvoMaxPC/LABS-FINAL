@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { EvoTechnicalTomeReader } from '../tomes/EvoTechnicalTomeReader';
 import { TOMO_09_META, TOMO_09_CHAPTERS, TOMO_09_CASES, TOMO_09_GLOSSARY } from '../../data/tomo09Data';
-import { EvoCodeEngineeringLab } from '../labs/tomo09/EvoCodeEngineeringLab';
+import { EvoCodeEngineeringLab } from '../labs/tomo09/EvoCodeEngineeringLab.tsx';
 
 interface Tomo09MasterPageProps {
   onBack?: () => void;

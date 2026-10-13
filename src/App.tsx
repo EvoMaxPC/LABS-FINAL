@@ -44,6 +44,9 @@ const EvoMasterLabSuite = React.lazy(() => import('./components/world/labs/EvoMa
 const EvoWindowsMatrixLab = React.lazy(() => import('./components/world/labs/windowsMatrix/EvoWindowsMatrixLab').then(m => ({ default: m.EvoWindowsMatrixLab })));
 const EvoWindowsXRayLab = React.lazy(() => import('./components/world/labs/windowsMatrix/EvoWindowsXRayLab').then(m => ({ default: m.EvoWindowsXRayLab })));
 const EvoLabCore = React.lazy(() => import('./components/evoLabCore/EvoLabCore').then(m => ({ default: m.EvoLabCore })));
+const EvoBsodRepairView = React.lazy(() => import('./components/tools/EvoBsodRepairView').then(m => ({ default: m.EvoBsodRepairView })));
+const EvoWindowsErrorAnalyzerView = React.lazy(() => import('./components/tools/EvoWindowsErrorAnalyzerView').then(m => ({ default: m.EvoWindowsErrorAnalyzerView })));
+const EvoBottleneckSimulatorView = React.lazy(() => import('./components/tools/EvoBottleneckSimulatorView').then(m => ({ default: m.EvoBottleneckSimulatorView })));
 import { ForensicBenchTarget } from './components/common/EvoTomoDossierModal';
 import { EvoHardwareDiscoveryModal } from './components/evoLabCore/components/EvoHardwareDiscoveryModal';
 import { CatalogCoverageDashboard } from './components/evoLabCore/components/CatalogCoverageDashboard';
@@ -123,9 +126,8 @@ const TOOL_TARGET_MAP: Record<string, (actions: {
   'diag-boot-seq': ({ setCurrentView }) => {
     setCurrentView('boot-lab');
   },
-  'diag-bsod-decoder': ({ setCurrentView, setMatrixInitialScenario }) => {
-    setMatrixInitialScenario('crash-repair');
-    setCurrentView('windows-matrix-lab');
+  'diag-bsod-decoder': ({ setCurrentView }) => {
+    setCurrentView('bsod-repair-view');
   },
   'diag-incident-events': ({ setCurrentView, setMatrixInitialScenario }) => {
     setMatrixInitialScenario('services');
@@ -374,7 +376,7 @@ function AppContent({
         }
       } else if (initialPendingTarget.type === 'TOOL') {
         const toolId = (initialPendingTarget as any).toolId;
-        const freeTools = ['med-latency-calc', 'diag-autodetect-pc', 'diag-bottleneck-calc'];
+        const freeTools = ['med-latency-calc', 'diag-autodetect-pc', 'diag-bottleneck-calc', 'diag-bsod-decoder'];
         if (isFreeUser && !freeTools.includes(toolId)) {
           openUpgradeModal('Herramienta Técnica Premium');
           setCurrentView('world-map');
@@ -434,6 +436,7 @@ function AppContent({
     | 'lab-core'
     | 'tomo01-quiz'
     | 'tomo01-completion'
+    | 'bsod-repair-view'
   >(() => {
     if (initialPendingTarget) {
       if (initialPendingTarget.type === 'TOME') {
@@ -1563,9 +1566,10 @@ function AppContent({
         onNavigateTomo02={handleNavigateTomo02}
         onNavigateTomo03={handleNavigateTomo03}
         onNavigateTomo04={handleNavigateTomo04}
-        onNavigateTomo05={() => setDossierModalTomoId('tomo-05')}
-        onNavigateTomo06={() => setDossierModalTomoId('tomo-06')}
+        onNavigateTomo05={() => handleNavigateTomo('05')}
+        onNavigateTomo06={() => handleNavigateTomo('06')}
         onNavigateTomo08={handleNavigateTomo08}
+        onNavigateTomo={handleNavigateTomo}
         onNavigateBootLab={handleNavigateBootLab}
         onNavigateMagazine={() => setCurrentView('magazine')}
         onNavigateHotSwapLab={handleNavigateHotSwapLab}
@@ -1771,8 +1775,8 @@ function AppContent({
           {currentView === 'tomo-11' && (
             isFreeUser ? (
               <EvoContentGate
-                title="Tomo 11 // Peritaje Judicial Informático"
-                subtitle="Los protocolos de cadena de custodia y análisis forense digital requieren Plan Complete."
+                title="Tomo 11 // Electrónica Aplicada a la Informática"
+                subtitle="La física del electrón, semiconductores, VRMs y diagnóstico pericial de placas madre requieren Plan Complete."
                 requiredPlan="Tomo 11 o Plan Complete"
                 onReturnHome={handleNavigateHome}
                 onReturnToDemo={handleNavigateTomo01}
@@ -1787,8 +1791,8 @@ function AppContent({
           {currentView === 'tomo-12' && (
             isFreeUser ? (
               <EvoContentGate
-                title="Tomo 12 // Laboratorio Maestro e Innovación"
-                subtitle="El compendio final de laboratorio e investigaciones avanzadas requiere Plan Complete."
+                title="Tomo 12 // Ingeniería y Creación de Videojuegos // EVO Game Forge"
+                subtitle="La arquitectura de motores lúdicos, game loop desacoplado, físicas vectoriales y shaders requieren Plan Complete."
                 requiredPlan="Tomo 12 o Plan Complete"
                 onReturnHome={handleNavigateHome}
                 onReturnToDemo={handleNavigateTomo01}
@@ -2151,6 +2155,39 @@ function AppContent({
                 onReviewExam={handleStartFinalExam}
               />
             </div>
+          )}
+
+          {currentView === 'bsod-repair-view' && (
+            <React.Suspense fallback={<div className="p-12 text-center text-zinc-400 font-mono">Cargando herramienta de solución de pantallas azules...</div>}>
+              <EvoBsodRepairView
+                onReturnToTools={() => {
+                  setCurrentView('world-map');
+                  setCampusSection('herramientas');
+                }}
+              />
+            </React.Suspense>
+          )}
+
+          {currentView === 'windows-error-analyzer-view' && (
+            <React.Suspense fallback={<div className="p-12 text-center text-cyan-400 font-mono">Cargando analizador de errores de Windows...</div>}>
+              <EvoWindowsErrorAnalyzerView
+                onReturnToTools={() => {
+                  setCurrentView('world-map');
+                  setCampusSection('herramientas');
+                }}
+              />
+            </React.Suspense>
+          )}
+
+          {currentView === 'bottleneck-simulator-view' && (
+            <React.Suspense fallback={<div className="p-12 text-center text-amber-400 font-mono">Cargando simulador de cuellos de botella...</div>}>
+              <EvoBottleneckSimulatorView
+                onReturnToTools={() => {
+                  setCurrentView('world-map');
+                  setCampusSection('herramientas');
+                }}
+              />
+            </React.Suspense>
           )}
           </React.Suspense>
         </main>

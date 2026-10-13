@@ -186,7 +186,7 @@ export const TOMO_02_MASTER_SECTORS: MasterSectorMeta[] = [
     subtitle: 'No sólo mirar porcentajes',
     level: 'NIVEL I',
     levelTitle: 'ENTENDER WINDOWS',
-    status: 'LOCKED',
+    status: 'ACTIVE',
     investigationsCount: 23,
     artefactOrLab: 'Lab: Task Manager Investigation.',
     investigationsList: [

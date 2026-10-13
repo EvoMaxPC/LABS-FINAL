@@ -178,7 +178,7 @@ export const EvoWindowsMatrixLab: React.FC<EvoWindowsMatrixLabProps> = ({
   const [activeTab, setActiveTab] = useState<'advisor' | 'matrix' | 'deep'>(() => {
     if (initialScenario === 'matrix') return 'matrix';
     if (initialScenario === 'advisor') return 'advisor';
-    if (['boot', 'install', 'services', 'repair', 'scheduler', 'scheduler-hybrid', 'xray', 'kernel-crash'].includes(initialScenario || '')) {
+    if (['boot', 'install', 'services', 'repair', 'scheduler', 'scheduler-hybrid', 'xray', 'kernel-crash', 'crash-repair', 'bsod', 'diag-bsod-decoder'].includes(initialScenario || '')) {
       return 'deep';
     }
     return 'advisor';
@@ -188,11 +188,28 @@ export const EvoWindowsMatrixLab: React.FC<EvoWindowsMatrixLabProps> = ({
     if (initialScenario === 'boot') return 'boot';
     if (initialScenario === 'install') return 'install';
     if (initialScenario === 'services') return 'services';
-    if (initialScenario === 'repair') return 'repair';
-    if (initialScenario === 'xray' || initialScenario === 'kernel-crash') return 'xray';
-    if (initialScenario === 'scheduler' || initialScenario === 'scheduler-hybrid') return 'scheduler';
+    if (['repair', 'crash-repair', 'bsod', 'diag-bsod-decoder'].includes(initialScenario || '')) return 'repair';
+    if (['xray', 'kernel-crash'].includes(initialScenario || '')) return 'xray';
+    if (['scheduler', 'scheduler-hybrid'].includes(initialScenario || '')) return 'scheduler';
     return 'scheduler';
   });
+
+  React.useEffect(() => {
+    if (!initialScenario) return;
+    if (initialScenario === 'matrix') {
+      setActiveTab('matrix');
+    } else if (initialScenario === 'advisor') {
+      setActiveTab('advisor');
+    } else if (['boot', 'install', 'services', 'repair', 'scheduler', 'scheduler-hybrid', 'xray', 'kernel-crash', 'crash-repair', 'bsod', 'diag-bsod-decoder'].includes(initialScenario)) {
+      setActiveTab('deep');
+      if (initialScenario === 'boot') setDeepLabSubTab('boot');
+      else if (initialScenario === 'install') setDeepLabSubTab('install');
+      else if (initialScenario === 'services') setDeepLabSubTab('services');
+      else if (['repair', 'crash-repair', 'bsod', 'diag-bsod-decoder'].includes(initialScenario)) setDeepLabSubTab('repair');
+      else if (['xray', 'kernel-crash'].includes(initialScenario)) setDeepLabSubTab('xray');
+      else if (['scheduler', 'scheduler-hybrid'].includes(initialScenario)) setDeepLabSubTab('scheduler');
+    }
+  }, [initialScenario]);
 
   // Step 1: User Hardware Input
   const [cpuCategory, setCpuCategory] = useState<string>('');

@@ -1,10 +1,12 @@
 import express from 'express';
+import http from 'http';
+import path from 'path';
 import { createServer as createViteServer } from 'vite';
 import { initializeApp, cert } from 'firebase-admin/app';
 import { getFirestore, FieldValue } from 'firebase-admin/firestore';
 import { getAuth } from 'firebase-admin/auth';
-import { EVO_PRICING } from './src/data/evoPricing';
-import { CANONICAL_TOMES } from './src/data/evoCatalog';
+import { EVO_PRICING } from './src/data/evoPricing.ts';
+import { CANONICAL_TOMES } from './src/data/evoCatalog.ts';
 
 // Initialize Firebase Admin
 let adminApp;
@@ -264,15 +266,39 @@ async function startServer() {
     }
   });
 
-  // Vite middleware for frontend development
-  const vite = await createViteServer({
-    server: { middlewareMode: true },
-    appType: 'spa',
-  });
-  app.use(vite.middlewares);
-
   const PORT = process.env.PORT || 3000;
-  app.listen(Number(PORT), '0.0.0.0', () => {
+  const httpServer = http.createServer(app);
+
+  // Frontend serving: static assets in production, Vite middleware in development
+  if (process.env.NODE_ENV === 'production') {
+    const fs = await import('fs');
+    const staticDir = fs.existsSync(path.resolve(process.cwd(), 'dist'))
+      ? path.resolve(process.cwd(), 'dist')
+      : path.resolve(process.cwd(), 'build');
+    app.use(express.static(staticDir));
+    app.get('*', (req, res, next) => {
+      if (req.path.startsWith('/api')) return next();
+      res.sendFile(path.resolve(staticDir, 'index.html'));
+    });
+  } else {
+    const vite = await createViteServer({
+      server: {
+        middlewareMode: true,
+        hmr: {
+          server: httpServer,
+        },
+      },
+      appType: 'spa',
+    });
+    // Ensure requests to /components/* are properly routed to Vite's /src/components/*
+    app.use('/components', (req, res, next) => {
+      req.url = '/src/components' + req.url;
+      vite.middlewares(req, res, next);
+    });
+    app.use(vite.middlewares);
+  }
+
+  httpServer.listen(Number(PORT), '0.0.0.0', () => {
     console.log(`EVO LABS Commerce Core running on http://localhost:${PORT}`);
   });
 }

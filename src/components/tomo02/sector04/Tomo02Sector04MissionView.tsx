@@ -8,7 +8,9 @@ import {
   Activity,
   ShieldCheck,
   Search,
+  Sliders,
 } from 'lucide-react';
+import { InteractiveVirtualTaskManager } from './InteractiveVirtualTaskManager';
 
 interface Tomo02Sector04MissionViewProps {
   onBack: () => void;
@@ -19,6 +21,7 @@ export const Tomo02Sector04MissionView: React.FC<Tomo02Sector04MissionViewProps>
   onBack,
   onMissionComplete,
 }) => {
+  const [labMode, setLabMode] = useState<'simulator' | 'cases'>('simulator');
   const [hypothesesMap, setHypothesesMap] = useState<Record<string, string>>({});
   const [evidenceMap, setEvidenceMap] = useState<Record<string, string>>({});
   const [conclusionsMap, setConclusionsMap] = useState<Record<string, string>>({});
@@ -145,10 +148,48 @@ export const Tomo02Sector04MissionView: React.FC<Tomo02Sector04MissionViewProps>
         <p className="text-xs text-zinc-300 leading-relaxed font-sans">
           Aplica el método científico de investigación pericial: Observá el síntoma, formulá la hipótesis de causa raíz, identificá la evidencia en Task Manager y sacá la conclusión técnica sin ejecutar terminaciones destructivas a ciegas.
         </p>
+
+        {/* Lab Mode Toggle */}
+        <div className="flex items-center gap-2 pt-2 font-mono text-xs border-t border-zinc-800">
+          <button
+            type="button"
+            onClick={() => setLabMode('simulator')}
+            className={`px-3.5 py-1.5 rounded-lg font-bold transition-all flex items-center gap-1.5 cursor-pointer ${
+              labMode === 'simulator'
+                ? 'bg-[#0078D4] text-white shadow-[0_0_12px_rgba(0,164,239,0.3)]'
+                : 'bg-[#11161D] text-zinc-400 hover:text-white'
+            }`}
+          >
+            <Activity className="w-3.5 h-3.5" />
+            <span>SIMULADOR VIRTUAL INTERACTIVO (7 PESTAÑAS)</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setLabMode('cases')}
+            className={`px-3.5 py-1.5 rounded-lg font-bold transition-all flex items-center gap-1.5 cursor-pointer ${
+              labMode === 'cases'
+                ? 'bg-[#0078D4] text-white shadow-[0_0_12px_rgba(0,164,239,0.3)]'
+                : 'bg-[#11161D] text-zinc-400 hover:text-white'
+            }`}
+          >
+            <Sliders className="w-3.5 h-3.5" />
+            <span>MATRIZ DE 7 CASOS PERICIALES</span>
+          </button>
+        </div>
       </div>
 
-      {/* Cases List */}
-      <div className="space-y-4 font-mono text-xs">
+      {labMode === 'simulator' ? (
+        <InteractiveVirtualTaskManager
+          onBackToTheory={onBack}
+          onScenarioCompleted={() => {
+            // Record progress if needed
+          }}
+        />
+      ) : (
+        <>
+        {/* Cases List */}
+        <div className="space-y-4 font-mono text-xs">
         {cases.map((c, idx) => {
           const selectedHyp = hypothesesMap[c.id];
           const selectedEv = evidenceMap[c.id];
@@ -241,6 +282,8 @@ export const Tomo02Sector04MissionView: React.FC<Tomo02Sector04MissionViewProps>
           <ArrowRight className="w-4 h-4" />
         </button>
       </div>
+      </>
+      )}
     </div>
   );
 };

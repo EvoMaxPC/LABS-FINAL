@@ -20,6 +20,7 @@ import {
   Zap,
   Power,
   Award,
+  Target,
 } from 'lucide-react';
 import { VOLUMES_COLLECTION } from '../../data/collections';
 import { EvoBootLab } from '../tomo08/EvoBootLab';
@@ -27,7 +28,7 @@ import { EvoTomeExamEngine } from '../exam/EvoTomeExamEngine';
 import { EvoNetworkForensicsLab } from '../labs/tomo05/EvoNetworkForensicsLab';
 import { EvoDefensiveSecurityLab } from '../labs/tomo06/EvoDefensiveSecurityLab';
 import { EvoPerformanceMetrologyLab } from '../labs/tomo07/EvoPerformanceMetrologyLab';
-import { EvoCodeEngineeringLab } from '../labs/tomo09/EvoCodeEngineeringLab';
+import { EvoCodeEngineeringLab } from '../labs/tomo09/EvoCodeEngineeringLab.tsx';
 import { EvoAiSystemsLab } from '../labs/tomo10/EvoAiSystemsLab';
 import { useEvoAccess } from '../../auth/EvoAccessContext';
 
@@ -483,6 +484,88 @@ export const TOMOS_EDITORIAL_COVERS: Record<string, TomoEditorialCoverMeta> = {
       statusLabel: 'INGENIERÍA DE PROMPTS & AGENTES AUTÓNOMOS',
       features: ['Prompting Estructurado CoT & ReAct', 'Tool Calling & RAG Vectorial', 'Validación Empírica Anti-Alucinación'],
       bgPattern: 'radial-gradient(ellipse at center, rgba(139,92,246,0.18) 0%, rgba(8,10,13,0.95) 75%)',
+    },
+  },
+
+  'tomo-11': {
+    tomoKey: 'tomo-11',
+    number: '11',
+    volumeLabel: 'TOMO 11',
+    editionLabel: 'EDICIÓN 11 // ELECTRÓNICA & VRM 2026',
+    primaryColor: '#eab308',
+    accentGradient: 'from-amber-500/25 via-yellow-500/10 to-transparent',
+    glowShadow: 'rgba(234, 179, 8, 0.28)',
+    tagline: '“Desde la física del electrón hasta el diagnóstico a nivel componente en motherboards y GPUs.”',
+    title: 'EVO LABS // ELECTRÓNICA APLICADA A LA INFORMÁTICA',
+    editorialSubtitle:
+      'Física del silicio, convertidores Buck DC-DC, inductores, capacitores de polímero, medición de osciloscopio y descarte de cortos en rieles de alimentación.',
+    pagesBadge: '5 CAPÍTULOS DE FÍSICA & VRM',
+    systemStandard: 'IPC-A-610 / JEDEC / ATX12VO ELECTRONICS SPECIFICATION',
+    keyTopics: [
+      {
+        num: '01',
+        title: 'Física del Silicio, Semiconductores & Rieles de Tensión',
+        description: 'Ley de Ohm aplicada a 180A, dopaje PN, conmutación MOSFET y resistencia parásita en planos de cobre.',
+      },
+      {
+        num: '02',
+        title: 'Arquitectura VRM, Fases de Potencia & Convertidores Buck',
+        description: 'Controladores PWM, drivers de compuerta, inductores SMD, DrMOS y filtrado de rizado con osciloscopio.',
+      },
+      {
+        num: '03',
+        title: 'Metrología de Banco, Multímetro & Prueba de Cortos',
+        description: 'Medición de caída de tensión en diodo, inyección de voltaje con fuente regulada y cámara térmica.',
+      },
+    ],
+    heroGraphic: {
+      badge: 'ELECTRÓNICA // VRM & SILICIO',
+      chipName: 'VRM MULTI-PHASE & BUCK CONTROLLER',
+      frequencyOrSpec: 'DrMOS // Buck DC-DC // VCore 0.8V-1.4V',
+      statusLabel: 'LABORATORIO DE ELECTRÓNICA & PERITAJE DE PLACA',
+      features: ['Leyes Eléctricas & Resistencia de Riel', 'Modulación PWM & Ondulación de Rizado', 'Aislamiento de Cortos en Standby'],
+      bgPattern: 'radial-gradient(ellipse at center, rgba(234,179,8,0.18) 0%, rgba(8,10,13,0.95) 75%)',
+    },
+  },
+
+  'tomo-12': {
+    tomoKey: 'tomo-12',
+    number: '12',
+    volumeLabel: 'TOMO 12',
+    editionLabel: 'EDICIÓN 12 // EVO GAME FORGE 2026',
+    primaryColor: '#06b6d4',
+    accentGradient: 'from-cyan-500/25 via-blue-600/10 to-transparent',
+    glowShadow: 'rgba(6, 182, 212, 0.28)',
+    tagline: '“EVO Game Forge: De las matemáticas vectoriales y shaders al desarrollo del proyecto Mundo Max.”',
+    title: 'EVO LABS // INGENIERÍA Y CREACIÓN DE VIDEOJUEGOS',
+    editorialSubtitle:
+      'Arquitectura de motores de juego, game loop determinista desacoplado, delta time, física 2D/3D, pipeline gráfico y diseño técnico.',
+    pagesBadge: '5 CAPÍTULOS DE GAME FORGE STUDIO',
+    systemStandard: 'WEBGL 2.0 / VULKAN / GLSL SHADER PIPELINE',
+    keyTopics: [
+      {
+        num: '01',
+        title: 'Arquitectura del Game Loop & Delta Time Desacoplado',
+        description: 'Fixed timestep para física vs. variable timestep para renderizado. Prevención del espiral de la muerte (death spiral).',
+      },
+      {
+        num: '02',
+        title: 'Matemáticas Vectoriales, Físicas & Detección de Colisiones',
+        description: 'Álgebra lineal, matrices de transformación, producto punto/cruz y algoritmo de separación de ejes (SAT).',
+      },
+      {
+        num: '03',
+        title: 'Pipeline de Renderizado, GLSL Shaders & Proyecto Mundo Max',
+        description: 'Vertex & fragment shaders, optimización de draw calls, iluminación dinámica y arquitectura de Mundo Max.',
+      },
+    ],
+    heroGraphic: {
+      badge: 'GAME FORGE // ARQUITECTURA DE MOTOR',
+      chipName: 'EVO GAME FORGE ENGINE & MUNDO MAX',
+      frequencyOrSpec: 'Fixed Timestep 60Hz // SAT Physics // GLSL Pipeline',
+      statusLabel: 'MOTOR LÚDICO & SIMULACIÓN VIRTUAL',
+      features: ['Game Loop Desacoplado con Delta Time', 'Físicas Vectoriales & Detección SAT', 'Shaders & Proyecto Mundo Max'],
+      bgPattern: 'radial-gradient(ellipse at center, rgba(6,182,212,0.18) 0%, rgba(8,10,13,0.95) 75%)',
     },
   },
 };
@@ -966,6 +1049,80 @@ const TOMO_EXTENDED_DATA: Record<
       },
     ],
   },
+  'tomo-11': {
+    pages: '5 capítulos de microelectrónica',
+    modulesCount: '5 módulos de hardware, VRM y física de componentes',
+    targetAudience: 'Técnicos de reparación avanzada, microsoldadores y entusiastas del hardware a nivel componente',
+    modules: [
+      {
+        number: 'M01',
+        title: 'Física del Electrón, Ley de Ohm & Rieles de Potencia',
+        desc: 'Cálculo de pérdidas resistivas, caída de tensión y conductividad en planos de cobre.',
+        benchConfig: { labView: 'hotswap-lab', scenario: 'atx-power-bench', badgeLabel: 'LEY DE OHM' }
+      },
+      {
+        number: 'M02',
+        title: 'Semiconductores, Diodos & Transistores MOSFET',
+        desc: 'Unión PN, transistores de efecto de campo, conmutación de compuerta y curvas I-V.',
+        benchConfig: { labView: 'hotswap-lab', scenario: 'pcb-schematic', badgeLabel: 'MOSFET & DIODOS' }
+      },
+      {
+        number: 'M03',
+        title: 'Arquitectura de Convertidores Buck & Fases VRM',
+        desc: 'Generación de VCore por modulación PWM, inductores, capacitores de filtrado y rizado.',
+        benchConfig: { labView: 'hotswap-lab', scenario: 'cache-imc-flow', badgeLabel: 'VRM & BUCK' }
+      },
+      {
+        number: 'M04',
+        title: 'Metrología de Banco: Multímetro, Osciloscopio & Shunts',
+        desc: 'Diagnóstico en escala de diodo, medición de resistencia parásita e inyección de voltaje segura.',
+        benchConfig: { labView: 'boot-lab', scenario: 'post-sequence', badgeLabel: 'METROLOGÍA DE BANCO' }
+      },
+      {
+        number: 'M05',
+        title: 'Secuencia de Encendido & Aislamiento de Cortocircuitos',
+        desc: 'Árbol de diagnóstico lógico ante rieles colapsados, protección contra sobrecorriente (OCP).',
+        benchConfig: { labView: 'boot-lab', scenario: 'boot-diagnostics', badgeLabel: 'AISLAMIENTO DE CORTOS' }
+      },
+    ],
+  },
+  'tomo-12': {
+    pages: '5 capítulos de arquitectura de motor',
+    modulesCount: '5 módulos de ingeniería de videojuegos y simulación física',
+    targetAudience: 'Programadores de videojuegos, arquitectos de software técnico y desarrolladores de simuladores',
+    modules: [
+      {
+        number: 'M01',
+        title: 'Arquitectura del Game Loop & Delta Time Desacoplado',
+        desc: 'Bucle principal determinista, fixed timestep para física y extrapolación de cuadros.',
+        benchConfig: { labView: 'windows-matrix', scenario: 'timer-resolution', badgeLabel: 'GAME LOOP & DT' }
+      },
+      {
+        number: 'M02',
+        title: 'Matemáticas Vectoriales & Transformaciones de Coordenadas',
+        desc: 'Vectores, matrices, proyecciones 2D/3D y cálculo de trayectorias físicas.',
+        benchConfig: { labView: 'hotswap-lab', scenario: 'ab-bench', badgeLabel: 'MATEMÁTICAS VECTORIALES' }
+      },
+      {
+        number: 'M03',
+        title: 'Físicas, Gravedad & Detección de Colisiones SAT',
+        desc: 'Integración de Euler y Verlet, cuerpos rígidos y algoritmo de separación de ejes.',
+        benchConfig: { labView: 'hotswap-lab', scenario: 'hardware', badgeLabel: 'COLISIONES & FÍSICAS' }
+      },
+      {
+        number: 'M04',
+        title: 'Pipeline de Gráficos, Shaders GLSL & Iluminación',
+        desc: 'Vertex shaders, fragment shaders, buffers de profundidad y optimización de lotes.',
+        benchConfig: { labView: 'windows-matrix', scenario: 'xray', badgeLabel: 'GLSL SHADERS' }
+      },
+      {
+        number: 'M05',
+        title: 'Proyecto Mundo Max: Integración & Pruebas de Estrés',
+        desc: 'Ensamblaje del proyecto integral Mundo Max con mapa virtual, entidades y telemetría.',
+        benchConfig: { labView: 'windows-matrix', scenario: 'services', badgeLabel: 'MUNDO MAX ENGINE' }
+      },
+    ],
+  },
 };
 
 export const EvoTomoDossierModal: React.FC<EvoTomoDossierModalProps> = ({
@@ -975,17 +1132,17 @@ export const EvoTomoDossierModal: React.FC<EvoTomoDossierModalProps> = ({
   onOpenTomoView,
   onOpenForensicBench,
 }) => {
-  // CRITICAL DIRECTIVE: The modal MUST ALWAYS open in 'portada' (cover) view by default
-  const [modalView, setModalView] = useState<'portada' | 'indice'>('portada');
+  // Opens in 'ficha' (pedagogical dossier) view by default
+  const [modalView, setModalView] = useState<'ficha' | 'portada' | 'indice'>('ficha');
   const [isBootLabOpen, setIsBootLabOpen] = useState<boolean>(false);
   const [isTomoLabOpen, setIsTomoLabOpen] = useState<boolean>(false);
   const [isExamOpen, setIsExamOpen] = useState<boolean>(false);
   const { canAccess, openUpgradeModal, isFreeUser } = useEvoAccess();
 
-  // Reset to 'portada' whenever the modal opens or tomoId changes
+  // Reset to 'ficha' whenever the modal opens or tomoId changes
   useEffect(() => {
     if (isOpen) {
-      setModalView('portada');
+      setModalView('ficha');
       setIsBootLabOpen(false);
       setIsTomoLabOpen(false);
       setIsExamOpen(false);
@@ -1172,6 +1329,20 @@ export const EvoTomoDossierModal: React.FC<EvoTomoDossierModalProps> = ({
             <div className="inline-flex rounded-lg bg-zinc-900/90 p-0.5 border border-zinc-800 text-[10px] font-mono-tech">
               <button
                 type="button"
+                onClick={() => setModalView('ficha')}
+                className={`px-2.5 py-1 rounded-md transition-all cursor-pointer font-bold ${
+                  modalView === 'ficha'
+                    ? 'text-black shadow'
+                    : 'text-zinc-400 hover:text-white'
+                }`}
+                style={{
+                  background: modalView === 'ficha' ? coverMeta.primaryColor : 'transparent',
+                }}
+              >
+                FICHA PEDAGÓGICA
+              </button>
+              <button
+                type="button"
                 onClick={() => setModalView('portada')}
                 className={`px-2.5 py-1 rounded-md transition-all cursor-pointer font-bold ${
                   modalView === 'portada'
@@ -1210,6 +1381,181 @@ export const EvoTomoDossierModal: React.FC<EvoTomoDossierModalProps> = ({
             </button>
           </div>
         </div>
+
+        {/* ============================================================ */}
+        {/* VIEW 0: FICHA PEDAGÓGICA ESTRUCTURADA (6 PILARES)            */}
+        {/* ============================================================ */}
+        {modalView === 'ficha' && (
+          <div className="p-5 sm:p-7 overflow-y-auto space-y-6 text-xs text-zinc-300">
+            {/* Header Ficha */}
+            <div className="p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-[#12100a] via-[#0d1017] to-[#080b12] border border-amber-400/30 space-y-2">
+              <div className="flex items-center justify-between flex-wrap gap-2">
+                <span className="px-2.5 py-0.5 rounded text-[10px] font-mono-tech font-bold uppercase bg-amber-400/20 text-amber-300 border border-amber-400/40">
+                  FICHA PEDAGÓGICA OFICIAL // {coverMeta.volumeLabel}
+                </span>
+                <span className="text-[10px] font-mono-tech text-zinc-400">
+                  ESTÁNDAR: {coverMeta.systemStandard}
+                </span>
+              </div>
+              <h2 className="font-display font-black text-2xl sm:text-3xl text-white uppercase tracking-tight">
+                {coverMeta.title}
+              </h2>
+              <p className="text-xs sm:text-sm font-sans-editorial text-zinc-300 leading-relaxed max-w-3xl">
+                {coverMeta.editorialSubtitle}
+              </p>
+            </div>
+
+            {/* 6 PILARES PEDAGÓGICOS GRID */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              
+              {/* 1. OBJETIVOS */}
+              <div className="p-4 rounded-xl bg-zinc-950 border border-zinc-800 space-y-2">
+                <div className="flex items-center gap-2 text-amber-400">
+                  <Target className="w-4 h-4 text-amber-400 shrink-0" />
+                  <h3 className="font-mono-tech font-bold text-xs uppercase text-white">
+                    1. OBJETIVOS PEDAGÓGICOS
+                  </h3>
+                </div>
+                <p className="text-xs font-sans-editorial text-zinc-300 leading-relaxed">
+                  {volume?.description || coverMeta.editorialSubtitle}
+                </p>
+                <div className="pt-2 text-[11px] font-mono-tech text-zinc-400 border-t border-zinc-900">
+                  <strong className="text-amber-300">¿Qué problema resuelve?</strong> {(volume as any)?.solvesProblem || 'Aporta criterios objetivos de medición y resolución de problemas sin mitos.'}
+                </div>
+              </div>
+
+              {/* 2. COMPETENCIAS */}
+              <div className="p-4 rounded-xl bg-zinc-950 border border-zinc-800 space-y-2">
+                <div className="flex items-center gap-2 text-cyan-400">
+                  <Award className="w-4 h-4 text-cyan-400 shrink-0" />
+                  <h3 className="font-mono-tech font-bold text-xs uppercase text-white">
+                    2. COMPETENCIAS TÉCNICAS
+                  </h3>
+                </div>
+                <ul className="space-y-1.5 text-xs font-sans-editorial text-zinc-300">
+                  {coverMeta.keyTopics.map((top, i) => (
+                    <li key={i} className="flex items-start gap-2">
+                      <span className="text-cyan-400 font-mono-tech text-[10px] font-bold mt-0.5">•</span>
+                      <span><strong className="text-white">{top.title}:</strong> {top.description}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              {/* 3. CONTENIDOS */}
+              <div className="p-4 rounded-xl bg-zinc-950 border border-zinc-800 space-y-2">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2 text-emerald-400">
+                    <Layers className="w-4 h-4 text-emerald-400 shrink-0" />
+                    <h3 className="font-mono-tech font-bold text-xs uppercase text-white">
+                      3. CONTENIDOS & TEMARIO
+                    </h3>
+                  </div>
+                  <span className="text-[10px] font-mono-tech text-zinc-400 font-bold bg-zinc-900 px-2 py-0.5 rounded border border-zinc-800">
+                    {extended?.modulesCount || 'Capítulos de Investigación'}
+                  </span>
+                </div>
+                <div className="space-y-1.5 max-h-48 overflow-y-auto pr-1 custom-scrollbar">
+                  {(extended?.modules || []).map((m) => (
+                    <div key={m.number} className="p-2 rounded bg-black/60 border border-zinc-900 flex items-start gap-2 text-[11px]">
+                      <span className="px-1.5 py-0.5 rounded text-[9px] font-bold font-mono-tech bg-amber-400/10 text-amber-300 border border-amber-400/30 shrink-0">
+                        {m.number}
+                      </span>
+                      <div className="min-w-0">
+                        <div className="font-bold text-white font-mono-tech text-[11px] truncate">{m.title}</div>
+                        <p className="text-zinc-400 text-[10.5px] font-sans-editorial line-clamp-1">{m.desc}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* 4. PRÁCTICAS */}
+              <div className="p-4 rounded-xl bg-zinc-950 border border-zinc-800 space-y-2">
+                <div className="flex items-center gap-2 text-purple-400">
+                  <Wrench className="w-4 h-4 text-purple-400 shrink-0" />
+                  <h3 className="font-mono-tech font-bold text-xs uppercase text-white">
+                    4. PRÁCTICAS EN VIVO
+                  </h3>
+                </div>
+                <p className="text-xs font-sans-editorial text-zinc-300 leading-relaxed">
+                  Ejercicios de medición, análisis de trazas periciales, diagnóstico deductivo de fallas y pruebas deterministas en entorno controlado.
+                </p>
+                <div className="pt-2 flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setModalView('indice')}
+                    className="px-3 py-1.5 rounded-lg bg-purple-500/10 hover:bg-purple-500/20 text-purple-300 border border-purple-500/30 text-[10px] font-mono-tech font-bold transition-all flex items-center gap-1.5 cursor-pointer"
+                  >
+                    <span>VER MÓDULOS DE PRÁCTICA →</span>
+                  </button>
+                </div>
+              </div>
+
+              {/* 5. LABORATORIO */}
+              <div className="p-4 rounded-xl bg-zinc-950 border border-zinc-800 space-y-2">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2 text-cyan-400">
+                    <Zap className="w-4 h-4 text-cyan-400 shrink-0" />
+                    <h3 className="font-mono-tech font-bold text-xs uppercase text-white">
+                      5. LABORATORIO ASOCIADO
+                    </h3>
+                  </div>
+                  <span className="px-1.5 py-0.5 rounded text-[8px] font-mono-tech font-black uppercase bg-cyan-500/10 text-cyan-300 border border-cyan-500/30">
+                    LAB INTEGRADO
+                  </span>
+                </div>
+                <div className="text-xs font-bold text-white font-mono-tech">
+                  {coverMeta.heroGraphic.chipName}
+                </div>
+                <p className="text-xs font-sans-editorial text-zinc-400 leading-relaxed">
+                  {coverMeta.heroGraphic.badge} — {coverMeta.heroGraphic.statusLabel}
+                </p>
+                <button
+                  type="button"
+                  onClick={() => handleNavigateToLab('c01')}
+                  className="w-full py-2 px-3 rounded-lg bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 text-xs font-mono-tech font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer shadow-md"
+                >
+                  <span>INICIAR LABORATORIO VIRTUAL</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </button>
+              </div>
+
+              {/* 6. EVALUACIÓN */}
+              <div className="p-4 rounded-xl bg-zinc-950 border border-zinc-800 space-y-2">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2 text-emerald-400">
+                    <Award className="w-4 h-4 text-emerald-400 shrink-0" />
+                    <h3 className="font-mono-tech font-bold text-xs uppercase text-white">
+                      6. EVALUACIÓN & ACREDITACIÓN
+                    </h3>
+                  </div>
+                  <span className="px-1.5 py-0.5 rounded text-[8px] font-mono-tech font-black uppercase bg-emerald-500/10 text-emerald-300 border border-emerald-500/30">
+                    CERTIFICABLE
+                  </span>
+                </div>
+                <p className="text-xs font-sans-editorial text-zinc-300 leading-relaxed">
+                  Examen final de opción múltiple y casos prácticos. Acredita el dominio técnico en tu expediente pericial personal.
+                </p>
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (isFreeUser) {
+                      openUpgradeModal(`Examen Final // ${coverMeta.volumeLabel}`);
+                      return;
+                    }
+                    setIsExamOpen(true);
+                  }}
+                  className="w-full py-2 px-3 rounded-lg bg-amber-400/20 hover:bg-amber-400/30 text-amber-300 border border-amber-400/40 text-xs font-mono-tech font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer shadow-md"
+                >
+                  {isFreeUser ? <Lock className="w-3.5 h-3.5 text-amber-400" /> : <Award className="w-3.5 h-3.5 text-amber-400" />}
+                  <span>RENDIR EXAMEN DE CERTIFICACIÓN</span>
+                </button>
+              </div>
+
+            </div>
+          </div>
+        )}
 
         {/* ============================================================ */}
         {/* VIEW 1: PORTADA EDITORIAL GRÁFICA COMPLETA                   */}

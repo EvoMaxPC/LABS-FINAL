@@ -48,20 +48,20 @@ export const EvoPublicHowToUse: React.FC<EvoPublicHowToUseProps> = ({
   const operationalPillars = [
     {
       step: '1',
-      title: 'CÓMO APRENDER // TOMOS & MAGAZINES',
+      title: 'CÓMO APRENDER // 12 TOMOS CANÓNICOS',
       color: 'text-amber-400',
       badge: 'APRENDER',
-      desc: 'Accedé a los 12 tomos canónicos y publicaciones técnicas. Cada tomo desglosa arquitectura de silicio, kernel, subsistemas y fallas reales.',
+      desc: 'Accedé a los 12 tomos canónicos. Cada tomo desglosa arquitectura de silicio, kernel, subsistemas y fallas reales.',
       actionLabel: 'IR A APRENDER →',
       onAction: onNavigateTomos,
     },
     {
       step: '2',
-      title: 'CÓMO PRACTICAR // LABS & SIMULADORES',
+      title: 'CÓMO EXPERIMENTAR // LABORATORIOS & SIMULADORES',
       color: 'text-cyan-400',
-      badge: 'PRACTICAR',
+      badge: 'LABORATORIOS',
       desc: 'Experimentá en bancos de trabajo reales como Hot-Swap Lab, Windows Matrix Lab y Boot Lab para validar hipótesis de hardware.',
-      actionLabel: 'IR A PRACTICAR →',
+      actionLabel: 'IR A LABORATORIOS →',
       onAction: onNavigateLabs,
     },
     {

@@ -101,7 +101,7 @@ export const EvoTomeDetailModal: React.FC<EvoTomeDetailModalProps> = ({
             <ChevronRight className="w-3 h-3 text-zinc-700 shrink-0" />
             <div className="flex items-center gap-1.5 text-zinc-300 whitespace-nowrap">
               <span className="w-1.5 h-1.5 rounded-full bg-zinc-600"></span>
-              <span>03. PRACTICAR</span>
+              <span>03. LABORATORIOS</span>
             </div>
             <ChevronRight className="w-3 h-3 text-zinc-700 shrink-0" />
             <div className="flex items-center gap-1.5 text-zinc-300 whitespace-nowrap">

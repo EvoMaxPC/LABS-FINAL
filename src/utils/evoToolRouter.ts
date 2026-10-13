@@ -40,19 +40,15 @@ export function executeToolById(toolId: string | undefined | null, ctx: EvoToolR
       return true;
 
     case 'diag-bsod-decoder':
-      if (ctx.setMatrixInitialScenario) ctx.setMatrixInitialScenario('crash-repair');
-      ctx.setCurrentView('windows-matrix-lab');
+      ctx.setCurrentView('bsod-repair-view');
       return true;
 
     case 'diag-incident-events':
-      if (ctx.setMatrixInitialScenario) ctx.setMatrixInitialScenario('services');
-      ctx.setCurrentView('windows-matrix-lab');
+      ctx.setCurrentView('windows-error-analyzer-view');
       return true;
 
     case 'diag-bottleneck-calc':
-      if (ctx.setLabCorePhase) ctx.setLabCorePhase('SELECT_PC');
-      if (ctx.setActiveLabMission) ctx.setActiveLabMission('BOTTLENECK');
-      ctx.setCurrentView('lab-core');
+      ctx.setCurrentView('bottleneck-simulator-view');
       return true;
 
     case 'diag-autodetect-pc':

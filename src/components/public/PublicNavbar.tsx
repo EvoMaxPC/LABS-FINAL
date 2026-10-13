@@ -31,7 +31,7 @@ export const PublicNavbar: React.FC<PublicNavbarProps> = ({
 
   const navItems: { id: PublicSection; label: string }[] = [
     { id: 'catalogo', label: 'APRENDER' },
-    { id: 'laboratorios', label: 'PRACTICAR' },
+    { id: 'laboratorios', label: 'LABORATORIOS' },
     { id: 'herramientas', label: 'HERRAMIENTAS' },
     { id: 'planes', label: 'PLANES' },
   ];

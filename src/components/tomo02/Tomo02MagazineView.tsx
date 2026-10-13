@@ -58,6 +58,7 @@ import { Tomo02Sector00View } from './sector00/Tomo02Sector00View';
 import { Tomo02Sector01View } from './sector01/Tomo02Sector01View';
 import { Tomo02Sector02View } from './sector02/Tomo02Sector02View';
 import { Tomo02Sector03View } from './sector03/Tomo02Sector03View';
+import { Tomo02Sector04View } from './sector04/Tomo02Sector04View';
 import { Tomo02Sector05View } from './sector05/Tomo02Sector05View';
 import { Tomo02Sector06View } from './sector06/Tomo02Sector06View';
 import { Tomo02Sector07View } from './sector07/Tomo02Sector07View';
@@ -77,6 +78,7 @@ export type Tomo02SubView =
   | 'sector_01'
   | 'sector_02'
   | 'sector_03'
+  | 'sector_04'
   | 'sector_05'
   | 'sector_06'
   | 'sector_07'
@@ -481,6 +483,37 @@ export const Tomo02MagazineView: React.FC<Tomo02MagazineViewProps> = ({
           setSubView('sector_02');
           window.scrollTo({ top: 0, behavior: 'smooth' });
         }}
+        onOpenSector04={() => {
+          setSubView('sector_04');
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }}
+      />
+    );
+  }
+
+  if (subView === 'sector_04') {
+    return (
+      <Tomo02Sector04View
+        onBackToMagazine={() => {
+          setSubView('index');
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }}
+        onOpenSector00={() => {
+          setSubView('sector_00');
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }}
+        onOpenSector01={() => {
+          setSubView('sector_01');
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }}
+        onOpenSector02={() => {
+          setSubView('sector_02');
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }}
+        onOpenSector03={() => {
+          setSubView('sector_03');
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }}
       />
     );
   }
@@ -767,6 +800,10 @@ export const Tomo02MagazineView: React.FC<Tomo02MagazineViewProps> = ({
             }}
             onOpenSector03={() => {
               setSubView('sector_03');
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }}
+            onOpenSector04={() => {
+              setSubView('sector_04');
               window.scrollTo({ top: 0, behavior: 'smooth' });
             }}
             onOpenSector05={() => {

@@ -134,14 +134,14 @@ export const PublicLanding: React.FC<PublicLandingProps> = ({
                 </p>
               </div>
 
-              {/* Concepto 2: PRACTICAR */}
+              {/* Concepto 2: LABORATORIOS */}
               <div className="flex flex-col justify-between p-4 rounded-xl bg-zinc-950/40 border border-zinc-850 hover:border-zinc-700 transition-colors">
                 <div className="flex items-center gap-3 mb-2">
                   <div className="w-8 h-8 rounded-lg bg-cyan-400/10 border border-cyan-400/30 flex items-center justify-center text-cyan-400 shrink-0">
                     <Zap className="w-4 h-4" />
                   </div>
                   <h3 className="font-display font-bold text-sm text-white uppercase tracking-wider">
-                    PRACTICAR
+                    LABORATORIOS
                   </h3>
                 </div>
                 <p className="text-xs text-zinc-400 font-sans-editorial leading-relaxed">

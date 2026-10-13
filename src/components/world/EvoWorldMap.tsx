@@ -12,6 +12,7 @@ import { EVO_TOMES_EXPANDED_DATA } from '../../data/evoTomesExpandedData';
 import { EvoTomeCardExpanded } from './EvoTomeCardExpanded';
 import { EvoHomeExperience } from '../home/EvoHomeExperience';
 import { EvoQuickSearchBar } from './EvoQuickSearchBar';
+import { EvoPublicLabsCatalog } from '../public/EvoPublicLabsCatalog';
 import {
   EVO_SCHOOL_LEVELS,
   EVO_TOMES_PEDAGOGY,
@@ -126,7 +127,7 @@ export interface EvoWorldMapProps {
   onInspectCore?: () => void;
   activeProfile?: EvoNarrativeProfile;
   onChangeProfile?: (profile: EvoNarrativeProfile) => void;
-  onOpenTomo?: (tomoId: '01' | '02' | '03' | '04' | '08') => void;
+  onOpenTomo?: (tomoId: string) => void;
   onNavigateBootLab?: () => void;
   onNavigateHotSwapLab?: (panel?: 'sandbox' | 'hardware' | 'software' | 'telemetry' | 'matrix' | 'all') => void;
   onNavigateWindowsMatrixLab?: (scenario?: string) => void;
@@ -367,7 +368,7 @@ export const EvoWorldMap: React.FC<EvoWorldMapProps> = ({
   initialZoneId,
   activeProfile = 'investigador',
   onChangeProfile = () => {},
-  onOpenTomo = (_tomoId: '01' | '02' | '03' | '04' | '08') => {},
+  onOpenTomo = (_tomoId: string) => {},
   onNavigateBootLab,
   onNavigateHotSwapLab,
   onNavigateWindowsMatrixLab,
@@ -943,7 +944,7 @@ export const EvoWorldMap: React.FC<EvoWorldMapProps> = ({
                 <span className="text-zinc-500 text-[10px] uppercase font-bold">UBICACIÓN:</span>
                 <span className="text-zinc-200 font-bold uppercase">
                   {activeIntention === 'escuela' || activeIntention === 'biblioteca' ? 'APRENDER // TOMOS Y PUBLICACIONES' :
-                   activeIntention === 'laboratorios' ? 'PRACTICAR // BANCOS INTERACTIVOS' :
+                   activeIntention === 'laboratorios' ? 'LABORATORIOS // BANCOS INTERACTIVOS' :
                    activeIntention === 'diagnosticar' ? 'ANALIZAR MI PC // EVO CORE' :
                    activeIntention === 'herramientas' ? 'HERRAMIENTAS // INSTRUMENTAL' :
                    activeIntention === 'como-usar' ? 'CÓMO USAR EVO // METODOLOGÍA & GUÍA' :
@@ -1025,7 +1026,8 @@ export const EvoWorldMap: React.FC<EvoWorldMapProps> = ({
       {/* ========================================================================= */}
       {/* 2. SECCIÓN: ESCUELA EVO (RUTA POR NIVELES 0 AL 6)                         */}
       {/* ========================================================================= */}
-      {activeIntention === 'escuela' && (
+      {/* RUTA POR NIVELES DESACTIVADA // APRENDER MUESTRA DIRECTAMENTE LOS 12 TOMOS */}
+      {false && (
         <div className="relative z-10 flex-1 max-w-6xl mx-auto w-full px-4 sm:px-8 py-6 space-y-6">
           
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-zinc-800 pb-4">
@@ -1239,9 +1241,9 @@ export const EvoWorldMap: React.FC<EvoWorldMapProps> = ({
       )}
 
       {/* ========================================================================= */}
-      {/* 3. SECCIÓN: TOMOS EVO LABS (COLECCIÓN DE LOS 10 TOMOS MAESTROS)           */}
+      {/* 2. SECCIÓN: TOMOS EVO LABS (COLECCIÓN COMPLETA DE 12 TOMOS MAESTROS)       */}
       {/* ========================================================================= */}
-      {activeIntention === 'biblioteca' && (() => {
+      {(activeIntention === 'escuela' || activeIntention === 'biblioteca') && (() => {
         const isC07Done = isChapter07Complete();
         const isExamPassed = isTomo01ExamPassed();
         const isTomo01FullyDone = isTomo01Complete();
@@ -1303,20 +1305,10 @@ export const EvoWorldMap: React.FC<EvoWorldMapProps> = ({
 
               {/* Sub-navigation */}
               <div className="flex items-center gap-1.5 p-1 rounded-xl bg-zinc-950 border border-zinc-900 font-mono text-[11px]">
-                <button
-                  type="button"
-                  onClick={() => setActiveIntention('biblioteca')}
-                  className="px-3 py-1.5 rounded-lg font-bold bg-amber-400 text-black shadow-md cursor-pointer"
-                >
-                  COLECCIÓN EVO (12 TOMOS)
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setActiveIntention('escuela')}
-                  className="px-3 py-1.5 rounded-lg font-bold text-zinc-400 hover:text-white transition-colors cursor-pointer"
-                >
-                  RUTA POR NIVELES
-                </button>
+                <div className="px-3.5 py-1.5 rounded-lg font-bold bg-amber-400 text-black shadow-md flex items-center gap-1.5">
+                  <BookOpen className="w-3.5 h-3.5 text-black" />
+                  <span>CATÁLOGO OFICIAL (12 TOMOS)</span>
+                </div>
               </div>
             </div>
 
@@ -1418,496 +1410,48 @@ export const EvoWorldMap: React.FC<EvoWorldMapProps> = ({
       {/* ========================================================================= */}
       {/* 4. SECCIÓN: PRACTICAR // ORGANIZACIÓN POR PROPÓSITO                      */}
       {/* ========================================================================= */}
-      {activeIntention === 'laboratorios' && (() => {
-        const isBootLabDone = localStorage.getItem('evo_boot_lab_completed') === 'true';
-
-        return (
-          <div className="relative z-10 flex-1 max-w-5xl mx-auto w-full px-4 sm:px-6 py-8 space-y-12 transition-all duration-300">
-            
-            {/* 1. HERO PRACTICAR */}
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-zinc-900 pb-5">
-              <div className="space-y-1">
-                <div className="flex items-center gap-2 flex-wrap">
-                  <span className="text-[10px] font-mono tracking-widest text-emerald-400 uppercase font-bold block">
-                    EVO LABS // ENTORNO DE EXPERIMENTACIÓN
-                  </span>
-                  <span className="text-[9px] font-mono text-amber-400/90 font-semibold px-2 py-0.5 rounded bg-amber-400/10 border border-amber-400/20">
-                    NO LO CREAS. COMPROBALO.
-                  </span>
-                </div>
-                <h2 className="font-display font-black text-3xl text-white uppercase tracking-tight">
-                  PRACTICAR
-                </h2>
-                <p className="text-xs text-amber-300 font-mono font-medium tracking-wide">
-                  Experimentá. Rompé. Medí. Recuperá. Comprobá.
-                </p>
-                <p className="text-xs text-zinc-300 font-sans-editorial leading-relaxed max-w-lg">
-                  Los laboratorios de EVO convierten teoría en evidencia técnica comprobable.
-                </p>
-              </div>
-
-              {/* Methodology steps badge */}
-              <div className="flex flex-col items-end gap-1.5 p-2.5 rounded-xl bg-zinc-950 border border-zinc-900 font-mono text-[10px] text-zinc-400">
-                <div className="flex items-center gap-2">
-                  <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                  <span className="text-emerald-400 font-bold">MÉTODO OFICIAL DE LAB</span>
-                </div>
-                <div className="flex items-center gap-1 text-[9px] text-zinc-400 font-mono tracking-tight">
-                  <span className="text-zinc-200">ENTENDER</span>
-                  <span className="text-zinc-600">→</span>
-                  <span className="text-zinc-200">PROFUNDIZAR</span>
-                  <span className="text-zinc-600">→</span>
-                  <span className="text-emerald-400 font-bold">HACER</span>
-                  <span className="text-zinc-600">→</span>
-                  <span className="text-amber-400 font-bold">COMPROBAR</span>
-                </div>
-              </div>
-            </div>
-
-            {/* 2. LAB DESTACADO (PIPELINE FORENSE DE ARRANQUE) */}
-            <div className="p-6 sm:p-8 rounded-2xl bg-gradient-to-r from-[#08140f] via-[#090d14] to-[#06080d] border border-emerald-500/30 shadow-[0_0_30px_rgba(16,185,129,0.06)] relative overflow-hidden group">
-              <div className="absolute top-0 right-0 w-80 h-80 bg-emerald-500/[0.02] rounded-full blur-3xl pointer-events-none" />
-              
-              <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-center relative z-10">
-                
-                {/* Left info */}
-                <div className="md:col-span-8 space-y-4">
-                  <div className="space-y-2">
-                    <div className="flex items-center gap-2.5 flex-wrap">
-                      <span className="text-[10px] font-mono tracking-widest text-emerald-400 font-bold uppercase">
-                        LABORATORIO DESTACADO DE REFERENCIA
-                      </span>
-                      <span className="px-2 py-0.5 rounded text-[8px] font-mono font-black border uppercase tracking-wider text-emerald-400 border-emerald-500/30 bg-emerald-500/10">
-                        {isBootLabDone ? 'COMPLETADO' : 'EN CURSO / DISPONIBLE'}
-                      </span>
-                      <span className="px-2 py-0.5 rounded text-[8px] font-mono text-zinc-400 border border-zinc-800 bg-zinc-900">
-                        DIFICULTAD: INTERMEDIO
-                      </span>
-                    </div>
-
-                    <h3 className="font-display font-black text-2xl sm:text-3xl text-white uppercase tracking-tight">
-                      PIPELINE FORENSE DE ARRANQUE (TOMO 08)
-                    </h3>
-                    
-                    <p className="text-sm text-zinc-300 font-sans-editorial leading-relaxed">
-                      Escenario: El sistema o firmware se detiene durante la fase POST o el bootloader BCD. Diagnostica con osciloscopio y multímetro virtual los 35 estados cronológicos desde el botón POWER hasta Windows.
-                    </p>
-                  </div>
-
-                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 text-[10px] font-mono text-zinc-400 pt-1">
-                    <div className="p-2 rounded bg-zinc-950/80 border border-zinc-900">
-                      <span className="text-zinc-500 block">HABILIDAD</span>
-                      <span className="text-zinc-200 font-bold">Descarte de POST & BCD</span>
-                    </div>
-                    <div className="p-2 rounded bg-zinc-950/80 border border-zinc-900">
-                      <span className="text-zinc-500 block">EVIDENCIA</span>
-                      <span className="text-emerald-400 font-bold">Reporte de Señales reloj</span>
-                    </div>
-                    <div className="p-2 rounded bg-zinc-950/80 border border-zinc-900">
-                      <span className="text-zinc-500 block">DURACIÓN</span>
-                      <span className="text-zinc-200 font-bold">20 Minutos</span>
-                    </div>
-                  </div>
-
-                  <div className="pt-2">
-                    {isFreeUser ? (
-                      <button
-                        type="button"
-                        onClick={() => openUpgradeModal('Laboratorio de Arranque y POST (Tomo 08)')}
-                        className="px-6 py-3 rounded-xl bg-amber-400/20 hover:bg-amber-400/30 text-amber-300 border border-amber-400/50 font-mono font-bold text-xs uppercase tracking-wider transition-all cursor-pointer shadow-md flex items-center gap-2"
-                      >
-                        <Lock className="w-4 h-4 text-amber-400" />
-                        <span>REQUIERE PLAN // VER PLANES</span>
-                      </button>
-                    ) : (
-                      <button
-                        type="button"
-                        onClick={() => {
-                          if (onNavigateBootLab) onNavigateBootLab();
-                          else if (onOpenTomo) onOpenTomo('08');
-                        }}
-                        className="px-6 py-3 rounded-xl bg-emerald-400 hover:bg-emerald-300 text-black font-mono font-bold text-xs uppercase tracking-wider transition-all cursor-pointer shadow-[0_0_20px_rgba(16,185,129,0.25)] hover:shadow-[0_0_30px_rgba(16,185,129,0.4)]"
-                      >
-                        {isBootLabDone ? 'REVISAR LABORATORIO BOOT →' : 'INICIAR LABORATORIO →'}
-                      </button>
-                    )}
-                  </div>
-                </div>
-
-                {/* Right side visual badge */}
-                <div className="md:col-span-4 flex justify-center">
-                  <div className="w-36 h-36 sm:w-44 sm:h-44 rounded-2xl bg-zinc-950 border border-emerald-500/30 p-4 flex flex-col justify-between shadow-2xl relative">
-                    <div className="flex justify-between items-start font-mono text-[8px] text-zinc-500">
-                      <span>POST_SEQUENCE</span>
-                      <span className="text-emerald-400 font-bold">35/35</span>
-                    </div>
-
-                    <div className="flex flex-col items-center justify-center space-y-1 my-auto">
-                      <Power className="w-10 h-10 text-emerald-400 animate-pulse" />
-                      <span className="font-mono text-[8px] text-zinc-400 uppercase tracking-widest">BOOT_CORE</span>
-                    </div>
-
-                    <div className="flex justify-between items-end font-mono text-[8px] text-zinc-600">
-                      <span>SIGNALS: OK</span>
-                      <span>BCD: VERIFIED</span>
-                    </div>
-                  </div>
-                </div>
-
-              </div>
-            </div>
-
-            <div className="space-y-6">
-
-            <div className="flex flex-wrap items-center gap-1.5 p-1 rounded-xl bg-zinc-900 border border-zinc-800 font-mono-tech text-xs">
-              {[
-                { id: 'todos', label: 'TODOS (12 LABS)' },
-                { id: 'sistemas', label: 'SISTEMAS' },
-                { id: 'hardware', label: 'HARDWARE' },
-                { id: 'peritaje', label: 'PERITAJE' },
-                { id: 'especializados', label: 'ESPECIALIZADOS' },
-              ].map((tab) => (
-                <button
-                  key={tab.id}
-                  type="button"
-                  onClick={() => setLabSubTab(tab.id as any)}
-                  className={`px-3 py-1.5 rounded-lg font-bold transition-all cursor-pointer ${
-                    labSubTab === tab.id
-                      ? 'bg-emerald-400 text-black shadow-md'
-                      : 'text-zinc-400 hover:text-white'
-                  }`}
-                >
-                  {tab.label}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* Grilla de Laboratorios Canónicos */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-            {[
-              {
-                id: 'lab-01-boot',
-                number: 'LAB 01',
-                familyKey: 'sistemas',
-                title: 'Laboratorio de Arranque y POST',
-                status: 'Disponible',
-                statusColor: 'text-emerald-400 bg-emerald-400/10 border-emerald-400/30',
-                whatYouDo: 'Inspección cronológica de los 35 estados de encendido, Power Good, VRMs, BIOS/UEFI y BCD.',
-                whatYouVerify: 'Diagnosticar con multímetro virtual y osciloscopio la etapa exacta donde se detiene el POST.',
-                ctaText: 'ABRIR LABORATORIO DE ARRANQUE →',
-                scenarios: ['diag-boot-seq'],
-                action: () => {
-                  if (onNavigateBootLab) onNavigateBootLab();
-                  else if (onOpenTomo) onOpenTomo('08');
-                },
-                icon: <Power className="w-5 h-5 text-emerald-400" />,
-              },
-              {
-                id: 'lab-02-windows',
-                number: 'LAB 02',
-                familyKey: 'sistemas',
-                title: 'Laboratorio de Windows Matrix & Kernel NT',
-                status: 'Disponible',
-                statusColor: 'text-cyan-400 bg-cyan-400/10 border-cyan-400/30',
-                whatYouDo: 'Matriz de Kernel NT: descarte de BSOD, latencias DPC/ISR, servicios en reposo, scheduler e instalación GPT.',
-                whatYouVerify: 'Auditar llamados al kernel, ring 0/3 y medir latencias reales en controladores.',
-                ctaText: 'ABRIR LABORATORIO DE WINDOWS →',
-                scenarios: ['diag-bsod-decoder', 'diag-incident-events', 'med-dpc-latency', 'inv-xray-kernel', 'rep-windows-repair', 'rep-windows-install', 'opt-nt-services'],
-                action: () => {
-                  if (onNavigateWindowsMatrixLab) onNavigateWindowsMatrixLab();
-                },
-                icon: <Terminal className="w-5 h-5 text-cyan-400" />,
-              },
-              {
-                id: 'lab-03-hardware',
-                number: 'LAB 03',
-                familyKey: 'hardware',
-                title: 'Laboratorio de Hardware & Hot-Swap',
-                status: 'Disponible',
-                statusColor: 'text-amber-400 bg-amber-400/10 border-amber-400/30',
-                whatYouDo: 'Intercambio en caliente, PCB VRM, arquitectura de silicio, controladores de memoria y 8 sectores de taller.',
-                whatYouVerify: 'Comprobar balance de consumo, compatibilidad de sockets y flujo de caché L1/L2/L3.',
-                ctaText: 'ABRIR LABORATORIO DE HARDWARE →',
-                scenarios: ['diag-atx-power-bench', 'inv-pcb-schematic', 'inv-cache-imc-flow', 'inv-workstations-sectors', 'rep-hotswap-bench'],
-                action: () => {
-                  if (onNavigateHotSwapLab) onNavigateHotSwapLab('hardware');
-                },
-                icon: <Cpu className="w-5 h-5 text-amber-400" />,
-              },
-              {
-                id: 'lab-04-cases',
-                number: 'LAB 04',
-                familyKey: 'peritaje',
-                title: 'Taller de Casos & Central Forense',
-                status: 'Disponible',
-                statusColor: 'text-pink-400 bg-pink-400/10 border-pink-400/30',
-                whatYouDo: 'Recepción y triaje de computadoras con reporte de falla real ingresadas por clientes al taller.',
-                whatYouVerify: 'Aplicar el árbol de descarte, registrar evidencias metrológicas y formular dictamen técnico.',
-                ctaText: 'ABRIR TALLER DE CASOS →',
-                scenarios: ['diag-case-resolver'],
-                action: () => {
-                  setIsCaseResolverOpen(true);
-                },
-                icon: <FolderGit2 className="w-5 h-5 text-pink-400" />,
-              },
-              {
-                id: 'lab-05-digital-twin',
-                number: 'LAB 05',
-                familyKey: 'hardware',
-                title: 'Gemelo Digital Causal (12 Subsistemas)',
-                status: 'Disponible',
-                statusColor: 'text-cyan-400 bg-cyan-400/10 border-cyan-400/30',
-                whatYouDo: 'Navegación causal de la PC virtual desde gabinete y silicio hasta Ring 0 Kernel NT.',
-                whatYouVerify: 'Inyectar fallas en cascada (BCD, Drivers, RAM, NCSI) y observar propagación de evidencias.',
-                ctaText: 'ABRIR GEMELO DIGITAL →',
-                scenarios: ['inv-digital-twin'],
-                action: () => {
-                  setIsDigitalTwinOpen(true);
-                },
-                icon: <Boxes className="w-5 h-5 text-cyan-400" />,
-              },
-              {
-                id: 'lab-06-performance',
-                number: 'LAB 06',
-                familyKey: 'hardware',
-                title: 'Laboratorio de Rendimiento & Metrología',
-                status: 'Disponible',
-                statusColor: 'text-purple-400 bg-purple-400/10 border-purple-400/30',
-                whatYouDo: 'Análisis de frametimes, percentiles 1% low, monitoreo diodo a diodo, historial térmico y cámara A/B.',
-                whatYouVerify: 'Demostrar empíricamente con percentiles de rendimiento si la mejora es medible.',
-                ctaText: 'ABRIR LAB DE RENDIMIENTO →',
-                scenarios: ['med-frametime-analyzer', 'med-sensors-telemetry', 'med-thermal-history', 'opt-ab-comparison'],
-                action: () => {
-                  if (onNavigateHotSwapLab) onNavigateHotSwapLab('telemetry');
-                },
-                icon: <Activity className="w-5 h-5 text-purple-400" />,
-              },
-              {
-                id: 'lab-07-network',
-                number: 'LAB 07',
-                familyKey: 'especializados',
-                title: 'Laboratorio Forense de Redes & Protocolos (Tomo 05)',
-                status: 'Disponible',
-                statusColor: 'text-indigo-400 bg-indigo-400/10 border-indigo-400/30',
-                whatYouDo: 'Inspección de tramas Ethernet, pila TCP/IP, resolución DNS e ingeniería inversa de tráfico.',
-                whatYouVerify: 'Auditoría pericial de latencias de sockets, cálculo CIDR y paquetes perdidos.',
-                ctaText: 'ABRIR LAB DE REDES & PROTOCOLOS →',
-                scenarios: ['net-wireshark-inspect', 'net-cidr-calculator', 'net-dns-diagnostics'],
-                action: () => {
-                  if (onOpenTomo) onOpenTomo('05');
-                },
-                icon: <Globe className="w-5 h-5 text-indigo-400" />,
-              },
-              {
-                id: 'lab-08-security',
-                number: 'LAB 08',
-                familyKey: 'especializados',
-                title: 'Laboratorio de Ciberseguridad Defensiva (Tomo 06)',
-                status: 'Disponible',
-                statusColor: 'text-rose-400 bg-rose-400/10 border-rose-400/30',
-                whatYouDo: 'Matriz táctica MITRE ATT&CK, contención de ransomware y análisis de privilegios Ring 0.',
-                whatYouVerify: 'Comprobar firmas digitales, políticas de hardening y aislamiento de memoria del kernel.',
-                ctaText: 'ABRIR LAB DE CIBERSEGURIDAD →',
-                scenarios: ['sec-mitre-attack-matrix', 'sec-ransomware-containment', 'sec-kernel-isolation'],
-                action: () => {
-                  if (onOpenTomo) onOpenTomo('06');
-                },
-                icon: <Shield className="w-5 h-5 text-rose-400" />,
-              },
-              {
-                id: 'lab-09-code',
-                number: 'LAB 09',
-                familyKey: 'especializados',
-                title: 'Laboratorio de Ingeniería de Software & Código (Tomo 09)',
-                status: 'Disponible',
-                statusColor: 'text-emerald-400 bg-emerald-400/10 border-emerald-400/30',
-                whatYouDo: 'Punteros, estructuras en memoria, compilación y optimización de código de bajo nivel.',
-                whatYouVerify: 'Verificar asignación dinámica, complejidad algorítmica y prevención de desbordamientos.',
-                ctaText: 'ABRIR LAB DE CÓDIGO & SOFTWARE →',
-                scenarios: ['code-complexity-analyzer', 'code-memory-allocation', 'code-pointer-safety'],
-                action: () => {
-                  if (onOpenTomo) onOpenTomo('09');
-                },
-                icon: <Code className="w-5 h-5 text-emerald-400" />,
-              },
-              {
-                id: 'lab-10-ai',
-                number: 'LAB 10',
-                familyKey: 'especializados',
-                title: 'Laboratorio de Sistemas de Inteligencia Artificial (Tomo 10)',
-                status: 'Disponible',
-                statusColor: 'text-yellow-400 bg-yellow-400/10 border-yellow-400/30',
-                whatYouDo: 'Simulador de fragmentación de tokens, ventanas de contexto y arquitectura de embeddings vectoriales.',
-                whatYouVerify: 'Medir la eficiencia de cuantización, latencia de inferencia y precisión contextual RAG.',
-                ctaText: 'ABRIR LAB DE SISTEMAS DE IA →',
-                scenarios: ['ai-token-fragmentation', 'ai-context-window-calc', 'ai-vector-embeddings'],
-                action: () => {
-                  if (onOpenTomo) onOpenTomo('10');
-                },
-                icon: <Sparkles className="w-5 h-5 text-yellow-400" />,
-              },
-              {
-                id: 'lab-11-electronics',
-                number: 'LAB 11',
-                familyKey: 'especializados',
-                title: 'Electronics Lab Hub & Mediciones VRM (Tomo 11)',
-                status: 'Disponible',
-                statusColor: 'text-amber-400 bg-amber-400/10 border-amber-400/30',
-                whatYouDo: 'Multímetro virtual en modos voltaje, resistencia y diodo con pruebas de cortocircuito en placa madre.',
-                whatYouVerify: 'Validar rieles de alimentación, Ley de Ohm y conmutación de etapas MOSFET.',
-                ctaText: 'ABRIR ELECTRONICS LAB HUB →',
-                scenarios: ['elec-multimeter-diode', 'elec-ohm-law-calc', 'elec-vrm-buck-converter'],
-                action: () => {
-                  if (onOpenTomo) onOpenTomo('11');
-                },
-                icon: <Cpu className="w-5 h-5 text-amber-400" />,
-              },
-              {
-                id: 'lab-12-game-forge',
-                number: 'LAB 12',
-                familyKey: 'especializados',
-                title: 'EVO Game Forge Studio & Simulación (Tomo 12)',
-                status: 'Disponible',
-                statusColor: 'text-cyan-400 bg-cyan-400/10 border-cyan-400/30',
-                whatYouDo: 'Arquitectura de motores de videojuego, game loop con delta time (dt) y shaders de renderizado.',
-                whatYouVerify: 'Comprobar estabilidad de física de colisiones y rendimiento de bucles gráficos.',
-                ctaText: 'ABRIR GAME FORGE STUDIO →',
-                scenarios: ['forge-game-loop-dt', 'forge-vector-physics', 'forge-shaders-pipeline'],
-                action: () => {
-                  if (onOpenTomo) onOpenTomo('12');
-                },
-                icon: <Boxes className="w-5 h-5 text-cyan-400" />,
-              },
-              {
-                id: 'lab-eval-transfer',
-                number: 'EVALUACIÓN',
-                familyKey: 'peritaje',
-                title: 'Desafío de Transferencia & Evaluación Práctica',
-                status: 'Disponible',
-                statusColor: 'text-emerald-400 bg-emerald-400/10 border-emerald-400/30',
-                whatYouDo: 'Evaluación metrológica y práctica guiada de transferencia directa de conocimientos.',
-                whatYouVerify: 'Demostrar competencia práctica mediante resolución de escenarios combinados.',
-                ctaText: 'INICIAR DESAFÍO DE TRANSFERENCIA →',
-                scenarios: ['doc-transfer-challenge'],
-                action: () => {
-                  if (onNavigateWindowsMatrixLab) onNavigateWindowsMatrixLab('services');
-                },
-                icon: <CheckCircle2 className="w-5 h-5 text-emerald-400" />,
-              },
-            ]
-              .filter((item) => labSubTab === 'todos' || item.familyKey === labSubTab)
-              .map((item) => (
-                <div
-                  key={item.id}
-                  className={`p-5 rounded-2xl evo-surface-level2 border transition-all flex flex-col justify-between gap-4 group ${
-                    item.isDisabled
-                      ? 'border-zinc-900/80 opacity-75'
-                      : 'border-zinc-900 hover:border-emerald-400/30'
-                  }`}
-                >
-                  <div className="space-y-3">
-                    <div className="flex items-center justify-between">
-                      <span className="text-[10px] font-mono-tech font-bold uppercase text-zinc-400 tracking-wider">
-                        {item.number}
-                      </span>
-                      <span className={`px-2 py-0.5 rounded text-[9px] font-mono-tech font-bold uppercase border ${item.statusColor}`}>
-                        ● {item.status}
-                      </span>
-                    </div>
-
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-xl bg-zinc-900 border border-zinc-800 flex items-center justify-center shrink-0">
-                        {item.icon}
-                      </div>
-                      <h3 className="font-display font-bold text-base text-white group-hover:text-emerald-300 transition-colors leading-tight">
-                        {item.title}
-                      </h3>
-                    </div>
-
-                    <div className="space-y-2 text-xs font-sans-editorial pt-1 border-t border-zinc-900/80">
-                      <div>
-                        <strong className="text-zinc-400 font-mono-tech text-[10px] uppercase block">
-                          Qué vas a hacer:
-                        </strong>
-                        <span className="text-zinc-300">{item.whatYouDo}</span>
-                      </div>
-                      <div>
-                        <strong className="text-emerald-400 font-mono-tech text-[10px] uppercase block">
-                          Qué vas a comprobar:
-                        </strong>
-                        <span className="text-zinc-200">{item.whatYouVerify}</span>
-                      </div>
-                    </div>
-
-                    {item.scenarios.length > 0 && (
-                      <div className="pt-2 border-t border-zinc-900/80 space-y-1 font-mono-tech text-[9px]">
-                        <span className="text-zinc-500 uppercase font-bold block">
-                          ESCENARIOS INTEGRADOS ({item.scenarios.length}):
-                        </span>
-                        <div className="flex items-center gap-1.5 flex-wrap">
-                          {item.scenarios.map((sc) => (
-                            <span key={sc} className="px-1.5 py-0.5 rounded bg-zinc-900 text-zinc-300 border border-zinc-800">
-                              {sc}
-                            </span>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-                  </div>
-
-                  {!item.isDisabled ? (
-                    isFreeUser ? (
-                      <button
-                        type="button"
-                        onClick={() => openUpgradeModal(`Laboratorio: ${item.title}`)}
-                        className="w-full py-2.5 px-4 rounded-xl bg-amber-400/20 hover:bg-amber-400/30 text-amber-300 border border-amber-400/50 font-mono-tech text-xs font-bold uppercase tracking-wider transition-all flex items-center justify-center gap-2 cursor-pointer shadow-sm"
-                      >
-                        <Lock className="w-3.5 h-3.5 text-amber-400" />
-                        <span>REQUIERE PLAN // VER PLANES</span>
-                      </button>
-                    ) : (
-                      <button
-                        type="button"
-                        onClick={item.action}
-                        className="w-full py-2.5 px-4 rounded-xl bg-zinc-900 hover:bg-emerald-400 hover:text-black text-emerald-300 border border-emerald-500/30 hover:border-emerald-400 font-mono-tech text-xs font-bold uppercase tracking-wider transition-all flex items-center justify-center gap-2 cursor-pointer shadow-sm"
-                      >
-                        <span>{item.ctaText}</span>
-                        <ArrowRight className="w-3.5 h-3.5" />
-                      </button>
-                    )
-                  ) : (
-                    <div className="w-full py-2.5 px-4 rounded-xl bg-zinc-900 text-zinc-500 font-mono-tech text-xs font-bold uppercase tracking-wider text-center border border-zinc-800">
-                      {item.ctaText}
-                    </div>
-                  )}
-                </div>
-              ))}
-          </div>
-
-          {/* 4. RESULTADOS Y EVIDENCIAS REGISTRADAS */}
-          <div className="p-6 rounded-2xl bg-zinc-950/40 border border-zinc-900 flex flex-col sm:flex-row sm:items-center justify-between gap-4 font-mono text-xs">
-            <div className="space-y-1">
-              <span className="text-[10px] text-emerald-400 font-bold uppercase tracking-widest block">
-                PASAPORTE Y EVIDENCIAS REGISTRADAS
-              </span>
-              <p className="text-zinc-300 font-sans-editorial">
-                Todas tus mediciones, casos resueltos y certificaciones quedan guardadas de forma persistente.
-              </p>
-            </div>
-
-            <button
-              type="button"
-              onClick={() => setActiveIntention('progreso')}
-              className="px-5 py-3 rounded-xl bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 font-bold uppercase tracking-wider transition-colors cursor-pointer shrink-0"
-            >
-              VER EN MI EVO →
-            </button>
-          </div>
-
+      {activeIntention === 'laboratorios' && (
+        <div className="relative z-10 flex-1 max-w-[1280px] mx-auto w-full px-4 sm:px-6 py-4">
+          <EvoPublicLabsCatalog
+            onOpenBootLab={() => {
+              if (onNavigateBootLab) onNavigateBootLab();
+              else if (onOpenTomo) onOpenTomo('08');
+            }}
+            onOpenWindowsMatrixLab={(scenario) => {
+              if (onNavigateWindowsMatrixLab) onNavigateWindowsMatrixLab(scenario);
+            }}
+            onOpenHotSwapLab={(subPanel) => {
+              if (onNavigateHotSwapLab) onNavigateHotSwapLab(subPanel);
+            }}
+            onOpenDigitalTwin={() => setIsDigitalTwinOpen(true)}
+            onOpenCaseResolver={() => {
+              if (onNavigateWindowsMatrixLab) onNavigateWindowsMatrixLab('crash-repair');
+            }}
+            onOpenTomo={onOpenTomo}
+            onOpenPerfMetrology={() => {
+              if (onNavigateHotSwapLab) onNavigateHotSwapLab('telemetry');
+            }}
+            onOpenNetForensics={() => {
+              if (onOpenTomo) onOpenTomo('05');
+            }}
+            onOpenDefensiveSec={() => {
+              if (onOpenTomo) onOpenTomo('06');
+            }}
+            onOpenCodeEng={() => {
+              if (onOpenTomo) onOpenTomo('09');
+            }}
+            onOpenAiSystems={() => {
+              if (onOpenTomo) onOpenTomo('10');
+            }}
+            onOpenGameForge={() => {
+              if (onOpenTomo) onOpenTomo('12');
+            }}
+            onOpenTransferChallenge={() => {
+              if (onNavigateWindowsMatrixLab) onNavigateWindowsMatrixLab('services');
+            }}
+          />
         </div>
-      );
-    })()}
+      )}
 
       {/* ========================================================================= */}
       {/* 5. SECCIÓN: ANALIZAR MI PC // DIAGNÓSTICO REAL & EVO CORE                  */}
@@ -1937,13 +1481,13 @@ export const EvoWorldMap: React.FC<EvoWorldMapProps> = ({
               </p>
             </div>
 
-            {/* Link hacia PRACTICAR para simulaciones */}
+            {/* Link hacia LABORATORIOS para simulaciones */}
             <button
               type="button"
               onClick={() => setActiveIntention('laboratorios')}
               className="px-4 py-2.5 rounded-xl bg-zinc-900 hover:bg-zinc-800 border border-emerald-500/30 text-emerald-300 hover:text-white font-mono-tech text-xs font-bold uppercase transition-all flex items-center gap-2 cursor-pointer shrink-0 self-start md:self-auto"
             >
-              <span>IR A PRACTICAR (LABS & SIMULACIONES) →</span>
+              <span>IR A LABORATORIOS (BANCOS & SIMULACIONES) →</span>
             </button>
           </div>
 
@@ -2344,7 +1888,7 @@ export const EvoWorldMap: React.FC<EvoWorldMapProps> = ({
                       onClick={() => setActiveIntention('laboratorios')}
                       className="px-4 py-2 rounded-xl bg-emerald-400 hover:bg-emerald-300 text-black font-mono-tech text-xs font-bold transition-all cursor-pointer"
                     >
-                      IR A PRACTICAR EN LABORATORIOS →
+                      IR A LABORATORIOS EXPERIMENTALES →
                     </button>
                     {onNavigateLabCore && (
                       <button
