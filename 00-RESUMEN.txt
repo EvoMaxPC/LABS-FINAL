@@ -1,0 +1,32 @@
+﻿EVO FPS OPTIMIZER - TOTAL SYSTEM AUDIT
+Fecha: 11/04/2026 01:48:57
+Equipo: DESKTOP-JJRB5D8
+Windows: Microsoft Windows 11 Pro
+Build: 26200
+
+Procesos CIM: 86
+Procesos Get-Process: 86
+Diferencias de inventario: 0
+Procesos con padre ausente: 7
+Ejecutables no encontrados: 0
+
+Servicios totales: 274
+Servicios activos: 70
+Servicios con PID inconsistente: 0
+
+Drivers encontrados: 408
+Drivers activos: 145
+Entradas de registro sin CIM: 71
+Tareas en ejecucion: 2
+Programas de inicio: 3
+
+CS2 ejecutandose: False
+
+IMPORTANTE:
+Las anomalías son candidatos para investigar, no pruebas de malware.
+Un PID padre ausente puede pertenecer a un proceso ya finalizado.
+Una entrada de registro sin CIM puede ser un componente especial o driver.
+La auditoría no detecta todos los rootkits ni procesos ocultos a nivel kernel.
+La medición de CPU es orientativa.
+
+Archivos CSV disponibles en esta carpeta.

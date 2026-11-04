@@ -1,0 +1,8 @@
+﻿"Name","PID","ParentPID","ParentName","ParentPresent","SessionID","Owner","Path","ExecutableExists","Threads","Handles","RAM_MB","CommandLine","CreationDate"
+"csrss.exe","848","792",,"False","0","NT AUTHORITY\SYSTEM",,,"13","403","7.21",,"11/4/2026 12:18:08 AM"
+"csrss.exe","936","928",,"False","1","NT AUTHORITY\SYSTEM",,,"14","539","8.01",,"11/4/2026 12:18:08 AM"
+"wininit.exe","960","792",,"False","0","NT AUTHORITY\SYSTEM",,,"4","163","10.2",,"11/4/2026 12:18:08 AM"
+"winlogon.exe","744","928",,"False","1","NT AUTHORITY\SYSTEM","C:\WINDOWS\system32\winlogon.exe","True","7","288","17.01","winlogon.exe","11/4/2026 12:18:08 AM"
+"explorer.exe","4324","4280",,"False","1","DESKTOP-JJRB5D8\ZuKA","C:\WINDOWS\Explorer.EXE","True","124","5801","459.04","C:\WINDOWS\Explorer.EXE","11/4/2026 12:18:14 AM"
+"firefox.exe","7504","4560",,"False","1","DESKTOP-JJRB5D8\ZuKA","C:\Program Files\Mozilla Firefox\firefox.exe","True","80","1947","744.99","""C:\Program Files\Mozilla Firefox\firefox.exe""","11/4/2026 12:44:00 AM"
+"Taskmgr.exe","9620","2996",,"False","1","DESKTOP-JJRB5D8\ZuKA","C:\WINDOWS\System32\Taskmgr.exe","True","25","1037","154.45","""C:\WINDOWS\System32\Taskmgr.exe"" /3","11/4/2026 1:35:57 AM"

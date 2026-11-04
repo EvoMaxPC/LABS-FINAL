@@ -1,0 +1,4 @@
+﻿"Name","Command","Location","User"
+"OneDriveSetup","C:\Windows\System32\OneDriveSetup.exe /thfirstsetup","HKU\S-1-5-19\SOFTWARE\Microsoft\Windows\CurrentVersion\Run","NT AUTHORITY\LOCAL SERVICE"
+"OneDriveSetup","C:\Windows\System32\OneDriveSetup.exe /thfirstsetup","HKU\S-1-5-20\SOFTWARE\Microsoft\Windows\CurrentVersion\Run","NT AUTHORITY\NETWORK SERVICE"
+"Riot Vanguard","""C:\Program Files\Riot Vanguard\vgtray.exe""","HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Run","Public"

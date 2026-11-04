@@ -1,0 +1,3 @@
+﻿"Task","Folder","State","Author","Description"
+"SystemSoundsService","\Microsoft\Windows\Multimedia\","Running",,"Agente de modo usuario de sonidos del sistema"
+"CacheTask","\Microsoft\Windows\Wininet\","Running","Microsoft","Tarea de caché WinINet"
